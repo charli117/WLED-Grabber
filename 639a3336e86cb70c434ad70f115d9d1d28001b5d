@@ -1,0 +1,31 @@
+docs/task/00-overview.md
+  e2fcb4b975340679 144
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "639a3336e86cb70c434ad70f115d9d1d28001b5d",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 1,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/93f4e8bdf7a1e449796af3c2edd17dadaba3c178fe03d3a6aa67e0a3d5278102",
+      "token_usage": {
+        "input_tokens": 3063268,
+        "output_tokens": 1630325,
+        "cache_read_tokens": 753279232,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
