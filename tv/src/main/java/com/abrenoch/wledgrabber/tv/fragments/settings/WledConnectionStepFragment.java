@@ -35,6 +35,8 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
     private static final long PHYSICAL_LEDS = 1004L;
     private static final long PROTOCOL = 1005L;
     private static final long RGBW = 1006L;
+    private static final long ACTION_TEST = 1007L;
+    private static final long ACTION_LAYOUT = 1008L;
     private static final long SET_PROTOCOL = 2001;
     private static final long SET_RGBW = 2002;
 
@@ -54,6 +56,15 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
 
     @Override
     public void onCreateActions(List<GuidedAction> actions, @Nullable Bundle savedInstanceState) {
+        // Direct entry so layout/LED-count settings are reachable without first
+        // saving this step; the layout page owns physical LEDs, T/B/L/R, gap,
+        // input position and reverse.
+        actions.add(new GuidedAction.Builder(requireContext())
+                .id(ACTION_LAYOUT)
+                .title("Layout & LED count")
+                .description("Top/Bottom/Left/Right, gap, input, reverse, physical LEDs")
+                .build());
+
         String host = controller.draft().get(ConfigFields.WLED_HOST);
         String protocol = controller.draft().get(ConfigFields.WLED_PROTOCOL);
         String rgbw = controller.draft().get(ConfigFields.WLED_RGBW_MODE);
@@ -92,12 +103,14 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
         actions.add(backAction());
     }
 
-    private static final long ACTION_TEST = 1007L;
-
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
         if (action.getId() == CONTINUE) {
             save();
+            return;
+        }
+        if (action.getId() == ACTION_LAYOUT) {
+            startActivity(new android.content.Intent(requireContext(), LayoutSettingsActivity.class));
             return;
         }
         if (action.getId() == ACTION_TEST) {
