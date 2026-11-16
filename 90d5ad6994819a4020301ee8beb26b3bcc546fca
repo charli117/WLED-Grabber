@@ -1,0 +1,41 @@
+docs/task/06-capture.md
+  e2fcb4b975340679 91-92,130-131
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/capture/ImageReaderLifecycleInstrumentedTest.java
+  e2fcb4b975340679 1-107
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/capture/OutputOwnershipInstrumentedTest.java
+  e2fcb4b975340679 1-84
+docs/task/07-preview.md
+  e2fcb4b975340679 50-51
+docs/task/00-overview.md
+  e2fcb4b975340679 143-145
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/views/LedLayoutPreviewInstrumentedTest.java
+  e2fcb4b975340679 1-94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "90d5ad6994819a4020301ee8beb26b3bcc546fca",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 465,
+      "total_deletions": 174,
+      "accepted_lines": 294,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/5e8eac50d4c7ed8ee6b65675bce572432a82c6e57e4749eb670e17a2e5c92de9",
+      "token_usage": {
+        "input_tokens": 3020440,
+        "output_tokens": 1581313,
+        "cache_read_tokens": 706340224,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
