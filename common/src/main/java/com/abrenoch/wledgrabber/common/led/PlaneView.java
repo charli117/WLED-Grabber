@@ -24,7 +24,6 @@ public final class PlaneView {
     private final int cropWidth;
     private final int cropHeight;
     private ByteBuffer reader;
-    private byte[] rowBytes;
 
     private PlaneView(ByteBuffer buffer, int width, int height, int rowStride, int pixelStride,
                       int offset, int limit, int cropLeft, int cropTop,
@@ -81,16 +80,14 @@ public final class PlaneView {
     }
 
     /**
-     * Copies one crop row into {@code rgb} as consecutive R,G,B bytes. Reading a
-     * whole row per JNI crossing keeps the per-frame buffer access bounded; the
-     * old per-channel {@code read()} made one JNI call per pixel channel.
+     * Copies the raw bytes covering one crop row into {@code out}: pixel 0 starts
+     * at index 0, pixel n at {@code n * pixelStride}. Callers pick R/G/B by the
+     * public pixel stride. One bulk read per row bounds the JNI crossings; the
+     * previous per-channel read made one JNI call per pixel channel.
      */
-    void readRow(int y, byte[] rgb) {
+    void readRow(int y, byte[] out) {
         int rowStart = offset + (cropTop + y) * rowStride + cropLeft * pixelStride;
         int span = (cropWidth - 1) * pixelStride + 4;
-        if (rowBytes == null || rowBytes.length < span) {
-            rowBytes = new byte[span];
-        }
         ByteBuffer source = reader;
         if (source == null) {
             source = buffer.duplicate();
@@ -98,14 +95,7 @@ public final class PlaneView {
         }
         // The duplicate keeps the validated limit; only the position moves per row.
         source.position(rowStart);
-        source.get(rowBytes, 0, span);
-        int out = 0;
-        for (int x = 0; x < cropWidth; x++) {
-            int in = x * pixelStride;
-            rgb[out++] = rowBytes[in];
-            rgb[out++] = rowBytes[in + 1];
-            rgb[out++] = rowBytes[in + 2];
-        }
+        source.get(out, 0, span);
     }
 
     public int width() {

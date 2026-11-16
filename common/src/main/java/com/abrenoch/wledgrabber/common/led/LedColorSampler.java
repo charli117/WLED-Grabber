@@ -21,10 +21,10 @@ public final class LedColorSampler {
                 || layout.captureHeight() != plane.cropHeight()) {
             return false;
         }
-        integral.update(plane);
         List<PixelRect> rects = layout.pixelRects();
+        integral.update(plane, rects);
         for (int i = 0; i < rects.size(); i++) {
-            integral.mean(rects.get(i), channel);
+            integral.mean(i, channel);
             argbOut[i] = 0xff000000
                     | (channel[0] << 16)
                     | (channel[1] << 8)
@@ -58,7 +58,8 @@ public final class LedColorSampler {
             return false;
         }
 
-        integral.update(plane);
+        List<PixelRect> rects = layout.pixelRects();
+        integral.update(plane, rects, averageColor);
         if (averageColor) {
             integral.meanFull(channel);
             for (int physical = 0; physical < physicalCount; physical++) {
@@ -76,9 +77,8 @@ public final class LedColorSampler {
         if (logicalColors.length < count) {
             logicalColors = new int[count];
         }
-        List<PixelRect> rects = layout.pixelRects();
         for (int i = 0; i < count; i++) {
-            integral.mean(rects.get(i), channel);
+            integral.mean(i, channel);
             logicalColors[i] = (channel[0] << 16) | (channel[1] << 8) | channel[2];
         }
         for (int physical = 0; physical < physicalCount; physical++) {

@@ -155,10 +155,13 @@ public class LedColorSamplerTest {
         PlaneData data = plane(32, 18, 0, 4, 0, 0, 0, 32, 18, (x, y) -> new int[]{x, y, 1});
         CompiledLayout layout = randomLayout(new Random(7), 32, 18);
         int[] out = new int[layout.count()];
+        assertTrue(sampler.sample(data.view, layout, out));
+        int allocationsAfterWarmUp = sampler.allocationCount();
         for (int i = 0; i < 100000; i++) {
             assertTrue(sampler.sample(data.view, layout, out));
         }
-        assertEquals(3, sampler.allocationCount());
+        // The workspace is sized once; the steady-state hot path allocates nothing.
+        assertEquals(allocationsAfterWarmUp, sampler.allocationCount());
         assertEquals(32, sampler.integralWidth());
         assertEquals(18, sampler.integralHeight());
     }
@@ -166,8 +169,9 @@ public class LedColorSamplerTest {
     @Test
     public void integralMemoryStaysWithinDocumentedBudget() {
         long bytes = IntegralImage.requiredBytes(640, 640);
-        assertEquals(3L * 641 * 641 * 4, bytes);
-        assertTrue(bytes < 12L * 1024 * 1024);
+        // Row-prefix workspace only; the width*height accumulator is gone.
+        assertEquals(3L * 641 * 4, bytes);
+        assertTrue(bytes < 1024L * 1024);
     }
 
     @Test
