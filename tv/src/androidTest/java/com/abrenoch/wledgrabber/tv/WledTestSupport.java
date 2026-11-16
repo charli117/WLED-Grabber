@@ -108,7 +108,11 @@ final class WledTestSupport {
                 .set(ConfigFields.CAPTURE_MAX_DIMENSION, "640")
                 .set(ConfigFields.FRAME_RATE, "30")
                 .set(ConfigFields.USE_AVG_COLOR, "false")
-                .set(ConfigFields.BOOT, "false");
+                .set(ConfigFields.BOOT, "false")
+                .set(ConfigFields.QUALITY_CROP_BLACK_BARS, "false")
+                .set(ConfigFields.QUALITY_LINEAR_AVERAGE, "false")
+                .set(ConfigFields.QUALITY_SATURATION, "100")
+                .set(ConfigFields.QUALITY_SMOOTHING, "0");
     }
 
     static ConfigSnapshot seedConfig(Context context) {
