@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -199,6 +200,16 @@ public class LedColorSamplerTest {
         return new CompiledLayout(rects, width, height, 0);
     }
 
+    /** One physical LED covering the frame, with a real mapping. */
+    private static CompiledLayout physicalFrame(int width, int height) {
+        LedLayoutConfig config = new LedLayoutConfig(1, 0, 0, 0, 0, 0, 0, false,
+                GapMode.SKIP, 8, 5, 0, 0, 0, 0, 100, 0, 100, 100, 0, 100);
+        LedMapping mapping = LedMapping.compile(config, 1).value();
+        List<LedSampleRect> rects = new ArrayList<>();
+        rects.add(new LedSampleRect(0, 1, 0, 1, Side.TOP, 0));
+        return new CompiledLayout(rects, width, height, 0, mapping);
+    }
+
     private static CompiledLayout rectLayout(double hmin, double hmax, double vmin, double vmax,
                                              int width, int height) {
         List<LedSampleRect> rects = new ArrayList<>();
@@ -232,5 +243,65 @@ public class LedColorSamplerTest {
                 rowStride, pixelStride, cropLeft, cropTop, cropWidth, cropHeight);
         assertTrue(result.errors().toString(), result.isValid());
         return new PlaneData(buffer, result.value());
+    }
+
+    @Test
+    public void qualityOffMatchesFirstVersionBytes() {
+        PlaneData data = plane(8, 8, 0, 4, 0, 0, 0, 8, 8,
+                (x, y) -> new int[]{x * 32, y * 32, 64});
+        CompiledLayout layout = physicalFrame(8, 8);
+        byte[] baseline = new byte[3];
+        byte[] withSettings = new byte[3];
+        assertTrue(sampler.samplePhysical(data.view, layout, false, RgbwMode.RGB,
+                WhiteMode.MIN_SUBTRACT, baseline));
+        assertTrue(sampler.samplePhysical(data.view, layout, false, RgbwMode.RGB,
+                WhiteMode.MIN_SUBTRACT, withSettings, QualitySettings.OFF));
+        assertArrayEquals(baseline, withSettings);
+    }
+
+    @Test
+    public void zeroSaturationGreysEveryPhysicalLed() {
+        PlaneData data = plane(8, 8, 0, 4, 0, 0, 0, 8, 8,
+                (x, y) -> new int[]{200, 40, 90});
+        CompiledLayout layout = physicalFrame(8, 8);
+        byte[] out = new byte[3];
+        assertTrue(sampler.samplePhysical(data.view, layout, false, RgbwMode.RGB,
+                WhiteMode.MIN_SUBTRACT, out, new QualitySettings(false, false, 0, 0)));
+        assertEquals(out[0], out[1]);
+        assertEquals(out[1], out[2]);
+    }
+
+    @Test
+    public void fullSmoothingHoldsThePreviousFrame() {
+        PlaneData white = plane(8, 8, 0, 4, 0, 0, 0, 8, 8,
+                (x, y) -> new int[]{200, 200, 200});
+        PlaneData black = plane(8, 8, 0, 4, 0, 0, 0, 8, 8,
+                (x, y) -> new int[]{0, 0, 0});
+        CompiledLayout layout = physicalFrame(8, 8);
+        QualitySettings smoothing = new QualitySettings(false, false, 100, 100);
+        byte[] first = new byte[3];
+        byte[] second = new byte[3];
+        assertTrue(sampler.samplePhysical(white.view, layout, false, RgbwMode.RGB,
+                WhiteMode.MIN_SUBTRACT, first, smoothing));
+        assertTrue(sampler.samplePhysical(black.view, layout, false, RgbwMode.RGB,
+                WhiteMode.MIN_SUBTRACT, second, smoothing));
+        assertArrayEquals(first, second);
+    }
+
+    @Test
+    public void blackBarCropSamplesOnlyTheContentDomain() {
+        PlaneData letterboxed = plane(20, 10, 0, 4, 0, 0, 0, 20, 10,
+                (x, y) -> y >= 3 && y < 7 ? new int[]{255, 0, 0} : new int[]{0, 0, 0});
+        CompiledLayout layout = physicalFrame(20, 10);
+        LedColorSampler cropper = new LedColorSampler();
+        QualitySettings crop = new QualitySettings(true, false, 100, 0);
+        byte[] out = new byte[3];
+        for (int i = 0; i < 3; i++) {
+            assertTrue(cropper.samplePhysical(letterboxed.view, layout, false, RgbwMode.RGB,
+                    WhiteMode.MIN_SUBTRACT, out, crop));
+        }
+        assertEquals(255, out[0] & 0xff);
+        assertEquals(0, out[1]);
+        assertEquals(0, out[2]);
     }
 }

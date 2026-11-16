@@ -64,6 +64,10 @@
   <string name="field_framerate">帧率</string>
   <string name="field_use_avg_color">使用平均屏幕色</string>
   <string name="field_start_on_boot">开机启动</string>
+  <string name="field_quality_crop">黑边裁剪</string>
+  <string name="field_quality_linear">线性平均</string>
+  <string name="field_quality_saturation">饱和度（100 为中性）</string>
+  <string name="field_quality_smoothing">时间平滑</string>
 
   <!-- Settings chrome shared by mobile and TV -->
   <string name="settings_title">WLED Grabber 设置</string>

@@ -39,6 +39,12 @@ public final class ConfigFields {
     public static final String USE_AVG_COLOR = "pref_key_use_avg_color";
     public static final String BOOT = "pref_key_start_on_boot";
 
+    /** SMP-3 optional enhancements; every switch defaults to off/neutral. */
+    public static final String QUALITY_CROP_BLACK_BARS = "pref_key_quality_crop";
+    public static final String QUALITY_LINEAR_AVERAGE = "pref_key_quality_linear";
+    public static final String QUALITY_SATURATION = "pref_key_quality_saturation";
+    public static final String QUALITY_SMOOTHING = "pref_key_quality_smoothing";
+
     /** Repository-only error field for storage failures. */
     public static final String STORAGE = "config_storage";
 
@@ -89,7 +95,11 @@ public final class ConfigFields {
             CAPTURE_MAX_DIMENSION,
             FRAME_RATE,
             USE_AVG_COLOR,
-            BOOT
+            BOOT,
+            QUALITY_CROP_BLACK_BARS,
+            QUALITY_LINEAR_AVERAGE,
+            QUALITY_SATURATION,
+            QUALITY_SMOOTHING
     };
 
     private ConfigFields() {

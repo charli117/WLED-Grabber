@@ -98,6 +98,8 @@ public class WledScreenService extends Service {
     private int channels;
     private int frameRate;
     private boolean averageColor;
+    private com.abrenoch.wledgrabber.common.led.QualitySettings quality =
+            com.abrenoch.wledgrabber.common.led.QualitySettings.OFF;
     private boolean running;
     private boolean stopping;
     private long epoch;
@@ -244,6 +246,8 @@ public class WledScreenService extends Service {
             channels = rgbwMode == RgbwMode.RGBW ? 4 : 3;
             frameRate = Math.max(1, capture.frameRate());
             averageColor = capture.useAverageColor();
+            quality = capture.quality();
+            sampler.resetQualityState();
             scratch = new byte[physicalCount * channels];
             lastFrame = new byte[physicalCount * channels];
             framePool = new FramePool(physicalCount * channels);
@@ -387,7 +391,7 @@ public class WledScreenService extends Service {
                 return;
             }
             if (!sampler.samplePhysical(plane.value(), layout, averageColor,
-                    rgbwMode, whiteMode, scratch)) {
+                    rgbwMode, whiteMode, scratch, quality)) {
                 return;
             }
             samplingMicros.recordMicros((System.nanoTime() - sampleStartNanos) / 1000);
@@ -489,6 +493,8 @@ public class WledScreenService extends Service {
             httpClient = null;
         }
         releaseOutputOwnership();
+        sampler.resetQualityState();
+        quality = com.abrenoch.wledgrabber.common.led.QualitySettings.OFF;
         framePool = null;
         layout = null;
         scratch = null;

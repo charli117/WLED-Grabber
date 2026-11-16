@@ -52,6 +52,10 @@ public final class PreferencesConfigStorage implements ConfigStorage {
         add(keys, types, ConfigFields.FRAME_RATE, R.string.pref_key_framerate, "integer");
         add(keys, types, ConfigFields.USE_AVG_COLOR, R.string.pref_key_use_avg_color, "bool");
         add(keys, types, ConfigFields.BOOT, R.string.pref_key_boot, "bool");
+        add(keys, types, ConfigFields.QUALITY_CROP_BLACK_BARS, R.string.pref_key_quality_crop, "bool");
+        add(keys, types, ConfigFields.QUALITY_LINEAR_AVERAGE, R.string.pref_key_quality_linear, "bool");
+        add(keys, types, ConfigFields.QUALITY_SATURATION, R.string.pref_key_quality_saturation, "integer");
+        add(keys, types, ConfigFields.QUALITY_SMOOTHING, R.string.pref_key_quality_smoothing, "integer");
         KEY_RESOURCES = Collections.unmodifiableMap(keys);
         KEY_TYPES = Collections.unmodifiableMap(types);
     }

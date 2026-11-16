@@ -44,6 +44,8 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
     private static final long PROBE_BOTTOM = 3109L;
     private static final long PROBE_LEFT = 3110L;
     private static final long PROBE_INPUT = 3111L;
+    private static final long QUALITY_CROP = 3112L;
+    private static final long QUALITY_LINEAR = 3113L;
     private static final long SET_GAP_MODE = 3201L;
     private static final long SET_WHITE_MODE = 3202L;
 
@@ -59,7 +61,8 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
             ConfigFields.LED_CORNER_TR_H, ConfigFields.LED_CORNER_TR_V,
             ConfigFields.LED_CORNER_BR_H, ConfigFields.LED_CORNER_BR_V,
             ConfigFields.LED_CORNER_BL_H, ConfigFields.LED_CORNER_BL_V,
-            ConfigFields.FRAME_RATE, ConfigFields.CAPTURE_MAX_DIMENSION
+            ConfigFields.FRAME_RATE, ConfigFields.CAPTURE_MAX_DIMENSION,
+            ConfigFields.QUALITY_SATURATION, ConfigFields.QUALITY_SMOOTHING
     };
 
     private final Map<String, Long> ids = new LinkedHashMap<>();
@@ -138,6 +141,20 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
                 .id(PROBE_LEFT).title(getString(R.string.wled_probe_left)).build());
         actions.add(new GuidedAction.Builder(requireContext())
                 .id(PROBE_INPUT).title(getString(R.string.wled_probe_input)).build());
+        actions.add(new GuidedAction.Builder(requireContext())
+                .id(QUALITY_CROP)
+                .title(getString(R.string.field_quality_crop))
+                .checkSetId(GuidedAction.CHECKBOX_CHECK_SET_ID)
+                .checked(Boolean.parseBoolean(
+                        controller.draft().get(ConfigFields.QUALITY_CROP_BLACK_BARS)))
+                .build());
+        actions.add(new GuidedAction.Builder(requireContext())
+                .id(QUALITY_LINEAR)
+                .title(getString(R.string.field_quality_linear))
+                .checkSetId(GuidedAction.CHECKBOX_CHECK_SET_ID)
+                .checked(Boolean.parseBoolean(
+                        controller.draft().get(ConfigFields.QUALITY_LINEAR_AVERAGE)))
+                .build());
     }
 
     @Override
@@ -281,6 +298,10 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
                     assertSubActionValue(WHITE_MODE, String.class));
             controller.set(ConfigFields.USE_AVG_COLOR,
                     Boolean.toString(findActionById(AVG_COLOR).isChecked()));
+            controller.set(ConfigFields.QUALITY_CROP_BLACK_BARS,
+                    Boolean.toString(findActionById(QUALITY_CROP).isChecked()));
+            controller.set(ConfigFields.QUALITY_LINEAR_AVERAGE,
+                    Boolean.toString(findActionById(QUALITY_LINEAR).isChecked()));
             ValidationResult<ConfigSnapshot> result = controller.save();
             if (!result.isValid()) {
                 showToast(getString(R.string.wled_setup_invalid) + " "

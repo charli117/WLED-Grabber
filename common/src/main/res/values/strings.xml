@@ -118,6 +118,10 @@
   <string name="field_framerate">Frame rate</string>
   <string name="field_use_avg_color">Use average screen color</string>
   <string name="field_start_on_boot">Start on boot</string>
+  <string name="field_quality_crop">Black-bar crop</string>
+  <string name="field_quality_linear">Linear averaging</string>
+  <string name="field_quality_saturation">Saturation (100 neutral)</string>
+  <string name="field_quality_smoothing">Temporal smoothing</string>
 
   <!-- Settings chrome shared by mobile and TV -->
   <string name="settings_title">WLED Grabber settings</string>

@@ -7,6 +7,7 @@ import com.abrenoch.wledgrabber.common.network.wled.DeviceEndpoint;
 import com.abrenoch.wledgrabber.common.led.GapMode;
 import com.abrenoch.wledgrabber.common.led.LedLayoutConfig;
 import com.abrenoch.wledgrabber.common.led.Protocol;
+import com.abrenoch.wledgrabber.common.led.QualitySettings;
 import com.abrenoch.wledgrabber.common.led.RgbwMode;
 import com.abrenoch.wledgrabber.common.led.ValidatedConfig;
 import com.abrenoch.wledgrabber.common.led.WhiteMode;
@@ -74,6 +75,10 @@ public final class ConfigValidator {
         Integer frameRate = intValue(draft, ConfigFields.FRAME_RATE, 1, 60, errors);
         Boolean useAverageColor = boolValue(draft, ConfigFields.USE_AVG_COLOR, errors);
         Boolean boot = boolValue(draft, ConfigFields.BOOT, errors);
+        Boolean qualityCrop = boolValue(draft, ConfigFields.QUALITY_CROP_BLACK_BARS, errors);
+        Boolean qualityLinear = boolValue(draft, ConfigFields.QUALITY_LINEAR_AVERAGE, errors);
+        Integer qualitySaturation = intValue(draft, ConfigFields.QUALITY_SATURATION, 0, 200, errors);
+        Integer qualitySmoothing = intValue(draft, ConfigFields.QUALITY_SMOOTHING, 0, 100, errors);
 
         if (rgbwMode == RgbwMode.RGBW && protocol == Protocol.DNRGB) {
             errors.add(new FieldError(ConfigFields.WLED_PROTOCOL,
@@ -122,7 +127,8 @@ public final class ConfigValidator {
                 hDepth, vDepth, overlap, edgeGap,
                 cornerTlH, cornerTlV, cornerTrH, cornerTrV,
                 cornerBrH, cornerBrV, cornerBlH, cornerBlV);
-        CaptureConfig capture = new CaptureConfig(maxDimension, frameRate, useAverageColor, boot);
+        CaptureConfig capture = new CaptureConfig(maxDimension, frameRate, useAverageColor, boot,
+                new QualitySettings(qualityCrop, qualityLinear, qualitySaturation, qualitySmoothing));
         return ValidationResult.ok(new ConfigSnapshot(ConfigSnapshot.CURRENT_SCHEMA_VERSION, 0,
                 device, layout, capture));
     }

@@ -12,8 +12,10 @@ import java.util.List;
  * writing a width*height accumulator; that write traffic dominated the frame
  * budget on the TV SoC.</p>
  *
- * <p>Workspace arrays are reallocated only when the capture size or the rect
- * count grows, so the steady-state hot path allocates nothing.</p>
+ * <p>SMP-3 options: {@code linearAverage} sums 12-bit linearized channel values
+ * and converts the mean back to sRGB; a {@link CropWindow} remaps every rect
+ * into the detected content domain. Both are inert when off, so the default
+ * output is byte-identical to the first version.</p>
  */
 public final class IntegralImage {
     private int[] prefixRed = new int[0];
@@ -27,6 +29,16 @@ public final class IntegralImage {
     private int[] rectX1 = new int[0];
     private int[] rectY0 = new int[0];
     private int[] rectY1 = new int[0];
+    private int[] workX0 = new int[0];
+    private int[] workX1 = new int[0];
+    private int[] workY0 = new int[0];
+    private int[] workY1 = new int[0];
+    private int[] workAreas = new int[0];
+    private int[] bX0;
+    private int[] bX1;
+    private int[] bY0;
+    private int[] bY1;
+    private int[] bAreas;
     private byte[] rowBytes;
 
     private int width;
@@ -37,7 +49,7 @@ public final class IntegralImage {
     private long totalGreen;
     private long totalBlue;
     private boolean lastFullMeanValid;
-    private int allocationCount;
+    private boolean linear;
 
     public void ensureCapacity(int newWidth, int newHeight) {
         if (newWidth <= 0 || newHeight <= 0
@@ -50,23 +62,31 @@ public final class IntegralImage {
         prefixRed = new int[newWidth + 1];
         prefixGreen = new int[newWidth + 1];
         prefixBlue = new int[newWidth + 1];
-        allocationCount += 3;
         width = newWidth;
         height = newHeight;
     }
 
     /** Computes every rect mean for this frame; caller passes the layout rects. */
     public void update(PlaneView plane, List<PixelRect> rects) {
-        update(plane, rects, false);
+        update(plane, rects, false, QualitySettings.OFF, null);
+    }
+
+    public void update(PlaneView plane, List<PixelRect> rects, boolean needFullMean) {
+        update(plane, rects, needFullMean, QualitySettings.OFF, null);
     }
 
     /**
      * @param needFullMean also accumulate whole-frame sums for {@link #meanFull}
      *                     (forces the full-frame scan path).
+     * @param quality      SMP-3 switches; null is treated as off.
+     * @param window       content domain from black-bar detection, or null.
      */
-    public void update(PlaneView plane, List<PixelRect> rects, boolean needFullMean) {
+    public void update(PlaneView plane, List<PixelRect> rects, boolean needFullMean,
+                       QualitySettings quality, CropWindow window) {
         ensureCapacity(plane.cropWidth(), plane.cropHeight());
         ensureRects(rects);
+        linear = quality != null && quality.linearAverage();
+        prepareBounds(window);
         Arrays.fill(sumRed, 0, rectCount, 0);
         Arrays.fill(sumGreen, 0, rectCount, 0);
         Arrays.fill(sumBlue, 0, rectCount, 0);
@@ -94,18 +114,26 @@ public final class IntegralImage {
         for (int y = 0; y < height; y++) {
             plane.readRow(y, rowBytes);
             for (int i = 0; i < rectCount; i++) {
-                if (y < rectY0[i] || y >= rectY1[i]) {
+                if (y < bY0[i] || y >= bY1[i]) {
                     continue;
                 }
                 int red = 0;
                 int green = 0;
                 int blue = 0;
-                int src = rectX0[i] * pixelStride;
-                int end = rectX1[i] * pixelStride;
-                for (; src < end; src += pixelStride) {
-                    red += rowBytes[src] & 0xff;
-                    green += rowBytes[src + 1] & 0xff;
-                    blue += rowBytes[src + 2] & 0xff;
+                int src = bX0[i] * pixelStride;
+                int end = bX1[i] * pixelStride;
+                if (linear) {
+                    for (; src < end; src += pixelStride) {
+                        red += ColorQuality.toLinear(rowBytes[src] & 0xff);
+                        green += ColorQuality.toLinear(rowBytes[src + 1] & 0xff);
+                        blue += ColorQuality.toLinear(rowBytes[src + 2] & 0xff);
+                    }
+                } else {
+                    for (; src < end; src += pixelStride) {
+                        red += rowBytes[src] & 0xff;
+                        green += rowBytes[src + 1] & 0xff;
+                        blue += rowBytes[src + 2] & 0xff;
+                    }
                 }
                 sumRed[i] += red;
                 sumGreen[i] += green;
@@ -121,35 +149,53 @@ public final class IntegralImage {
             int green = 0;
             int blue = 0;
             int src = 0;
-            for (int x = 0; x < width; x++) {
-                red += rowBytes[src] & 0xff;
-                green += rowBytes[src + 1] & 0xff;
-                blue += rowBytes[src + 2] & 0xff;
-                src += pixelStride;
-                prefixRed[x + 1] = red;
-                prefixGreen[x + 1] = green;
-                prefixBlue[x + 1] = blue;
+            if (linear) {
+                for (int x = 0; x < width; x++) {
+                    red += ColorQuality.toLinear(rowBytes[src] & 0xff);
+                    green += ColorQuality.toLinear(rowBytes[src + 1] & 0xff);
+                    blue += ColorQuality.toLinear(rowBytes[src + 2] & 0xff);
+                    src += pixelStride;
+                    prefixRed[x + 1] = red;
+                    prefixGreen[x + 1] = green;
+                    prefixBlue[x + 1] = blue;
+                }
+            } else {
+                for (int x = 0; x < width; x++) {
+                    red += rowBytes[src] & 0xff;
+                    green += rowBytes[src + 1] & 0xff;
+                    blue += rowBytes[src + 2] & 0xff;
+                    src += pixelStride;
+                    prefixRed[x + 1] = red;
+                    prefixGreen[x + 1] = green;
+                    prefixBlue[x + 1] = blue;
+                }
             }
             totalRed += red;
             totalGreen += green;
             totalBlue += blue;
             for (int i = 0; i < rectCount; i++) {
-                if (y < rectY0[i] || y >= rectY1[i]) {
+                if (y < bY0[i] || y >= bY1[i]) {
                     continue;
                 }
-                sumRed[i] += prefixRed[rectX1[i]] - prefixRed[rectX0[i]];
-                sumGreen[i] += prefixGreen[rectX1[i]] - prefixGreen[rectX0[i]];
-                sumBlue[i] += prefixBlue[rectX1[i]] - prefixBlue[rectX0[i]];
+                sumRed[i] += prefixRed[bX1[i]] - prefixRed[bX0[i]];
+                sumGreen[i] += prefixGreen[bX1[i]] - prefixGreen[bX0[i]];
+                sumBlue[i] += prefixBlue[bX1[i]] - prefixBlue[bX0[i]];
             }
         }
     }
 
     /** Fills out[0..2] with floor(sum/area) for the rect at {@code index}. */
     public void mean(int index, int[] out) {
-        int area = rectAreas[index];
-        out[0] = sumRed[index] / area;
-        out[1] = sumGreen[index] / area;
-        out[2] = sumBlue[index] / area;
+        int area = bAreas[index];
+        if (linear) {
+            out[0] = ColorQuality.toSrgb(sumRed[index] / area);
+            out[1] = ColorQuality.toSrgb(sumGreen[index] / area);
+            out[2] = ColorQuality.toSrgb(sumBlue[index] / area);
+        } else {
+            out[0] = sumRed[index] / area;
+            out[1] = sumGreen[index] / area;
+            out[2] = sumBlue[index] / area;
+        }
     }
 
     /** Full-domain mean without allocating a rectangle. */
@@ -158,9 +204,46 @@ public final class IntegralImage {
             throw new IllegalStateException("meanFull requires a full-frame update");
         }
         int area = width * height;
-        out[0] = (int) (totalRed / area);
-        out[1] = (int) (totalGreen / area);
-        out[2] = (int) (totalBlue / area);
+        if (linear) {
+            out[0] = ColorQuality.toSrgb((int) (totalRed / area));
+            out[1] = ColorQuality.toSrgb((int) (totalGreen / area));
+            out[2] = ColorQuality.toSrgb((int) (totalBlue / area));
+        } else {
+            out[0] = (int) (totalRed / area);
+            out[1] = (int) (totalGreen / area);
+            out[2] = (int) (totalBlue / area);
+        }
+    }
+
+    private void prepareBounds(CropWindow window) {
+        if (window == null || window.isFullFrame(width, height)) {
+            bX0 = rectX0;
+            bX1 = rectX1;
+            bY0 = rectY0;
+            bY1 = rectY1;
+            bAreas = rectAreas;
+            return;
+        }
+        for (int i = 0; i < rectCount; i++) {
+            int x0 = window.x0() + Math.round((float) rectX0[i] * window.width() / width);
+            int x1 = window.x0() + Math.round((float) rectX1[i] * window.width() / width);
+            int y0 = window.y0() + Math.round((float) rectY0[i] * window.height() / height);
+            int y1 = window.y0() + Math.round((float) rectY1[i] * window.height() / height);
+            x0 = Math.max(window.x0(), Math.min(window.x1() - 1, x0));
+            x1 = Math.max(x0 + 1, Math.min(window.x1(), x1));
+            y0 = Math.max(window.y0(), Math.min(window.y1() - 1, y0));
+            y1 = Math.max(y0 + 1, Math.min(window.y1(), y1));
+            workX0[i] = x0;
+            workX1[i] = x1;
+            workY0[i] = y0;
+            workY1[i] = y1;
+            workAreas[i] = (x1 - x0) * (y1 - y0);
+        }
+        bX0 = workX0;
+        bX1 = workX1;
+        bY0 = workY0;
+        bY1 = workY1;
+        bAreas = workAreas;
     }
 
     private void ensureRects(List<PixelRect> rects) {
@@ -174,7 +257,11 @@ public final class IntegralImage {
             rectX1 = new int[count];
             rectY0 = new int[count];
             rectY1 = new int[count];
-            allocationCount += 4;
+            workX0 = new int[count];
+            workX1 = new int[count];
+            workY0 = new int[count];
+            workY1 = new int[count];
+            workAreas = new int[count];
         }
         rectCount = count;
         rectAreaSum = 0;
@@ -190,7 +277,8 @@ public final class IntegralImage {
     }
 
     public int allocationCount() {
-        return allocationCount;
+        // The workspaces are sized once per max rect count / capture size.
+        return (prefixRed.length > 0 ? 3 : 0) + (rectX0.length > 0 ? 1 : 0);
     }
 
     public int width() {

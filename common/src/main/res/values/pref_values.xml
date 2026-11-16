@@ -104,4 +104,14 @@
 
     <string name="pref_key_capture_max_dimension" translatable="false">pref_key_capture_max_dimension</string>
     <integer name="pref_default_capture_max_dimension" translatable="false">640</integer>
+
+    <!-- SMP-3 optional enhancements (off by default) -->
+    <string name="pref_key_quality_crop" translatable="false">pref_key_quality_crop</string>
+    <bool name="pref_default_quality_crop" translatable="false">false</bool>
+    <string name="pref_key_quality_linear" translatable="false">pref_key_quality_linear</string>
+    <bool name="pref_default_quality_linear" translatable="false">false</bool>
+    <string name="pref_key_quality_saturation" translatable="false">pref_key_quality_saturation</string>
+    <integer name="pref_default_quality_saturation" translatable="false">100</integer>
+    <string name="pref_key_quality_smoothing" translatable="false">pref_key_quality_smoothing</string>
+    <integer name="pref_default_quality_smoothing" translatable="false">0</integer>
 </resources>

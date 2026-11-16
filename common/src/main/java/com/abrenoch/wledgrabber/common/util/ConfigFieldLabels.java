@@ -53,6 +53,10 @@ public final class ConfigFieldLabels {
             case ConfigFields.FRAME_RATE: return R.string.field_framerate;
             case ConfigFields.USE_AVG_COLOR: return R.string.field_use_avg_color;
             case ConfigFields.BOOT: return R.string.field_start_on_boot;
+            case ConfigFields.QUALITY_CROP_BLACK_BARS: return R.string.field_quality_crop;
+            case ConfigFields.QUALITY_LINEAR_AVERAGE: return R.string.field_quality_linear;
+            case ConfigFields.QUALITY_SATURATION: return R.string.field_quality_saturation;
+            case ConfigFields.QUALITY_SMOOTHING: return R.string.field_quality_smoothing;
             default: return 0;
         }
     }

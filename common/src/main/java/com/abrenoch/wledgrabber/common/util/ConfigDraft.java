@@ -82,6 +82,14 @@ public final class ConfigDraft {
         draft.set(ConfigFields.FRAME_RATE, Integer.toString(capture.frameRate()));
         draft.set(ConfigFields.USE_AVG_COLOR, Boolean.toString(capture.useAverageColor()));
         draft.set(ConfigFields.BOOT, Boolean.toString(capture.bootReminder()));
+        draft.set(ConfigFields.QUALITY_CROP_BLACK_BARS,
+                Boolean.toString(capture.quality().cropBlackBars()));
+        draft.set(ConfigFields.QUALITY_LINEAR_AVERAGE,
+                Boolean.toString(capture.quality().linearAverage()));
+        draft.set(ConfigFields.QUALITY_SATURATION,
+                Integer.toString(capture.quality().saturationPercent()));
+        draft.set(ConfigFields.QUALITY_SMOOTHING,
+                Integer.toString(capture.quality().temporalSmoothingPercent()));
         return draft;
     }
 }
