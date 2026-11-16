@@ -1,0 +1,58 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/led/IntegralImage.java
+  e2fcb4b975340679 3-5,7-16,19-31,34-39,47,50-52,58-67,69-89,91-93,96-112,117-144,147-152,157-159,161-163,166-189,203-206
+common/src/main/java/com/abrenoch/wledgrabber/common/led/PlaneView.java
+  e2fcb4b975340679 83-86,88,98
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LedColorSampler.java
+  e2fcb4b975340679 25,27,61-62,81
+common/src/test/java/com/abrenoch/wledgrabber/common/led/LedColorSamplerTest.java
+  e2fcb4b975340679 158-159,163-164,172-174
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "37e97fff30f2b561a83bd8690f0b60c563ca02ac",
+  "prompts": {
+    "28269c58ea12fffa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a2e7f4d-46e0-48b2-b4dc-a10fcb19f35f",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 3,
+      "accepted_lines": 3,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/472af70d75c309e21fa5dedcb8d1781fa829ed78904dea1642caaf037a10dcc3",
+      "token_usage": {
+        "input_tokens": 139512,
+        "output_tokens": 31880,
+        "cache_read_tokens": 2134016,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 1346,
+      "total_deletions": 605,
+      "accepted_lines": 1467,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/d6753e340194be7afc6c5422e394ef948a5a93091020238449e93838002571d1",
+      "token_usage": {
+        "input_tokens": 1347068,
+        "output_tokens": 1325687,
+        "cache_read_tokens": 526934016,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
