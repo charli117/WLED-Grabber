@@ -68,9 +68,17 @@ public class NetworkScanActivity extends LeanbackActivity implements WledScanner
         super.onBackPressed();
     }
 
+    /** A scan that finishes after the page is gone must not touch the view tree. */
+    private boolean canUpdateUi() {
+        return !isFinishing() && !isDestroyed();
+    }
+
     @SuppressLint("StringFormatInvalid")
     @Override
     public void onScanStarted() {
+        if (!canUpdateUi()) {
+            return;
+        }
         isScanning = true;
         binding.startScanButton.setText(com.abrenoch.wledgrabber.common.R.string.scanner_scan_in_progress_button);
         binding.scannerDescriptionText.setGravity(Gravity.CENTER);
@@ -81,6 +89,9 @@ public class NetworkScanActivity extends LeanbackActivity implements WledScanner
 
     @Override
     public void onScanFinished(@Nullable WledDevice device) {
+        if (!canUpdateUi()) {
+            return;
+        }
         isScanning = false;
         binding.progressBar.setIndeterminate(false);
         if (device == null) {
@@ -95,6 +106,9 @@ public class NetworkScanActivity extends LeanbackActivity implements WledScanner
 
     @Override
     public void onScanError(String error) {
+        if (!canUpdateUi()) {
+            return;
+        }
         isScanning = false;
         binding.progressBar.setIndeterminate(false);
         binding.startScanButton.setText(com.abrenoch.wledgrabber.common.R.string.scanner_retry_button);
@@ -106,7 +120,11 @@ public class NetworkScanActivity extends LeanbackActivity implements WledScanner
             try (WledHttpClient client = new WledHttpClient()) {
                 ProbeResult result = client.probe(candidate.host(), candidate.httpPort());
                 if (result.isSuccess()) {
-                    runOnUiThread(() -> openResult(result.device(), candidate.httpPort()));
+                    runOnUiThread(() -> {
+                        if (canUpdateUi()) {
+                            openResult(result.device(), candidate.httpPort());
+                        }
+                    });
                 }
             }
         });
