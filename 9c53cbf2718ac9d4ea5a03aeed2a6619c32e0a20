@@ -1,0 +1,33 @@
+scripts/qa/measure-qa2.sh
+  e2fcb4b975340679 1-75
+docs/verification/wled/qa-2/qa2-runbook.md
+  e2fcb4b975340679 1-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "9c53cbf2718ac9d4ea5a03aeed2a6619c32e0a20",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 142,
+      "total_deletions": 0,
+      "accepted_lines": 142,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/f31ad9e4bd2d055c4707599802cf348ef6e7358cef6b6ab93295309d9e935e29",
+      "token_usage": {
+        "input_tokens": 5800000,
+        "output_tokens": 1680167,
+        "cache_read_tokens": 793448576,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
