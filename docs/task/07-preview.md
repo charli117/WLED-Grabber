@@ -36,7 +36,7 @@ common/.../views/LedLayoutPreviewView、共享测试图案控制器；双端仅�
 
 - [x] LedLayoutPreviewTest验证274/288、SKIP/BLACK、Reverse、竖屏与错误布局的绘制模型。
 - [x] 仪器测试检查键盘/D-pad选中物理0/最后灯，并在resize后保持选中身份（`LedLayoutPreviewInstrumentedTest`，API 21/33/34）。
-- [ ] TV大字体与mobile小屏下焦点/索引/按钮可见，不被insets遮挡。
+- [~] TV大字体：Sony 真机 `font_scale=1.5` 下布局页 14/14 仪器用例通过（标签/按钮仍可见）；mobile 小屏 insets 未测。
 
 **验证入口**：`:common:testDebugUnitTest --tests '*LedLayoutPreviewTest'（另需View仪器测试）`。Gradle入口在FND基座完成后执行；仪器/硬件测试必须记录设备与退出码，不能由JVM通过推定。
 
@@ -47,7 +47,7 @@ common/.../views/LedLayoutPreviewView、共享测试图案控制器；双端仅�
 
 **证据（2026-11-16，本地部分）**：`PreviewModel`与`LedLayoutPreviewView`落地；8个`LedLayoutPreviewTest`通过，覆盖274/288、SKIP/BLACK、Reverse、竖屏、梯形角点、尾黑、选中越界与错误模型。View只读同一`CompiledLayout`/映射，不解析Preferences、不发网络；触摸与D-pad选择、TV大字体/mobile小屏/insets仪器测试未执行，PRE-1保持“待验证”。证据见`docs/verification/wled/pre-1/`。
 
-**证据（2026-11-17，设备端 View）**：新增`LedLayoutPreviewInstrumentedTest`，在真实 Android runtime 验证：D-pad 左右可连续走到物理 273 与 0 并正确钳位、resize（重新 setLayout）后保持用户选中的物理索引 161、错误状态阻断 D-pad 选择（保持 -1）。API **21 / 33 / 34** 均通过。另有`TvTestPatternLifecycleTest`（`tv`模块）：启动测试图案宿主后 finish，断言共享 `TEST` 租约被释放、随后 `CAPTURE` 可重新取得，证明宿主退出不会永久占住输出。此外`touchSelectsTheNearestPhysicalLed`：给 View 真实尺寸后，顶部点击选中一个物理灯，底部点击选中另一个，证明触摸按最近矩形映射。仍未覆盖：TV 大字体/insets、选中索引的像素级 golden。
+**证据（2026-11-17，设备端 View）**：新增`LedLayoutPreviewInstrumentedTest`，在真实 Android runtime 验证：D-pad 左右可连续走到物理 273 与 0 并正确钳位、resize（重新 setLayout）后保持用户选中的物理索引 161、错误状态阻断 D-pad 选择（保持 -1）。API **21 / 33 / 34** 均通过。另有`TvTestPatternSlowNetworkTest`：把主机指向 RFC5737 不可达地址 `192.0.2.1` 后，10 秒图案仍在 15 秒内到达终态，且报告 `UNCONFIRMED`（不伪报 CONFIRMED）。`TvTestPatternLifecycleTest`（`tv`模块）：启动测试图案宿主后 finish，断言共享 `TEST` 租约被释放、随后 `CAPTURE` 可重新取得，证明宿主退出不会永久占住输出。此外`touchSelectsTheNearestPhysicalLed`：给 View 真实尺寸后，顶部点击选中一个物理灯，底部点击选中另一个，证明触摸按最近矩形映射。仍未覆盖：TV 大字体/insets、选中索引的像素级 golden。
 
 <a id="pre-2"></a>
 

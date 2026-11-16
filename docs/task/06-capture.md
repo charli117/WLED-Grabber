@@ -88,7 +88,7 @@ common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer
 
 **证据（2026-11-16，本地部分）**：`GenerationGate`、`ImageLifecycle`、`ImagePlaneView`落地；5个`ScreenEncoderLifecycleTest`通过，覆盖采样异常仍关闭、acquire null/失败、旧generation拒绝、100次生命周期循环0泄漏。`HyperionScreenEncoder`改为Image finally关闭、reader身份+generation校验、reader max3、停止幂等；orientation先关旧reader再resize/setSurface。API34+ captured-content resize、100次真机旋转/锁屏/撤销与仪器测试未执行，CAP-2保持“待验证”。证据见`docs/verification/wled/cap-2/`。
 
-**证据（2026-11-17，设备端 reader）**：新增`ImageReaderLifecycleInstrumentedTest`，用真实 `ImageReader`+`Surface` 生产者验证：20 帧连续 `acquireLatestImage`→`ImagePlaneView.from` 几何正确（320×180）→`close`，**acquired 与 closed 严格相等（无泄漏、无双重关闭）**；`maxImages=3` 时第四次获取被系统以 `IllegalStateException` 拒绝，证明服务必须先 close 再 acquire。API **21 / 33 / 34** 均 11/11 通过。仍未覆盖：旋转/锁屏/授权撤销组合、API34+ 单应用窗口 resize 的实体尺寸变化。
+**证据（2026-11-17，设备端 reader）**：新增`ImageReaderLifecycleInstrumentedTest`，用真实 `ImageReader`+`Surface` 生产者验证：20 帧连续 `acquireLatestImage`→`ImagePlaneView.from` 几何正确（320×180）→`close`，**acquired 与 closed 严格相等（无泄漏、无双重关闭）**；`maxImages=3` 时第四次获取被系统以 `IllegalStateException` 拒绝，证明服务必须先 close 再 acquire。API **21 / 33 / 34** 均 11/11 通过。另有真机/模拟器场景验证（2026-11-17）：API 26 手机模拟器 0→90→0 旋转、锁屏唤醒后 Activity 均存活、无崩溃；仍未覆盖：API 34+ 单应用窗口 resize、100 次旋转/锁屏/撤销组合。
 
 <a id="cap-3"></a>
 
@@ -127,5 +127,5 @@ common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer
 
 **证据（2026-11-16，本地部分）**：`FrameLease`、`FramePool`（3租约）、`OutputOwner`、`LedStreamer`落地；7个`LedStreamerTest`通过，覆盖10万帧无撕裂/无重复归还、pending latest-wins、慢sink停止屏障（黑帧在所有颜色帧之后）、停止超时不误报、CAPTURE/TEST互斥、旧epoch/停止后offer归还、发送失败不泄漏。真实Encoder/transport/UI接线与断网/HTTP超时/Activity退出/授权撤销仪器测试未执行，CAP-3保持“待验证”。证据见`docs/verification/wled/cap-3/`。
 
-**证据（2026-11-17，设备端所有权）**：新增`OutputOwnershipInstrumentedTest`，在真实 Android runtime 验证：CAPTURE 与 TEST 互斥（TEST 持有期间 CAPTURE 启动被拒）、release 必须匹配 owner id 与 epoch（错误 id/错误 owner/过期 epoch 均不释放）、Activity 退出释放后重新进入可再次取得且 epoch 递增、TEST 释放后 CAPTURE 可接管。API **21 / 33 / 34** 均 9/9 通过（含既有 2 个配置/夹具用例）。另新增`WledHttpFailureInstrumentedTest`：本地 socket 接受连接但不应答时，`probe`/`readState` 均返回 `TIMEOUT` 且 probe 在 5s 内返回，`turnOff` 不误报成功；端口关闭返回 `CONNECT_FAILURE`。仍未覆盖：真实断网/路由变更、授权撤销、进程被杀后的 ownership 复位。
+**证据（2026-11-17，设备端所有权）**：新增`OutputOwnershipInstrumentedTest`，在真实 Android runtime 验证：CAPTURE 与 TEST 互斥（TEST 持有期间 CAPTURE 启动被拒）、release 必须匹配 owner id 与 epoch（错误 id/错误 owner/过期 epoch 均不释放）、Activity 退出释放后重新进入可再次取得且 epoch 递增、TEST 释放后 CAPTURE 可接管。API **21 / 33 / 34** 均 9/9 通过（含既有 2 个配置/夹具用例）。另新增`WledHttpFailureInstrumentedTest`：本地 socket 接受连接但不应答时，`probe`/`readState` 均返回 `TIMEOUT` 且 probe 在 5s 内返回，`turnOff` 不误报成功；端口关闭返回 `CONNECT_FAILURE`。另有真机验证（2026-11-17）：测试图案持有 TEST 租约后 `am force-stop` 杀进程，重启服务无“output already owned”、无崩溃，证明 ownership 随进程复位。仍未覆盖：真实断网/路由变更、授权撤销。
 

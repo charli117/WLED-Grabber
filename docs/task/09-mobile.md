@@ -71,7 +71,7 @@ mobile SettingsActivity/MainActivity/TileService、mobile LayoutPreviewActivity�
 
 **独立测试**（完成后勾选并附命令/原始证据）：
 
-- [x] MobileEntryTest覆盖主按钮/磁贴/入口解析/通知通道/进程重建：`MobileEntryTest`（主按钮可见可点）、`MobileEntriesInstrumentedTest`（磁贴服务与`_QS_TILE` 可解析、预览/测试 Activity 可解析、capture 通道与 boot 接收器注册）、`MobileSettingsFormTest`（recreate 保留值）。锁屏/系统撤销仍未覆盖。
+- [x] MobileEntryTest覆盖主按钮/磁贴/入口解析/通知通道/进程重建：`MobileEntryTest`（主按钮可见可点）、`MobileEntriesInstrumentedTest`（磁贴服务与`_QS_TILE` 可解析、预览/测试 Activity 可解析、capture 通道与 boot 接收器注册）、`MobileSettingsFormTest`（recreate 保留值）。锁屏唤醒后 MainActivity 存活、无崩溃（API 26 模拟器）；系统撤销仍未覆盖。
 - [ ] TEST模式不出现录屏弹窗，切换capture/test保持单owner。
 - [~] API21/26/33/34/35上无不可用API调用：API 21/26/33/34 上 mobile 仪器均通过；API 35 部分（无 android-tv 镜像）。横竖屏 insets 未测。
 

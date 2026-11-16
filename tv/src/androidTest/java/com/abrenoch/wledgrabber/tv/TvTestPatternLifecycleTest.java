@@ -29,6 +29,42 @@ public class TvTestPatternLifecycleTest {
         }
     }
 
+
+    @Test
+    public void previewThenPatternThenExitKeepsAFreeOwner() throws Exception {
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        OutputSessionCoordinator coordinator = OutputSessionCoordinator.get();
+
+        // 1) Preview page opens and closes without taking the TEST lease.
+        android.content.Intent preview = new android.content.Intent(
+                InstrumentationRegistry.getInstrumentation().getTargetContext(),
+                com.abrenoch.wledgrabber.common.views.LayoutPreviewActivity.class);
+        preview.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+        android.app.Activity previewActivity = InstrumentationRegistry.getInstrumentation()
+                .startActivitySync(preview);
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(previewActivity::finish);
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        assertEquals("preview must not hold the output lease",
+                OutputOwner.NONE, coordinator.owner());
+
+        // 2) Pattern page takes and releases TEST, leaving a free owner for capture.
+        android.content.Intent pattern = new android.content.Intent(
+                InstrumentationRegistry.getInstrumentation().getTargetContext(),
+                com.abrenoch.wledgrabber.common.views.TestPatternActivity.class);
+        pattern.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+        android.app.Activity patternActivity = InstrumentationRegistry.getInstrumentation()
+                .startActivitySync(pattern);
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(patternActivity::finish);
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        assertEquals("exiting the pattern must free the TEST lease",
+                OutputOwner.NONE, coordinator.owner());
+
+        // 3) Capture can be taken afterwards.
+        assertTrue(coordinator.acquire(OutputOwner.CAPTURE, "post-pattern-capture"));
+        assertTrue(coordinator.release(OutputOwner.CAPTURE, "post-pattern-capture",
+                coordinator.epoch()));
+    }
+
     @Test
     public void leavingThePatternActivityReleasesTheOutputLease() throws Exception {
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
