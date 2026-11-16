@@ -1,0 +1,113 @@
+common/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+  28269c58ea12fffa 2-3,6-9
+common/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+  28269c58ea12fffa 2-3,6-9
+docs/design/app-icon/source/wled-grabber-icon-round-512.svg
+  e2fcb4b975340679 1-20
+docs/design/app-icon/source/wled-grabber-icon-mono-light.svg
+  e2fcb4b975340679 1-13
+common/src/main/res/drawable-v24/ic_launcher_foreground.xml
+  28269c58ea12fffa 2,4-56
+common/src/main/res/drawable/ic_launcher_background.xml
+  28269c58ea12fffa 4-10
+docs/design/app-icon/source/wled-grabber-symbol-white.svg
+  e2fcb4b975340679 1-9
+docs/design/app-icon/brand-guide.md
+  56b284ad51a9a663 1-180
+common/src/main/res/drawable/ic_launcher_monochrome.xml
+  28269c58ea12fffa 1-20
+docs/design/app-icon/source/wled-grabber-icon-512.svg
+  e2fcb4b975340679 1-20
+docs/design/app-icon/source/wled-grabber-symbol.svg
+  e2fcb4b975340679 1-9
+docs/design/app-icon/source/wled-grabber-banner.svg
+  e2fcb4b975340679 1-33
+docs/design/app-icon/source/wled-grabber-lockup-horizontal-light.svg
+  e2fcb4b975340679 1-25
+docs/design/app-icon/source/wled-grabber-lockup-horizontal-dark.svg
+  e2fcb4b975340679 1-32
+docs/design/app-icon/source/wled-grabber-lockup-stacked-dark.svg
+  e2fcb4b975340679 1-32
+docs/design/app-icon/source/wled-grabber-symbol-ink.svg
+  e2fcb4b975340679 1-9
+docs/design/app-icon/source/wled-grabber-icon-mono-dark.svg
+  e2fcb4b975340679 1-13
+common/src/main/res/drawable/ic_notification_icon.xml
+  28269c58ea12fffa 3-20
+common/src/main/res/drawable-v24/ic_launcher_background.xml
+  28269c58ea12fffa 1-19
+docs/design/app-icon/source/wled-grabber-notification-24.svg
+  e2fcb4b975340679 1-7
+docs/design/app-icon/source/wled-grabber-lockup-stacked-light.svg
+  e2fcb4b975340679 1-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "3b3c2b1b0ca74719a8c9dea85a89be576104b78f",
+  "prompts": {
+    "28269c58ea12fffa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a2e7f4d-46e0-48b2-b4dc-a10fcb19f35f",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 438,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/e95e7e2b07b23a16002e2f68d3768335fb3daf93e70aabd3d8636c0d158f63c5",
+      "token_usage": {
+        "input_tokens": 142922,
+        "output_tokens": 35380,
+        "cache_read_tokens": 2708480,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "56b284ad51a9a663": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "34c78244-30f0-42df-9b0a-e1550470b1c3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 835,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/998b4c8ea4929f8040f0dfa821c49bf0bbbb7f7560cc0d89bb2ea2be66cd8518",
+      "token_usage": {
+        "input_tokens": 580968,
+        "output_tokens": 583141,
+        "cache_read_tokens": 43502592,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 3386,
+      "total_deletions": 718,
+      "accepted_lines": 3689,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/21e41b591759cdbf11b58c678cc01400795d5e60d6fd239c4e89ba76201f70ed",
+      "token_usage": {
+        "input_tokens": 1347068,
+        "output_tokens": 1325687,
+        "cache_read_tokens": 526934016,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
