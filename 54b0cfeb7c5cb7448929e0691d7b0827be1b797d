@@ -1,0 +1,41 @@
+common/src/test/java/com/abrenoch/wledgrabber/common/led/LayoutProbeTest.java
+  28269c58ea12fffa 1-108
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/LayoutProbeSender.java
+  28269c58ea12fffa 1-68
+common/src/main/res/values/strings.xml
+  28269c58ea12fffa 152-160
+common/src/main/res/values-zh-rCN/strings.xml
+  28269c58ea12fffa 98-106
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledLayoutStepFragment.java
+  28269c58ea12fffa 10-12,15-17,42-46,131-140,163-182,190-218
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LayoutProbe.java
+  28269c58ea12fffa 1-82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "54b0cfeb7c5cb7448929e0691d7b0827be1b797d",
+  "prompts": {
+    "28269c58ea12fffa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a2e7f4d-46e0-48b2-b4dc-a10fcb19f35f",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 789,
+      "total_deletions": 335,
+      "accepted_lines": 792,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/d917cf2bf29412dc045487c767a652c3558e37d33c1affafa124fe4854a3ce79",
+      "token_usage": {
+        "input_tokens": 141662,
+        "output_tokens": 33952,
+        "cache_read_tokens": 2563840,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
