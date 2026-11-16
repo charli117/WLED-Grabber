@@ -53,6 +53,7 @@ public class TvServiceForegroundContractTest {
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
     }
 
+
     private void startForegroundServiceWithoutConsent() {
         Intent start = new Intent(context, WledScreenService.class);
         start.setAction(WledScreenService.ACTION_START);
