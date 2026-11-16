@@ -1,0 +1,784 @@
+gradlew
+  b2423ab3e479126b 1-19,22-64,67-83,85-90,93,95,97,99,104,110-115,120,125,127,136-139,143,147-162,165-178,181-190,192-200,205-252
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledSession.java
+  cf282f30275fc4e0 1-273
+common/src/main/java/com/abrenoch/wledgrabber/common/util/ConfigStorage.java
+  cf282f30275fc4e0 1-11
+common/src/sharedTest/java/com/abrenoch/wledgrabber/common/config/ConfigTestData.java
+  cf282f30275fc4e0 1-91
+common/src/test/java/com/abrenoch/wledgrabber/common/fixtures/FakeClockTest.java
+  cf282f30275fc4e0 1-23
+mobile/src/main/res/layout/activity_main.xml
+  b2423ab3e479126b 2,9,19,35,56,79,81
+  cf282f30275fc4e0 7,14
+common/src/sharedTest/java/com/abrenoch/wledgrabber/common/fixtures/RgbaPlaneFixture.java
+  cf282f30275fc4e0 1-135
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvTestPatternDeviceTest.java
+  abcc132df9de77f9 1-70
+common/src/main/res/values/strings.xml
+  cf282f30275fc4e0 2,10,18,20,27,32-35,43,49,59-60,62,64,82-85
+  b2423ab3e479126b 68-81
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvMainActivityTest.java
+  d85f48dc0124fb63 1-50,53-58
+  abcc132df9de77f9 51-52
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/ImagePlaneView.java
+  cf282f30275fc4e0 1-32
+common/src/main/java/com/abrenoch/wledgrabber/common/led/PlaneView.java
+  cf282f30275fc4e0 1-133
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/DeviceState.java
+  cf282f30275fc4e0 1-30
+common/src/main/java/com/abrenoch/wledgrabber/common/views/SweepGradientView.java
+  cf282f30275fc4e0 1,10
+common/src/sharedTest/java/com/abrenoch/wledgrabber/common/fixtures/LayoutFixture.java
+  cf282f30275fc4e0 1-43
+scripts/qa/check-doc-links.py
+  cf282f30275fc4e0 1-52
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/DiscoveryCandidate.java
+  cf282f30275fc4e0 1-50
+docs/verification/wled/rel-1/graph-detect-changes.txt
+  cf282f30275fc4e0 1-11
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvLayoutFlowTest.java
+  cf282f30275fc4e0 1-2,7-11,13,16-17,21-25,27,35-36,50-52,54,69-72
+  abcc132df9de77f9 3-6,12,14-15,18-20,26,28-34,37-49,53,55-68
+common/src/sharedTest/java/com/abrenoch/wledgrabber/common/fixtures/DeviceJsonFixture.java
+  cf282f30275fc4e0 1-36
+docs/verification/wled/cfg-2/final-verification.txt
+  b2423ab3e479126b 1-186
+docs/archive/README.md
+  b2423ab3e479126b 1-12
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/OutputSessionCoordinator.java
+  cf282f30275fc4e0 1-50
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/DiscoveryResult.java
+  cf282f30275fc4e0 1-42
+common/src/main/res/values-ar/strings.xml
+  cf282f30275fc4e0 18,34-35,43,60,62,64
+common/src/main/res/values-no/strings.xml
+  cf282f30275fc4e0 10,18,20,32-35,43,49,59-60,62,64
+mobile/src/main/res/values-it/strings.xml
+  cf282f30275fc4e0 5
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LedSampleRect.java
+  cf282f30275fc4e0 1-75
+docs/verification/wled/lay-1/lay-1-2-full-build.txt
+  b2423ab3e479126b 1-190
+common/src/main/java/com/abrenoch/wledgrabber/common/led/WhiteMode.java
+  cf282f30275fc4e0 1-7
+docs/migration/legacy-to-wled-layout.md
+  b2423ab3e479126b 1-93,97,99-104
+  cf282f30275fc4e0 94-96,98
+docs/verification/wled/cap-1/test-summary.txt
+  b2423ab3e479126b 1-2
+docs/verification/wled/cap-3/test-summary.txt
+  b2423ab3e479126b 1-2
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/ProbeResult.java
+  cf282f30275fc4e0 1-49
+common/src/main/java/com/abrenoch/wledgrabber/common/led/CaptureSizing.java
+  cf282f30275fc4e0 1-46
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvWledDeviceTest.java
+  abcc132df9de77f9 1-53
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledHttpClient.java
+  cf282f30275fc4e0 1-350
+docs/task/06-capture.md
+  63020c299dceecab 1-36,38,40-46,63-73,75-83,86-110,113-120,123
+  b2423ab3e479126b 37,39,47-48,74,84-85,111-112,121-122
+  e2fcb4b975340679 50-51
+common/src/main/res/xml/network_security_config.xml
+  abcc132df9de77f9 1-10
+common/src/main/java/com/abrenoch/wledgrabber/common/led/CaptureConfig.java
+  cf282f30275fc4e0 1-32
+common/src/test/java/com/abrenoch/wledgrabber/common/fixtures/RecordingDatagramSinkTest.java
+  cf282f30275fc4e0 1-27
+docs/task/00-overview.md
+  63020c299dceecab 1-29,31-123,132,149-150,172-189,191-208,210-225,227-305,307,309-310
+  e2fcb4b975340679 136
+  cf282f30275fc4e0 140-142,144-145,147-148,170,209,226
+  b2423ab3e479126b 30,124-131,133-135,137-139,143,146,151-169,171,190,306,308,311-312
+docs/verification/wled/fnd-1/toolchain.txt
+  b2423ab3e479126b 1-15
+common/src/sharedTest/java/com/abrenoch/wledgrabber/common/fixtures/FakeClock.java
+  cf282f30275fc4e0 1-21
+mobile/src/main/res/values-de/strings.xml
+  cf282f30275fc4e0 4-5
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/FadingImageView.java
+  cf282f30275fc4e0 1,8
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LedLayoutConfig.java
+  cf282f30275fc4e0 1-150
+common/src/main/java/com/abrenoch/wledgrabber/common/led/ValidatedConfig.java
+  cf282f30275fc4e0 1-16
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/GenerationGate.java
+  cf282f30275fc4e0 1-18
+docs/verification/wled/fnd-1/build-environment.txt
+  b2423ab3e479126b 1-423
+common/src/main/java/com/abrenoch/wledgrabber/common/led/GapMode.java
+  cf282f30275fc4e0 1-18
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/ChannelHint.java
+  cf282f30275fc4e0 1-9
+common/src/test/java/com/abrenoch/wledgrabber/common/qa/EndToEndWledPipelineTest.java
+  cf282f30275fc4e0 1-186
+build.gradle
+  b2423ab3e479126b 2-5,8-9
+mobile/src/main/res/values-cs/strings.xml
+  cf282f30275fc4e0 5
+common/src/test/java/com/abrenoch/wledgrabber/common/capture/LedPatternTest.java
+  cf282f30275fc4e0 1-175
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/WledPacketizerTest.java
+  cf282f30275fc4e0 1-225
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/ManualSetupActivity.java
+  cf282f30275fc4e0 17,20-21,23,35
+docs/verification/wled/fnd-1/build-and-tests-jdk17.txt
+  b2423ab3e479126b 1-170
+docs/verification/wled/cap-2/cap-2-local-verification.txt
+  b2423ab3e479126b 1-186
+tv/src/main/res/layout/activity_network_scan.xml
+  b2423ab3e479126b 2,10,17,39,109
+docs/verification/wled/rel-2/mapping-coverage.txt
+  b2423ab3e479126b 1-16
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/MainActivity.java
+  cf282f30275fc4e0 1,15-18,23,26-35,57-62,80-92,127-130,176,190,214-215,248-249,258
+common/src/main/java/com/abrenoch/wledgrabber/common/util/EdgeToEdge.java
+  cf282f30275fc4e0 1-25
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/SettingsActivity.java
+  cf282f30275fc4e0 1,5-13,15-31,34-35,37,41-43,45-54,56-60,64-119,122-132,134-153,155-159,161-162,164-165,167-170,173-176,178,181-183,185-188,190
+docs/archive/design/wled-direct-ambilight-architecture-review-premerge-2026-11-16.md
+  b2423ab3e479126b 1-291
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/LedTestPattern.java
+  cf282f30275fc4e0 1-135
+common/src/test/java/com/abrenoch/wledgrabber/common/config/ConfigValidatorTest.java
+  cf282f30275fc4e0 1-169
+common/src/main/java/com/abrenoch/wledgrabber/common/WledBootReceiver.java
+  cf282f30275fc4e0 1,3-6,12-22,26-33,35-64
+docs/verification/wled/cfg-1/tests-and-build.txt
+  b2423ab3e479126b 1-87
+common/src/main/java/com/abrenoch/wledgrabber/common/WledNotification.java
+  cf282f30275fc4e0 1,11-12,14-15,24,37,60,100-107
+common/src/main/res/values-fr/strings.xml
+  cf282f30275fc4e0 10,18,20,32-35,43,49,59-60,62,64
+common/src/main/java/com/abrenoch/wledgrabber/common/led/RgbwConverter.java
+  cf282f30275fc4e0 1-29
+common/src/test/java/com/abrenoch/wledgrabber/common/capture/ScreenEncoderLifecycleTest.java
+  cf282f30275fc4e0 1-123
+docs/verification/wled/pre-2/pre-2-local-verification.txt
+  b2423ab3e479126b 1-186
+common/src/main/java/com/abrenoch/wledgrabber/common/util/WledSetupController.java
+  cf282f30275fc4e0 1-61
+common/src/test/java/com/abrenoch/wledgrabber/common/config/ConfigUiAdapterParityTest.java
+  cf282f30275fc4e0 1-43
+docs/verification/wled/qa-1/local-regression.txt
+  d85f48dc0124fb63 449-461
+  abcc132df9de77f9 250-448
+docs/verification/wled/tv-1/verification-final.txt
+  cf282f30275fc4e0 1-186
+common/build.gradle
+  b2423ab3e479126b 1-3,8-9,11-12,16,23,25-37,43-52
+  cf282f30275fc4e0 7
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/WledTestSupport.java
+  abcc132df9de77f9 1-206
+common/src/test/java/com/abrenoch/wledgrabber/common/config/MobileSettingsTest.java
+  cf282f30275fc4e0 1-129
+docs/task/04-sampling.md
+  63020c299dceecab 1-36,40-46,49-71,75-81,84-117
+  b2423ab3e479126b 37-39,47-48,72-74,82-83
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/TestPatternRunner.java
+  cf282f30275fc4e0 1-91
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/WledTileService.java
+  cf282f30275fc4e0 1,13-16,18-27,30,39-40,55,59-60,87-88,91-94,120,139-148
+common/src/main/res/values-nl/strings.xml
+  cf282f30275fc4e0 10,18,20,32-35,40,43,49,59-60,62,64
+common/src/test/java/com/abrenoch/wledgrabber/common/config/ConfigRepositoryTest.java
+  cf282f30275fc4e0 1-160
+docs/verification/wled/cap-2/test-summary.txt
+  b2423ab3e479126b 1-2
+common/src/main/res/values-it/strings.xml
+  cf282f30275fc4e0 10,18,20,32-35,43,49,59-60,62,64
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/LayoutSettingsActivity.java
+  cf282f30275fc4e0 1-20
+tv/src/main/java/com/abrenoch/wledgrabber/tv/views/SettingsRelativeLayout.java
+  cf282f30275fc4e0 1,6,21,39-40,49-50,52-53
+docs/verification/wled/rel-1/test-summary.txt
+  cf282f30275fc4e0 1
+common/src/test/java/com/abrenoch/wledgrabber/common/capture/LedStreamerTest.java
+  cf282f30275fc4e0 1-289
+docs/verification/wled/fnd-1/aar-metadata.txt
+  b2423ab3e479126b 1-31
+common/src/main/java/com/abrenoch/wledgrabber/common/util/ConfigDraft.java
+  cf282f30275fc4e0 1-87
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/StartConfirmation.java
+  cf282f30275fc4e0 1-78
+common/src/main/java/com/abrenoch/wledgrabber/common/led/CompiledLayout.java
+  cf282f30275fc4e0 1-126
+docs/verification/wled/cfg-2/test-summary.txt
+  b2423ab3e479126b 1-10
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/FramePool.java
+  cf282f30275fc4e0 1-59
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/MainActivity.java
+  cf282f30275fc4e0 1,11,15-17,27-30,35,43,45,48,60,73,81-84,87,103,106,110,120-140,156-163,170-171,182-183,217
+settings.gradle
+  b2423ab3e479126b 1-17
+common/src/main/res/values-ru/strings.xml
+  cf282f30275fc4e0 17,31,33
+common/src/main/res/values-es/strings.xml
+  cf282f30275fc4e0 10,28-30
+docs/archive/design/wled-direct-ambilight-architecture-review.md
+  b2423ab3e479126b 1-9
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/DatagramSink.java
+  cf282f30275fc4e0 1-8
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/fixtures/FixtureAvailabilityTest.java
+  cf282f30275fc4e0 1-40
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledUdpTransport.java
+  cf282f30275fc4e0 1-54
+common/src/main/java/com/abrenoch/wledgrabber/common/led/Protocol.java
+  cf282f30275fc4e0 1-19
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/ReadyDevice.java
+  cf282f30275fc4e0 1-33
+common/src/main/java/com/abrenoch/wledgrabber/common/views/LedLayoutPreviewView.java
+  cf282f30275fc4e0 1-211
+common/src/test/java/com/abrenoch/wledgrabber/common/fixtures/ControlledHttpEndpointTest.java
+  cf282f30275fc4e0 1-92
+common/src/test/java/com/abrenoch/wledgrabber/common/fixtures/RgbaPlaneFixtureTest.java
+  cf282f30275fc4e0 1-60
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/FrameLease.java
+  cf282f30275fc4e0 1-79
+tv/src/main/res/layout/activity_main.xml
+  b2423ab3e479126b 2,14,34,49,69,84
+  cf282f30275fc4e0 7,9
+mobile/build.gradle
+  b2423ab3e479126b 1-2,7-8,11-12,17,24,26-31,37-42,47
+  cf282f30275fc4e0 6,10,15,43-46
+mobile/src/main/res/values-ar/strings.xml
+  cf282f30275fc4e0 5
+common/src/test/java/com/abrenoch/wledgrabber/common/views/LedLayoutPreviewTest.java
+  cf282f30275fc4e0 1-167
+common/src/test/java/com/abrenoch/wledgrabber/common/led/RgbwConversionTest.java
+  cf282f30275fc4e0 1-33
+scripts/run-tv-tests.sh
+  abcc132df9de77f9 1-229
+common/src/main/java/com/abrenoch/wledgrabber/common/led/RgbwMode.java
+  cf282f30275fc4e0 1-19
+docs/verification/wled/mob-1/test-summary.txt
+  b2423ab3e479126b 1
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvSetupUiTest.java
+  abcc132df9de77f9 1-91
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledNsdDiscovery.java
+  cf282f30275fc4e0 1,3-5,7-8,10-14,16-29,31-34,36-37,40-41,44-45,48-57,60-69,71-75,77-81,84-86,89-100
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/NetworkScanActivity.java
+  cf282f30275fc4e0 1,9-17,19,21-22,24,26-29,34-35,38-39,44-46,53-57,59,73-80,82-93,97,99-102,104-113,115-127,130-140
+docs/verification/wled/tv-1/tv-1-local-verification.txt
+  b2423ab3e479126b 1-190
+docs/verification/wled/fnd-1/dependencies-common.txt
+  b2423ab3e479126b 1-69
+docs/task/07-preview.md
+  63020c299dceecab 1-36,38-46,49-71,73-81,84
+  cf282f30275fc4e0 83
+  b2423ab3e479126b 37,47-48,72,82
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/DiscoveryCandidateCache.java
+  cf282f30275fc4e0 1-51
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledControlClient.java
+  cf282f30275fc4e0 1-10
+gradlew.bat
+  b2423ab3e479126b 1-19,30-31,35-40,46,48-52,60,62-66,75,77,81,86-89
+common/src/main/java/com/abrenoch/wledgrabber/common/BootActivity.java
+  cf282f30275fc4e0 1,9-11,31,41-46
+common/src/main/res/values-cs/strings.xml
+  cf282f30275fc4e0 10,18,20,32-35,43,49,59-60,62,64
+docs/verification/wled/lay-1/test-summary.txt
+  b2423ab3e479126b 1-12
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LedMapping.java
+  cf282f30275fc4e0 1-168
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/StateReadResult.java
+  cf282f30275fc4e0 1-38
+docs/verification/wled/fnd-2-build-and-tests.txt
+  b2423ab3e479126b 1-149
+common/src/main/java/com/abrenoch/wledgrabber/common/led/ConfigSnapshot.java
+  cf282f30275fc4e0 1-47
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LedColorSampler.java
+  cf282f30275fc4e0 1-131
+common/src/main/java/com/abrenoch/wledgrabber/common/util/PreferencesConfigStorage.java
+  cf282f30275fc4e0 1-106
+common/src/test/java/com/abrenoch/wledgrabber/common/fixtures/LayoutFixtureTest.java
+  cf282f30275fc4e0 1-72
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/AppCompatPreferenceActivity.java
+  cf282f30275fc4e0 1,6-11
+docs/verification/wled/rel-1/artifact-audit.txt
+  cf282f30275fc4e0 1-52
+scripts/build-client.sh
+  cf282f30275fc4e0 1-193
+docs/verification/wled/fnd-2/lint-summary.txt
+  b2423ab3e479126b 1-37
+docs/verification/wled/fnd-2/lint-baseline.txt
+  b2423ab3e479126b 1-281
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/CaptureSession.java
+  e2fcb4b975340679 152-164
+  cf282f30275fc4e0 1-151,165-205
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/UdpDatagramSink.java
+  cf282f30275fc4e0 1-32
+docs/verification/wled/cfg-1/test-summary.txt
+  b2423ab3e479126b 1-9
+tv/src/main/AndroidManifest.xml
+  cf282f30275fc4e0 28
+  b2423ab3e479126b 2,17,29,51-53
+docs/verification/wled/mob-1/mob-1-local-verification.txt
+  b2423ab3e479126b 1-186
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/ImageLifecycle.java
+  cf282f30275fc4e0 1-78
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledDiscovery.java
+  cf282f30275fc4e0 1-137
+common/src/main/java/com/abrenoch/wledgrabber/common/ToggleActivity.java
+  cf282f30275fc4e0 1,10-12,35,47,53-54,66,85-86
+docs/verification/wled/test-host/test-summary.txt
+  cf282f30275fc4e0 1
+common/src/main/java/com/abrenoch/wledgrabber/common/views/LayoutPreviewActivity.java
+  cf282f30275fc4e0 1-66
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/DeviceConfigTest.java
+  cf282f30275fc4e0 1-221
+tv/src/main/res/layout/settings_guidance.xml
+  cf282f30275fc4e0 22,44
+tv/src/main/res/values/styles.xml
+  cf282f30275fc4e0 16,20,24,28,32,35-36
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledConnectionStepFragment.java
+  cf282f30275fc4e0 1-45,48-51,53-189
+  abcc132df9de77f9 46-47,52
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledScannerTask.java
+  cf282f30275fc4e0 1,3-4,6-8,14-16,18-21,23,25,28-42,44-51,53-60,63-64,67-72,74-77,79-84,88
+docs/verification/wled/fnd-1/dependencies-tv.txt
+  b2423ab3e479126b 1-83
+docs/verification/wled/fnd-1-fnd-2-final.txt
+  b2423ab3e479126b 1-186
+docs/verification/wled/pre-1/pre-1-local-verification.txt
+  b2423ab3e479126b 1-186
+docs/verification/wled/rel-2/apk-metadata.txt
+  b2423ab3e479126b 1-26
+docs/verification/wled/test-host/verification.txt
+  cf282f30275fc4e0 1-186
+mobile/src/main/res/menu/options_menu.xml
+  cf282f30275fc4e0 7-8
+  b2423ab3e479126b 5-6
+docs/verification/wled/fnd-2/dependencies-common.txt
+  b2423ab3e479126b 1-231
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/Transport.java
+  cf282f30275fc4e0 1-30
+common/src/test/java/com/abrenoch/wledgrabber/common/led/AverageColorTest.java
+  cf282f30275fc4e0 1-125
+tv/src/main/res/values-ar/strings.xml
+  cf282f30275fc4e0 21
+scripts/qa/local-regression.sh
+  cf282f30275fc4e0 1-18,24-41
+common/src/main/java/com/abrenoch/wledgrabber/common/WledScreenService.java
+  cf282f30275fc4e0 1,7-12,16-17,23-24,27-51,53-56,60,68-69,71,73-74,76-100,102,104,106,110-123,127,129-131,133-134,136,139,166-181,183-186,188-234,236-248,254-256,258,260-263,265-267,269-281,283-285,287-291,295-302,305-325,327-350,354-358,360-362,364-399,401,405-415,418-423,427,430-433,435-438,440-443,445-456,458-468,471,474-475,477,480-481,486-494,497-499
+  e2fcb4b975340679 3,26,72,105,124-126,142-148,151-156,159-160,163,182,187,250-252,257,259,264,268,282,286,359,363,400,428-429,472-473,476
+docs/verification/wled/fnd-2/build-and-tests.txt
+  b2423ab3e479126b 1-149
+docs/verification/wled/net/net-1-2-3-full-build.txt
+  b2423ab3e479126b 1-190
+docs/verification/wled/cfg-2/cfg-2-and-full-build.txt
+  b2423ab3e479126b 1-190
+common/src/main/java/com/abrenoch/wledgrabber/common/led/Side.java
+  cf282f30275fc4e0 1-8
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/WledSessionTest.java
+  cf282f30275fc4e0 1-220
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/SettingsStepStylist.kt
+  cf282f30275fc4e0 1,3-4
+common/src/sharedTest/java/com/abrenoch/wledgrabber/common/fixtures/RecordingDatagramSink.java
+  cf282f30275fc4e0 1-42
+common/src/test/java/com/abrenoch/wledgrabber/common/config/TvSetupTest.java
+  cf282f30275fc4e0 1-121
+gradle/wrapper/gradle-wrapper.properties
+  b2423ab3e479126b 3-6
+docs/design/wled-direct-ambilight-architecture-review.md
+  b2423ab3e479126b 1,3,9
+  63020c299dceecab 2,4-8
+mobile/src/main/AndroidManifest.xml
+  cf282f30275fc4e0 3,23,31,33
+  b2423ab3e479126b 9,32
+common/src/main/java/com/abrenoch/wledgrabber/common/util/ConfigValidator.java
+  cf282f30275fc4e0 1-223
+mobile/src/main/res/values-nl/strings.xml
+  cf282f30275fc4e0 4-5
+tv/build.gradle
+  cf282f30275fc4e0 7,11,58-59
+  abcc132df9de77f9 16,18-20,56-57
+  b2423ab3e479126b 1-3,8-9,12-13,22,29,31-40,46-55
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/ProbeError.java
+  cf282f30275fc4e0 1-15
+docs/verification/wled/tv2-mob2/local-verification.txt
+  b2423ab3e479126b 1-190
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/FrameSender.java
+  cf282f30275fc4e0 1-6
+common/src/main/java/com/abrenoch/wledgrabber/common/util/SettingsDraftController.java
+  cf282f30275fc4e0 1-59
+docs/task/09-mobile.md
+  cf282f30275fc4e0 83
+  b2423ab3e479126b 37-38,47-48,84
+  63020c299dceecab 1-36,39-46,49-82
+mobile/src/main/res/values-no/strings.xml
+  cf282f30275fc4e0 5
+common/src/main/java/com/abrenoch/wledgrabber/common/util/StoredConfig.java
+  cf282f30275fc4e0 1-23
+common/src/sharedTest/java/com/abrenoch/wledgrabber/common/fixtures/ControlledHttpEndpoint.java
+  cf282f30275fc4e0 1,3,5,7-8,10-78,82-88,91-123,126-141,144-150,154-158,160-164,167
+common/src/test/java/com/abrenoch/wledgrabber/common/led/ClassicLedLayoutTest.java
+  cf282f30275fc4e0 1-297
+docs/verification/wled/qa-1/test-summary.txt
+  cf282f30275fc4e0 1
+docs/design/wled-direct-ambilight-feasibility.md
+  80088eac48a6102c 2,7,9,15-16,18,20-21,23,25,27,29,40,42,44,49-50,52,54-55,57,63,201-250,532
+  63020c299dceecab 1,3-4,8,10-14,17,19,22,24,26,28,30-39,41,43,45-48,51,53,56,58-62,71-130,134-200,251-531,533-534,540-639,654-740,742-762
+  cf282f30275fc4e0 6,64
+  b2423ab3e479126b 5,65-70,131-133,535-539,640-653
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/TestPatternSession.java
+  cf282f30275fc4e0 1-93
+common/src/main/java/com/abrenoch/wledgrabber/common/views/PreviewModel.java
+  cf282f30275fc4e0 1-181
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/WledDiscoveryTest.java
+  cf282f30275fc4e0 1,3,5,7-13,15-17,19,21-25,27,30-44,47-61,64-77,80-96,99-127,130-143,145
+common/src/sharedTest/resources/fixtures/wled-state.json
+  b2423ab3e479126b 1
+docs/task/01-foundation.md
+  b2423ab3e479126b 37-39,47-48,73-75,83-84
+  63020c299dceecab 1-36,40-46,49-72,76-82,85
+.gitignore
+  cf282f30275fc4e0 13-14
+  e2fcb4b975340679 15-20
+  b2423ab3e479126b 12
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/OutputOwner.java
+  cf282f30275fc4e0 1-8
+common/src/main/java/com/abrenoch/wledgrabber/common/led/ClassicLedLayout.java
+  cf282f30275fc4e0 1-210
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/Capabilities.java
+  cf282f30275fc4e0 1-73
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/ScanResultActivity.java
+  cf282f30275fc4e0 1,12-22,29,32-36,38,40-44,53-54,56-57,59-63,65-81,84,86,88,95,97-98,100,105-114,118-146,150,158,162,178-179,181,193
+common/src/test/java/com/abrenoch/wledgrabber/common/capture/OutputSessionCoordinatorTest.java
+  cf282f30275fc4e0 1-47
+mobile/src/androidTest/java/com/abrenoch/wledgrabber/mobile/MobileEntryTest.java
+  cf282f30275fc4e0 1-83
+common/src/test/java/com/abrenoch/wledgrabber/common/capture/TestPatternRunnerTest.java
+  cf282f30275fc4e0 1-130
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/LeanbackActivity.java
+  cf282f30275fc4e0 1,3
+tv/src/main/res/values-de/strings.xml
+  cf282f30275fc4e0 21
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledPacketizer.java
+  cf282f30275fc4e0 1,6-11,13-14,16-21,23,26-50,52-55,57-60,62-83,85,88-98
+common/src/main/java/com/abrenoch/wledgrabber/common/util/BorderProcessor.java
+  cf282f30275fc4e0 1
+common/src/test/java/com/abrenoch/wledgrabber/common/led/LedColorSamplerTest.java
+  cf282f30275fc4e0 1-232
+docs/verification/wled/fnd-1/toolchain-jdk17.txt
+  b2423ab3e479126b 1-15
+docs/verification/wled/qa-2/hardware-blocked.md
+  cf282f30275fc4e0 1-30
+docs/verification/wled/cap-3/cap-3-local-verification.txt
+  b2423ab3e479126b 1-186
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/DeviceEndpoint.java
+  cf282f30275fc4e0 1-94
+docs/verification/wled/rel-1/verification.txt
+  abcc132df9de77f9 127-373
+  cf282f30275fc4e0 374-380
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledDevice.java
+  cf282f30275fc4e0 1-40
+docs/verification/wled/pre-1/test-summary.txt
+  b2423ab3e479126b 1
+docs/verification/wled/mob-2/verification.txt
+  cf282f30275fc4e0 1-186
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/WledHttpClientTest.java
+  cf282f30275fc4e0 1-120
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledLayoutStepFragment.java
+  cf282f30275fc4e0 1-56,59-65,67-214
+  abcc132df9de77f9 57-58,66
+common/src/main/java/com/abrenoch/wledgrabber/common/led/ConfigFields.java
+  cf282f30275fc4e0 1-97
+common/src/main/java/com/abrenoch/wledgrabber/common/led/IntegralImage.java
+  cf282f30275fc4e0 1-101
+tv/src/main/res/values/strings.xml
+  cf282f30275fc4e0 2,21
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/DeviceReadiness.java
+  cf282f30275fc4e0 1-205
+common/src/main/res/values-de/strings.xml
+  cf282f30275fc4e0 10,18,20,33,35,41,43,52,59-60,62,64
+docs/verification/wled/fnd-1/dependencies-mobile.txt
+  b2423ab3e479126b 1-53
+common/src/test/java/com/abrenoch/wledgrabber/common/capture/CaptureSessionTest.java
+  cf282f30275fc4e0 1-71,90-163
+  e2fcb4b975340679 72-89
+.vscode/extensions.json
+  e2fcb4b975340679 1-5
+docs/verification/wled/lay-1/golden.txt
+  b2423ab3e479126b 1-18
+README.md
+  b2423ab3e479126b 6-20,23
+common/src/main/java/com/abrenoch/wledgrabber/common/util/ValidationResult.java
+  cf282f30275fc4e0 1-58
+docs/task/08-tv.md
+  cf282f30275fc4e0 37,47-48,85
+  63020c299dceecab 1-36,39-46,51-84
+  b2423ab3e479126b 38,49-50,86
+docs/verification/wled/rel-2/readme-link-check.txt
+  b2423ab3e479126b 1-3
+docs/verification/wled/cfg-1/cfg-1-and-full-build.txt
+  b2423ab3e479126b 1-205
+docs/task/03-layout.md
+  63020c299dceecab 1,3-5,7,9,11,13,15,17,19-20,22,24-37,42-48,51-73,77-83
+  b2423ab3e479126b 38-41,49-50,74-76,84-85
+mobile/src/main/res/values/strings.xml
+  cf282f30275fc4e0 2,5
+docs/verification/wled/fnd-2/dependencies-mobile.txt
+  b2423ab3e479126b 1-237
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/config/PreferencesConfigStorageInstrumentedTest.java
+  cf282f30275fc4e0 1-74
+common/src/test/java/com/abrenoch/wledgrabber/common/led/LedMappingTest.java
+  cf282f30275fc4e0 1-230
+common/src/main/java/com/abrenoch/wledgrabber/common/util/NotificationPermission.java
+  cf282f30275fc4e0 1-36
+docs/verification/wled/fnd-2/dependencies-tv.txt
+  b2423ab3e479126b 1-295
+docs/task/10-release-migration.md
+  cf282f30275fc4e0 38-40,48-49
+  63020c299dceecab 1-37,41-47,50-72,76-82,85
+  b2423ab3e479126b 73-75,83-84
+docs/verification/wled/fnd-2/lint-ownership.md
+  b2423ab3e479126b 1-23
+docs/verification/wled/rel-2/link-check.txt
+  b2423ab3e479126b 1
+mobile/src/main/res/values-fr/strings.xml
+  cf282f30275fc4e0 5
+docs/task/05-wled.md
+  63020c299dceecab 1-37,41-47,50-72,76-82,85-107,111-117,120
+  b2423ab3e479126b 38-40,48-49,73-75,83-84,108-110,118-119
+mobile/src/test/java/com/abrenoch/wledgrabber/ExampleUnitTest.java
+  cf282f30275fc4e0 1
+common/src/main/res/values/pref_values.xml
+  b2423ab3e479126b 37-106
+docs/verification/wled/cap-1/cap-1-local-verification.txt
+  b2423ab3e479126b 1-186
+docs/verification/wled/pre-2/test-summary.txt
+  b2423ab3e479126b 1
+gradle/libs.versions.toml
+  abcc132df9de77f9 13-14,30-31
+  b2423ab3e479126b 1-12,15-29,33-40
+  d85f48dc0124fb63 32
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/LedStreamer.java
+  cf282f30275fc4e0 1,3-6,8-15,17-18,20-21,24-43,46-47,50-71,74-76,79-84,86-92,95-97,99-101,103-108,111-113,116-126,128-137,139-162,164-165,167-175,177,179-249,251-273,276-292,295-312,314-316,319
+common/src/sharedTest/resources/fixtures/wled-info.json
+  b2423ab3e479126b 1
+docs/verification/wled/tv-1/test-summary.txt
+  b2423ab3e479126b 1
+common/src/main/java/com/abrenoch/wledgrabber/common/led/PixelRect.java
+  cf282f30275fc4e0 1-47
+gradle.properties
+  b2423ab3e479126b 12-18
+common/src/main/java/com/abrenoch/wledgrabber/common/util/ConfigRepository.java
+  cf282f30275fc4e0 1-106
+common/src/main/java/com/abrenoch/wledgrabber/common/util/FieldError.java
+  cf282f30275fc4e0 1-21,24-26,28-32,34-36,38-40,42-43,47-49,51-57,61-62,65-67,69
+common/src/main/AndroidManifest.xml
+  b2423ab3e479126b 3,8-10,29,37
+  abcc132df9de77f9 16,19-20
+  cf282f30275fc4e0 23-25,28,30,38
+common/src/main/java/com/abrenoch/wledgrabber/common/views/TestPatternActivity.java
+  cf282f30275fc4e0 1-201
+common/src/test/java/com/abrenoch/wledgrabber/common/fixtures/DeviceJsonFixtureTest.java
+  cf282f30275fc4e0 1-34
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/SettingsStepBaseFragment.kt
+  cf282f30275fc4e0 1,5-7,10-11,21,38,46,54,67,77,111,167
+docs/task/11-validation.md
+  cf282f30275fc4e0 37,39,47,86-87
+  63020c299dceecab 1-36,38,40-46,49-85,88-120
+docs/verification/wled/net/test-summary.txt
+  b2423ab3e479126b 1-19
+common/src/main/java/com/abrenoch/wledgrabber/common/util/Preferences.kt
+  cf282f30275fc4e0 1,6,77-99
+tv/src/main/res/layout/activity_scan_result.xml
+  b2423ab3e479126b 2,16,23,85,124
+docs/task/02-configuration.md
+  b2423ab3e479126b 37-39,47-48
+  63020c299dceecab 1-36,40-46,49-71,75-84
+docs/verification/wled/qa-1/api-matrix.md
+  cf282f30275fc4e0 1-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "14f883706986b43db58b13049a2de46dbad634d6",
+  "prompts": {
+    "07808cd102dd184c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e34e-60be-74d1-8f68-963173018fbe",
+        "model": "unknown"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 26,
+      "total_deletions": 6,
+      "accepted_lines": 24,
+      "overriden_lines": 0
+    },
+    "56b284ad51a9a663": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "34c78244-30f0-42df-9b0a-e1550470b1c3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 5,
+      "total_deletions": 1,
+      "accepted_lines": 4,
+      "overriden_lines": 1,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/5a19c085308db0092e2fbd9c761c32685bc96a8e46124319beb59e4b46fa3a4d",
+      "token_usage": {
+        "input_tokens": 406179,
+        "output_tokens": 84196,
+        "cache_read_tokens": 2220416,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "63020c299dceecab": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e349-594d-7b12-bea8-619451173fe7",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 2213,
+      "total_deletions": 1708,
+      "accepted_lines": 1879,
+      "overriden_lines": 5,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/58ef84dd5e470a14094f91ebcc8afcc066686002e2706cef70e4831929c5eb79",
+      "token_usage": {
+        "input_tokens": 143763,
+        "output_tokens": 86282,
+        "cache_read_tokens": 9776159,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    },
+    "80088eac48a6102c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "26e99b80-cc56-4e58-bd0e-a4fd0085339f",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 2155,
+      "total_deletions": 539,
+      "accepted_lines": 107,
+      "overriden_lines": 11,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/9e7912db85678aae6de6bf907dd2ea015595f662de7a45877175da65d3ae9556",
+      "token_usage": {
+        "input_tokens": 970777,
+        "output_tokens": 1233079,
+        "cache_read_tokens": 320993664,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "abcc132df9de77f9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "95e39473-51dc-40eb-ad59-207284bc7622",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 1476,
+      "total_deletions": 421,
+      "accepted_lines": 1070,
+      "overriden_lines": 4,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/1757115762efdfb386e2c4b2f0fc9e9138bce713b1a887e67160e134befb6df6",
+      "token_usage": {
+        "input_tokens": 1603116,
+        "output_tokens": 303474,
+        "cache_read_tokens": 48121728,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "b2423ab3e479126b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f09d3f2-4cab-42d0-a647-e9182ae0b2e9",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 18075,
+      "total_deletions": 1423,
+      "accepted_lines": 6286,
+      "overriden_lines": 6,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/b047b33bc504872cecf9c26f0b6489d87bd9d1329b17e5d7d98bc09e0306cbb0",
+      "token_usage": {
+        "input_tokens": 964160,
+        "output_tokens": 2078905,
+        "cache_read_tokens": 691187200,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "cf282f30275fc4e0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7ab6b0ca-e6a8-4b85-83fd-035f0cd99ef7",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 17641,
+      "total_deletions": 4725,
+      "accepted_lines": 15476,
+      "overriden_lines": 3,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/369ca83292e00451875e628ea5c4be4b36718fdf3f825deacc925008e7c1702b",
+      "token_usage": {
+        "input_tokens": 6011352,
+        "output_tokens": 2475680,
+        "cache_read_tokens": 871541760,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "d85f48dc0124fb63": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "706c85bb-0bbe-4d11-acf2-6be513a4901b",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 424,
+      "total_deletions": 22,
+      "accepted_lines": 399,
+      "overriden_lines": 4,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/8150fb7036b2a2ba48f03d2b5ebcae441baf0cafdb0b28ac4320639512e5dbbe",
+      "token_usage": {
+        "input_tokens": 397784,
+        "output_tokens": 421364,
+        "cache_read_tokens": 15749376,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 504,
+      "total_deletions": 13133,
+      "accepted_lines": 269,
+      "overriden_lines": 1,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/972e4091410148ff4a751b140f69b5c4ce35dde815a99a3496818f3115e7881d",
+      "token_usage": {
+        "input_tokens": 822727,
+        "output_tokens": 402285,
+        "cache_read_tokens": 54181120,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
