@@ -95,4 +95,13 @@
   <string name="wled_setup_layout_entry_desc">顶部/底部/左侧/右侧、间隙、输入位置、反向、物理灯数</string>
   <string name="wled_setup_invalid_led_count">物理灯数无效</string>
   <string name="wled_setup_invalid_rgbw">请确认 RGB 或 RGBW</string>
+
+  <!-- Layout probe -->
+  <string name="wled_probe_top">点亮顶部灯带</string>
+  <string name="wled_probe_right">点亮右侧灯带</string>
+  <string name="wled_probe_bottom">点亮底部灯带</string>
+  <string name="wled_probe_left">点亮左侧灯带</string>
+  <string name="wled_probe_input">点亮输入位置</string>
+  <string name="wled_probe_sent">已点亮 %1$d 颗灯珠（约 2 秒），请检查灯带。</string>
+  <string name="wled_probe_busy">请先停止采集再点亮校验。</string>
 </resources>

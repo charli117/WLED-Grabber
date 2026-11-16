@@ -7,8 +7,14 @@ import androidx.leanback.widget.GuidedAction;
 import androidx.leanback.widget.GuidanceStylist;
 
 import com.abrenoch.wledgrabber.common.R;
+import com.abrenoch.wledgrabber.common.led.CaptureSizing;
+import com.abrenoch.wledgrabber.common.led.ClassicLedLayout;
+import com.abrenoch.wledgrabber.common.led.CompiledLayout;
 import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
+import com.abrenoch.wledgrabber.common.led.LayoutProbe;
+import com.abrenoch.wledgrabber.common.led.Side;
+import com.abrenoch.wledgrabber.common.network.wled.LayoutProbeSender;
 import com.abrenoch.wledgrabber.common.util.ConfigFieldLabels;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
@@ -33,6 +39,11 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
     private static final long PREVIEW = 3104L;
     private static final long PRESET_274 = 3105L;
     private static final long TEST_PATTERN = 3106L;
+    private static final long PROBE_TOP = 3107L;
+    private static final long PROBE_RIGHT = 3108L;
+    private static final long PROBE_BOTTOM = 3109L;
+    private static final long PROBE_LEFT = 3110L;
+    private static final long PROBE_INPUT = 3111L;
     private static final long SET_GAP_MODE = 3201L;
     private static final long SET_WHITE_MODE = 3202L;
 
@@ -117,6 +128,16 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
                 .id(TEST_PATTERN)
                 .title(getString(R.string.wled_layout_test_pattern))
                 .build());
+        actions.add(new GuidedAction.Builder(requireContext())
+                .id(PROBE_TOP).title(getString(R.string.wled_probe_top)).build());
+        actions.add(new GuidedAction.Builder(requireContext())
+                .id(PROBE_RIGHT).title(getString(R.string.wled_probe_right)).build());
+        actions.add(new GuidedAction.Builder(requireContext())
+                .id(PROBE_BOTTOM).title(getString(R.string.wled_probe_bottom)).build());
+        actions.add(new GuidedAction.Builder(requireContext())
+                .id(PROBE_LEFT).title(getString(R.string.wled_probe_left)).build());
+        actions.add(new GuidedAction.Builder(requireContext())
+                .id(PROBE_INPUT).title(getString(R.string.wled_probe_input)).build());
     }
 
     @Override
@@ -139,11 +160,62 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
             save(com.abrenoch.wledgrabber.common.views.TestPatternActivity.class);
             return;
         }
+        if (action.getId() == PROBE_TOP) {
+            probe(Side.TOP);
+            return;
+        }
+        if (action.getId() == PROBE_RIGHT) {
+            probe(Side.RIGHT);
+            return;
+        }
+        if (action.getId() == PROBE_BOTTOM) {
+            probe(Side.BOTTOM);
+            return;
+        }
+        if (action.getId() == PROBE_LEFT) {
+            probe(Side.LEFT);
+            return;
+        }
+        if (action.getId() == PROBE_INPUT) {
+            probe(null);
+            return;
+        }
         if (action.getId() == PRESET_274) {
             apply274Preset();
             return;
         }
         super.onGuidedActionClicked(action);
+    }
+
+    /**
+     * Pulses the current draft's LEDs for one edge, or the input marker when
+     * {@code side} is null, so the user can verify the mapping on the strip.
+     */
+    private void probe(Side side) {
+        ValidationResult<ConfigSnapshot> validated = controller.validate();
+        if (!validated.isValid()) {
+            showToast(getString(R.string.wled_setup_invalid));
+            return;
+        }
+        ConfigSnapshot snapshot = validated.value();
+        android.util.DisplayMetrics metrics = getResources().getDisplayMetrics();
+        CaptureSizing.Size size = CaptureSizing.fit(metrics.widthPixels, metrics.heightPixels,
+                snapshot.capture().maxDimension());
+        ValidationResult<CompiledLayout> compiled = new ClassicLedLayout().compile(
+                snapshot.layout(), snapshot.device().physicalLedCount(),
+                size.width(), size.height());
+        if (!compiled.isValid()) {
+            showToast(getString(R.string.wled_setup_invalid));
+            return;
+        }
+        int[] logical = side == null
+                ? new int[]{LayoutProbe.inputLogical(snapshot.layout())}
+                : LayoutProbe.logicalForSide(snapshot.layout(), side);
+        if (LayoutProbeSender.pulse(snapshot, compiled.value(), logical)) {
+            showToast(getString(R.string.wled_probe_sent, logical.length));
+        } else {
+            showToast(getString(R.string.wled_probe_busy));
+        }
     }
 
     private void apply274Preset() {

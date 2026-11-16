@@ -149,4 +149,13 @@
   <string name="wled_setup_layout_entry_desc">Top/Bottom/Left/Right, gap, input, reverse, physical LEDs</string>
   <string name="wled_setup_invalid_led_count">Invalid physical LED count</string>
   <string name="wled_setup_invalid_rgbw">Please confirm RGB or RGBW</string>
+
+  <!-- Layout probe -->
+  <string name="wled_probe_top">Light top edge</string>
+  <string name="wled_probe_right">Light right edge</string>
+  <string name="wled_probe_bottom">Light bottom edge</string>
+  <string name="wled_probe_left">Light left edge</string>
+  <string name="wled_probe_input">Light input position</string>
+  <string name="wled_probe_sent">Lighting %1$d LEDs for 2 s. Check the strip.</string>
+  <string name="wled_probe_busy">Stop capture before probing the strip.</string>
 </resources>
