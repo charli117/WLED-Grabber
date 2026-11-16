@@ -9,6 +9,12 @@ import com.abrenoch.wledgrabber.tv.fragments.settings.WledLayoutStepFragment;
 
 /** TV-2 host for full layout settings and preview. */
 public class LayoutSettingsActivity extends FragmentActivity {
+
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(
+                com.abrenoch.wledgrabber.common.util.LocaleHelper.wrap(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

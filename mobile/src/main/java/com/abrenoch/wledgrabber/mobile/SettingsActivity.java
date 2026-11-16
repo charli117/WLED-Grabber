@@ -5,16 +5,20 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.abrenoch.wledgrabber.common.WledGrabberApp;
 import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
 import com.abrenoch.wledgrabber.common.util.ConfigFieldLabels;
@@ -36,6 +40,12 @@ import java.util.Map;
  * saves atomically through SettingsDraftController; no per-field parseInt.
  */
 public class SettingsActivity extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(
+                com.abrenoch.wledgrabber.common.util.LocaleHelper.wrap(newBase));
+    }
     public static final String EXTRA_SHOW_TOAST_KEY = "extra_show_toast_key";
     public static final int EXTRA_SHOW_TOAST_SETUP_REQUIRED_FOR_QUICK_TILE = 1;
 
@@ -79,6 +89,8 @@ public class SettingsActivity extends AppCompatActivity {
         title.setText(com.abrenoch.wledgrabber.common.R.string.settings_title);
         title.setTextSize(20);
         root.addView(title);
+
+        addLanguagePicker(root);
 
         for (String field : ConfigFields.ALL) {
             if (ConfigFields.SCHEMA_VERSION.equals(field)) {
@@ -163,6 +175,44 @@ public class SettingsActivity extends AppCompatActivity {
             builder.append(error.field()).append(": ").append(error.code());
         }
         errorView.setText(builder.toString());
+    }
+
+    private void addLanguagePicker(ViewGroup root) {
+        TextView label = new TextView(this);
+        label.setText(com.abrenoch.wledgrabber.common.R.string.settings_language);
+        root.addView(label);
+
+        final String[] values = {WledGrabberApp.LANGUAGE_SYSTEM,
+                WledGrabberApp.LANGUAGE_ZH, WledGrabberApp.LANGUAGE_EN};
+        String[] labels = {
+                getString(com.abrenoch.wledgrabber.common.R.string.language_system),
+                getString(com.abrenoch.wledgrabber.common.R.string.language_chinese),
+                getString(com.abrenoch.wledgrabber.common.R.string.language_english)};
+        Spinner spinner = new Spinner(this);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, labels);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        String current = WledGrabberApp.currentLanguage(this);
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].equals(current)) {
+                spinner.setSelection(i);
+            }
+        }
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!values[position].equals(WledGrabberApp.currentLanguage(SettingsActivity.this))) {
+                    WledGrabberApp.setLanguage(SettingsActivity.this, values[position]);
+                    recreate();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        root.addView(spinner);
     }
 
     private static boolean isBoolean(String field) {

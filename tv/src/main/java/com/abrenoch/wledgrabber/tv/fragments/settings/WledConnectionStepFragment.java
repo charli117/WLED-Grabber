@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.GuidedAction;
 
+import com.abrenoch.wledgrabber.common.WledGrabberApp;
 import com.abrenoch.wledgrabber.common.R;
 import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
@@ -37,8 +38,11 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
     private static final long RGBW = 1006L;
     private static final long ACTION_TEST = 1007L;
     private static final long ACTION_LAYOUT = 1008L;
+    private static final long FRAME_RATE = 1009L;
+    private static final long LANGUAGE = 1010L;
     private static final long SET_PROTOCOL = 2001;
     private static final long SET_RGBW = 2002;
+    private static final long SET_LANGUAGE = 2003;
 
     private final ExecutorService probeExecutor = Executors.newSingleThreadExecutor();
     private SettingsDraftController controller;
@@ -83,6 +87,8 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                 controller.draft().get(ConfigFields.WLED_DDP_PORT)));
         actions.add(unSignedNumberAction(PHYSICAL_LEDS, getString(R.string.wled_setup_physical_leds),
                 controller.draft().get(ConfigFields.WLED_PHYSICAL_LEDS)));
+        actions.add(unSignedNumberAction(FRAME_RATE, getString(R.string.field_framerate),
+                controller.draft().get(ConfigFields.FRAME_RATE)));
 
         String[] protocols = {"auto", "dnrgb", "ddp"};
         actions.add(radioListAction(PROTOCOL, getString(R.string.wled_setup_protocol), null,
@@ -90,6 +96,14 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
         String[] rgbwModes = {"unconfirmed", "rgb", "rgbw"};
         actions.add(radioListAction(RGBW, getString(R.string.wled_setup_rgbw), null,
                 (int) SET_RGBW, rgbwModes, rgbwModes, rgbw));
+
+        String[] languageValues = {WledGrabberApp.LANGUAGE_SYSTEM,
+                WledGrabberApp.LANGUAGE_ZH, WledGrabberApp.LANGUAGE_EN};
+        String[] languageLabels = {getString(R.string.language_system),
+                getString(R.string.language_chinese), getString(R.string.language_english)};
+        actions.add(radioListAction(LANGUAGE, getString(R.string.settings_language), null,
+                (int) SET_LANGUAGE, languageLabels, languageValues,
+                WledGrabberApp.currentLanguage(requireContext())));
 
         actions.add(new GuidedAction.Builder(requireContext())
                 .id(ACTION_TEST)
@@ -106,6 +120,7 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
         if (action.getId() == CONTINUE) {
+            applyLanguage();
             save();
             return;
         }
@@ -120,6 +135,19 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
         super.onGuidedActionClicked(action);
     }
 
+    /** Language is a UI preference, so it applies on Save together with the config. */
+    private void applyLanguage() {
+        try {
+            String selected = assertSubActionValue(LANGUAGE, String.class);
+            if (!selected.equals(WledGrabberApp.currentLanguage(requireContext()))) {
+                WledGrabberApp.setLanguage(requireContext(), selected);
+                requireActivity().recreate();
+            }
+        } catch (AssertionError ignored) {
+            // No selection yet; keep the current language.
+        }
+    }
+
     private void save() {
         try {
             String host = assertStringValue(HOST);
@@ -127,6 +155,7 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
             int udpPort = assertIntValue(UDP_PORT);
             int ddpPort = assertIntValue(DDP_PORT);
             int physical = assertIntValue(PHYSICAL_LEDS);
+            int frameRate = assertIntValue(FRAME_RATE);
             String protocol = assertSubActionValue(PROTOCOL, String.class);
             String rgbw = assertSubActionValue(RGBW, String.class);
             if (physical < 1) {
@@ -142,6 +171,7 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
             controller.set(ConfigFields.WLED_UDP_PORT, Integer.toString(udpPort));
             controller.set(ConfigFields.WLED_DDP_PORT, Integer.toString(ddpPort));
             controller.set(ConfigFields.WLED_PHYSICAL_LEDS, Integer.toString(physical));
+            controller.set(ConfigFields.FRAME_RATE, Integer.toString(frameRate));
             controller.set(ConfigFields.WLED_PROTOCOL, protocol);
             controller.set(ConfigFields.WLED_RGBW_MODE, rgbw);
 

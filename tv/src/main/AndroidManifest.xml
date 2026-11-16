@@ -9,6 +9,7 @@
         android:required="true" />
 
     <application
+        android:name="com.abrenoch.wledgrabber.common.WledGrabberApp"
         android:banner="@drawable/banner"
         android:theme="@style/Theme.Leanback">
 

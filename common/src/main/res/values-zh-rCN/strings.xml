@@ -70,6 +70,10 @@
   <string name="settings_save">保存</string>
   <string name="settings_cancel">取消</string>
   <string name="settings_saved">已保存，下次启动生效。</string>
+  <string name="settings_language">语言</string>
+  <string name="language_system">跟随系统</string>
+  <string name="language_chinese">中文</string>
+  <string name="language_english">English</string>
 
   <!-- TV layout guided step -->
   <string name="wled_layout_title">WLED 布局</string>

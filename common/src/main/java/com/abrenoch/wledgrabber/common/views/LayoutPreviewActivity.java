@@ -18,6 +18,12 @@ import com.abrenoch.wledgrabber.common.util.ValidationResult;
 
 /** Shared preview host; host apps provide theme and navigation. */
 public class LayoutPreviewActivity extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(
+                com.abrenoch.wledgrabber.common.util.LocaleHelper.wrap(newBase));
+    }
     private LedLayoutPreviewView preview;
     private TextView status;
     private ConfigSnapshot snapshot;

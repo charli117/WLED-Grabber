@@ -32,6 +32,12 @@ import com.abrenoch.wledgrabber.common.util.ValidationResult;
 
 /** Shared 10-second TEST host using the single-writer streamer and fixed transport. */
 public class TestPatternActivity extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(
+                com.abrenoch.wledgrabber.common.util.LocaleHelper.wrap(newBase));
+    }
     private final Handler handler = new Handler(Looper.getMainLooper());
     private TextView status;
     private TestPatternRunner runner;

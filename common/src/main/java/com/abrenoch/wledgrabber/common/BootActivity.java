@@ -11,6 +11,12 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class BootActivity extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(
+                com.abrenoch.wledgrabber.common.util.LocaleHelper.wrap(newBase));
+    }
     public static final int REQUEST_MEDIA_PROJECTION = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

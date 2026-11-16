@@ -27,6 +27,12 @@ import com.abrenoch.wledgrabber.tv.fragments.settings.WledConnectionStepFragment
  */
 public class ManualSetupActivity extends FragmentActivity {
 
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(
+                com.abrenoch.wledgrabber.common.util.LocaleHelper.wrap(newBase));
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

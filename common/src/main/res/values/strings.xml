@@ -124,6 +124,10 @@
   <string name="settings_save">Save</string>
   <string name="settings_cancel">Cancel</string>
   <string name="settings_saved">Saved. New settings apply on next start.</string>
+  <string name="settings_language">Language</string>
+  <string name="language_system">Follow system</string>
+  <string name="language_chinese">Chinese</string>
+  <string name="language_english">English</string>
 
   <!-- TV layout guided step -->
   <string name="wled_layout_title">WLED layout</string>

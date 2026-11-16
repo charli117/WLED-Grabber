@@ -31,6 +31,13 @@ import com.abrenoch.wledgrabber.common.util.NotificationPermission;
 
 public class MainActivity extends AppCompatActivity implements ImageView.OnClickListener,
         ImageView.OnFocusChangeListener {
+
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(
+                com.abrenoch.wledgrabber.common.util.LocaleHelper.wrap(newBase));
+    }
+
     public static final int REQUEST_MEDIA_PROJECTION = 1;
     public static final int REQUEST_NOTIFICATIONS = 2;
     private static final String TAG = "DEBUG";
