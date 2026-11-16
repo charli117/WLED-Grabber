@@ -1,0 +1,31 @@
+.claude/skills/commit/SKILL.md
+  e2fcb4b975340679 1-253
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "da365e23963191d2e54fe1acc2cab64af4e6f78a",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 253,
+      "total_deletions": 0,
+      "accepted_lines": 253,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/bbf26ad7adb80c51c4d9571bc6b51b2166a651a28716553f320a74463fff1646",
+      "token_usage": {
+        "input_tokens": 1347068,
+        "output_tokens": 1325687,
+        "cache_read_tokens": 526934016,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
