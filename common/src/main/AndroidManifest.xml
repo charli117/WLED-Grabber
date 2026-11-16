@@ -34,8 +34,12 @@
         </receiver>
 
         <activity android:name=".BootActivity" android:theme="@style/Theme.Transparent" android:exported="true"/>
-        <activity android:name=".views.LayoutPreviewActivity" android:exported="false" />
-        <activity android:name=".views.TestPatternActivity" android:exported="false" />
+        <activity android:name=".views.LayoutPreviewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".views.TestPatternActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
 </manifest>
