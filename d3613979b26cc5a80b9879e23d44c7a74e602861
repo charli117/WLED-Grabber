@@ -1,0 +1,33 @@
+docs/verification/wled/qa-1/api-matrix.md
+  e2fcb4b975340679 14,17-19
+docs/verification/wled/qa-1/api-matrix-runs-2026-11-17.txt
+  e2fcb4b975340679 1,3,5,7,9-12,14,16-24,26-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "d3613979b26cc5a80b9879e23d44c7a74e602861",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 29,
+      "total_deletions": 20,
+      "accepted_lines": 26,
+      "overriden_lines": 3,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/e00530aaeadd9500eb95fb2ac73e3d9907cad8a2b2976dabfa150436fc281d0c",
+      "token_usage": {
+        "input_tokens": 3057035,
+        "output_tokens": 1626801,
+        "cache_read_tokens": 746508032,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
