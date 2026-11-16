@@ -1,0 +1,64 @@
+docs/task/07-preview.md
+  e2fcb4b975340679 39,50
+docs/task/09-mobile.md
+  e2fcb4b975340679 74
+docs/task/00-overview.md
+  e2fcb4b975340679 143-146,148,150
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvTestPatternSlowNetworkTest.java
+  e2fcb4b975340679 1-107
+docs/task/06-capture.md
+  e2fcb4b975340679 91,130
+docs/task/08-tv.md
+  e2fcb4b975340679 75
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvTestPatternLifecycleTest.java
+  e2fcb4b975340679 32-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "2a37c21fce90df9efdcc076b0553a0a20c8361d3",
+  "prompts": {
+    "51396205a9b60a22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ff5acb-12c7-4dbe-bae9-040be916a7c2",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 48,
+      "total_deletions": 0,
+      "accepted_lines": 98,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/d83bdd2fb8b36793bc4b7c42096d2b0c1e3f16f18e1fb2063933a8250525b513",
+      "token_usage": {
+        "input_tokens": 689429,
+        "output_tokens": 254486,
+        "cache_read_tokens": 26970240,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 777,
+      "total_deletions": 68,
+      "accepted_lines": 777,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/70c1f1f7f109736681cc42525dfa8fcf4f209449dbeec845cd1be4583267a06b",
+      "token_usage": {
+        "input_tokens": 5884325,
+        "output_tokens": 1799631,
+        "cache_read_tokens": 962357760,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
