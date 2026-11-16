@@ -1,0 +1,33 @@
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvSetupUiTest.java
+  28269c58ea12fffa 61-65,67,74
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvLayoutFlowTest.java
+  28269c58ea12fffa 53,65-78,80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "d66d9842b11120cdb28f4a15bbf682e2db3f0d5f",
+  "prompts": {
+    "28269c58ea12fffa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a2e7f4d-46e0-48b2-b4dc-a10fcb19f35f",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 305,
+      "total_deletions": 70,
+      "accepted_lines": 305,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/9e0fd6aa3c42e91d61e13a636635cdf44e6739525ff21818483d472521e4b352",
+      "token_usage": {
+        "input_tokens": 145758,
+        "output_tokens": 36486,
+        "cache_read_tokens": 2854144,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
