@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
+  <title id="title">WLED Grabber symbol</title>
+  <!-- Four edge strips, clockwise colour order: top L→R, right T→B,
+       bottom R→L, left B→T. Strip 124 long, 26 thick, joints open ≈4. -->
+  <rect x="53" y="32" width="150" height="26" rx="13" fill="#FFFFFF"/>
+  <rect x="198" y="53" width="26" height="150" rx="13" fill="#FFFFFF"/>
+  <rect x="53" y="198" width="150" height="26" rx="13" fill="#FFFFFF"/>
+  <rect x="32" y="53" width="26" height="150" rx="13" fill="#FFFFFF"/>
+</svg>

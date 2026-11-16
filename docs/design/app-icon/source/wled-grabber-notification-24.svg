@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-labelledby="title">
+  <title id="title">WLED Grabber notification icon</title>
+  <rect x="4.188" y="2.000" width="15.625" height="2.708" rx="1.354" fill="#FFFFFF"/>
+  <rect x="19.292" y="4.188" width="2.708" height="15.625" rx="1.354" fill="#FFFFFF"/>
+  <rect x="4.188" y="19.292" width="15.625" height="2.708" rx="1.354" fill="#FFFFFF"/>
+  <rect x="2.000" y="4.188" width="2.708" height="15.625" rx="1.354" fill="#FFFFFF"/>
+</svg>

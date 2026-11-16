@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-labelledby="title">
+  <title id="title">WLED Grabber app icon</title>
+  <defs>
+  <radialGradient id="bg" cx="50%" cy="50%" r="75%">
+    <stop offset="0" stop-color="#121A2B"/>
+    <stop offset="1" stop-color="#0B0F1A"/>
+  </radialGradient>
+  <linearGradient id="top" gradientUnits="userSpaceOnUse" x1="66" y1="45" x2="190" y2="45"><stop offset="0" stop-color="#22E0FF"/><stop offset="1" stop-color="#7A5CFF"/></linearGradient>
+  <linearGradient id="right" gradientUnits="userSpaceOnUse" x1="211" y1="66" x2="211" y2="190"><stop offset="0" stop-color="#7A5CFF"/><stop offset="1" stop-color="#FF4FBE"/></linearGradient>
+  <linearGradient id="bottom" gradientUnits="userSpaceOnUse" x1="190" y1="211" x2="66" y2="211"><stop offset="0" stop-color="#FF4FBE"/><stop offset="1" stop-color="#FFB454"/></linearGradient>
+  <linearGradient id="left" gradientUnits="userSpaceOnUse" x1="45" y1="190" x2="45" y2="66"><stop offset="0" stop-color="#FFB454"/><stop offset="1" stop-color="#22E0FF"/></linearGradient>
+  </defs>
+  <circle cx="256.0" cy="256.0" r="256.0" fill="url(#bg)"/>
+  <g transform="translate(68.266 68.266) scale(1.46667)">
+    <rect x="53" y="32" width="150" height="26" rx="13" fill="url(#top)"/>
+    <rect x="198" y="53" width="26" height="150" rx="13" fill="url(#right)"/>
+    <rect x="53" y="198" width="150" height="26" rx="13" fill="url(#bottom)"/>
+    <rect x="32" y="53" width="26" height="150" rx="13" fill="url(#left)"/>
+  </g>
+</svg>
