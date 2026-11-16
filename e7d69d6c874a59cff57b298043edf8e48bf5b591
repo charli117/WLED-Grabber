@@ -1,0 +1,31 @@
+docs/task/08-tv.md
+  51396205a9b60a22 48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "e7d69d6c874a59cff57b298043edf8e48bf5b591",
+  "prompts": {
+    "51396205a9b60a22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ff5acb-12c7-4dbe-bae9-040be916a7c2",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 1353,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/9830bf3c4ae1076f09231f540622251478ad5189503e11b5e22a26726c76ea9d",
+      "token_usage": {
+        "input_tokens": 762245,
+        "output_tokens": 394813,
+        "cache_read_tokens": 54952576,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
