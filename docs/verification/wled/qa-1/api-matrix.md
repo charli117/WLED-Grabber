@@ -11,12 +11,12 @@
 
 | API | JVM 纯逻辑 | Android 仪器 | UI/系统行为 | 结论 |
 |---|---|---|---|---|
-| 21 | PASS（配置/几何/采样/报文/生命周期纯逻辑） | **PASS**：common 2/2、mobile 1/1（`api21-phone` AVD 5.0.2） | 入口可见/可点 | API 21 部分覆盖 |
+| 21 | PASS（配置/几何/采样/报文/生命周期纯逻辑） | **PASS**：common 14/14、mobile 3/3（`api21-phone` AVD 5.0.2） | 入口、预览D-pad/触摸、设置表单重建 | API 21 覆盖 |
 | 23 | PASS（同上） | 未建镜像 | 未建镜像 | 未验证 |
-| 26 | PASS（同上） | **PASS**：common 2/2、mobile 1/1（`api26-phone` AVD 8.0.0） | 入口可见/可点 | API 26 部分覆盖 |
-| 29 | PASS（同上） | **PASS**：common 2/2、tv 7/7（含真实 WLED 探测/读回/测试图案 release CONFIRMED） | **PASS**：采集授权、前台服务、`display=1`、语言/设置 UI、静态画面心跳 | API 29 已覆盖 |
-| 33 | PASS（同上） | **PASS**：common 2/2、mobile 1/1、tv 7/7（`wled-tv-api33` AVD） | TV 引导步骤/设置/测试图案 | API 33 已覆盖 |
-| 34 | PASS（同上） | **PASS**：common 2/2、tv 7/7、mobile 1/1（`wled-tv-api34` AVD） | 入口/设置/TV 流程 | API 34 已覆盖 |
+| 26 | PASS（同上） | **PASS**：common 14/14、mobile 3/3（`api26-phone` AVD 8.0.0） | 入口、预览、设置表单重建、所有权 | API 26 覆盖 |
+| 29 | PASS（同上） | **PASS**：tv 8/8（含真实 WLED 探测/读回/测试图案 release CONFIRMED、宿主租约释放）；common 2/2（新增用例前） | **PASS**：采集授权、前台服务、`display=1`、语言/设置 UI、静态画面心跳、点亮校验 | API 29 覆盖 |
+| 33 | PASS（同上） | **PASS**：common 14/14、mobile 3/3、tv 8/8（`wled-tv-api33` AVD） | TV 引导步骤/设置/测试图案/租约生命周期 | API 33 覆盖 |
+| 34 | PASS（同上） | **PASS**：common 14/14、mobile 3/3、tv 8/8（`wled-tv-api34` AVD） | 入口/设置/TV 流程/租约生命周期 | API 34 覆盖 |
 | 35 | PASS（同上） | **PARTIAL**：common 2/2、mobile 1/1；tv 5/7（`api35-phone` AVD） | 无 android-tv 镜像，TvSetupUiTest 2 项不适用 | 部分覆盖 |
 
 “PASS”仅表示该平台上的对应测试类别通过；未运行的类别保持待验证。

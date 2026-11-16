@@ -1,18 +1,27 @@
-# API 矩阵仪器测试运行记录 2026-11-17
+# API 矩阵仪器测试运行记录 2026-11-17（更新）
 
-环境：macOS / Apple Silicon；Gradle 8.9 + AGP 8.7.2 + JDK 17.0.21；`ANDROID_SERIAL` 逐台指定，避免并行误跑。
+环境：macOS / Apple Silicon；Gradle 8.9 + AGP 8.7.2 + JDK 17.0.21；`ANDROID_SERIAL` 逐台指定。
 
-| API | 设备/镜像 | 运行模块 | 结果 |
+| API | 设备/镜像 | 模块与结果 | 结论 |
 |---|---|---|---|
-| 21 | `api21-phone` AVD（Android 5.0.2, arm64） | common 2/2、mobile 1/1 | **PASS** |
-| 26 | `api26-phone` AVD（Android 8.0.0, arm64） | common 2/2、mobile 1/1 | **PASS** |
-| 29 | Sony KD-55XD8005（Android 10, 真机 `10.245.0.109:5555`） | common 2/2、tv 7/7（wledHost=10.245.0.99） | **PASS** |
-| 33 | `wled-tv-api33` AVD（Android 13, android-tv） | common 2/2、mobile 1/1、tv 7/7（wledHost=10.245.0.99） | **PASS** |
-| 34 | `wled-tv-api34` AVD（Android 14, android-tv） | common 2/2、tv 7/7（wledHost=10.245.0.99）、mobile 1/1 | **PASS** |
-| 35 | `api35-phone` AVD（Android 15, google_apis） | common 2/2、mobile 1/1；tv 5/7 | **PARTIAL** |
+| 21 | `api21-phone`（5.0.2 arm64） | common 14/14、mobile 3/3 | PASS |
+| 26 | `api26-phone`（8.0.0 arm64） | common 14/14、mobile 3/3 | PASS |
+| 29 | Sony KD-55XD8005（真机） | common 2/2、tv 8/8（wledHost=10.245.0.99） | PASS（软件侧） |
+| 33 | `wled-tv-api33`（android-tv 13） | common 14/14、mobile 3/3、tv 8/8 | PASS |
+| 34 | `wled-tv-api34`（android-tv 14） | common 14/14、mobile 3/3、tv 8/8 | PASS |
+| 35 | `api35-phone`（15 google_apis） | common 2/2、mobile 1/1；tv 5/7 | 部分覆盖（无 android-tv 镜像） |
 
-说明：
+## 本轮新增设备端用例
 
-- API 35 没有 `android-tv` 系统镜像，TV 的 `TvSetupUiTest` 两项因手机镜像下 GuidedStep 按钮列不可见而失败；`TvLayoutFlowTest`、`TvMainActivityTest`、`TvTestPatternDeviceTest`、`TvWledDeviceTest` 5 项仍通过。该组合视为“TV UI 不适用”，不记为产品失败。
-- API 23 未单独建立镜像；其平台行为介于 21 与 26 之间，保持未验证，不做外推。
-- 授权拒绝、旋转/锁屏、通知权限拒绝、TEST/CAPTURE 互斥仍无对应仪器用例，保持待验证。
+- `common` `ImageReaderLifecycleInstrumentedTest`：真实 Surface 生产者 20 帧 acquired==closed；maxImages 超限被拒。
+- `common` `OutputOwnershipInstrumentedTest`：CAPTURE/TEST 互斥、release 需匹配 id+epoch、宿主退出可重取。
+- `common` `LedLayoutPreviewInstrumentedTest`：D-pad 走到 273/0 并钳位、resize 保持选中、错误态阻断、触摸命中不同物理灯。
+- `common` `WledHttpFailureInstrumentedTest`：静默服务器 TIMEOUT、关闭端口 CONNECT_FAILURE、不误报 turnOff。
+- `tv` `TvTestPatternLifecycleTest`：测试图案宿主退出释放 TEST 租约，随后 CAPTURE 可取得。
+- `mobile` `MobileSettingsFormTest`：全字段非空本地化标签、recreate 后保留值。
+
+## 仍未覆盖
+
+- API 23 无镜像；API 35 未跑新增用例（无 android-tv 镜像）。
+- 授权拒绝/旋转/锁屏/撤销、真实断网/路由变更、进程被杀后的 ownership 复位。
+- RGBW 样机两模式、端到端物理时延、物理 FPS。
