@@ -36,6 +36,7 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
     private static final long SET_WHITE_MODE = 3202L;
 
     private static final String[] NUMERIC_FIELDS = {
+            ConfigFields.WLED_PHYSICAL_LEDS,
             ConfigFields.LED_TOP, ConfigFields.LED_BOTTOM,
             ConfigFields.LED_LEFT, ConfigFields.LED_RIGHT,
             ConfigFields.LED_GAP_LENGTH, ConfigFields.LED_GAP_POSITION,
@@ -182,6 +183,18 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
             for (String field : NUMERIC_FIELDS) {
                 controller.set(field, Integer.toString(assertIntValue(ids.get(field))));
             }
+            int physical = Integer.parseInt(
+                    controller.draft().get(ConfigFields.WLED_PHYSICAL_LEDS));
+            int layoutTotal = Integer.parseInt(controller.draft().get(ConfigFields.LED_TOP))
+                    + Integer.parseInt(controller.draft().get(ConfigFields.LED_BOTTOM))
+                    + Integer.parseInt(controller.draft().get(ConfigFields.LED_LEFT))
+                    + Integer.parseInt(controller.draft().get(ConfigFields.LED_RIGHT));
+            if (physical < layoutTotal) {
+                // LedMapping rejects physical < effective, which would only surface
+                // as a silent start failure later; block it here instead.
+                showToast("Physical LEDs (" + physical + ") < layout total (" + layoutTotal + ")");
+                return;
+            }
             controller.set(ConfigFields.LED_REVERSE,
                     Boolean.toString(findActionById(REVERSE).isChecked()));
             controller.set(ConfigFields.LED_GAP_MODE,
@@ -208,6 +221,9 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
     }
 
     private static String title(String field) {
+        if (ConfigFields.WLED_PHYSICAL_LEDS.equals(field)) {
+            return "Physical LED count";
+        }
         String label = field.replace("pref_key_", "").replace('_', ' ');
         return Character.toUpperCase(label.charAt(0)) + label.substring(1);
     }

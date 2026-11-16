@@ -34,6 +34,7 @@ public final class WledHttpClient implements WledControlClient, AutoCloseable {
     public static final int MAX_BODY_BYTES = 64 * 1024;
     private static final int MAX_PARALLEL_REQUESTS = 4;
     private static final String OFF_BODY = "{\"on\":false,\"live\":false,\"tt\":0}";
+    private static final String ON_BODY = "{\"on\":true}";
 
     private final boolean allowLoopback;
     private final ExecutorService executor;
@@ -106,13 +107,22 @@ public final class WledHttpClient implements WledControlClient, AutoCloseable {
     }
 
     @Override
+    public boolean turnOn(String host, int port) {
+        return submitControl(host, port, ON_BODY);
+    }
+
+    @Override
     public boolean turnOff(String host, int port) {
+        return submitControl(host, port, OFF_BODY);
+    }
+
+    private boolean submitControl(String host, int port, String body) {
         if (!isValidHostInput(host) || port < 1 || port > 65535) {
             return false;
         }
         Future<Boolean> future;
         try {
-            future = executor.submit(() -> turnOffBlocking(host, port));
+            future = executor.submit(() -> postStateBlocking(host, port, body));
         } catch (RejectedExecutionException e) {
             return false;
         }
@@ -162,8 +172,8 @@ public final class WledHttpClient implements WledControlClient, AutoCloseable {
         }
     }
 
-    private boolean turnOffBlocking(String host, int port) {
-        HttpResult result = request(host, port, "/json/state", "POST", OFF_BODY);
+    private boolean postStateBlocking(String host, int port, String body) {
+        HttpResult result = request(host, port, "/json/state", "POST", body);
         return result.error == null && result.status == 200;
     }
 

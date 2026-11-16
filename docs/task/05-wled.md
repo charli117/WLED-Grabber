@@ -118,3 +118,5 @@ common/.../network/wled、NetworkScanner重用、network_security_config.xml
 
 **证据（2026-11-16）**：`WledSession`、`WledControlClient`、`StateReadResult`、`FrameSender`落地；9个FakeClock测试通过。覆盖success、live/on仍true、读回失败、3秒预算、黑帧失败仍以读回为准、5秒探测频率/10秒stale、身份变化废弃端点、release中旧epoch不覆盖新session、start不自动release；证据见`docs/verification/wled/net/`。
 
+**证据（2026-11-17，真机 10.245.0.99 / WLED 16.0.1 / 274 RGB）**：发现控制面缺少开灯能力——`WledControlClient`只有`turnOff`，WLED主电源为关时实时UDP帧不会点亮灯带（`live=true`仅表示在收实时数据）。新增`turnOn`（POST `/json/state`，body `{"on":true}`，需JSON Content-Type），`WledHttpClientTest.turnOnPostsPowerOnJson`先RED后GREEN；服务在建立采集后由后台线程开灯，不违反主线程网络约束。另在服务侧加入1秒心跳：静态画面无新帧时经同一`LedStreamer`单写者与帧池重发最后一帧，避免WLED在2秒UDP超时后退出live并回落到自身效果。真机证据：启动前`on=false`→启动后`on=true`、`lm=UDP`、`lip=10.245.0.109`（电视）；切到静态设置页后连续10秒`live=true`。未验证：停止路径release读回确认、与另一DDP源（10.245.0.121）并发抢占时的最终显示归属、QA-2时延/帧率量化门禁。
+

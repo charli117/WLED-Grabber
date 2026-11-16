@@ -39,6 +39,9 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
     private final Thread thread;
     private final AtomicInteger requests = new AtomicInteger();
     private volatile boolean running = true;
+    private volatile String lastMethod = "";
+    private volatile String lastPath = "";
+    private volatile String lastBody = "";
 
     public ControlledHttpEndpoint(Mode mode) throws IOException {
         server = new ServerSocket(0, 16, InetAddress.getByName("127.0.0.1"));
@@ -57,6 +60,18 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
 
     public int requestCount() {
         return requests.get();
+    }
+
+    public String lastMethod() {
+        return lastMethod;
+    }
+
+    public String lastPath() {
+        return lastPath;
+    }
+
+    public String lastBody() {
+        return lastBody;
     }
 
     private void serve(Mode mode) {
@@ -79,13 +94,41 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
         }
     }
 
-    private static void readRequest(Socket socket) throws IOException {
+    private void readRequest(Socket socket) throws IOException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+        String requestLine = reader.readLine();
+        if (requestLine != null) {
+            String[] parts = requestLine.split(" ");
+            if (parts.length >= 2) {
+                lastMethod = parts[0];
+                lastPath = parts[1];
+            }
+        }
+        int contentLength = 0;
         String line;
         while ((line = reader.readLine()) != null && !line.isEmpty()) {
-            // Drain request headers; the fixture only needs the connection.
+            int colon = line.indexOf(':');
+            if (colon > 0 && line.substring(0, colon).trim().equalsIgnoreCase("Content-Length")) {
+                try {
+                    contentLength = Integer.parseInt(line.substring(colon + 1).trim());
+                } catch (NumberFormatException ignored) {
+                    contentLength = 0;
+                }
+            }
         }
+        StringBuilder body = new StringBuilder();
+        int remaining = contentLength;
+        char[] buffer = new char[512];
+        while (remaining > 0) {
+            int read = reader.read(buffer, 0, Math.min(buffer.length, remaining));
+            if (read < 0) {
+                break;
+            }
+            body.append(buffer, 0, read);
+            remaining -= read;
+        }
+        lastBody = body.toString();
     }
 
     private static Response responseFor(Mode mode) {

@@ -49,6 +49,11 @@ public class WledSessionTest {
         }
 
         @Override
+        public boolean turnOn(String host, int httpPort) {
+            return true;
+        }
+
+        @Override
         public boolean turnOff(String host, int httpPort) {
             offs++;
             if (beforeOff != null) {

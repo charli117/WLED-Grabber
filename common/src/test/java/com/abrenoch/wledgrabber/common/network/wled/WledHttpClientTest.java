@@ -110,6 +110,17 @@ public class WledHttpClientTest {
     }
 
     @Test
+    public void turnOnPostsPowerOnJson() throws Exception {
+        try (ControlledHttpEndpoint endpoint = new ControlledHttpEndpoint(
+                ControlledHttpEndpoint.Mode.STATE_OFF)) {
+            assertTrue(loopbackClient.turnOn("127.0.0.1", endpoint.port()));
+            assertEquals("POST", endpoint.lastMethod());
+            assertEquals("/json/state", endpoint.lastPath());
+            assertTrue(endpoint.lastBody(), endpoint.lastBody().contains("\"on\":true"));
+        }
+    }
+
+    @Test
     public void errorResultsNeverPassAsDiscoverySuccess() throws Exception {
         try (ControlledHttpEndpoint endpoint = new ControlledHttpEndpoint(ControlledHttpEndpoint.Mode.ERROR)) {
             ProbeResult result = probe(loopbackClient, endpoint);

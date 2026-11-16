@@ -11,6 +11,7 @@ public final class IntegralImage {
     private int width;
     private int height;
     private int allocationCount;
+    private byte[] rowBytes;
 
     public void ensureCapacity(int newWidth, int newHeight) {
         if (newWidth <= 0 || newHeight <= 0
@@ -36,16 +37,23 @@ public final class IntegralImage {
     public void update(PlaneView plane) {
         ensureCapacity(plane.cropWidth(), plane.cropHeight());
         int stride = width + 1;
+        int rowLength = width * 3;
+        if (rowBytes == null || rowBytes.length < rowLength) {
+            rowBytes = new byte[rowLength];
+        }
         for (int y = 0; y < height; y++) {
+            plane.readRow(y, rowBytes);
             int rowR = 0;
             int rowG = 0;
             int rowB = 0;
             int previous = y * stride;
             int current = (y + 1) * stride;
+            int src = 0;
             for (int x = 0; x < width; x++) {
-                rowR += plane.read(x, y, 0);
-                rowG += plane.read(x, y, 1);
-                rowB += plane.read(x, y, 2);
+                rowR += rowBytes[src] & 0xff;
+                rowG += rowBytes[src + 1] & 0xff;
+                rowB += rowBytes[src + 2] & 0xff;
+                src += 3;
                 red[current + x + 1] = red[previous + x + 1] + rowR;
                 green[current + x + 1] = green[previous + x + 1] + rowG;
                 blue[current + x + 1] = blue[previous + x + 1] + rowB;

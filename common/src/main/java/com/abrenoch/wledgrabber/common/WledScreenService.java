@@ -65,6 +65,7 @@ public class WledScreenService extends Service {
     public static final String EXTRA_RESULT_CODE = BASE + "EXTRA_RESULT_CODE";
     private static final int NOTIFICATION_ID = 1;
     private static final int NOTIFICATION_EXIT_INTENT_ID = 2;
+    private static final long KEEP_ALIVE_MS = 1000L;
     private static final String TAG = "WledScreenService";
     private static final String OUTPUT_OWNER_ID = "wled-screen-service";
 
@@ -84,6 +85,7 @@ public class WledScreenService extends Service {
     private UdpDatagramSink sink;
     private WledHttpClient httpClient;
     private byte[] scratch;
+    private byte[] lastFrame;
     private CompiledLayout layout;
     private RgbwMode rgbwMode;
     private WhiteMode whiteMode;
@@ -104,6 +106,30 @@ public class WledScreenService extends Service {
         public void onStop() {
             captureSession.onProjectionRevoked();
             stopCapture("projection revoked");
+        }
+    };
+
+    /**
+     * MediaProjection only emits frames when the screen changes; without a heartbeat
+     * WLED leaves realtime mode after its 2 s UDP timeout and the strip falls back to
+     * its own effect. Resends the last payload through the same single writer.
+     */
+    private final Runnable keepAlive = new Runnable() {
+        @Override
+        public void run() {
+            long now = System.currentTimeMillis();
+            synchronized (lock) {
+                if (!running || stopping || lastFrame == null) {
+                    return;
+                }
+                if (now - lastFrameAt >= KEEP_ALIVE_MS) {
+                    lastFrameAt = now;
+                    offerPayload(lastFrame, now);
+                }
+            }
+            if (captureHandler != null) {
+                captureHandler.postDelayed(this, KEEP_ALIVE_MS);
+            }
         }
     };
 
@@ -215,6 +241,7 @@ public class WledScreenService extends Service {
             frameRate = Math.max(1, capture.frameRate());
             averageColor = capture.useAverageColor();
             scratch = new byte[physicalCount * channels];
+            lastFrame = new byte[physicalCount * channels];
             framePool = new FramePool(physicalCount * channels);
 
             int port = channels == 4 || protocol == Protocol.DDP
@@ -241,6 +268,7 @@ public class WledScreenService extends Service {
             };
             final String host = snapshot.device().host();
             final int httpPort = snapshot.device().httpPort();
+            requestWledPowerOn(httpClient, host, httpPort);
             streamer = new LedStreamer(framePool, frameSink, reason -> {
                 boolean off = httpClient.turnOff(host, httpPort);
                 StateReadResult state = httpClient.readState(host, httpPort);
@@ -288,8 +316,29 @@ public class WledScreenService extends Service {
             streamer.start(epoch, OutputOwner.CAPTURE, physicalCount, channels);
             running = true;
             stopping = false;
+            if (captureHandler != null) {
+                captureHandler.postDelayed(keepAlive, KEEP_ALIVE_MS);
+            }
             notifyActivity();
         }
+    }
+
+    /**
+     * WLED only outputs while its master power is on; realtime UDP frames alone do
+     * not switch it on. Runs off the main thread for the no-main-thread-network rule.
+     */
+    private void requestWledPowerOn(WledHttpClient client, String host, int port) {
+        Thread worker = new Thread(() -> {
+            try {
+                if (!client.turnOn(host, port)) {
+                    Log.w(TAG, "WLED power-on not acknowledged");
+                }
+            } catch (RuntimeException e) {
+                Log.w(TAG, "WLED power-on failed", e);
+            }
+        }, "wled-power-on");
+        worker.setDaemon(true);
+        worker.start();
     }
 
     private boolean sendFrame(WledUdpTransport transport, byte[] data, int leds, int ledChannels) {
@@ -336,18 +385,32 @@ public class WledScreenService extends Service {
                     rgbwMode, whiteMode, scratch)) {
                 return;
             }
-            FrameLease lease = framePool.acquire(epoch, layout.generation(), now,
-                    channels, physicalCount);
-            if (lease != null) {
-                System.arraycopy(scratch, 0, lease.data(), 0, scratch.length);
-                streamer.offer(lease);
+            byte[] frame = lastFrame;
+            if (frame == null) {
+                return;
             }
+            System.arraycopy(scratch, 0, frame, 0, frame.length);
+            offerPayload(frame, now);
         } catch (RuntimeException e) {
             Log.w(TAG, "frame dropped", e);
         } finally {
             if (image != null) {
                 image.close();
             }
+        }
+    }
+
+    private void offerPayload(byte[] payload, long now) {
+        FramePool pool = framePool;
+        LedStreamer target = streamer;
+        CompiledLayout current = layout;
+        if (pool == null || target == null || current == null || payload == null) {
+            return;
+        }
+        FrameLease lease = pool.acquire(epoch, current.generation(), now, channels, physicalCount);
+        if (lease != null) {
+            System.arraycopy(payload, 0, lease.data(), 0, payload.length);
+            target.offer(lease);
         }
     }
 
@@ -396,6 +459,7 @@ public class WledScreenService extends Service {
         framePool = null;
         layout = null;
         scratch = null;
+        lastFrame = null;
         notifyActivity();
         captureSession.stopCompleted();
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE);
@@ -463,6 +527,7 @@ public class WledScreenService extends Service {
         framePool = null;
         layout = null;
         scratch = null;
+        lastFrame = null;
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE);
         notifyActivity();
         stopSelf();

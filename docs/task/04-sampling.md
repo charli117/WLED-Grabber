@@ -47,6 +47,8 @@ common/.../led/LedColorSampler、PlaneView、RGBW转换、可选颜色处理
 
 **证据（2026-11-16）**：`PlaneView`、`IntegralImage`、`LedColorSampler`、`CaptureSizing`落地；7个`LedColorSamplerTest`通过。1000帧随机oracle逐通道一致，纯色/灰阶/棋盘/小矩形/全屏平均覆盖，非零position/pixelStride>4/row padding/紧凑末行与畸形limit/crop拒绝，100000帧后积分图仍只分配3个数组，640×640积分图=4,930,572字节（<12MiB）。证据见`docs/verification/wled/net/`（原始日志与采样测试同批）。
 
+**证据（2026-11-17，真机帧率）**：真机发现逐帧成本过高——`IntegralImage.update` 旧实现对每个像素调用3次`PlaneView.read()`，640×360时约69万次`DirectByteBuffer`绝对读取（每次一次JNI跨越），实测WLED侧有效刷新仅27–33fps。改为`PlaneView.readRow()`按行批量读取（每行一次bulk get，再在Java数组内解析RGB），`IntegralImage.update`改用行缓冲；每帧JNI跨越降到约360次。1000帧随机oracle与非零position/padding/紧凑末行用例全部保持通过，逐通道结果不变。真机（Sony KD-55XD8005 + WLED_TV 274 RGB）WLED `/json/info` 的 `leds.fps` 从27–33升到68–175（均值约74），用户在60fps配置下确认观感跟手。QA-2的p95/p99量化门禁仍未测量。
+
 <a id="smp-2"></a>
 
 ## SMP-2 — 平均模式掩码与单方白通道合成

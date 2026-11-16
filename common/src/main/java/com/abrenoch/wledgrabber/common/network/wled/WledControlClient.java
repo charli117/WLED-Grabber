@@ -6,5 +6,7 @@ public interface WledControlClient {
 
     StateReadResult readState(String host, int httpPort);
 
+    boolean turnOn(String host, int httpPort);
+
     boolean turnOff(String host, int httpPort);
 }
