@@ -1,0 +1,53 @@
+docs/task/00-overview.md
+  51396205a9b60a22 147
+  e2fcb4b975340679 142-146,149-150
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "2d204451c11cc2189ba661bcb1004beba1ee7f49",
+  "prompts": {
+    "51396205a9b60a22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ff5acb-12c7-4dbe-bae9-040be916a7c2",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 74,
+      "total_deletions": 18,
+      "accepted_lines": 1410,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/de0cfa4db7d6021fddb13b49924d5712919b45260260f301e0bde89b40dbef4e",
+      "token_usage": {
+        "input_tokens": 785527,
+        "output_tokens": 433931,
+        "cache_read_tokens": 66297600,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 7,
+      "total_deletions": 7,
+      "accepted_lines": 759,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/bf1a7d428085767a9d3a52116a92d5b264ad43febc69c40489fc3c3d6e9ae2f0",
+      "token_usage": {
+        "input_tokens": 6241193,
+        "output_tokens": 1851839,
+        "cache_read_tokens": 1036430080,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
