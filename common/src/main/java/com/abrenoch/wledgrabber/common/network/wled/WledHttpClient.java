@@ -163,10 +163,30 @@ public final class WledHttpClient implements WledControlClient, AutoCloseable {
         }
         try {
             JSONObject state = new JSONObject(new String(result.body, StandardCharsets.UTF_8));
-            if (!state.has("on") || !state.has("live")) {
+            if (!state.has("on")) {
                 return StateReadResult.failure(ProbeError.MISSING_FIELD);
             }
-            return StateReadResult.success(state.getBoolean("on"), state.getBoolean("live"));
+            boolean on = state.getBoolean("on");
+            boolean live;
+            if (state.has("live")) {
+                live = state.getBoolean("live");
+            } else {
+                // WLED 16.x omits "live" from /json/state; /json/info is authoritative.
+                HttpResult info = request(host, port, "/json/info", "GET", null);
+                if (info.error != null) {
+                    return StateReadResult.failure(info.error);
+                }
+                if (info.status != 200) {
+                    return StateReadResult.failure(ProbeError.HTTP_ERROR);
+                }
+                JSONObject infoJson = new JSONObject(
+                        new String(info.body, StandardCharsets.UTF_8));
+                if (!infoJson.has("live")) {
+                    return StateReadResult.failure(ProbeError.MISSING_FIELD);
+                }
+                live = infoJson.getBoolean("live");
+            }
+            return StateReadResult.success(on, live);
         } catch (JSONException e) {
             return StateReadResult.failure(ProbeError.MALFORMED_JSON);
         }

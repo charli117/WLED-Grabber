@@ -29,7 +29,8 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
         MISSING_FIELDS,
         NON_WLED,
         STATE_OFF,
-        STATE_LIVE
+        STATE_LIVE,
+        STATE_WITHOUT_LIVE
     }
 
     private static final int SLOW_DELAY_MS = 1500;
@@ -82,7 +83,7 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
                 if (mode == Mode.SLOW) {
                     Thread.sleep(SLOW_DELAY_MS);
                 }
-                Response response = responseFor(mode);
+                Response response = responseFor(mode, lastPath);
                 writeResponse(socket, response);
             } catch (IOException e) {
                 // A timeout test closes the client socket while the fixture is still serving;
@@ -131,7 +132,7 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
         lastBody = body.toString();
     }
 
-    private static Response responseFor(Mode mode) {
+    private static Response responseFor(Mode mode, String path) {
         switch (mode) {
             case ERROR:
                 return new Response(500, "Internal Server Error", "error", null);
@@ -156,6 +157,11 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
                 return new Response(200, "OK", "{\"on\":false,\"live\":false}", null);
             case STATE_LIVE:
                 return new Response(200, "OK", "{\"on\":false,\"live\":true}", null);
+            case STATE_WITHOUT_LIVE:
+                // WLED 16.x omits "live" from /json/state; only /json/info has it.
+                return path != null && path.startsWith("/json/info")
+                        ? new Response(200, "OK", "{\"live\":false}", null)
+                        : new Response(200, "OK", "{\"on\":false}", null);
             case NORMAL:
             case SLOW:
             default:

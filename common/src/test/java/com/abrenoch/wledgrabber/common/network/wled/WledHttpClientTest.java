@@ -110,6 +110,18 @@ public class WledHttpClientTest {
     }
 
     @Test
+    public void liveFallsBackToInfoWhenStateOmitsIt() throws Exception {
+        try (ControlledHttpEndpoint endpoint = new ControlledHttpEndpoint(
+                ControlledHttpEndpoint.Mode.STATE_WITHOUT_LIVE)) {
+            StateReadResult state = loopbackClient.readState("127.0.0.1", endpoint.port());
+            assertTrue(String.valueOf(state.error()), state.isSuccess());
+            assertFalse(state.on());
+            assertFalse(state.live());
+            assertEquals(2, endpoint.requestCount());
+        }
+    }
+
+    @Test
     public void turnOnPostsPowerOnJson() throws Exception {
         try (ControlledHttpEndpoint endpoint = new ControlledHttpEndpoint(
                 ControlledHttpEndpoint.Mode.STATE_OFF)) {
