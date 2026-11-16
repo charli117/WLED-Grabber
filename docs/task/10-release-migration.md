@@ -81,5 +81,5 @@
 - 旧Host/Port/Priority/X/Y/帧率/平均色/开机行为均有映射或“不迁移”解释。
 - 失效链接0；所有未测试组合标注未验证；签名/发布完成的虚假表述0。
 
-**证据（2026-11-16）**：`docs/migration/legacy-to-wled-layout.md`交付；链接检查19个文档、217处链接0错误；旧字段映射/274参数/Input/Reverse/DDP/auto-white/RELEASE_UNCONFIRMED排障全部覆盖；README与合并APK manifest的package/versionCode/versionName/权限已对照（仍为旧身份`com.abrenoch.hyperiongrabber`，签名/发布/硬件未完成）。REL-2保持“待验证”，等待QA-1/REL-1。证据见`docs/verification/wled/rel-2/`。
+**证据（2026-11-16）**：`docs/migration/legacy-to-wled-layout.md`交付；链接检查19个文档、217处链接0错误；旧字段映射/274参数/Input/Reverse/DDP/auto-white/RELEASE_UNCONFIRMED排障全部覆盖；README与合并APK manifest的package/versionCode/versionName/权限已对照（仍为旧身份`com.abrenoch.hyperiongrabber`，签名/发布/硬件未完成）。**2026-11-17 复核**：本地回归 `scripts/qa/local-regression.sh` 通过——25 个文档、241 处链接、0 错误；`docs/migration/legacy-to-wled-layout.md` 仍覆盖旧 Host/Port/Priority/X/Y/帧率/平均色/开机行为的映射或“不迁移”解释；QA-1 已验收（JVM 187/0、lint 0 error、Debug+Release 构建）。三项独立测试全部勾选，REL-2 验收通过。证据见`docs/verification/wled/rel-2/` 与 `docs/verification/wled/qa-1/`。
 

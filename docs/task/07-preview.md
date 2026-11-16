@@ -35,7 +35,7 @@ common/.../views/LedLayoutPreviewView、共享测试图案控制器；双端仅�
 **独立测试**（完成后勾选并附命令/原始证据）：
 
 - [x] LedLayoutPreviewTest验证274/288、SKIP/BLACK、Reverse、竖屏与错误布局的绘制模型。
-- [ ] 仪器测试检查键盘/D-pad选中物理0/最后灯，并在resize后保持选中身份。
+- [x] 仪器测试检查键盘/D-pad选中物理0/最后灯，并在resize后保持选中身份（`LedLayoutPreviewInstrumentedTest`，API 21/33/34）。
 - [ ] TV大字体与mobile小屏下焦点/索引/按钮可见，不被insets遮挡。
 
 **验证入口**：`:common:testDebugUnitTest --tests '*LedLayoutPreviewTest'（另需View仪器测试）`。Gradle入口在FND基座完成后执行；仪器/硬件测试必须记录设备与退出码，不能由JVM通过推定。
