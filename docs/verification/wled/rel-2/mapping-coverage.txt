@@ -1,0 +1,16 @@
+OK Host
+OK Port
+OK Priority
+OK Reconnect
+OK Reconnect Delay
+OK X LED Count
+OK Y LED Count
+OK Frame Rate
+OK Average Color
+OK Grab on Boot
+OK 274
+OK Input=161
+OK Reverse=true
+OK DDP
+OK auto-white
+OK RELEASE_UNCONFIRMED

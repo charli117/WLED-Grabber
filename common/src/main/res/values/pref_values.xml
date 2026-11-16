@@ -34,4 +34,74 @@
 
     <string name="pref_key_use_avg_color" translatable="false">pref_key_use_avg_color</string>
     <bool name="pref_default_use_avg_color" translatable="false">false</bool>
+
+    <!-- WLED direct configuration keys and defaults (CFG-1). -->
+    <string name="pref_key_config_schema_version" translatable="false">pref_key_config_schema_version</string>
+    <integer name="pref_default_config_schema_version" translatable="false">1</integer>
+    <string name="pref_key_config_revision" translatable="false">pref_key_config_revision</string>
+    <integer name="pref_default_config_revision" translatable="false">0</integer>
+
+    <string name="pref_key_wled_host" translatable="false">pref_key_wled_host</string>
+    <string name="pref_default_wled_host" translatable="false"></string>
+    <string name="pref_key_wled_http_port" translatable="false">pref_key_wled_http_port</string>
+    <integer name="pref_default_wled_http_port" translatable="false">80</integer>
+    <string name="pref_key_wled_udp_port" translatable="false">pref_key_wled_udp_port</string>
+    <integer name="pref_default_wled_udp_port" translatable="false">21324</integer>
+    <string name="pref_key_wled_ddp_port" translatable="false">pref_key_wled_ddp_port</string>
+    <integer name="pref_default_wled_ddp_port" translatable="false">4048</integer>
+    <string name="pref_key_wled_protocol" translatable="false">pref_key_wled_protocol</string>
+    <string name="pref_default_wled_protocol" translatable="false">auto</string>
+    <string name="pref_key_wled_rgbw_mode" translatable="false">pref_key_wled_rgbw_mode</string>
+    <string name="pref_default_wled_rgbw_mode" translatable="false">unconfirmed</string>
+    <string name="pref_key_wled_rgbw_white_mode" translatable="false">pref_key_wled_rgbw_white_mode</string>
+    <string name="pref_default_wled_rgbw_white_mode" translatable="false">min_subtract</string>
+    <string name="pref_key_wled_physical_leds" translatable="false">pref_key_wled_physical_leds</string>
+    <integer name="pref_default_wled_physical_leds" translatable="false">0</integer>
+
+    <string name="pref_key_led_top" translatable="false">pref_key_led_top</string>
+    <integer name="pref_default_led_top" translatable="false">60</integer>
+    <string name="pref_key_led_bottom" translatable="false">pref_key_led_bottom</string>
+    <integer name="pref_default_led_bottom" translatable="false">60</integer>
+    <string name="pref_key_led_left" translatable="false">pref_key_led_left</string>
+    <integer name="pref_default_led_left" translatable="false">34</integer>
+    <string name="pref_key_led_right" translatable="false">pref_key_led_right</string>
+    <integer name="pref_default_led_right" translatable="false">34</integer>
+    <string name="pref_key_led_gap_length" translatable="false">pref_key_led_gap_length</string>
+    <integer name="pref_default_led_gap_length" translatable="false">0</integer>
+    <string name="pref_key_led_gap_position" translatable="false">pref_key_led_gap_position</string>
+    <integer name="pref_default_led_gap_position" translatable="false">0</integer>
+    <string name="pref_key_led_input_position" translatable="false">pref_key_led_input_position</string>
+    <integer name="pref_default_led_input_position" translatable="false">0</integer>
+    <string name="pref_key_led_reverse" translatable="false">pref_key_led_reverse</string>
+    <bool name="pref_default_led_reverse" translatable="false">false</bool>
+    <string name="pref_key_led_gap_mode" translatable="false">pref_key_led_gap_mode</string>
+    <string name="pref_default_led_gap_mode" translatable="false">skip</string>
+    <string name="pref_key_led_h_depth" translatable="false">pref_key_led_h_depth</string>
+    <integer name="pref_default_led_h_depth" translatable="false">8</integer>
+    <string name="pref_key_led_v_depth" translatable="false">pref_key_led_v_depth</string>
+    <integer name="pref_default_led_v_depth" translatable="false">5</integer>
+    <string name="pref_key_led_overlap" translatable="false">pref_key_led_overlap</string>
+    <integer name="pref_default_led_overlap" translatable="false">0</integer>
+    <string name="pref_key_led_edge_gap" translatable="false">pref_key_led_edge_gap</string>
+    <integer name="pref_default_led_edge_gap" translatable="false">0</integer>
+
+    <string name="pref_key_led_corner_tl_h" translatable="false">pref_key_led_corner_tl_h</string>
+    <integer name="pref_default_led_corner_tl_h" translatable="false">0</integer>
+    <string name="pref_key_led_corner_tl_v" translatable="false">pref_key_led_corner_tl_v</string>
+    <integer name="pref_default_led_corner_tl_v" translatable="false">0</integer>
+    <string name="pref_key_led_corner_tr_h" translatable="false">pref_key_led_corner_tr_h</string>
+    <integer name="pref_default_led_corner_tr_h" translatable="false">100</integer>
+    <string name="pref_key_led_corner_tr_v" translatable="false">pref_key_led_corner_tr_v</string>
+    <integer name="pref_default_led_corner_tr_v" translatable="false">0</integer>
+    <string name="pref_key_led_corner_br_h" translatable="false">pref_key_led_corner_br_h</string>
+    <integer name="pref_default_led_corner_br_h" translatable="false">100</integer>
+    <string name="pref_key_led_corner_br_v" translatable="false">pref_key_led_corner_br_v</string>
+    <integer name="pref_default_led_corner_br_v" translatable="false">100</integer>
+    <string name="pref_key_led_corner_bl_h" translatable="false">pref_key_led_corner_bl_h</string>
+    <integer name="pref_default_led_corner_bl_h" translatable="false">0</integer>
+    <string name="pref_key_led_corner_bl_v" translatable="false">pref_key_led_corner_bl_v</string>
+    <integer name="pref_default_led_corner_bl_v" translatable="false">100</integer>
+
+    <string name="pref_key_capture_max_dimension" translatable="false">pref_key_capture_max_dimension</string>
+    <integer name="pref_default_capture_max_dimension" translatable="false">640</integer>
 </resources>

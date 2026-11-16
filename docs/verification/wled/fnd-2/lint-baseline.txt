@@ -1,0 +1,281 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.9/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :common:preBuild UP-TO-DATE
+> Task :common:preDebugBuild UP-TO-DATE
+> Task :common:mergeDebugJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugNativeLibs NO-SOURCE
+> Task :common:stripDebugDebugSymbols NO-SOURCE
+> Task :common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :common:extractDebugProto UP-TO-DATE
+> Task :common:copyDebugJniLibsProjectAndLocalJars
+> Task :common:extractIncludeDebugProto UP-TO-DATE
+> Task :common:extractProto UP-TO-DATE
+> Task :common:generateDebugProto UP-TO-DATE
+> Task :common:generateDebugResValues UP-TO-DATE
+> Task :common:generateDebugResources UP-TO-DATE
+> Task :common:packageDebugResources UP-TO-DATE
+> Task :common:parseDebugLocalResources UP-TO-DATE
+> Task :common:generateDebugRFile UP-TO-DATE
+> Task :common:compileDebugKotlin UP-TO-DATE
+> Task :common:extractDebugAnnotations
+> Task :common:extractDeepLinksForAarDebug
+> Task :common:javaPreCompileDebug UP-TO-DATE
+> Task :common:compileDebugJavaWithJavac UP-TO-DATE
+> Task :common:mergeDebugGeneratedProguardFiles
+> Task :common:mergeDebugConsumerProguardFiles
+> Task :common:mergeDebugShaders UP-TO-DATE
+> Task :common:compileDebugShaders NO-SOURCE
+> Task :common:generateDebugAssets UP-TO-DATE
+> Task :common:packageDebugAssets UP-TO-DATE
+> Task :common:prepareDebugArtProfile
+> Task :common:prepareLintJarForPublish
+> Task :common:processDebugManifest UP-TO-DATE
+> Task :common:processDebugJavaRes UP-TO-DATE
+> Task :common:writeDebugAarMetadata UP-TO-DATE
+> Task :common:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :common:createFullJarDebug UP-TO-DATE
+> Task :common:preDebugAndroidTestBuild UP-TO-DATE
+> Task :common:generateDebugAndroidTestResValues
+> Task :common:writeDebugLintModelMetadata
+> Task :common:extractProguardFiles
+> Task :common:mergeDebugJavaResource
+> Task :common:generateDebugLintReportModel
+> Task :common:syncDebugLibJars
+> Task :common:bundleDebugLocalLintAar
+> Task :common:preDebugUnitTestBuild UP-TO-DATE
+> Task :common:generateDebugLintModel
+> Task :common:lintAnalyzeDebug
+> Task :common:generateDebugAndroidTestLintModel
+> Task :common:generateDebugUnitTestLintModel
+> Task :common:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :mobile:preBuild UP-TO-DATE
+> Task :mobile:preDebugBuild UP-TO-DATE
+> Task :mobile:dataBindingMergeDependencyArtifactsDebug UP-TO-DATE
+> Task :mobile:generateDebugResValues UP-TO-DATE
+> Task :mobile:generateDebugResources UP-TO-DATE
+> Task :mobile:mergeDebugResources UP-TO-DATE
+> Task :mobile:packageDebugResources UP-TO-DATE
+> Task :mobile:parseDebugLocalResources UP-TO-DATE
+> Task :mobile:dataBindingGenBaseClassesDebug UP-TO-DATE
+> Task :mobile:javaPreCompileDebug UP-TO-DATE
+> Task :common:compileDebugLibraryResources UP-TO-DATE
+> Task :mobile:checkDebugAarMetadata UP-TO-DATE
+> Task :mobile:mapDebugSourceSetPaths UP-TO-DATE
+> Task :mobile:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :common:extractDeepLinksDebug UP-TO-DATE
+> Task :mobile:extractDeepLinksDebug UP-TO-DATE
+> Task :mobile:processDebugMainManifest UP-TO-DATE
+> Task :mobile:processDebugManifest UP-TO-DATE
+> Task :mobile:processDebugManifestForPackage UP-TO-DATE
+> Task :mobile:processDebugResources UP-TO-DATE
+> Task :mobile:compileDebugJavaWithJavac UP-TO-DATE
+> Task :mobile:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :mobile:preDebugAndroidTestBuild SKIPPED
+> Task :mobile:generateDebugAndroidTestResValues
+> Task :mobile:generateDebugAndroidTestLintModel
+> Task :mobile:extractProguardFiles
+> Task :mobile:generateDebugLintReportModel
+> Task :mobile:preDebugUnitTestBuild UP-TO-DATE
+> Task :mobile:generateDebugUnitTestLintModel
+> Task :tv:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :tv:preBuild UP-TO-DATE
+> Task :tv:preDebugBuild UP-TO-DATE
+> Task :tv:dataBindingMergeDependencyArtifactsDebug UP-TO-DATE
+> Task :tv:generateDebugResValues UP-TO-DATE
+> Task :tv:generateDebugResources UP-TO-DATE
+> Task :tv:mergeDebugResources UP-TO-DATE
+> Task :tv:packageDebugResources UP-TO-DATE
+> Task :tv:parseDebugLocalResources UP-TO-DATE
+> Task :tv:dataBindingGenBaseClassesDebug UP-TO-DATE
+> Task :tv:checkDebugAarMetadata UP-TO-DATE
+> Task :tv:mapDebugSourceSetPaths UP-TO-DATE
+> Task :tv:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :tv:extractDeepLinksDebug UP-TO-DATE
+> Task :tv:processDebugMainManifest UP-TO-DATE
+> Task :tv:processDebugManifest UP-TO-DATE
+> Task :tv:processDebugManifestForPackage UP-TO-DATE
+> Task :tv:processDebugResources UP-TO-DATE
+> Task :tv:compileDebugKotlin UP-TO-DATE
+> Task :tv:javaPreCompileDebug UP-TO-DATE
+> Task :tv:compileDebugJavaWithJavac UP-TO-DATE
+> Task :tv:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :tv:preDebugAndroidTestBuild SKIPPED
+> Task :tv:generateDebugAndroidTestResValues
+> Task :tv:generateDebugAndroidTestLintModel
+> Task :tv:extractProguardFiles
+> Task :tv:generateDebugLintReportModel
+> Task :tv:preDebugUnitTestBuild UP-TO-DATE
+> Task :tv:generateDebugUnitTestLintModel
+> Task :mobile:lintAnalyzeDebug
+> Task :mobile:lintAnalyzeDebugAndroidTest
+> Task :mobile:lintAnalyzeDebugUnitTest
+> Task :tv:lintAnalyzeDebug
+> Task :tv:lintAnalyzeDebugAndroidTest
+> Task :tv:lintAnalyzeDebugUnitTest
+> Task :common:lintAnalyzeDebugUnitTest
+> Task :common:lintAnalyzeDebugAndroidTest
+
+> Task :mobile:lintReportDebug
+Wrote HTML report to file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/mobile/build/reports/lint-results-debug.html
+
+> Task :mobile:lintDebug FAILED
+Lint found 5 errors, 6 warnings. First failure:
+
+/Users/luowei/Documents/Pycharm/hyperion-android-grabber/mobile/src/main/java/com/abrenoch/hyperiongrabber/mobile/HyperionGrabberTileService.java:140: Error: Missing permissions required by intent Intent.ACTION_CLOSE_SYSTEM_DIALOGS: android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS [MissingPermission]
+            sendBroadcast(closeIntent);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "MissingPermission":
+   This check scans through your code and libraries and looks at the APIs
+   being used, and checks this against the set of permissions required to
+   access those APIs. If the code using those APIs is called at runtime, then
+   the program will crash.
+
+   Furthermore, for permissions that are revocable (with targetSdkVersion 23),
+   client code must also be prepared to handle the calls throwing an exception
+   if the user rejects the request for permission at runtime.
+
+
+The full lint text report is located at:
+  /Users/luowei/Documents/Pycharm/hyperion-android-grabber/mobile/build/intermediates/lint_intermediate_text_report/debug/lintReportDebug/lint-results-debug.txt
+
+> Task :tv:lintReportDebug
+Wrote HTML report to file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/tv/build/reports/lint-results-debug.html
+
+> Task :tv:lintDebug FAILED
+Lint found 12 errors, 29 warnings. First failure:
+
+/Users/luowei/Documents/Pycharm/hyperion-android-grabber/tv/src/main/java/com/abrenoch/hyperiongrabber/tv/activities/MainActivity.java:152: Error: Overriding method should call super.onActivityResult [MissingSuperCall]
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                ~~~~~~~~~~~~~~~~
+
+The full lint text report is located at:
+  /Users/luowei/Documents/Pycharm/hyperion-android-grabber/tv/build/intermediates/lint_intermediate_text_report/debug/lintReportDebug/lint-results-debug.txt
+
+> Task :common:lintReportDebug
+Wrote HTML report to file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/build/reports/lint-results-debug.html
+
+> Task :common:lintDebug FAILED
+Lint found 44 errors, 77 warnings. First failure:
+
+/Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/main/java/com/abrenoch/hyperiongrabber/common/BootActivity.java:30: Error: Overriding method should call super.onActivityResult [MissingSuperCall]
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                ~~~~~~~~~~~~~~~~
+
+The full lint text report is located at:
+  /Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/build/intermediates/lint_intermediate_text_report/debug/lintReportDebug/lint-results-debug.txt
+
+FAILURE: Build completed with 3 failures.
+
+1: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':mobile:lintDebug'.
+> Lint found errors in the project; aborting build.
+  
+  Fix the issues identified by lint, or create a baseline to see only new errors.
+  To create a baseline, run `gradlew updateLintBaseline` after adding the following to the module's build.gradle file:
+  ```
+  android {
+      lint {
+          baseline = file("lint-baseline.xml")
+      }
+  }
+  ```
+  For more details, see https://developer.android.com/studio/write/lint#snapshot
+  
+  Lint found 5 errors, 6 warnings. First failure:
+  
+  /Users/luowei/Documents/Pycharm/hyperion-android-grabber/mobile/src/main/java/com/abrenoch/hyperiongrabber/mobile/HyperionGrabberTileService.java:140: Error: Missing permissions required by intent Intent.ACTION_CLOSE_SYSTEM_DIALOGS: android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS [MissingPermission]
+              sendBroadcast(closeIntent);
+              ~~~~~~~~~~~~~~~~~~~~~~~~~
+  
+     Explanation for issues of type "MissingPermission":
+     This check scans through your code and libraries and looks at the APIs
+     being used, and checks this against the set of permissions required to
+     access those APIs. If the code using those APIs is called at runtime, then
+     the program will crash.
+  
+     Furthermore, for permissions that are revocable (with targetSdkVersion 23),
+     client code must also be prepared to handle the calls throwing an exception
+     if the user rejects the request for permission at runtime.
+  
+  
+  The full lint text report is located at:
+    /Users/luowei/Documents/Pycharm/hyperion-android-grabber/mobile/build/intermediates/lint_intermediate_text_report/debug/lintReportDebug/lint-results-debug.txt
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+2: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':tv:lintDebug'.
+> Lint found errors in the project; aborting build.
+  
+  Fix the issues identified by lint, or create a baseline to see only new errors.
+  To create a baseline, run `gradlew updateLintBaseline` after adding the following to the module's build.gradle file:
+  ```
+  android {
+      lint {
+          baseline = file("lint-baseline.xml")
+      }
+  }
+  ```
+  For more details, see https://developer.android.com/studio/write/lint#snapshot
+  
+  Lint found 12 errors, 29 warnings. First failure:
+  
+  /Users/luowei/Documents/Pycharm/hyperion-android-grabber/tv/src/main/java/com/abrenoch/hyperiongrabber/tv/activities/MainActivity.java:152: Error: Overriding method should call super.onActivityResult [MissingSuperCall]
+      public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                  ~~~~~~~~~~~~~~~~
+  
+  The full lint text report is located at:
+    /Users/luowei/Documents/Pycharm/hyperion-android-grabber/tv/build/intermediates/lint_intermediate_text_report/debug/lintReportDebug/lint-results-debug.txt
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+3: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':common:lintDebug'.
+> Lint found errors in the project; aborting build.
+  
+  Fix the issues identified by lint, or create a baseline to see only new errors.
+  To create a baseline, run `gradlew updateLintBaseline` after adding the following to the module's build.gradle file:
+  ```
+  android {
+      lint {
+          baseline = file("lint-baseline.xml")
+      }
+  }
+  ```
+  For more details, see https://developer.android.com/studio/write/lint#snapshot
+  
+  Lint found 44 errors, 77 warnings. First failure:
+  
+  /Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/main/java/com/abrenoch/hyperiongrabber/common/BootActivity.java:30: Error: Overriding method should call super.onActivityResult [MissingSuperCall]
+      public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                  ~~~~~~~~~~~~~~~~
+  
+  The full lint text report is located at:
+    /Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/build/intermediates/lint_intermediate_text_report/debug/lintReportDebug/lint-results-debug.txt
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+BUILD FAILED in 2m 2s
+102 actionable tasks: 42 executed, 60 up-to-date

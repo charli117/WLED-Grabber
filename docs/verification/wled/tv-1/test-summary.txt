@@ -1,0 +1,1 @@
+com.abrenoch.hyperiongrabber.common.config.TvSetupTest                         tests=4 failures=0 errors=0

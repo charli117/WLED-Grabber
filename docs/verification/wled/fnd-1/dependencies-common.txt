@@ -1,0 +1,69 @@
+Starting a Gradle Daemon (subsequent builds will be faster)
+
+> Task :common:dependencies
+
+------------------------------------------------------------
+Project ':common'
+------------------------------------------------------------
+
+debugCompileClasspath - Compile classpath for '/debug'.
++--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21
+|    \--- org.jetbrains:annotations:13.0
++--- com.android.support:support-v4:26.1.0
+|    +--- com.android.support:support-compat:26.1.0
+|    |    +--- com.android.support:support-annotations:26.1.0
+|    |    \--- android.arch.lifecycle:runtime:1.0.0
+|    |         +--- android.arch.lifecycle:common:1.0.0
+|    |         \--- android.arch.core:common:1.0.0
+|    +--- com.android.support:support-media-compat:26.1.0
+|    |    +--- com.android.support:support-annotations:26.1.0
+|    |    \--- com.android.support:support-compat:26.1.0 (*)
+|    +--- com.android.support:support-core-utils:26.1.0
+|    |    +--- com.android.support:support-annotations:26.1.0
+|    |    \--- com.android.support:support-compat:26.1.0 (*)
+|    +--- com.android.support:support-core-ui:26.1.0
+|    |    +--- com.android.support:support-annotations:26.1.0
+|    |    \--- com.android.support:support-compat:26.1.0 (*)
+|    \--- com.android.support:support-fragment:26.1.0
+|         +--- com.android.support:support-compat:26.1.0 (*)
+|         +--- com.android.support:support-core-ui:26.1.0 (*)
+|         \--- com.android.support:support-core-utils:26.1.0 (*)
++--- com.android.support:support-vector-drawable:26.1.0
+|    +--- com.android.support:support-annotations:26.1.0
+|    \--- com.android.support:support-compat:26.1.0 (*)
++--- com.android.support:appcompat-v7:26.1.0
+|    +--- com.android.support:support-annotations:26.1.0
+|    +--- com.android.support:support-v4:26.1.0 (*)
+|    +--- com.android.support:support-vector-drawable:26.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:26.1.0
+|         +--- com.android.support:support-vector-drawable:26.1.0 (*)
+|         \--- com.android.support:support-core-ui:26.1.0 (*)
++--- com.android.support.constraint:constraint-layout:1.1.0
+|    \--- com.android.support.constraint:constraint-layout-solver:1.1.0
++--- com.google.protobuf:protobuf-javalite:3.25.5
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 2.1.21} -> 2.1.21 (c)
++--- com.android.support:support-v4:{strictly 26.1.0} -> 26.1.0 (c)
++--- com.android.support:support-vector-drawable:{strictly 26.1.0} -> 26.1.0 (c)
++--- com.android.support:appcompat-v7:{strictly 26.1.0} -> 26.1.0 (c)
++--- com.android.support.constraint:constraint-layout:{strictly 1.1.0} -> 1.1.0 (c)
++--- com.google.protobuf:protobuf-javalite:{strictly 3.25.5} -> 3.25.5 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- com.android.support:support-compat:{strictly 26.1.0} -> 26.1.0 (c)
++--- com.android.support:support-media-compat:{strictly 26.1.0} -> 26.1.0 (c)
++--- com.android.support:support-core-utils:{strictly 26.1.0} -> 26.1.0 (c)
++--- com.android.support:support-core-ui:{strictly 26.1.0} -> 26.1.0 (c)
++--- com.android.support:support-fragment:{strictly 26.1.0} -> 26.1.0 (c)
++--- com.android.support:support-annotations:{strictly 26.1.0} -> 26.1.0 (c)
++--- com.android.support:animated-vector-drawable:{strictly 26.1.0} -> 26.1.0 (c)
++--- com.android.support.constraint:constraint-layout-solver:{strictly 1.1.0} -> 1.1.0 (c)
++--- android.arch.lifecycle:runtime:{strictly 1.0.0} -> 1.0.0 (c)
++--- android.arch.lifecycle:common:{strictly 1.0.0} -> 1.0.0 (c)
+\--- android.arch.core:common:{strictly 1.0.0} -> 1.0.0 (c)
+
+(c) - A dependency constraint, not a dependency. The dependency affected by the constraint occurs elsewhere in the tree.
+(*) - Indicates repeated occurrences of a transitive dependency subtree. Gradle expands transitive dependency subtrees only once per project; repeat occurrences only display the root of the subtree, followed by this annotation.
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL in 4s
+1 actionable task: 1 executed

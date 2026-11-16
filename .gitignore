@@ -9,3 +9,12 @@
 /build
 /captures
 .externalNativeBuild
+.toolchains/
+
+/dist/
+
+# Tool/runtime artifacts
+.omc/
+.kotlin/
+.openidea/
+*.swp

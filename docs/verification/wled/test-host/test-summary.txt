@@ -1,0 +1,1 @@
+com.abrenoch.hyperiongrabber.common.capture.TestPatternRunnerTest              tests=3 failures=0 errors=0

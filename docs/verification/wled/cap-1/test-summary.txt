@@ -1,0 +1,2 @@
+com.abrenoch.hyperiongrabber.common.capture.CaptureSessionTest              tests=7 failures=0 errors=0
+com.abrenoch.hyperiongrabber.common.network.wled.WledSessionTest            tests=9 failures=0 errors=0

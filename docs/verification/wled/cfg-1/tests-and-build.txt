@@ -1,0 +1,87 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.9/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :common:extractDebugProto UP-TO-DATE
+> Task :common:extractIncludeDebugProto UP-TO-DATE
+> Task :common:extractProto UP-TO-DATE
+> Task :common:generateDebugProto UP-TO-DATE
+> Task :common:preBuild UP-TO-DATE
+> Task :common:preDebugBuild UP-TO-DATE
+> Task :common:generateDebugResValues UP-TO-DATE
+> Task :common:generateDebugResources UP-TO-DATE
+> Task :common:packageDebugResources UP-TO-DATE
+> Task :common:parseDebugLocalResources UP-TO-DATE
+> Task :common:generateDebugRFile UP-TO-DATE
+> Task :common:compileDebugKotlin UP-TO-DATE
+> Task :common:javaPreCompileDebug UP-TO-DATE
+> Task :common:compileDebugJavaWithJavac UP-TO-DATE
+> Task :common:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :common:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :common:processDebugJavaRes UP-TO-DATE
+> Task :common:createFullJarDebug UP-TO-DATE
+> Task :common:extractIncludeDebugUnitTestProto UP-TO-DATE
+> Task :common:extractTestDebugProto UP-TO-DATE
+> Task :common:extractTestProto UP-TO-DATE
+> Task :common:generateDebugUnitTestProto NO-SOURCE
+> Task :common:preDebugUnitTestBuild UP-TO-DATE
+> Task :common:generateDebugUnitTestStubRFile UP-TO-DATE
+> Task :common:compileDebugUnitTestKotlin NO-SOURCE
+> Task :common:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :common:compileDebugUnitTestJavaWithJavac
+> Task :common:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :common:testDebugUnitTest
+> Task :common:extractAndroidTestDebugProto UP-TO-DATE
+> Task :common:extractAndroidTestProto UP-TO-DATE
+> Task :common:extractIncludeDebugAndroidTestProto
+> Task :common:generateDebugAndroidTestProto NO-SOURCE
+> Task :common:preDebugAndroidTestBuild UP-TO-DATE
+> Task :common:writeDebugAarMetadata UP-TO-DATE
+> Task :common:checkDebugAndroidTestAarMetadata UP-TO-DATE
+> Task :common:generateDebugAndroidTestResValues UP-TO-DATE
+> Task :common:compileDebugLibraryResources
+> Task :common:mapDebugAndroidTestSourceSetPaths
+> Task :common:generateDebugAndroidTestResources UP-TO-DATE
+> Task :common:extractDeepLinksDebug UP-TO-DATE
+> Task :common:processDebugManifest UP-TO-DATE
+> Task :common:processDebugAndroidTestManifest UP-TO-DATE
+> Task :common:javaPreCompileDebugAndroidTest UP-TO-DATE
+> Task :common:mergeDebugAndroidTestShaders UP-TO-DATE
+> Task :common:compileDebugAndroidTestShaders NO-SOURCE
+> Task :common:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :common:mergeDebugShaders UP-TO-DATE
+> Task :common:compileDebugShaders NO-SOURCE
+> Task :common:generateDebugAssets UP-TO-DATE
+> Task :common:packageDebugAssets UP-TO-DATE
+> Task :common:mergeDebugAndroidTestAssets UP-TO-DATE
+> Task :common:compressDebugAndroidTestAssets UP-TO-DATE
+> Task :common:desugarDebugAndroidTestFileDependencies UP-TO-DATE
+> Task :common:checkDebugAndroidTestDuplicateClasses UP-TO-DATE
+> Task :common:mergeExtDexDebugAndroidTest UP-TO-DATE
+> Task :common:mergeDebugJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugNativeLibs NO-SOURCE
+> Task :common:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :common:mergeDebugAndroidTestJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :common:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :common:validateSigningDebugAndroidTest UP-TO-DATE
+> Task :common:writeDebugAndroidTestSigningConfigVersions UP-TO-DATE
+> Task :common:mergeLibDexDebugAndroidTest
+> Task :common:mergeDebugAndroidTestResources
+> Task :common:processDebugAndroidTestResources
+> Task :common:compileDebugAndroidTestKotlin NO-SOURCE
+
+> Task :common:compileDebugAndroidTestJavaWithJavac
+Note: /Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/androidTest/java/com/abrenoch/hyperiongrabber/common/config/PreferencesConfigStorageInstrumentedTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :common:dexBuilderDebugAndroidTest
+> Task :common:mergeDebugAndroidTestGlobalSynthetics UP-TO-DATE
+> Task :common:processDebugAndroidTestJavaRes NO-SOURCE
+> Task :common:mergeDebugAndroidTestJavaResource UP-TO-DATE
+> Task :common:mergeProjectDexDebugAndroidTest
+> Task :common:packageDebugAndroidTest
+> Task :common:createDebugAndroidTestApkListingFileRedirect UP-TO-DATE
+> Task :common:assembleDebugAndroidTest
+
+BUILD SUCCESSFUL in 9s
+60 actionable tasks: 12 executed, 48 up-to-date

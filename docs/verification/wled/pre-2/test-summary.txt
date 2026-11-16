@@ -1,0 +1,1 @@
+com.abrenoch.hyperiongrabber.common.capture.LedPatternTest                     tests=6 failures=0 errors=0

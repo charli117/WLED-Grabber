@@ -1,0 +1,2 @@
+com.abrenoch.hyperiongrabber.common.capture.CaptureSessionTest                 tests=7 failures=0 errors=0
+com.abrenoch.hyperiongrabber.common.capture.LedStreamerTest                    tests=7 failures=0 errors=0

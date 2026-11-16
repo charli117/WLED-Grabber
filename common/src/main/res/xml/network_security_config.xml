@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  WLED is reached over cleartext HTTP on user-configured LAN addresses.
+  Android cannot express dynamic private LAN ranges in a domain-config, so this
+  app-level exception is paired with WledHttpClient's LAN-only endpoint checks:
+  public, loopback, multicast and redirected targets are rejected in code.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

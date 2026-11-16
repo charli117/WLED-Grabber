@@ -1,0 +1,37 @@
+== common: total=121 {'Error': 44, 'Warning': 77}
+  Error    MissingTranslation                       42
+  Warning  GradleDependency                         30
+  Warning  ObsoleteSdkInt                           17
+  Warning  TypographyEllipsis                       8
+  Warning  AndroidGradlePluginVersion               6
+  Warning  Deprecated                               6
+  Error    MissingSuperCall                         2
+  Warning  DefaultLocale                            2
+  Warning  VectorPath                               2
+  Warning  MonochromeLauncherIcon                   2
+  Warning  VectorRaster                             1
+  Warning  DiscouragedApi                           1
+  Warning  ExportedService                          1
+  Warning  DrawAllocation                           1
+== mobile: total=11 {'Error': 5, 'Warning': 6}
+  Warning  ObsoleteSdkInt                           3
+  Warning  NonConstantResourceId                    2
+  Error    MissingTranslation                       2
+  Error    MissingPermission                        1
+  Error    MissingSuperCall                         1
+  Error    NewApi                                   1
+  Warning  OldTargetApi                             1
+== tv: total=41 {'Error': 12, 'Warning': 29}
+  Warning  UnusedResources                          12
+  Error    MissingTranslation                       10
+  Warning  NonConstantResourceId                    4
+  Warning  UsingOnClickInXml                        4
+  Error    MissingSuperCall                         2
+  Warning  Overdraw                                 2
+  Warning  OldTargetApi                             1
+  Warning  UseCompatLoadingForDrawables             1
+  Warning  ObsoleteSdkInt                           1
+  Warning  VectorPath                               1
+  Warning  IconLocation                             1
+  Warning  IconMissingDensityFolder                 1
+  Warning  SetTextI18n                              1

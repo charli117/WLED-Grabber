@@ -1,0 +1,18 @@
+LAY-1 four-decimal reference golden (2026-11-16)
+
+Reference: hyperion-project/hyperion.ng c3f24c0fcc3aaed854535214608b186a1f3de388,
+assets/webconfig/js/content_leds.js, SHA256 c6e884ce6dc58cde68c4077fc9890dac6929c98fb6ef83eb942aa13f5b3aab64.
+The Classic geometry formulas are implemented from the project technical design;
+upstream copyright/license remains with hyperion.ng. No upstream code is vendored.
+
+288 reference (T116/R50/B72/L50, H15%, V8%, Overlap10%, Edge Gap0, 640x360):
+top[58] hmin=0.4000 hmax=0.6086 vmin=0.0000 vmax=0.1500
+
+274 first unit (T86/B90/L49/R49, H8%, V5%, Overlap0, Edge Gap0, 640x360):
+top[0]     hmin=0.0000 hmax=0.0116 vmin=0.0000 vmax=0.0800
+right[0]   hmin=0.9500 hmax=1.0000 vmin=0.0000 vmax=0.0204
+bottom[0]  hmin=0.9889 hmax=1.0000 vmin=0.9200 vmax=1.0000
+left[0]    hmin=0.0000 hmax=0.0500 vmin=0.9796 vmax=1.0000
+
+4:3 non-16:9 Edge Gap sanity (T10/B10/L0/R0, H8%, Edge Gap10%, 640x480):
+top[0] hmin=0.0375 hmax=0.1300

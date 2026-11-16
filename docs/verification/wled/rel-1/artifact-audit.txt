@@ -1,0 +1,52 @@
+=== mobile merged manifest
+    package="com.abrenoch.wledgrabber"
+    android:versionCode="1012"
+    android:versionName="1.0" >
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="com.abrenoch.wledgrabber.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+        <activity
+        </activity>
+        <activity
+        </activity>
+        <activity
+        </activity>
+        <service
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+        </service>
+        <service
+        <activity
+        <activity
+=== tv merged manifest
+    package="com.abrenoch.wledgrabber"
+    android:versionCode="2012"
+    android:versionName="1.0" >
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="com.abrenoch.wledgrabber.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+        <activity
+        </activity>
+        <activity
+            android:label="@string/toggle_activity_label"
+        </activity>
+        <activity
+        <activity
+        <activity
+        <activity
+        <service
+        <activity
+        <activity
+        <activity
+=== apk legacy/protobuf entries
+0
+0
+=== source old refs
+none

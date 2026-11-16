@@ -7,7 +7,7 @@
     <item>30 fps</item>
     <item>60 fps</item>
   </string-array>
-  <string name="app_name">Hyperion Grabber</string>
+  <string name="app_name">WLED Grabber</string>
   <string name="pref_title">Einstellungen</string>
   <string name="enabled">Einschalten</string>
   <string name="disabled">Ausschalten</string>
@@ -15,9 +15,9 @@
   <string name="notification_exit_button">Beenden</string>
   <!-- Network scanner -->
   <string name="scanner_title">Hallo!</string>
-  <string name="scanner_description">Hyperion Grabber kann im Netzwerk nach Servern suchen, so dass Du nicht die IP-Adresse deines Servers manuell eingeben musst.</string>
+  <string name="scanner_description">WLED Grabber kann im Netzwerk nach Servern suchen, so dass Du nicht die IP-Adresse deines Servers manuell eingeben musst.</string>
   <string name="scanner_start_scan_button">Suche starten</string>
-  <string name="scanner_scan_in_progress_text">Suche nach lokalen Hyperion Servers läuft %s</string>
+  <string name="scanner_scan_in_progress_text">Suche nach lokalen WLED Servers läuft %s</string>
   <string name="scanner_scan_in_progress_button">Suche…</string>
   <string name="scanner_no_results">Kein Server gefunden %s</string>
   <string name="scanner_retry_button">Wiederholen</string>
@@ -30,17 +30,17 @@
   <!-- Connection settings -->
   <string name="pref_group_connection">Verbindung</string>
   <string name="pref_title_host">IP Adresse</string>
-  <string name="pref_summary_host">Die IP Adresse auf dem dein Hyperion Server läuft</string>
+  <string name="pref_summary_host">Die IP Adresse auf dem dein WLED Server läuft</string>
   <string name="pref_title_port">Port Nummer</string>
-  <string name="pref_summary_port">Die PROTO Port Nummer von deinem Hyperion Server</string>
+  <string name="pref_summary_port">Die PROTO Port Nummer von deinem WLED Server</string>
   <string name="pref_title_y_led">Vertikale LEDs</string>
   <string name="pref_summary_y_led">Die vertikale Anzahl deiner LEDs</string>
   <string name="pref_title_x_led">Horizontale LEDs</string>
   <string name="pref_summary_x_led">Die horizontale Anzahl deiner LEDs</string>
   <string name="pref_title_priority">Priorität</string>
-  <string name="pref_summary_priority">Die Priorität vom Hyperion Grabber</string>
+  <string name="pref_summary_priority">Die Priorität vom WLED Grabber</string>
   <string name="pref_title_reconnect">Verbindungswiederholung</string>
-  <string name="pref_summary_reconnect">Die Verbindung zum Hyperion Server bei Verlust automatisch wiederherstellen</string>
+  <string name="pref_summary_reconnect">Die Verbindung zum WLED Server bei Verlust automatisch wiederherstellen</string>
   <string name="pref_title_reconnect_delay">Verzögerung</string>
   <string name="pref_summary_reconnect_delay">Die Sekundenanzahl zwischen den Verbindungswiederholungen</string>
   <!-- Capturing settings -->
@@ -49,19 +49,19 @@
   <string name="pref_summary_framerate">Wie schnell neue Bilder an den Server gesendet werden sollen</string>
   <!-- General settings -->
   <string name="pref_group_general">Allgemein</string>
-  <string name="pref_summary_boot">Hyperion Grabber mit Android starten</string>
+  <string name="pref_summary_boot">WLED Grabber mit Android starten</string>
   <string name="pref_title_boot">Autostart</string>
   <string name="pref_error_missing_field">%s sollte nicht leer sein</string>
   <string name="pref_error_invalid_field" formatted="false">%s passt nicht zur %s</string>
   <string name="error_empty_host">Die IP Adresse darf nicht leer sein</string>
   <string name="error_empty_port">Die Port Nummer darf nicht leer sein</string>
   <string name="error_invalid_led_counts">Die Anzahl der horizontalen oder vertikalen LEDs müssen größer als 0 sein</string>
-  <string name="error_server_unreachable">Eine Verbindung zum Hyperion Server konnte nicht hergestellt werden. Bitte überprüfe deine Einstellungen und stelle sicher, dass dein Hyperion Server läuft</string>
-  <string name="error_connection_lost">Die Verbindung zum Hyperion Server wurde getrennt. Die Bilderfassung wir angehalten.</string>
+  <string name="error_server_unreachable">Eine Verbindung zum WLED Server konnte nicht hergestellt werden. Bitte überprüfe deine Einstellungen und stelle sicher, dass dein WLED Server läuft</string>
+  <string name="error_connection_lost">Die Verbindung zum WLED Server wurde getrennt. Die Bilderfassung wir angehalten.</string>
   <string name="toast_must_give_permission">Bitte erlaube die Bilderfassung.</string>
-  <string name="message_service_started">Du kannst Hyperion Grabber mit der Zurück-Taste verlassen. Der Bildschirminhalt wird im Hintergrund an deinen Hyperion Server gesendet.</string>
+  <string name="message_service_started">Du kannst WLED Grabber mit der Zurück-Taste verlassen. Der Bildschirminhalt wird im Hintergrund an deinen WLED Server gesendet.</string>
   <string name="error_no_host_name_extra">Eigentlich sollte hier eine IP Adresse eingegeben werden</string>
-  <string name="notification_channel_label">Hyperion Grabber Benachrichtigungen</string>
+  <string name="notification_channel_label">WLED Grabber Benachrichtigungen</string>
   <string name="notification_description">Bildschirminhalt wird übertragen</string>
   <string name="pref_title_use_avg_color">Durchschnittliche Bildschirmfarbe senden</string>
   <string name="pref_summary_use_avg_color">Es wird die durchschnittliche Farbe jedes Bildes berechnet und deine LEDs leuchten alle nach dieser berechneten Farbe.</string>

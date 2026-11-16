@@ -1,0 +1,40 @@
+[versions]
+agp = "8.7.2"
+kotlin = "2.1.21"
+androidxAppcompat = "1.7.0"
+androidxCore = "1.13.1"
+androidxAnnotation = "1.9.1"
+androidxLocalBroadcast = "1.1.0"
+androidxLeanback = "1.0.0"
+androidxLeanbackPreference = "1.0.0"
+androidxConstraintLayout = "2.1.4"
+androidxVectordrawable = "1.2.0"
+androidxTestRunner = "1.6.2"
+androidxTestRules = "1.6.1"
+androidxTestJunit = "1.2.1"
+androidxTestEspresso = "3.6.1"
+junit = "4.12"
+json = "20240303"
+konfetti = "1.2.6"
+
+[libraries]
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppcompat" }
+androidx-core = { module = "androidx.core:core", version.ref = "androidxCore" }
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidxAnnotation" }
+androidx-localbroadcastmanager = { module = "androidx.localbroadcastmanager:localbroadcastmanager", version.ref = "androidxLocalBroadcast" }
+androidx-leanback = { module = "androidx.leanback:leanback", version.ref = "androidxLeanback" }
+androidx-leanback-preference = { module = "androidx.leanback:leanback-preference", version.ref = "androidxLeanbackPreference" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidxConstraintLayout" }
+androidx-vectordrawable = { module = "androidx.vectordrawable:vectordrawable", version.ref = "androidxVectordrawable" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxTestRules" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestJunit" }
+androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidxTestEspresso" }
+junit = { module = "junit:junit", version.ref = "junit" }
+json = { module = "org.json:json", version.ref = "json" }
+konfetti = { module = "nl.dionsegijn:konfetti", version.ref = "konfetti" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

@@ -1,0 +1,11 @@
+
+  GitNexus Detect Changes (1.6.12)
+warning: in the working copy of 'gradlew.bat', CRLF will be replaced by LF the next time Git touches it
+Changes: 76 files, 3 symbols
+Affected processes: 0
+Risk level: low
+
+Changed symbols:
+  Section hyperion-android-grabber → README.md
+  Section WLED direct mode (in development) → README.md
+  Section Legacy Hyperion information → README.md

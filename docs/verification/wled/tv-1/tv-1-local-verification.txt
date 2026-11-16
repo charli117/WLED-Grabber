@@ -1,0 +1,190 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.9/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :common:extractDebugProto UP-TO-DATE
+> Task :common:extractIncludeDebugProto UP-TO-DATE
+> Task :common:extractProto UP-TO-DATE
+> Task :common:generateDebugProto UP-TO-DATE
+> Task :common:preBuild UP-TO-DATE
+> Task :common:preDebugBuild UP-TO-DATE
+> Task :common:generateDebugResValues UP-TO-DATE
+> Task :common:generateDebugResources UP-TO-DATE
+> Task :common:packageDebugResources UP-TO-DATE
+> Task :common:parseDebugLocalResources UP-TO-DATE
+> Task :common:generateDebugRFile UP-TO-DATE
+> Task :common:compileDebugKotlin UP-TO-DATE
+> Task :common:javaPreCompileDebug UP-TO-DATE
+> Task :common:compileDebugJavaWithJavac UP-TO-DATE
+> Task :common:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :common:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :common:processDebugJavaRes UP-TO-DATE
+> Task :common:createFullJarDebug UP-TO-DATE
+> Task :common:extractIncludeDebugUnitTestProto UP-TO-DATE
+> Task :common:extractTestDebugProto UP-TO-DATE
+> Task :common:extractTestProto UP-TO-DATE
+> Task :common:generateDebugUnitTestProto NO-SOURCE
+> Task :common:preDebugUnitTestBuild UP-TO-DATE
+> Task :common:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :mobile:preBuild UP-TO-DATE
+> Task :mobile:preDebugBuild UP-TO-DATE
+> Task :mobile:dataBindingMergeDependencyArtifactsDebug UP-TO-DATE
+> Task :mobile:generateDebugResValues UP-TO-DATE
+> Task :mobile:generateDebugResources UP-TO-DATE
+> Task :common:generateDebugUnitTestStubRFile
+> Task :common:compileDebugUnitTestKotlin NO-SOURCE
+> Task :common:compileDebugUnitTestJavaWithJavac UP-TO-DATE
+> Task :common:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :mobile:mergeDebugResources
+> Task :common:testDebugUnitTest
+> Task :mobile:packageDebugResources UP-TO-DATE
+> Task :mobile:parseDebugLocalResources UP-TO-DATE
+> Task :mobile:dataBindingGenBaseClassesDebug
+> Task :mobile:javaPreCompileDebug UP-TO-DATE
+> Task :common:compileDebugLibraryResources UP-TO-DATE
+> Task :common:writeDebugAarMetadata UP-TO-DATE
+> Task :mobile:checkDebugAarMetadata UP-TO-DATE
+> Task :mobile:mapDebugSourceSetPaths
+> Task :mobile:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :common:extractDeepLinksDebug UP-TO-DATE
+> Task :common:processDebugManifest UP-TO-DATE
+> Task :mobile:extractDeepLinksDebug UP-TO-DATE
+> Task :mobile:processDebugMainManifest UP-TO-DATE
+> Task :mobile:processDebugManifest UP-TO-DATE
+> Task :mobile:processDebugManifestForPackage UP-TO-DATE
+> Task :mobile:preDebugUnitTestBuild UP-TO-DATE
+> Task :mobile:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :mobile:processDebugJavaRes NO-SOURCE
+> Task :mobile:processDebugUnitTestJavaRes NO-SOURCE
+> Task :tv:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :tv:preBuild UP-TO-DATE
+> Task :tv:preDebugBuild UP-TO-DATE
+> Task :tv:dataBindingMergeDependencyArtifactsDebug UP-TO-DATE
+> Task :tv:generateDebugResValues UP-TO-DATE
+> Task :tv:generateDebugResources UP-TO-DATE
+> Task :tv:mergeDebugResources UP-TO-DATE
+> Task :tv:packageDebugResources UP-TO-DATE
+> Task :tv:parseDebugLocalResources UP-TO-DATE
+> Task :tv:dataBindingGenBaseClassesDebug UP-TO-DATE
+> Task :tv:checkDebugAarMetadata UP-TO-DATE
+> Task :tv:mapDebugSourceSetPaths UP-TO-DATE
+> Task :tv:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :tv:extractDeepLinksDebug UP-TO-DATE
+> Task :tv:processDebugMainManifest UP-TO-DATE
+> Task :tv:processDebugManifest UP-TO-DATE
+> Task :tv:processDebugManifestForPackage UP-TO-DATE
+> Task :tv:processDebugResources UP-TO-DATE
+> Task :mobile:processDebugResources
+
+> Task :mobile:compileDebugJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :tv:javaPreCompileDebug UP-TO-DATE
+> Task :tv:preDebugUnitTestBuild UP-TO-DATE
+> Task :mobile:bundleDebugClassesToRuntimeJar
+> Task :mobile:bundleDebugClassesToCompileJar
+> Task :tv:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :mobile:compileDebugUnitTestJavaWithJavac UP-TO-DATE
+> Task :tv:compileDebugKotlin
+> Task :mobile:testDebugUnitTest
+> Task :tv:compileDebugJavaWithJavac
+> Task :tv:processDebugJavaRes UP-TO-DATE
+> Task :mobile:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :common:mergeDebugShaders UP-TO-DATE
+> Task :common:compileDebugShaders NO-SOURCE
+> Task :common:generateDebugAssets UP-TO-DATE
+> Task :common:packageDebugAssets UP-TO-DATE
+> Task :mobile:mergeDebugShaders UP-TO-DATE
+> Task :mobile:compileDebugShaders NO-SOURCE
+> Task :mobile:generateDebugAssets UP-TO-DATE
+> Task :tv:bundleDebugClassesToCompileJar
+> Task :mobile:mergeDebugAssets UP-TO-DATE
+> Task :tv:bundleDebugClassesToRuntimeJar
+> Task :tv:compileDebugUnitTestKotlin NO-SOURCE
+> Task :tv:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :tv:processDebugUnitTestJavaRes NO-SOURCE
+> Task :tv:testDebugUnitTest NO-SOURCE
+> Task :mobile:compressDebugAssets UP-TO-DATE
+> Task :mobile:desugarDebugFileDependencies UP-TO-DATE
+> Task :mobile:dexBuilderDebug
+> Task :mobile:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :mobile:mergeDebugJavaResource UP-TO-DATE
+> Task :mobile:checkDebugDuplicateClasses UP-TO-DATE
+> Task :mobile:mergeExtDexDebug UP-TO-DATE
+> Task :common:mergeDebugJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugNativeLibs NO-SOURCE
+> Task :common:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :mobile:mergeDebugJniLibFolders UP-TO-DATE
+> Task :mobile:mergeProjectDexDebug
+> Task :mobile:mergeDebugNativeLibs NO-SOURCE
+> Task :mobile:stripDebugDebugSymbols NO-SOURCE
+> Task :mobile:validateSigningDebug UP-TO-DATE
+> Task :mobile:mergeLibDexDebug
+> Task :mobile:writeDebugAppMetadata UP-TO-DATE
+> Task :mobile:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :tv:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :tv:mergeDebugShaders UP-TO-DATE
+> Task :tv:compileDebugShaders NO-SOURCE
+> Task :tv:generateDebugAssets UP-TO-DATE
+> Task :tv:mergeDebugAssets UP-TO-DATE
+> Task :tv:compressDebugAssets UP-TO-DATE
+> Task :tv:desugarDebugFileDependencies UP-TO-DATE
+> Task :tv:dexBuilderDebug
+> Task :tv:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :tv:mergeDebugJavaResource UP-TO-DATE
+> Task :tv:checkDebugDuplicateClasses UP-TO-DATE
+> Task :tv:mergeExtDexDebug UP-TO-DATE
+> Task :tv:mergeLibDexDebug UP-TO-DATE
+> Task :tv:mergeDebugJniLibFolders UP-TO-DATE
+> Task :tv:mergeDebugNativeLibs NO-SOURCE
+> Task :tv:stripDebugDebugSymbols NO-SOURCE
+> Task :tv:validateSigningDebug UP-TO-DATE
+> Task :tv:writeDebugAppMetadata UP-TO-DATE
+> Task :tv:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :common:extractAndroidTestDebugProto UP-TO-DATE
+> Task :common:extractAndroidTestProto UP-TO-DATE
+> Task :tv:mergeProjectDexDebug
+> Task :common:extractIncludeDebugAndroidTestProto
+> Task :common:generateDebugAndroidTestProto NO-SOURCE
+> Task :common:preDebugAndroidTestBuild UP-TO-DATE
+> Task :common:checkDebugAndroidTestAarMetadata UP-TO-DATE
+> Task :common:generateDebugAndroidTestResValues UP-TO-DATE
+> Task :common:mapDebugAndroidTestSourceSetPaths
+> Task :common:generateDebugAndroidTestResources UP-TO-DATE
+> Task :tv:packageDebug
+> Task :tv:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :tv:assembleDebug
+> Task :common:processDebugAndroidTestManifest UP-TO-DATE
+> Task :common:javaPreCompileDebugAndroidTest UP-TO-DATE
+> Task :common:mergeDebugAndroidTestShaders UP-TO-DATE
+> Task :common:compileDebugAndroidTestShaders NO-SOURCE
+> Task :common:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :common:mergeDebugAndroidTestAssets UP-TO-DATE
+> Task :common:compressDebugAndroidTestAssets UP-TO-DATE
+> Task :common:mergeDebugAndroidTestResources
+> Task :common:desugarDebugAndroidTestFileDependencies UP-TO-DATE
+> Task :common:checkDebugAndroidTestDuplicateClasses UP-TO-DATE
+> Task :common:mergeExtDexDebugAndroidTest UP-TO-DATE
+> Task :common:mergeDebugAndroidTestJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :common:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :common:validateSigningDebugAndroidTest UP-TO-DATE
+> Task :common:writeDebugAndroidTestSigningConfigVersions UP-TO-DATE
+> Task :mobile:packageDebug
+> Task :mobile:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :mobile:assembleDebug
+> Task :common:mergeLibDexDebugAndroidTest
+> Task :common:processDebugAndroidTestResources
+> Task :common:compileDebugAndroidTestKotlin NO-SOURCE
+> Task :common:compileDebugAndroidTestJavaWithJavac UP-TO-DATE
+> Task :common:dexBuilderDebugAndroidTest
+> Task :common:mergeDebugAndroidTestGlobalSynthetics UP-TO-DATE
+> Task :common:processDebugAndroidTestJavaRes NO-SOURCE
+> Task :common:mergeDebugAndroidTestJavaResource UP-TO-DATE
+> Task :common:mergeProjectDexDebugAndroidTest
+> Task :common:packageDebugAndroidTest
+> Task :common:createDebugAndroidTestApkListingFileRedirect UP-TO-DATE
+> Task :common:assembleDebugAndroidTest
+
+BUILD SUCCESSFUL in 19s
+138 actionable tasks: 29 executed, 109 up-to-date

@@ -13,27 +13,27 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Widget.HyperionGrabber.GuidedActionItemDescriptionStyle" parent="Widget.Leanback.GuidedActionItemDescriptionStyle">
+    <style name="Widget.WledGrabber.GuidedActionItemDescriptionStyle" parent="Widget.Leanback.GuidedActionItemDescriptionStyle">
         <item name="android:textColor">@color/primary_text</item>
     </style>
 
-    <style name="Widget.HyperionGrabber.GuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
+    <style name="Widget.WledGrabber.GuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
         <item name="android:background">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="Widget.HyperionGrabber.FirstStepGuidanceIconStyle" parent="Widget.HyperionGrabber.GuidanceIconStyle">
+    <style name="Widget.WledGrabber.FirstStepGuidanceIconStyle" parent="Widget.WledGrabber.GuidanceIconStyle">
         <item name="android:background">#fff</item>
     </style>
 
-    <style name="Theme.HyperionGrabber.GuidedStep" parent="Theme.Leanback.GuidedStep">
+    <style name="Theme.WledGrabber.GuidedStep" parent="Theme.Leanback.GuidedStep">
         <item name="guidedStepBackground">@color/colorPrimaryDark</item>
         <item name="guidedActionsBackground">@color/colorPrimaryExtraDark</item>
         <item name="guidedActionsBackgroundDark">@color/colorPrimarySuperDark</item>
-        <item name="guidanceIconStyle">@style/Widget.HyperionGrabber.GuidanceIconStyle</item>
+        <item name="guidanceIconStyle">@style/Widget.WledGrabber.GuidanceIconStyle</item>
     </style>
 
-    <style name="Theme.HyperionGrabber.GuidedStep.First" parent="@style/Theme.HyperionGrabber.GuidedStep">
-        <item name="guidanceIconStyle">@style/Widget.HyperionGrabber.FirstStepGuidanceIconStyle</item>
+    <style name="Theme.WledGrabber.GuidedStep.First" parent="@style/Theme.WledGrabber.GuidedStep">
+        <item name="guidanceIconStyle">@style/Widget.WledGrabber.FirstStepGuidanceIconStyle</item>
     </style>
 
 </resources>

@@ -14,7 +14,7 @@
   <string name="scanner_scan_in_progress_button">сканирование...</string>
   <string name="pref_title_priority">Приоритет сообщений</string>
   <string name="pref_title_reconnect">Заново</string>
-  <string name="pref_summary_reconnect">Автоматическо заново соедините к hyperion припотеряли связи</string>
+  <string name="pref_summary_reconnect">Автоматическо заново соедините к WLED припотеряли связи</string>
   <string name="pref_title_reconnect_delay">Задержка повторного подключения</string>
   <string name="pref_summary_reconnect_delay">Количество секунд ожидания до попытки повторного подключения</string>
   <!-- Capturing settings -->
@@ -28,7 +28,7 @@
   <string name="pref_error_invalid_field" formatted="false">%s недействительно для %s</string>
   <string name="error_empty_host">Настройка хоста не должна быть пустой</string>
   <string name="error_empty_port">Настройка порта не должна быть пустой</string>
-  <string name="error_connection_lost">Соединение с вашим сервером hyperion было потеряно. Грабер останавливаться</string>
+  <string name="error_connection_lost">Соединение с вашим сервером WLED было потеряно. Грабер останавливаться</string>
   <string name="toast_must_give_permission">Разрешение должно быть предоставлено для записи экрана данных.</string>
-  <string name="message_service_started">Нажмите «Назад», чтобы закрыть приложение. Содержимое вашего экрана будет по-прежнему отправляться в Hyperion</string>
+  <string name="message_service_started">Нажмите «Назад», чтобы закрыть приложение. Содержимое вашего экрана будет по-прежнему отправляться в WLED</string>
 </resources>

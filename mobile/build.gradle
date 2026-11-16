@@ -1,51 +1,47 @@
-apply plugin: 'com.android.application'
-
-apply from: project(':common').projectDir.absolutePath + '/variables.gradle'
-
-buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
-    }
-}
-
-repositories {
-    jcenter()
-    maven {
-        url 'https://maven.google.com'
-    }
+plugins {
+    alias(libs.plugins.android.application)
 }
 
 android {
-    compileSdkVersion 26
+    namespace 'com.abrenoch.wledgrabber.mobile'
+    compileSdk 35
+
     defaultConfig {
-        applicationId "com.abrenoch.hyperiongrabber"
-        minSdkVersion 19
-        targetSdkVersion 26
+        applicationId "com.abrenoch.wledgrabber"
+        minSdk 21
+        targetSdk 35
         versionCode 1012
         versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api project(path: ':common')
-    implementation "com.android.support:appcompat-v7:$android_support_version"
-    implementation "com.android.support:support-v4:$android_support_version"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation project(':common')
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.core
+    implementation libs.androidx.localbroadcastmanager
+    implementation libs.androidx.constraintlayout
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.test.runner
+    androidTestImplementation libs.androidx.test.rules
+    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation libs.androidx.test.espresso.core
 }

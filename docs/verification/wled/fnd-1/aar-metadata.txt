@@ -1,0 +1,31 @@
+Resolved external modules (from dependency graphs): 29
+module:version                                             minSdk     targetSdk  minCompileSdk          artifact
+android.arch.core:common:1.0.0                             -          -          -                      jar
+android.arch.lifecycle:common:1.0.0                        -          -          -                      jar
+android.arch.lifecycle:runtime:1.0.0                       14         26         n/a (pre-AGP4)         aar
+com.android.support:animated-vector-drawable:26.1.0        14         -          n/a (pre-AGP4)         aar
+com.android.support:appcompat-v7:26.1.0                    14         -          n/a (pre-AGP4)         aar
+com.android.support:leanback-v17:26.1.0                    17         -          n/a (pre-AGP4)         aar
+com.android.support:preference-leanback-v17:26.1.0         17         -          n/a (pre-AGP4)         aar
+com.android.support:preference-v14:26.1.0                  14         -          n/a (pre-AGP4)         aar
+com.android.support:preference-v7:26.1.0                   14         -          n/a (pre-AGP4)         aar
+com.android.support:recyclerview-v7:26.1.0                 14         -          n/a (pre-AGP4)         aar
+com.android.support:support-annotations:25.3.0             -          -          -                      jar
+com.android.support:support-annotations:26.1.0             -          -          -                      jar
+com.android.support:support-compat:25.3.0                  -          -          -                      requested; selected version differs
+com.android.support:support-compat:26.1.0                  14         -          n/a (pre-AGP4)         aar
+com.android.support:support-core-ui:26.1.0                 14         -          n/a (pre-AGP4)         aar
+com.android.support:support-core-utils:26.1.0              14         -          n/a (pre-AGP4)         aar
+com.android.support:support-fragment:26.1.0                14         -          n/a (pre-AGP4)         aar
+com.android.support:support-media-compat:26.1.0            14         -          n/a (pre-AGP4)         aar
+com.android.support:support-v4:26.1.0                      14         -          n/a (pre-AGP4)         aar
+com.android.support:support-vector-drawable:26.1.0         14         -          n/a (pre-AGP4)         aar
+com.android.support.constraint:constraint-layout:1.1.0     9          24         n/a (pre-AGP4)         aar
+com.android.support.constraint:constraint-layout-solver:1.1.0 -          -          -                      jar
+com.google.protobuf:protobuf-javalite:3.25.5               -          -          -                      jar
+com.jakewharton:butterknife:8.8.1                          9          -          n/a (pre-AGP4)         aar
+com.jakewharton:butterknife-annotations:8.8.1              -          -          -                      jar
+nl.dionsegijn:konfetti:1.2.6                               15         29         -                      aar
+org.jetbrains:annotations:13.0                             -          -          -                      jar
+org.jetbrains.kotlin:kotlin-stdlib:1.4.21                  -          -          -                      requested; selected version differs
+org.jetbrains.kotlin:kotlin-stdlib:2.1.21                  -          -          -                      jar

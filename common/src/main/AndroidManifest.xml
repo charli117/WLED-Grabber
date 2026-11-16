@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.abrenoch.hyperiongrabber.common">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        tools:ignore="UnusedAttribute"
         tools:targetApi="lollipop">
         <service
-            android:name="com.abrenoch.hyperiongrabber.common.HyperionScreenService"
-            android:exported="true"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="com.abrenoch.hyperiongrabber.common.HyperionScreenService" />
-                <action android:name="com.abrenoch.hyperiongrabber.service.ACTION_START" />
-                <action android:name="com.abrenoch.hyperiongrabber.service.ACTION_STOP" />
-                <action android:name="com.abrenoch.hyperiongrabber.service.ACTION_STATUS" />
-                <action android:name="com.abrenoch.hyperiongrabber.service.ACTION_EXIT" />
-            </intent-filter>
-        </service>
+            android:name="com.abrenoch.wledgrabber.common.WledScreenService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
 
         <receiver
-            android:name=".HyperionGrabberBootReceiver"
-            android:label="HyperionGrabberBootReceiver">
+            android:name=".WledBootReceiver"
+            android:exported="true"
+            android:label="WledBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <activity android:name=".BootActivity" android:theme="@style/Theme.Transparent" android:exported="true"/>
+        <activity android:name=".views.LayoutPreviewActivity" android:exported="false" />
+        <activity android:name=".views.TestPatternActivity" android:exported="false" />
     </application>
 
 </manifest>
