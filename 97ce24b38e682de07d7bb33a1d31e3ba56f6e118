@@ -1,0 +1,54 @@
+docs/task/00-overview.md
+  51396205a9b60a22 147
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/NetworkScanActivity.java
+  e2fcb4b975340679 71-75,79-81,92-94,109-111,123-127
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "97ce24b38e682de07d7bb33a1d31e3ba56f6e118",
+  "prompts": {
+    "51396205a9b60a22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ff5acb-12c7-4dbe-bae9-040be916a7c2",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 945,
+      "total_deletions": 282,
+      "accepted_lines": 1353,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/7c375d31a5f074e29ad9f0dd501f2e43e6a5c201e712654938fd0b9be2007dc1",
+      "token_usage": {
+        "input_tokens": 759873,
+        "output_tokens": 392207,
+        "cache_read_tokens": 52056192,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 63,
+      "total_deletions": 5,
+      "accepted_lines": 771,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/e0868c0b2b91c2cd3f2609e8aa4b8fbff76654b9e88e627e283083b271a565be",
+      "token_usage": {
+        "input_tokens": 5917824,
+        "output_tokens": 1831809,
+        "cache_read_tokens": 1008192512,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
