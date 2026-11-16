@@ -4,6 +4,10 @@
 > 状态权威：[00-overview.md](00-overview.md)；本册编制时全部待开发。功能实现/设备验收尚未发生。
 > 唯一技术来源：[最终技术方案](../design/wled-direct-ambilight-feasibility.md)；源码/决策/固定资料见其附录A/B/C。
 
+> 2026-11-17 补充：[Android 10 TV 设备侧持续授权](../verification/wled/cap-1/android10-persistent-consent.md)仅在用户明确选择后配置。AppOps 读回不代替新会话/重启/拒绝授权测试；保留 token 不重用、前台服务及其他 API 的验收契约。
+
+> 2026-11-17 需求增补：[默认后台与自启动](../verification/wled/cap-1/android10-background-autostart.md)。本机后台权限/白名单已设置；boot 默认值、启动目标和实际冷启动验收仍待处理，不将当前“仅提醒”标作自启动完成。
+
 ## 模块边界
 
 common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer

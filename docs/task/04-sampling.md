@@ -43,11 +43,13 @@ common/.../led/LedColorSampler、PlaneView、RGBW转换、可选颜色处理
 **验收标准（量化）**：
 
 - 随机oracle结果逐通道误差0（统一整数舍入）；畸形帧安全丢弃不越界。
-- 积分图最大3×641×641×4字节，预热后应用热路径新数组0；实机时延另由QA-2验收。
+- 采样工作区为前缀行`3×(W+1)×4`字节加矩形数组，预热后应用热路径新数组0；实机时延由QA-2验收（首套实测p95≈4.1ms/p99≈4.5ms）。
 
 **证据（2026-11-16）**：`PlaneView`、`IntegralImage`、`LedColorSampler`、`CaptureSizing`落地；7个`LedColorSamplerTest`通过。1000帧随机oracle逐通道一致，纯色/灰阶/棋盘/小矩形/全屏平均覆盖，非零position/pixelStride>4/row padding/紧凑末行与畸形limit/crop拒绝，100000帧后积分图仍只分配3个数组，640×640积分图=4,930,572字节（<12MiB）。证据见`docs/verification/wled/net/`（原始日志与采样测试同批）。
 
 **证据（2026-11-17，真机帧率）**：真机发现逐帧成本过高——`IntegralImage.update` 旧实现对每个像素调用3次`PlaneView.read()`，640×360时约69万次`DirectByteBuffer`绝对读取（每次一次JNI跨越），实测WLED侧有效刷新仅27–33fps。改为`PlaneView.readRow()`按行批量读取（每行一次bulk get，再在Java数组内解析RGB），`IntegralImage.update`改用行缓冲；每帧JNI跨越降到约360次。1000帧随机oracle与非零position/padding/紧凑末行用例全部保持通过，逐通道结果不变。真机（Sony KD-55XD8005 + WLED_TV 274 RGB）WLED `/json/info` 的 `leds.fps` 从27–33升到68–175（均值约74），用户在60fps配置下确认观感跟手。QA-2的p95/p99量化门禁仍未测量。
+
+**证据（2026-11-17，QA-2采样时延）**：真机量化发现采样p95≈10.5ms，未达§11门禁（≤5ms）。逐项定位：JNI批量读后瓶颈是2.7MB三通道积分图数组的访存；三通道并行仅降到p95≈6.8ms。最终把`IntegralImage`改为按布局选择两路等价精确实现——矩形面积和≤W×H时逐矩形求和（首套274灯约6万像素/帧），否则逐行前缀+矩形累加；平均色强制整帧前缀路径。矩形边界预取到原始int数组，热路径不再访问`PixelRect`对象。首套真机实测：采样p50≈3.3ms、p95≈4.05–4.5ms、p99≈4.5–4.9ms；发送间隔p95≈17.3ms；WLED `leds.fps` 30次1秒采样 min=66/avg=107.4。1000帧随机oracle与全部166个JVM用例保持通过。预热后`allocationCount`不再增长；工作区降为前缀行约7.7KiB加矩形数组。未测：端到端物理时延（需光感/高速相机）、RGBW样机两模式。
 
 <a id="smp-2"></a>
 

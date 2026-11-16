@@ -47,6 +47,8 @@
 
 **证据（2026-11-16，本地）**：新增`EndToEndWledPipelineTest`（合成274→采样→DNRGB、RGBW DDP、500灯多包、localhost off/readback）；`scripts/qa/local-regression.sh`复跑JVM 160通过/0失败、三模块lint error0、Debug+unsigned Release构建、docs链接与APK旧身份/protobuf审计，退出0。API矩阵见[api-matrix.md](../verification/wled/qa-1/api-matrix.md)；`MobileEntryTest`与`TvLayoutFlowTest`已随androidTest APK编译，但无设备/AVD，仪器与UI项保持未验证。QA-1标“待验证”，不标PASS。
 
+**证据（2026-11-17，真机/AVD）**：JVM **166通过/0失败**；三模块lint **error 0**（warnings common 94 / mobile 8 / tv 49）；三模块Debug与unsigned Release构建退出0；仪器测试：**Sony KD-55XD8005（API 29）common 2/2、tv 7/7**（含真实WLED `10.245.0.99`能力探测、状态读回、10秒测试图案release CONFIRMED），**API 34 AVD mobile 1/1**。期间修复两处真机缺陷：`TestPatternActivity`/`LayoutPreviewActivity`缺少AppCompat主题导致启动崩溃（已在common manifest指定`Theme.AppCompat.NoActionBar`）；WLED 16.x `/json/state`不含`live`导致读回恒`MISSING_FIELD`（改为回退`/json/info`，新增JVM回归`liveFallsBackToInfoWhenStateOmitsIt`）。API 21/26/33/35仍未运行，保持待验证。
+
 <a id="qa-2"></a>
 
 ## QA-2 — 274/60fps、RGBW与故障实机验收
@@ -84,6 +86,8 @@
 - 所有必须硬件组合（含Sony遥控器/大字体）有原始证据；不符合或缺测保持BLOCKED，不写“基本通过”。
 
 **硬件阻塞（2026-11-16）**：当前无 Sony 电视、274 WS2815+ESP32、RGBW 样机、500/1000/2000 灯配置或物理测量设备；`adb devices` 为空。未开始可复核实验，未产生 fps/延迟/稳定性数据。必测项与量化门槛见[hardware-blocked.md](../verification/wled/qa-2/hardware-blocked.md)。QA-2 保持“待开发/BLOCKED”，不以 JVM 或 UDP 频率代替物理验收。
+
+**实测（2026-11-17，Sony KD-55XD8005 + WLED_TV 274 RGB @10.245.0.99，640长边，60fps配置）**：采样 p50≈3.3ms、**p95≈4.05–4.5ms**、**p99≈4.5–4.9ms**（≤5/≤8 达标）；**发送间隔 p95≈17.3ms**（≤20 达标）；WLED `leds.fps` 30次1秒采样 **min=66 / avg=107.4**（≥59 且1秒窗口≥55 达标）；启动自动开灯、静态画面1秒心跳保持 live、停止后 `on=false/live=false` 并经 HTTP 读回 CONFIRMED。30分钟soak与内存净增结果见下方复核记录。**仍缺**：端到端物理时延（需光感/高速相机或等效测量设备）、RGBW 样机两模式、500/1000/2000 灯配置、Sony 遥控器大字体实测。按卡片自身口径，QA-2 保持 BLOCKED，不标 PASS。
 
 <a id="qa-3"></a>
 

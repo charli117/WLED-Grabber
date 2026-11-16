@@ -120,3 +120,5 @@ common/.../network/wled、NetworkScanner重用、network_security_config.xml
 
 **证据（2026-11-17，真机 10.245.0.99 / WLED 16.0.1 / 274 RGB）**：发现控制面缺少开灯能力——`WledControlClient`只有`turnOff`，WLED主电源为关时实时UDP帧不会点亮灯带（`live=true`仅表示在收实时数据）。新增`turnOn`（POST `/json/state`，body `{"on":true}`，需JSON Content-Type），`WledHttpClientTest.turnOnPostsPowerOnJson`先RED后GREEN；服务在建立采集后由后台线程开灯，不违反主线程网络约束。另在服务侧加入1秒心跳：静态画面无新帧时经同一`LedStreamer`单写者与帧池重发最后一帧，避免WLED在2秒UDP超时后退出live并回落到自身效果。真机证据：启动前`on=false`→启动后`on=true`、`lm=UDP`、`lip=10.245.0.109`（电视）；切到静态设置页后连续10秒`live=true`。未验证：停止路径release读回确认、与另一DDP源（10.245.0.121）并发抢占时的最终显示归属、QA-2时延/帧率量化门禁。
 
+**证据（2026-11-17，读回字段兼容）**：真机WLED 16.0.1的`/json/state`**不包含`live`字段**（实时中也不含，`/json/info`才有），旧`readState`要求两者都在，导致读回恒`MISSING_FIELD`、release永远`UNCONFIRMED`。改为：`on`仍取`/json/state`，缺失`live`时回退读取`/json/info`的`live`；两者都缺才报`MISSING_FIELD`。新增JVM回归`liveFallsBackToInfoWhenStateOmitsIt`（先RED后GREEN，断言两次请求）。真机10秒测试图案用例`tenSecondPatternConfirmsRelease`因此从失败转为通过：`release CONFIRMED`，POST `{"on":false,"live":false,"tt":0}`后`/json/state`的`on=false`且`/json/info`的`live=false`。
+

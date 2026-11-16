@@ -1,0 +1,5 @@
+# QA-1 local regression, 2026-11-17 (JVM 166 / lint 0 / builds / doc links)
+files 25 links 240 errors 0
+QA-1 local regression passed
+
+[exited with code 0]

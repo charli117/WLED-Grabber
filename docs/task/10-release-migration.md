@@ -46,7 +46,7 @@
 - 活动源与产物旧协议类/依赖/后端开关0；未解释的旧品牌残留0。
 - Debug与unsigned Release均可构建，引用/manifest错误0；所有例外具名且合法。
 
-**证据（2026-11-16，本地未验收）**：唯一入口改为`WledScreenService`，旧`HyperionScreenService/Encoder/Thread/proto`与protobuf插件/依赖已删除；包目录、namespace、applicationId、service/action/channel、主题与活动UI字符串迁移到`com.abrenoch.wledgrabber`；多语言`values-*`活动品牌清理；Debug+unsigned Release+三模块lint通过；156 JVM测试通过；APK内旧身份/protobuf命中0；merged manifest为`com.abrenoch.wledgrabber`、versionCode 1012/2012、versionName 1.0。未安装、未签名、未发布；真机采集/关灯读回与Sony/RGBW验收未执行。翻译完整度仍有缺口（未翻译项回退默认文案，已用lint抑制并记录），不阻塞构建但不声称翻译全覆盖。REL-1保持“待验证”。证据见`docs/verification/wled/rel-1/`。
+**证据（2026-11-16，本地未验收）**：唯一入口改为`WledScreenService`，旧`HyperionScreenService/Encoder/Thread/proto`与protobuf插件/依赖已删除；包目录、namespace、applicationId、service/action/channel、主题与活动UI字符串迁移到`com.abrenoch.wledgrabber`；多语言`values-*`活动品牌清理；Debug+unsigned Release+三模块lint通过；156 JVM测试通过；APK内旧身份/protobuf命中0；merged manifest为`com.abrenoch.wledgrabber`、versionCode 1012/2012、versionName 1.0。未安装、未签名、未发布；真机采集/关灯读回与Sony/RGBW验收未执行。翻译完整度仍有缺口（未翻译项回退默认文案，已用lint抑制并记录），不阻塞构建但不声称翻译全覆盖。REL-1保持“待验证”。证据见`docs/verification/wled/rel-1/`。2026-11-17：应用图标、自适应图标（含 Android 13 monochrome）、24dp 通知图标与 TV banner 已按[品牌与图标规范](../design/app-icon/brand-guide.md)替换；三模块 Debug 构建与 `:common:lintDebug` 通过（exit 0）。真机 launcher/themed icon/TV banner 显示待验收。
 
 <a id="rel-2"></a>
 

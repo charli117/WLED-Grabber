@@ -34,7 +34,7 @@
 | 设备 | 单设备LAN；RGB、RGBW均首版；DDP因RGBW为必做，不延期 |
 | 产品 | TV优先且mobile完整配置；共用预览、三种测试图案；保留与后端无关的主界面动效等体验，不扩大为UI重写 |
 | 平台 | minSdk21、compileSdk35、targetSdk35；授权、通知、磁贴、开机提醒及横竖屏按平台规则适配 |
-| 身份 | WLED Grabber，`com.abrenoch.wledgrabber`；major破坏性版本，仅侧载 |
+| 身份 | WLED Grabber，`com.abrenoch.wledgrabber`；major破坏性版本，仅侧载；图标、色板、字标与资源映射见[品牌与图标规范](app-icon/brand-guide.md) |
 | 性能 | 首套274灯目标60fps；达不到则发布门禁未通过，不静默改为30fps |
 | 延后 | 仅SMP-3的黑边检测、线性平均、饱和度、平滑等增强；默认关闭 |
 
@@ -315,18 +315,20 @@ LAY/PRE/SMP/NET的测试复用同一向量定义；预览和行走图案用于�
 ## 5. 精确采样与颜色责任
 
 
-### 5.1 有界积分图
+### 5.1 有界精确矩形采样
 
-默认 sRGB 分量算术平均，不增加 gamma/亮度增强。使用三个 `int[]` 积分图一次遍历有效帧，矩形均值 O(1)，总复杂度 O(W×H+N)。平均模式复用整域矩形查询，RGBW 在均值后转换。
+默认 sRGB 分量算术平均，不增加 gamma/亮度增强。每个物理槽位仍以“矩形和÷面积向下取整”得到颜色，与逐像素 oracle 完全一致。
+
+首版采用两路等价实现，按布局自动选择：边界型布局（所有矩形面积之和≤W×H，首套 T86/B90/L49/R49 约 6 万像素）逐矩形扫描自身像素求和；稠密或大面积布局改用逐行前缀和加矩形累加，复杂度 O(W×H+N)。平均色模式强制整帧前缀路径，一次扫描得到整域均值。两路都只做整数累加与整数除法，不引入近似。
 
 - 长边640且不放大源图；所有尺寸正数，宽高均≤640。最大通道累积 `255×640×640=104448000`，int安全；若将来提升尺寸须重新证明上界。
-- 640×360三通道积分图为 `3×641×361×4=2776812` 字节。方形最坏约4.93MB，工作内存按真实尺寸计量。
-- reader最多3张，应用同时持有≤1张；三帧颜色池；采集+积分图+帧池+布局工作缓冲预算≤12MiB（不含UI/系统图形栈）。通过分配记录与堆分析分别验证，不能把Java堆当全部内存。
+- 不再分配 W×H 三通道积分图；前缀行工作区为 `3×(W+1)×4` 字节（640 宽约 7.7KiB），矩形和/面积数组按 N 计。首套实测采样 p95≈4.1ms、p99≈4.5ms（Sony KD-55XD8005，640×360，274 灯）。
+- reader最多3张，应用同时持有≤1张；三帧颜色池；采集+采样工作区+帧池+布局工作缓冲预算≤12MiB（不含UI/系统图形栈）。通过分配记录与堆分析分别验证，不能把Java堆当全部内存。
 - 平面地址使用 buffer 的有效起始位置、rowStride、pixelStride、limit及Image cropRect；验证最后访问字节，不假定最后一行含完整 padding。Image 在 capture线程的 finally 中关闭；不把其 ByteBuffer 交给 sender。
 - 测试 oracle 用简单逐像素求和，测试中共享一个实现；生产仅一个积分图路径。热身后应用自有逐帧代码不新建数组/集合；系统 Image 包装分配不包含在“零数组分配”指标里。
 - 自动黑边/线性平均/时间平滑是 SMP-3 的后续范围，首版不启用。以后复用 BorderProcessor 前必须用全黑、单像素、异常stride、裁剪抖动等回归锁住边界。
 
-积分图每通道尺寸为`(W+1)*(H+1)`，首行首列为0；矩形和复用`I(x1,y1)-I(x0,y1)-I(x1,y0)+I(x0,y0)`。求和再按面积整数除法取均值，不重复RGBW转换、不再保留生产逐矩形遍历分支。平均色复用整域查询，随后复用同一物理映射与黑灯掩码。
+矩形和按行累加：直接路径对每个活跃矩形累加其 `[x0,x1)` 像素；前缀路径先构造每行三通道前缀 `P`，再取 `P[x1]-P[x0]` 累加到该矩形。两路最后都按面积整数除法取均值，不重复RGBW转换。平均色复用整帧总和，随后复用同一物理映射与黑灯掩码。
 
 ### 5.2 RGBW与亮度职责
 
@@ -380,6 +382,20 @@ VALIDATING在用户前台操作后异步完成设备与配置验证，再显示�
 - 息屏统一停止发送并release；如系统已撤销投屏，亮屏只显示“需重新授权”，不承诺无感续采。仍有效会话的恢复与已终止会话严格区分。
 - target35开机接收器只提供用户可见提醒入口，不从BOOT_COMPLETED启动mediaProjection FGS，不后台强拉Activity；通知权限被拒则下次前台显示提示。
 - service和内部Activity默认不导出；launcher/tile/boot入口按平台需求声明exported及系统权限。控制广播保持进程内或显式受限，不把capture intent暴露给外部。
+
+### 6.2.1 用户选择的 Android 10 TV 持续授权
+
+在设备所有者明确要求且具备 ADB 管理权限时，可仅对指定 Android 用户与 `com.abrenoch.wledgrabber` 设置 `PROJECT_MEDIA=allow`。已核对的 Android 10 AOSP 分支允许系统在已有投射权限时返回**新的**授权结果而不显示确认页；应用仍请求新会话，不存储/重放旧 Intent 或 token，不自动提权，不修改系统警告。该设备配置与普通应用的逐次授权流程分开，不能外推到其他固件/API或承诺卸载、重置、升级后“永久有效”。撤销使用同一用户/包的 `PROJECT_MEDIA=default`。
+
+2026-11-17 Sony Android 10 设备已完成指定包 `default → allow` 并读回；新会话免弹窗、进程重建与重启保持仍待实测。调用链、作用范围、命令、撤销及验收分层见[设备授权记录](../verification/wled/cap-1/android10-persistent-consent.md)，不得据此提升 CAP-1/QA 状态。
+
+### 6.2.2 默认后台与自启动需求增补（待实现）
+
+2026-11-17 用户补充“默认后台运行及自启动”。已在指定 Sony Android 10 设备为新版包显式设置 `RUN_IN_BACKGROUND=allow`、`RUN_ANY_IN_BACKGROUND=allow` 并加入 deviceidle user 白名单，独立读回通过；这是本机设置，不是 APK 自动获得系统权限，也不改变停止/息屏/撤销后的释放契约。
+
+上文“开机只提醒”仍是**当前实现**，不是新增自启动需求的完成状态：boot 源码默认值仍为 false，receiver 仍只发提醒。开机后进入待机还是直接采集的目标及新增公共测试边界待确认，随后再以 TDD 修改默认值/启动策略并执行真实冷启动验收。系统权限、用户偏好和可运行的新录屏会话须分层验证，不以后台白名单或广播注册代替自动启动证据；不缓存旧 token、不绕过平台许可、不扩展权限到旧包或其他应用。
+
+命令、撤销、当前调用链及待验收项见[后台运行与自启动记录](../verification/wled/cap-1/android10-background-autostart.md)。该增补归属 CAP-1 / MOB-2 / QA-1，不自动提升现有任务状态。
 
 ### 6.3 停止屏障与恢复
 
@@ -501,7 +517,7 @@ NSD浏览`_wled._tcp.`，解析的port是HTTP端口，不是UDP；缓存service�
 | WLED Connection | host、HTTP端口、UDP realtime端口、只读DDP端口、协议、明确通道格式、RGBW白模式、物理数量/观察值、自动探测、扫描/测试 | 手机Preference；TV GuidedStep首步，缺设备保留手动入口 |
 | LED Layout | T/B/L/R、Gap length/position、Input、Reverse | TV D-pad可编辑并显示实际物理0对应槽位 |
 | Advanced Layout | H/V Depth、Overlap、Edge Gap、四角、SKIP/BLACK | 两端均首版，TV不能只给手机配置提示 |
-| Preview | 共用预览、274预设、288参考向量、三种图案 | 两端各有独立LayoutPreviewActivity |
+| Preview | 共用预览、274预设、288参考向量、三种图案、逐边/输入位置点亮校验 | 两端各有独立LayoutPreviewActivity |
 | Capturing / General | 帧率、平均色、长边上限、开机提醒、权限/状态 | 录屏授权/通知/Tile/系统insets按平台适配 |
 
 手机：空配置点击电源先进入WLED设置/扫描，完成确认后返回主界面再授权。TV：沿用改造后的`NetworkScanActivity → ScanResultActivity`导航，再进入Connection → Layout → Advanced → Preview → Capturing。保留主界面与非后端相关交互；设置保存失败不启动、不假显示已保存。
@@ -509,6 +525,8 @@ NSD浏览`_wled._tcp.`，解析的port是HTTP端口，不是UDP；缓存service�
 复用`SettingsStepBaseFragment`的`unSignedNumberAction`、`radioListAction`和现有Preference listener适配职责，`assertIntValue`等校验统一委托ConfigValidator，不复制规则。扫描`saveResult()`保存确认的WLED端点，不能继续写旧Host/Port；删除TV TestTask独立网络分支。
 
 RGB模式隐藏White Mode；unconfirmed模式提示确认硬件而不自动假定RGB。修改草稿即时刷新预览，**不热更新正在发送的快照**；运行中保存显式提示“下次启动生效”。错误、单位、默认值和资源均共享，TV大字体/D-pad焦点完整可达。
+
+布局页提供**逐边与输入位置点亮校验**：按当前草稿编译布局，经`LayoutProbe`取逻辑环区间并映射到物理索引，借助共享`TEST`输出租约向WLED发送约2秒白色脉冲，其余灯珠为黑；采集运行中不抢占输出，提示先停止。该动作只用于确认接线/顺序/Input/Reverse，不替代正式预览与10秒图案测试。
 
 ### 9.2 预览与图案
 
@@ -570,7 +588,7 @@ mobile/tv目前同applicationId，继续输出**同ID的替代APK**，不承诺�
 
 ### 11.1 性能预算与证据层级
 
-使用S09固定函数与§4.5的288配置（640×360、H15%、V8%、Overlap10%）计算：精确逐矩形遍历约 **1,678,644次像素读取/帧**，60Hz约100,718,640次/秒。该值是算法访问量，不是Android benchmark。积分图把像素扫描收敛为230,400/帧再加矩形查询。
+使用S09固定函数与§4.5的288配置（640×360、H15%、V8%、Overlap10%）计算：精确逐矩形遍历约 **1,678,644次像素读取/帧**，60Hz约100,718,640次/秒。该值是算法访问量，不是Android benchmark。首版按布局选择：矩形面积和≤W×H时逐矩形求和（首套约6万像素/帧），否则逐行前缀+矩形累加（≤230,400像素/帧）。真机首套实测采样p95≈4.1ms、p99≈4.5ms、发送间隔p95≈17.3ms，见§11.1证据。
 
 首套274RGB DNRGB为826B/帧、60Hz为49,560B/s（仅UDP应用报文，不含链路开销）。这只能证明带宽数量级；若灯带为800kbit/s、24bit/像素，纯数据阶段为8.22ms，尚不含reset/latch，不能统一写“WLED渲染1–5ms”。硬件供电/电流按实际灯带资料与接线测量，不将未经验证的单灯功率估值当选型依据。
 
@@ -584,6 +602,8 @@ mobile/tv目前同applicationId，继续输出**同ID的替代APK**，不承诺�
 | 故障 | HTTP失败、UDP丢包/延迟/乱序、路由变更、WLED重启、其他发送者、应用进程被杀 | 状态与已观察事实一致；不报告未确认关灯；本地资源按预算释放 |
 
 以上阈值是**拟定验收预算，不是已有测量结果**；QA-2须记录设备型号/系统/WLED烧录版本/灯数/总线/网络、原始数据与统计方法。`info.leds.fps`是show层证据，物理刷新需逻辑分析仪或可复核高速摄影/光学采样，不能相互替代。500/1000/2000灯与ESP8266分别测试并发布自己的支持矩阵，不把274结论外推。
+
+**2026-11-17 首套软件侧实测（Sony KD-55XD8005 + WLED_TV 274 RGB，640×360，60fps 配置）**：采样 p50≈3.3ms、p95≈4.05–4.5ms、p99≈4.5–4.9ms；发送间隔 p95≈17.3ms；WLED show 层 `leds.fps` 30次1秒采样 min=66/avg=107.4。软件侧采样与发送门禁达标；物理刷新与端到端 p95 需测量设备，尚未验收。原始日志见 `docs/verification/wled/qa-2/device-metrics-2026-11-17.txt`。
 
 ### 11.2 主要风险与失败处理
 

@@ -1,0 +1,18 @@
+# QA-2 device metrics, 2026-11-17
+# device: Sony KD-55XD8005 (BRAVIA 4K UR3), API 29, serial c0eabd001408547
+# wled: 10.245.0.99 WLED_TV 16.0.1, 274 RGB, udp 21324
+# config: maxDimension=640, frameRate=60, T86/B90/L49/R49, Input 161, Reverse
+
+## service qa2 logcat (sampling_us / interval_us percentiles)
+11-17 01:36:56.187  1333  1418 I WledScreenService: qa2 sampling_us p50=3353 p95=3863 p99=4647 max=5210 n=301; interval_us p50=16638 p95=17251 p99=17805 max=32445 n=300
+11-17 01:37:01.204  1333  1418 I WledScreenService: qa2 sampling_us p50=3354 p95=4371 p99=4768 max=5503 n=301; interval_us p50=16634 p95=17622 p99=18245 max=19147 n=300
+11-17 01:37:06.220  1333  1418 I WledScreenService: qa2 sampling_us p50=3353 p95=4007 p99=4720 max=5239 n=301; interval_us p50=16646 p95=17441 p99=18108 max=18703 n=300
+11-17 01:37:11.237  1333  1418 I WledScreenService: qa2 sampling_us p50=3346 p95=3918 p99=4627 max=4814 n=301; interval_us p50=16654 p95=17351 p99=17927 max=18154 n=300
+11-17 01:37:16.253  1333  1418 I WledScreenService: qa2 sampling_us p50=3364 p95=4097 p99=4697 max=5337 n=301; interval_us p50=16673 p95=17357 p99=17836 max=18164 n=300
+11-17 01:37:21.304  1333  1418 I WledScreenService: qa2 sampling_us p50=3355 p95=3729 p99=3926 max=5662 n=301; interval_us p50=16651 p95=17151 p99=17676 max=32939 n=300
+11-17 01:37:26.320  1333  1418 I WledScreenService: qa2 sampling_us p50=3350 p95=3952 p99=4649 max=4956 n=301; interval_us p50=16653 p95=17157 p99=18049 max=18184 n=300
+11-17 01:37:31.337  1333  1418 I WledScreenService: qa2 sampling_us p50=3343 p95=4024 p99=4765 max=5534 n=301; interval_us p50=16651 p95=17394 p99=18200 max=18865 n=300
+11-17 01:37:36.370  1333  1418 I WledScreenService: qa2 sampling_us p50=3358 p95=4136 p99=4724 max=5516 n=301; interval_us p50=16660 p95=17401 p99=18389 max=32322 n=300
+11-17 01:37:41.387  1333  1418 I WledScreenService: qa2 sampling_us p50=3348 p95=4007 p99=4532 max=4773 n=301; interval_us p50=16657 p95=17287 p99=18027 max=18204 n=300
+11-17 01:37:46.421  1333  1418 I WledScreenService: qa2 sampling_us p50=3349 p95=4137 p99=4710 max=5904 n=301; interval_us p50=16677 p95=17352 p99=18291 max=31656 n=300
+11-17 01:37:51.470  1333  1418 I WledScreenService: qa2 sampling_us p50=3349 p95=3856 p99=4330 max=4672 n=301; interval_us p50=16650 p95=17298 p99=17868 max=32714 n=300

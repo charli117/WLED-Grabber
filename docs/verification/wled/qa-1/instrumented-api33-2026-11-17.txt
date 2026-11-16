@@ -1,0 +1,17 @@
+# Instrumented test run, 2026-11-17, API 33 TV AVD (wled-tv-api33)
+## common
+device=com.abrenoch.wledgrabber.common.config.PreferencesConfigStorageInstrumentedTest tests=2 failures=0 errors=0 skipped=0
+  PASS com.abrenoch.wledgrabber.common.config.PreferencesConfigStorageInstrumentedTest::saveWritesOneVisibleRevisionAndBypassDoesNotReplaceSnapshot
+  PASS com.abrenoch.wledgrabber.common.fixtures.FixtureAvailabilityTest::sharedFixtureClassesAndAssetsAreAvailable
+## mobile
+device=com.abrenoch.wledgrabber.mobile.MobileEntryTest tests=1 failures=0 errors=0 skipped=0
+  PASS com.abrenoch.wledgrabber.mobile.MobileEntryTest::mainEntryIsDisplayedAndClickable
+## tv
+device=com.abrenoch.wledgrabber.tv.TvLayoutFlowTest tests=7 failures=0 errors=0 skipped=0
+  PASS com.abrenoch.wledgrabber.tv.TvLayoutFlowTest::layoutStepShowsFieldsPresetAndTestEntry
+  PASS com.abrenoch.wledgrabber.tv.TvMainActivityTest::mainShowsReadyStatusAndControls
+  PASS com.abrenoch.wledgrabber.tv.TvSetupUiTest::savePersistsWholeSeededSnapshot
+  PASS com.abrenoch.wledgrabber.tv.TvSetupUiTest::connectionStepShowsSeededDeviceAndActions
+  PASS com.abrenoch.wledgrabber.tv.TvTestPatternDeviceTest::tenSecondPatternConfirmsRelease
+  PASS com.abrenoch.wledgrabber.tv.TvWledDeviceTest::deviceReportsWledCapabilities
+  PASS com.abrenoch.wledgrabber.tv.TvWledDeviceTest::stateEndpointIsReadableThroughRestrictedClient
