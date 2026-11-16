@@ -1,0 +1,31 @@
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvServiceForegroundContractTest.java
+  e2fcb4b975340679 56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "2745fc3593f1c4f7a1a811dcc89d296094e1020f",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 71473,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/88303eca0bb4ed22cbd4c9431d350e277b1ed7a110bf34e17539d8f8e8c52538",
+      "token_usage": {
+        "input_tokens": 5852280,
+        "output_tokens": 1756835,
+        "cache_read_tokens": 914885504,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
