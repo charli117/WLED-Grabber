@@ -87,7 +87,7 @@
 
 **硬件阻塞（2026-11-16）**：当前无 Sony 电视、274 WS2815+ESP32、RGBW 样机、500/1000/2000 灯配置或物理测量设备；`adb devices` 为空。未开始可复核实验，未产生 fps/延迟/稳定性数据。必测项与量化门槛见[hardware-blocked.md](../verification/wled/qa-2/hardware-blocked.md)。QA-2 保持“待开发/BLOCKED”，不以 JVM 或 UDP 频率代替物理验收。
 
-**实测（2026-11-17，Sony KD-55XD8005 + WLED_TV 274 RGB @10.245.0.99，640长边，60fps配置）**：采样 p50≈3.3ms、**p95≈4.05–4.5ms**、**p99≈4.5–4.9ms**（≤5/≤8 达标）；**发送间隔 p95≈17.3ms**（≤20 达标）；WLED `leds.fps` 30次1秒采样 **min=66 / avg=107.4**（≥59 且1秒窗口≥55 达标）；启动自动开灯、静态画面1秒心跳保持 live、停止后 `on=false/live=false` 并经 HTTP 读回 CONFIRMED。30分钟soak与内存净增结果见下方复核记录。**仍缺**：端到端物理时延（需光感/高速相机或等效测量设备）、RGBW 样机两模式、500/1000/2000 灯配置、Sony 遥控器大字体实测。按卡片自身口径，QA-2 保持 BLOCKED，不标 PASS。
+**实测（2026-11-17，Sony KD-55XD8005 + WLED_TV 274 RGB @10.245.0.99，640长边，60fps配置）**：采样 p50≈3.3ms、**p95≈4.05–4.5ms**、**p99≈4.5–4.9ms**（≤5/≤8 达标）；**发送间隔 p95≈17.3ms**（≤20 达标）；WLED `leds.fps` 30次1秒采样 **min=66 / avg=107.4**（≥59 且1秒窗口≥55 达标）；启动自动开灯、静态画面1秒心跳保持 live、停止后 `on=false/live=false` 并经 HTTP 读回 CONFIRMED。30分钟soak与内存净增结果见下方复核记录。**仍缺**：端到端物理时延（需光感/高速相机或等效测量设备）、RGBW 样机两模式、500/1000/2000 灯配置、Sony 遥控器大字体实测。按卡片自身口径，QA-2 保持 BLOCKED，不标 PASS。硬件就绪后的执行步骤见[qa2-runbook.md](../verification/wled/qa-2/qa2-runbook.md)，软件侧复测可用`scripts/qa/measure-qa2.sh`。
 
 <a id="qa-3"></a>
 
