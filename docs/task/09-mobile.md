@@ -47,7 +47,7 @@ mobile SettingsActivity/MainActivity/TileService、mobile LayoutPreviewActivity�
 - 首版字段覆盖率100%；mobile/TV同输入快照完全一致。
 - 非法提交0，损坏配置不崩溃；热改活动session0。
 
-**证据（2026-11-16，本地部分）**：`SettingsDraftController`与mobile全字段表单落地；4个`MobileSettingsTest`通过，覆盖整份加载/保存、非法输入不写存储、取消恢复、mobile/TV同输入错误码与最终快照一致。表单字段来自`ConfigFields.ALL`，保存经ConfigValidator/ConfigRepository原子提交；字段标签已改走共享`ConfigFieldLabels`（中英文资源）。**设备端（2026-11-17）**：新增`MobileSettingsFormTest`——遍历`ConfigFields.ALL`断言每个字段都有非空本地化标签（覆盖率100%），并在表单上验证主机与帧率标签可见（帧率需滚动到）；`ActivityScenario.recreate()` 后表单仍显示种子值 `192.0.2.11`，证明重建不丢值。API 21/33/34 均 3/3 通过。仍未覆盖：损坏Preferences、键盘遮挡/IME insets。
+**证据（2026-11-16，本地部分）**：`SettingsDraftController`与mobile全字段表单落地；4个`MobileSettingsTest`通过，覆盖整份加载/保存、非法输入不写存储、取消恢复、mobile/TV同输入错误码与最终快照一致。表单字段来自`ConfigFields.ALL`，保存经ConfigValidator/ConfigRepository原子提交；字段标签已改走共享`ConfigFieldLabels`（中英文资源）。**设备端（2026-11-17）**：新增`MobileSettingsFormTest`——遍历`ConfigFields.ALL`断言每个字段都有非空本地化标签（覆盖率100%），并在表单上验证主机与帧率标签可见（帧率需滚动到）；`ActivityScenario.recreate()` 后表单仍显示种子值 `192.0.2.11`，证明重建不丢值。API 21/33/34 均 3/3 通过。**键盘/IME（2026-11-17）**：API 26 模拟器上打开设置页并聚焦首个输入框，`dumpsys input_method` 显示 `mInputShown=true`，截图确认焦点字段位于键盘上方、未被遮挡。仍未覆盖：损坏Preferences。
 
 <a id="mob-2"></a>
 
