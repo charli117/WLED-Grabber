@@ -1,0 +1,46 @@
+# QA-2 software-side measurement 20261116T225721Z
+serial=10.245.0.109:5555 wled=10.245.0.99 duration=30s
+device=BRAVIA 4K UR3 api=29
+config=    <string name="pref_key_capture_max_dimension">640</string>     <string name="pref_key_wled_physical_leds">274</string>     <string name="pref_key_framerate">60</string> 
+
+## service qa2 percentiles (sampling_us / interval_us)
+## WLED show-layer fps samples (1 per second, NOT physical evidence)
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=71
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=63
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=77
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=81
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=133
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=60
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=112
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=104
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=87
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=88
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=95
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=80
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=82
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=95
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=80
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=68
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=118
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=89
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=76
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=148
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=100
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=76
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=109
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=96
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=133
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=88
+"live":true "lm":"UDP" "lip":"10.245.0.109" fps=123
+
+## qa2 logcat lines
+11-17 06:57:17.272 25769 25859 I WledScreenService: qa2 sampling_us p50=3754 p95=4935 p99=5709 max=7451 n=301; interval_us p50=16653 p95=17653 p99=18297 max=18989 n=300
+11-17 06:57:22.288 25769 25859 I WledScreenService: qa2 sampling_us p50=3741 p95=4618 p99=5441 max=5652 n=301; interval_us p50=16683 p95=17498 p99=17800 max=18895 n=300
+11-17 06:57:27.307 25769 25859 I WledScreenService: qa2 sampling_us p50=3693 p95=4650 p99=5247 max=6150 n=301; interval_us p50=16650 p95=17764 p99=18316 max=18797 n=300
+11-17 06:57:32.355 25769 25859 I WledScreenService: qa2 sampling_us p50=3670 p95=4654 p99=5203 max=5478 n=301; interval_us p50=16675 p95=17759 p99=18512 max=33399 n=300
+11-17 06:57:37.421 25769 25859 I WledScreenService: qa2 sampling_us p50=3697 p95=4636 p99=5206 max=6025 n=301; interval_us p50=16676 p95=17655 p99=18621 max=33281 n=300
+11-17 06:57:42.438 25769 25859 I WledScreenService: qa2 sampling_us p50=3640 p95=4437 p99=5119 max=5594 n=301; interval_us p50=16666 p95=17438 p99=18088 max=18600 n=300
+
+## note
+Physical FPS and end-to-end latency are NOT measured here.
+Record light-sensor / high-speed-camera evidence separately before QA-2 can pass.

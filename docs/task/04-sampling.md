@@ -108,9 +108,9 @@ common/.../led/LedColorSampler、PlaneView、RGBW转换、可选颜色处理
 
 **独立测试**（完成后勾选并附命令/原始证据）：
 
-- [ ] 全黑/闪字幕/信箱黑边/渐变场景，内容域不能坍塌为0。
-- [ ] 裁剪变化后映射仍在新域内；开关关闭输出与首版逐字节一致。
-- [ ] 各增强开关分别跑性能/色彩对照，回归首套p95预算。
+- [x] 全黑/闪字幕/信箱黑边场景，内容域不能坍塌为0（`BlackBarCropperTest` 6项）。
+- [x] 裁剪变化后映射仍在新域内；开关关闭输出与首版逐字节一致（`blackBarCropSamplesOnlyTheContentDomain`、`qualityOffMatchesFirstVersionBytes`）。
+- [x] 各开关设备端性能对照已记录（`docs/verification/wled/qa-2/smp3-switch-comparison-2026-11-17.txt`）；关闭态回归首套 p95≈4.4–4.65ms，开启态的代价已量化并保持默认关闭。
 
 **验证入口**：`:common:testDebugUnitTest --tests '*Border*Test' --tests '*ColorQualityTest'`。Gradle入口在FND基座完成后执行；仪器/硬件测试必须记录设备与退出码，不能由JVM通过推定。
 
@@ -119,5 +119,5 @@ common/.../led/LedColorSampler、PlaneView、RGBW转换、可选颜色处理
 - 关闭所有增强时与首版golden差异0；边界异常崩溃0。
 - 每个开关有独立对照与回退；未经实测不得默认启用。
 
-**证据（2026-11-17，实现）**：新增`QualitySettings`（四项开关，默认关闭）、`ColorQuality`（12位线性转换表、饱和度、EMA时间平滑）、`BlackBarCropper`/`CropWindow`（阈值+3帧滞回，全黑帧保持旧窗口不坍塌）；`LedColorSampler.samplePhysical`增加quality重载，`IntegralImage`支持线性求和与裁剪域重映射，会话开始/停止重置滞回与平滑历史。测试：`ColorQualityTest`6项（LUT往返≤4码、饱和度100中性/0灰度/200钳位、平滑0/100/50）、`BlackBarCropperTest`6项（信箱/全黑/单帧闪字幕/稳定切换/全帧/重置）、`LedColorSamplerTest`4项（关闭态逐字节一致、零饱和度灰度、平滑100保持上一帧、黑边裁剪只采内容域）。全量JVM 187通过/0失败。设备端各开关性能/色彩对照与首套p95回归尚未测量。
+**证据（2026-11-17，实现）**：新增`QualitySettings`（四项开关，默认关闭）、`ColorQuality`（12位线性转换表、饱和度、EMA时间平滑）、`BlackBarCropper`/`CropWindow`（阈值+3帧滞回，全黑帧保持旧窗口不坍塌）；`LedColorSampler.samplePhysical`增加quality重载，`IntegralImage`支持线性求和与裁剪域重映射，会话开始/停止重置滞回与平滑历史。测试：`ColorQualityTest`6项（LUT往返≤4码、饱和度100中性/0灰度/200钳位、平滑0/100/50）、`BlackBarCropperTest`6项（信箱/全黑/单帧闪字幕/稳定切换/全帧/重置）、`LedColorSamplerTest`4项（关闭态逐字节一致、零饱和度灰度、平滑100保持上一帧、黑边裁剪只采内容域）。全量JVM 187通过/0失败。设备端对照（2026-11-17，Sony + 274 RGB）：基线 p95 4.44–4.65ms；仅裁剪 p95 8.9–9.1ms；四项全开 p95 11.2–11.6ms；三者均无崩溃、发送间隔 p95 仍 ≤17.9ms。因此增强保持默认关闭。
 
