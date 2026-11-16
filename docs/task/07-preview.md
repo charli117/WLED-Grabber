@@ -47,6 +47,8 @@ common/.../views/LedLayoutPreviewView、共享测试图案控制器；双端仅�
 
 **证据（2026-11-16，本地部分）**：`PreviewModel`与`LedLayoutPreviewView`落地；8个`LedLayoutPreviewTest`通过，覆盖274/288、SKIP/BLACK、Reverse、竖屏、梯形角点、尾黑、选中越界与错误模型。View只读同一`CompiledLayout`/映射，不解析Preferences、不发网络；触摸与D-pad选择、TV大字体/mobile小屏/insets仪器测试未执行，PRE-1保持“待验证”。证据见`docs/verification/wled/pre-1/`。
 
+**证据（2026-11-17，设备端 View）**：新增`LedLayoutPreviewInstrumentedTest`，在真实 Android runtime 验证：D-pad 左右可连续走到物理 273 与 0 并正确钳位、resize（重新 setLayout）后保持用户选中的物理索引 161、错误状态阻断 D-pad 选择（保持 -1）。API **21 / 33 / 34** 均通过。仍未覆盖：触摸选中最邻近灯珠、TV 大字体/insets、选中索引的像素级 golden。
+
 <a id="pre-2"></a>
 
 ## PRE-2 — 共用四边色与行走像素测试

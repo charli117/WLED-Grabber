@@ -88,6 +88,8 @@ common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer
 
 **证据（2026-11-16，本地部分）**：`GenerationGate`、`ImageLifecycle`、`ImagePlaneView`落地；5个`ScreenEncoderLifecycleTest`通过，覆盖采样异常仍关闭、acquire null/失败、旧generation拒绝、100次生命周期循环0泄漏。`HyperionScreenEncoder`改为Image finally关闭、reader身份+generation校验、reader max3、停止幂等；orientation先关旧reader再resize/setSurface。API34+ captured-content resize、100次真机旋转/锁屏/撤销与仪器测试未执行，CAP-2保持“待验证”。证据见`docs/verification/wled/cap-2/`。
 
+**证据（2026-11-17，设备端 reader）**：新增`ImageReaderLifecycleInstrumentedTest`，用真实 `ImageReader`+`Surface` 生产者验证：20 帧连续 `acquireLatestImage`→`ImagePlaneView.from` 几何正确（320×180）→`close`，**acquired 与 closed 严格相等（无泄漏、无双重关闭）**；`maxImages=3` 时第四次获取被系统以 `IllegalStateException` 拒绝，证明服务必须先 close 再 acquire。API **21 / 33 / 34** 均 11/11 通过。仍未覆盖：旋转/锁屏/授权撤销组合、API34+ 单应用窗口 resize 的实体尺寸变化。
+
 <a id="cap-3"></a>
 
 ## CAP-3 — 唯一输出所有者、三帧池与停止屏障
@@ -124,4 +126,6 @@ common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer
 - 测试模式投屏请求=0；旧epoch发送=0（屏障之后）；本地停止≤3秒，设备结果保留真实UNCONFIRMED。
 
 **证据（2026-11-16，本地部分）**：`FrameLease`、`FramePool`（3租约）、`OutputOwner`、`LedStreamer`落地；7个`LedStreamerTest`通过，覆盖10万帧无撕裂/无重复归还、pending latest-wins、慢sink停止屏障（黑帧在所有颜色帧之后）、停止超时不误报、CAPTURE/TEST互斥、旧epoch/停止后offer归还、发送失败不泄漏。真实Encoder/transport/UI接线与断网/HTTP超时/Activity退出/授权撤销仪器测试未执行，CAP-3保持“待验证”。证据见`docs/verification/wled/cap-3/`。
+
+**证据（2026-11-17，设备端所有权）**：新增`OutputOwnershipInstrumentedTest`，在真实 Android runtime 验证：CAPTURE 与 TEST 互斥（TEST 持有期间 CAPTURE 启动被拒）、release 必须匹配 owner id 与 epoch（错误 id/错误 owner/过期 epoch 均不释放）、Activity 退出释放后重新进入可再次取得且 epoch 递增、TEST 释放后 CAPTURE 可接管。API **21 / 33 / 34** 均 9/9 通过（含既有 2 个配置/夹具用例）。仍未覆盖：断网/HTTP 超时、授权撤销、进程被杀后的 ownership 复位。
 
