@@ -1,0 +1,35 @@
+docs/task/10-release-migration.md
+  e2fcb4b975340679 84
+docs/task/07-preview.md
+  e2fcb4b975340679 38
+docs/task/00-overview.md
+  e2fcb4b975340679 152
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "e3f0771aa329e8c74b38c9f1f3429393f0fdbc37",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 3,
+      "accepted_lines": 3,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/07fc16b1252bf81479eb53d5db8b5694c7cdafdcbec17ef88f245a1e060a6efd",
+      "token_usage": {
+        "input_tokens": 5788906,
+        "output_tokens": 1667968,
+        "cache_read_tokens": 784238976,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
