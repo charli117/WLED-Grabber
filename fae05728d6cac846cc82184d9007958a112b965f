@@ -1,0 +1,31 @@
+mobile/src/androidTest/java/com/abrenoch/wledgrabber/mobile/MobileSettingsFormTest.java
+  e2fcb4b975340679 1-156
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "fae05728d6cac846cc82184d9007958a112b965f",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 156,
+      "total_deletions": 0,
+      "accepted_lines": 156,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/2fee43253dc9c88ecc7b5ccdfdcf3c3d9f00dbab21e77aedf4a4ac5db014e5ee",
+      "token_usage": {
+        "input_tokens": 3046250,
+        "output_tokens": 1616272,
+        "cache_read_tokens": 737551104,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
