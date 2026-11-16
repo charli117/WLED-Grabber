@@ -26,6 +26,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.abrenoch.wledgrabber.common.capture.CaptureSession;
 import com.abrenoch.wledgrabber.common.capture.FrameLease;
 import com.abrenoch.wledgrabber.common.capture.FramePool;
+import com.abrenoch.wledgrabber.common.capture.FrameTimingStats;
 import com.abrenoch.wledgrabber.common.capture.ImagePlaneView;
 import com.abrenoch.wledgrabber.common.capture.LedStreamer;
 import com.abrenoch.wledgrabber.common.capture.OutputOwner;
@@ -86,6 +87,9 @@ public class WledScreenService extends Service {
     private WledHttpClient httpClient;
     private byte[] scratch;
     private byte[] lastFrame;
+    private final FrameTimingStats samplingMicros = new FrameTimingStats(600);
+    private final FrameTimingStats sendIntervalMicros = new FrameTimingStats(600);
+    private long lastSentAtMicros;
     private CompiledLayout layout;
     private RgbwMode rgbwMode;
     private WhiteMode whiteMode;
@@ -372,6 +376,7 @@ public class WledScreenService extends Service {
         }
         lastFrameAt = now;
         Image image = null;
+        long sampleStartNanos = System.nanoTime();
         try {
             image = source.acquireLatestImage();
             if (image == null) {
@@ -385,12 +390,20 @@ public class WledScreenService extends Service {
                     rgbwMode, whiteMode, scratch)) {
                 return;
             }
+            samplingMicros.recordMicros((System.nanoTime() - sampleStartNanos) / 1000);
             byte[] frame = lastFrame;
             if (frame == null) {
                 return;
             }
             System.arraycopy(scratch, 0, frame, 0, frame.length);
-            offerPayload(frame, now);
+            if (offerPayload(frame, now)) {
+                long nowMicros = System.nanoTime() / 1000;
+                if (lastSentAtMicros != 0) {
+                    sendIntervalMicros.recordMicros(nowMicros - lastSentAtMicros);
+                }
+                lastSentAtMicros = nowMicros;
+                logCaptureMetricsIfDue();
+            }
         } catch (RuntimeException e) {
             Log.w(TAG, "frame dropped", e);
         } finally {
@@ -400,18 +413,38 @@ public class WledScreenService extends Service {
         }
     }
 
-    private void offerPayload(byte[] payload, long now) {
+    private boolean offerPayload(byte[] payload, long now) {
         FramePool pool = framePool;
         LedStreamer target = streamer;
         CompiledLayout current = layout;
         if (pool == null || target == null || current == null || payload == null) {
-            return;
+            return false;
         }
         FrameLease lease = pool.acquire(epoch, current.generation(), now, channels, physicalCount);
         if (lease != null) {
             System.arraycopy(payload, 0, lease.data(), 0, payload.length);
-            target.offer(lease);
+            return target.offer(lease);
         }
+        return false;
+    }
+
+    /** Emits the QA-2 timing evidence every 300 sent frames and resets the window. */
+    private void logCaptureMetricsIfDue() {
+        if (sendIntervalMicros.size() < 300) {
+            return;
+        }
+        Log.i(TAG, String.format(java.util.Locale.US,
+                "qa2 sampling_us p50=%d p95=%d p99=%d max=%d n=%d; "
+                        + "interval_us p50=%d p95=%d p99=%d max=%d n=%d",
+                samplingMicros.percentileMicros(50), samplingMicros.percentileMicros(95),
+                samplingMicros.percentileMicros(99), samplingMicros.maxMicros(),
+                samplingMicros.size(),
+                sendIntervalMicros.percentileMicros(50), sendIntervalMicros.percentileMicros(95),
+                sendIntervalMicros.percentileMicros(99), sendIntervalMicros.maxMicros(),
+                sendIntervalMicros.size()));
+        samplingMicros.reset();
+        sendIntervalMicros.reset();
+        lastSentAtMicros = 0;
     }
 
     private void stopCapture(String reason) {
