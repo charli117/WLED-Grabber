@@ -1,0 +1,77 @@
+docs/task/08-tv.md
+  e2fcb4b975340679 87
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledConnectionStepFragment.java
+  e2fcb4b975340679 38-39,59-67,112-115
+docs/task/00-overview.md
+  e2fcb4b975340679 142
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "172949afb1551876d0cd1e3ab0cd58451740dc19",
+  "prompts": {
+    "56b284ad51a9a663": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "34c78244-30f0-42df-9b0a-e1550470b1c3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 6,
+      "accepted_lines": 852,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/0a8c411e4b6f011cfba708347d6e03497593925d8d212db340278b0d8cbb0a38",
+      "token_usage": {
+        "input_tokens": 580968,
+        "output_tokens": 583141,
+        "cache_read_tokens": 43502592,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "575c369da7ebd45a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e53d-7484-73c2-bd35-c4075ea327c7",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 2,
+      "accepted_lines": 6,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/baf51910500814ed1924b1223039ad9f0c4b9b9c55cf53aa96809a7f2b2795a1",
+      "token_usage": {
+        "input_tokens": 8924,
+        "output_tokens": 3279,
+        "cache_read_tokens": 1240716,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 160,
+      "total_deletions": 280,
+      "accepted_lines": 427,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/6f2f12a3bdea5bc76f893d014c3bcd8db50788534a13e6385434dfabd8f5b76a",
+      "token_usage": {
+        "input_tokens": 1018948,
+        "output_tokens": 660080,
+        "cache_read_tokens": 157213440,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
