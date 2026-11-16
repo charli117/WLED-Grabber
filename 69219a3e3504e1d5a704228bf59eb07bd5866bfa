@@ -1,0 +1,31 @@
+common/src/main/AndroidManifest.xml
+  28269c58ea12fffa 37-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "69219a3e3504e1d5a704228bf59eb07bd5866bfa",
+  "prompts": {
+    "28269c58ea12fffa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a2e7f4d-46e0-48b2-b4dc-a10fcb19f35f",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 441,
+      "total_deletions": 335,
+      "accepted_lines": 444,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/9536e564289afe6bb49adc19bf76023e91d9feb8dd2a40b6d0a1855bc66dc95a",
+      "token_usage": {
+        "input_tokens": 142922,
+        "output_tokens": 35380,
+        "cache_read_tokens": 2708480,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
