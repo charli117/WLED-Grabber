@@ -1,0 +1,45 @@
+docs/task/08-tv.md
+  e2fcb4b975340679 75
+docs/task/04-sampling.md
+  e2fcb4b975340679 111-113,122
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvDpadWalkthroughTest.java
+  e2fcb4b975340679 1-95
+docs/task/00-overview.md
+  e2fcb4b975340679 138,147-148,150
+docs/verification/wled/qa-2/measure-20261116T225721Z.txt
+  e2fcb4b975340679 1-46
+mobile/src/androidTest/java/com/abrenoch/wledgrabber/mobile/MobileEntriesInstrumentedTest.java
+  e2fcb4b975340679 1-109
+docs/task/09-mobile.md
+  e2fcb4b975340679 74,76
+docs/verification/wled/qa-2/smp3-switch-comparison-2026-11-17.txt
+  e2fcb4b975340679 1-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "b8507e7c9304ca2a2061fc7d8f06fd4c305c8363",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 292,
+      "total_deletions": 26,
+      "accepted_lines": 277,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/1684dec6627ea3b2046c0ba99c480be8a77d1b3f30e6cb0e2ba112b8c3a8b014",
+      "token_usage": {
+        "input_tokens": 5844535,
+        "output_tokens": 1744048,
+        "cache_read_tokens": 892896128,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
