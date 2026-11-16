@@ -1,0 +1,33 @@
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/network/wled/WledHttpFailureInstrumentedTest.java
+  e2fcb4b975340679 1-71
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/views/LedLayoutPreviewInstrumentedTest.java
+  e2fcb4b975340679 94-131
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "706815878cb80740d62c78853a9401fd040ef05b",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 111,
+      "total_deletions": 2,
+      "accepted_lines": 109,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/e08421243834be75e56effc49a6706c8e9feaae78442f14c447393a82fd97868",
+      "token_usage": {
+        "input_tokens": 3028767,
+        "output_tokens": 1596009,
+        "cache_read_tokens": 717732608,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
