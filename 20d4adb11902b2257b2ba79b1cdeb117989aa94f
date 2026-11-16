@@ -1,0 +1,84 @@
+docs/verification/wled/qa-1/api-matrix-runs-2026-11-17.txt
+  28269c58ea12fffa 1-18
+docs/verification/wled/cap-1/android10-background-autostart.md
+  28269c58ea12fffa 1-63
+docs/verification/wled/qa-2/device-metrics-2026-11-17.txt
+  28269c58ea12fffa 1-18
+docs/verification/wled/qa-2/hardware-blocked.md
+  28269c58ea12fffa 1,3,5,7-12,14-18,20-27,29,38
+docs/verification/wled/cap-1/android10-persistent-consent.md
+  28269c58ea12fffa 1-61
+docs/task/04-sampling.md
+  28269c58ea12fffa 46,52
+docs/task/09-mobile.md
+  28269c58ea12fffa 7-8
+docs/fixes/2026-11-17-completion-audit.md
+  e2fcb4b975340679 1-34
+docs/verification/wled/qa-1/instrumented-api33-2026-11-17.txt
+  28269c58ea12fffa 1-17
+docs/task/06-capture.md
+  28269c58ea12fffa 7-10
+docs/task/10-release-migration.md
+  28269c58ea12fffa 49
+docs/verification/wled/qa-1/api-matrix.md
+  28269c58ea12fffa 3,7-8,14-20,22,37,41-42
+docs/task/11-validation.md
+  28269c58ea12fffa 50-51,90
+docs/task/00-overview.md
+  28269c58ea12fffa 7-12,136,141,146-154
+docs/task/05-wled.md
+  28269c58ea12fffa 123-124
+docs/design/wled-direct-ambilight-feasibility.md
+  28269c58ea12fffa 37,318,320-322,325-326,331,386-399,520,529-530,591,606
+docs/verification/wled/qa-1/local-regression-2026-11-17.txt
+  28269c58ea12fffa 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "20d4adb11902b2257b2ba79b1cdeb117989aa94f",
+  "prompts": {
+    "28269c58ea12fffa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a2e7f4d-46e0-48b2-b4dc-a10fcb19f35f",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 282,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/c8981be8ab59627762e91b0094f4f718e79597c7504d3fd6a77a9a4804962bfd",
+      "token_usage": {
+        "input_tokens": 145758,
+        "output_tokens": 36486,
+        "cache_read_tokens": 2854144,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 34,
+      "total_deletions": 0,
+      "accepted_lines": 34,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/41316ee31fc0a154f964cbc9c84d3a83f5a508f8f98a2a9c3567601cc7e0bf82",
+      "token_usage": {
+        "input_tokens": 1347068,
+        "output_tokens": 1325687,
+        "cache_read_tokens": 526934016,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
