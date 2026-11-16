@@ -58,16 +58,20 @@ public class TvSetupUiTest {
     public void connectionStepShowsSeededDeviceAndActions() {
         activity = launchManualSetup();
 
-        onView(withText("WLED host or IP")).check(matches(isDisplayed()));
+        // Resolve labels from the activity so assertions follow the active locale.
+        String hostLabel = activity.getString(
+                com.abrenoch.wledgrabber.common.R.string.wled_setup_host);
+        String saveLabel = activity.getString(R.string.guidedstep_save);
+        onView(withText(hostLabel)).check(matches(isDisplayed()));
         onView(withText(WledTestSupport.host())).check(matches(isDisplayed()));
-        onView(withText("Save")).check(matches(isDisplayed()));
+        onView(withText(saveLabel)).check(matches(isDisplayed()));
     }
 
     @Test
     public void savePersistsWholeSeededSnapshot() {
         activity = launchManualSetup();
 
-        onView(withText("Save")).perform(click());
+        onView(withText(activity.getString(R.string.guidedstep_save))).perform(click());
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
 
         ConfigRepository repository = new ConfigRepository(

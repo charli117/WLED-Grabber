@@ -50,6 +50,7 @@ public class TvLayoutFlowTest {
 
     @Test
     public void layoutStepShowsFieldsPresetAndTestEntry() {
+        final String[] expected = new String[4];
         try (ActivityScenario<LayoutSettingsActivity> scenario =
                      ActivityScenario.launch(LayoutSettingsActivity.class)) {
             scenario.onActivity(activity -> {
@@ -61,12 +62,22 @@ public class TvLayoutFlowTest {
                 for (GuidedAction action : ((WledLayoutStepFragment) fragment).getActions()) {
                     titles.add(String.valueOf(action.getTitle()));
                 }
-                assertTrue(titles.toString(), titles.contains("Led top"));
-                assertTrue(titles.toString(), titles.contains("RGBW white mode"));
-                assertTrue(titles.toString(), titles.contains("Load 274 first-unit preset"));
-                assertTrue(titles.toString(), titles.contains("Run 10-second test patterns"));
+                // Resolve labels from the activity so the assertions follow the
+                // active locale instead of hardcoding English.
+                expected[0] = activity.getString(
+                        com.abrenoch.wledgrabber.common.R.string.field_led_top);
+                expected[1] = activity.getString(
+                        com.abrenoch.wledgrabber.common.R.string.wled_layout_white_mode);
+                expected[2] = activity.getString(
+                        com.abrenoch.wledgrabber.common.R.string.wled_layout_preset_274);
+                expected[3] = activity.getString(
+                        com.abrenoch.wledgrabber.common.R.string.wled_layout_test_pattern);
+                assertTrue(titles.toString(), titles.contains(expected[0]));
+                assertTrue(titles.toString(), titles.contains(expected[1]));
+                assertTrue(titles.toString(), titles.contains(expected[2]));
+                assertTrue(titles.toString(), titles.contains(expected[3]));
             });
-            onView(withText("Led top")).check(matches(isDisplayed()));
+            onView(withText(expected[0])).check(matches(isDisplayed()));
         }
     }
 }
