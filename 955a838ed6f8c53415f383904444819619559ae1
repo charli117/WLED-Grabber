@@ -1,0 +1,84 @@
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/LeanbackActivity.java
+  e2fcb4b975340679 6-11
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/ManualSetupActivity.java
+  e2fcb4b975340679 30-35
+common/src/main/java/com/abrenoch/wledgrabber/common/views/LayoutPreviewActivity.java
+  e2fcb4b975340679 21-26
+common/src/main/java/com/abrenoch/wledgrabber/common/WledGrabberApp.java
+  e2fcb4b975340679 1-31
+mobile/src/main/AndroidManifest.xml
+  e2fcb4b975340679 6
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledConnectionStepFragment.java
+  e2fcb4b975340679 8,41-42,45,90-91,100-107,123,138-150,158,174
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/MainActivity.java
+  e2fcb4b975340679 34-40
+common/src/main/res/values-zh-rCN/strings.xml
+  e2fcb4b975340679 73-76
+common/src/main/res/values/strings.xml
+  e2fcb4b975340679 127-130
+tv/src/main/AndroidManifest.xml
+  e2fcb4b975340679 12
+common/src/main/java/com/abrenoch/wledgrabber/common/util/LocaleHelper.java
+  e2fcb4b975340679 1-36
+common/src/main/java/com/abrenoch/wledgrabber/common/BootActivity.java
+  e2fcb4b975340679 14-19
+common/src/main/java/com/abrenoch/wledgrabber/common/ToggleActivity.java
+  e2fcb4b975340679 15-20
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/LayoutSettingsActivity.java
+  e2fcb4b975340679 12-17
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/SettingsActivity.java
+  e2fcb4b975340679 8-9,15,21,43-48,93-94,180-217
+docs/task/08-tv.md
+  e2fcb4b975340679 87
+common/src/main/java/com/abrenoch/wledgrabber/common/views/TestPatternActivity.java
+  e2fcb4b975340679 35-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "955a838ed6f8c53415f383904444819619559ae1",
+  "prompts": {
+    "575c369da7ebd45a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e53d-7484-73c2-bd35-c4075ea327c7",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 77,
+      "total_deletions": 0,
+      "accepted_lines": 111,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/0a89129822ec68ea270b4a0eb10b0fca1dc34e6d801ca437c4e4c97f538bd075",
+      "token_usage": {
+        "input_tokens": 40886,
+        "output_tokens": 27723,
+        "cache_read_tokens": 3745136,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 484,
+      "total_deletions": 338,
+      "accepted_lines": 705,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/11defc1273025e3b3165ced4154154f6e2d2190ffe2cc107ecba5d3c816af79a",
+      "token_usage": {
+        "input_tokens": 1165496,
+        "output_tokens": 876397,
+        "cache_read_tokens": 265863040,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
