@@ -1,0 +1,35 @@
+common/src/sharedTest/java/com/abrenoch/wledgrabber/common/fixtures/ControlledHttpEndpoint.java
+  28269c58ea12fffa 32-33,86,135,160-164
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/WledHttpClientTest.java
+  28269c58ea12fffa 113-123
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledHttpClient.java
+  28269c58ea12fffa 166,169-189
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "44c854e4f03d582a6c2ba227b975ba6d718836b4",
+  "prompts": {
+    "28269c58ea12fffa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a2e7f4d-46e0-48b2-b4dc-a10fcb19f35f",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 832,
+      "total_deletions": 340,
+      "accepted_lines": 835,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/0e1c27bad8a463ded8c906ee6a646c01996d4899d1e87aa7f6131901bfc46c5d",
+      "token_usage": {
+        "input_tokens": 140692,
+        "output_tokens": 33198,
+        "cache_read_tokens": 2419968,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
