@@ -1,0 +1,189 @@
+.claude/skills/ui-ux-pro-max/data/stacks/html-tailwind.csv
+  e2fcb4b975340679 1-60
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-react-exports.json
+  e2fcb4b975340679 1-4
+.claude/skills/ui-ux-pro-max/data/stacks/winui.csv
+  e2fcb4b975340679 1-60
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-baseline.json
+  e2fcb4b975340679 1-3366
+.claude/skills/ui-ux-pro-max/scripts/tests/test_relevance_evaluator.py
+  e2fcb4b975340679 1-182
+.claude/skills/apple-design/references/typography.md
+  e2fcb4b975340679 1-155
+.claude/skills/apple-design/references/app-patterns.md
+  e2fcb4b975340679 1-154
+.claude/skills/ui-ux-pro-max/data/stacks/react.csv
+  e2fcb4b975340679 1-62
+.claude/skills/ui-ux-pro-max/data/catalog-summary.json
+  e2fcb4b975340679 1-78
+.claude/skills/ui-ux-pro-max/data/stacks/vue.csv
+  e2fcb4b975340679 1-50
+.claude/skills/ui-ux-pro-max/scripts/design_system.py
+  e2fcb4b975340679 1-1643
+.claude/skills/ui-ux-pro-max/scripts/tests/test_core.py
+  e2fcb4b975340679 1-343
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvServiceForegroundContractTest.java
+  e2fcb4b975340679 56
+.claude/skills/ui-ux-pro-max/scripts/tests/test_data_contracts.py
+  e2fcb4b975340679 1-421
+.claude/skills/apple-design/references/colors.md
+  e2fcb4b975340679 1-131
+.claude/skills/ui-ux-pro-max/data/charts.csv
+  e2fcb4b975340679 1-26
+.claude/skills/ui-ux-pro-max/scripts/tests/test_design_system_mode.py
+  e2fcb4b975340679 1-189
+.claude/skills/ui-ux-pro-max/data/stacks/angular.csv
+  e2fcb4b975340679 1-51
+.claude/skills/ui-ux-pro-max/data/stacks/flutter.csv
+  e2fcb4b975340679 1-53
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-catalog.json
+  e2fcb4b975340679 1-33
+.claude/skills/ui-ux-pro-max/data/stacks/uwp.csv
+  e2fcb4b975340679 1-56
+.claude/skills/ui-ux-pro-max/data/colors.csv
+  e2fcb4b975340679 1-193
+.claude/skills/apple-design/references/liquid-glass.md
+  e2fcb4b975340679 1-292
+.claude/skills/ui-ux-pro-max/data/ui-reasoning.csv
+  e2fcb4b975340679 1-193
+.claude/skills/ui-ux-pro-max/data/landing.csv
+  e2fcb4b975340679 1-35
+.claude/skills/ui-ux-pro-max/data/motion.csv
+  e2fcb4b975340679 1-18
+.claude/skills/apple-design/references/components.md
+  e2fcb4b975340679 1-311
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-thresholds.json
+  e2fcb4b975340679 1-100
+.claude/skills/ui-ux-pro-max/scripts/tests/test_catalog_refresh.py
+  e2fcb4b975340679 1-354
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-cases.json
+  e2fcb4b975340679 1-111
+.claude/skills/ui-ux-pro-max/data/app-interface.csv
+  e2fcb4b975340679 1-33
+.claude/skills/ui-ux-pro-max/data/phosphor-icons-upstream.json
+  e2fcb4b975340679 1-32582
+.claude/skills/apple-design/references/accessibility.md
+  e2fcb4b975340679 1-164
+.claude/skills/ui-ux-pro-max/data/stacks/avalonia.csv
+  e2fcb4b975340679 1-57
+.claude/skills/ui-ux-pro-max/data/stacks/nuxtjs.csv
+  e2fcb4b975340679 1-68
+.claude/skills/ui-ux-pro-max/data/stacks/swiftui.csv
+  e2fcb4b975340679 1-51
+.claude/skills/ui-ux-pro-max/scripts/reasoning_contract.py
+  e2fcb4b975340679 1-123
+.claude/skills/apple-design/references/layout-and-navigation.md
+  e2fcb4b975340679 1-304
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-core.json
+  e2fcb4b975340679 1-23
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-api.json
+  e2fcb4b975340679 1-36
+.claude/skills/ui-ux-pro-max/data/stacks/shadcn.csv
+  e2fcb4b975340679 1-69
+.claude/skills/ui-ux-pro-max/data/stacks/laravel.csv
+  e2fcb4b975340679 1-51
+.claude/skills/apple-design/references/motion.md
+  e2fcb4b975340679 1-140
+.claude/skills/ui-ux-pro-max/data/react-performance.csv
+  e2fcb4b975340679 1-45
+.claude/skills/ui-ux-pro-max/data/icons.csv
+  e2fcb4b975340679 1-106
+.claude/skills/ui-ux-pro-max/data/stacks/jetpack-compose.csv
+  e2fcb4b975340679 1-53
+.claude/skills/apple-design/references/sf-symbols.md
+  e2fcb4b975340679 1-203
+.claude/skills/ui-ux-pro-max/data/stacks/wpf.csv
+  e2fcb4b975340679 1-57
+.claude/skills/ui-ux-pro-max/data/stacks/svelte.csv
+  e2fcb4b975340679 1-56
+.claude/skills/ui-ux-pro-max/data/products.csv
+  e2fcb4b975340679 1-193
+.claude/skills/ui-ux-pro-max/data/typography.csv
+  e2fcb4b975340679 1-75
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-metadata.json
+  e2fcb4b975340679 1-17
+.claude/skills/ui-ux-pro-max/scripts/tests/test_style_taxonomy.py
+  e2fcb4b975340679 1-175
+.claude/skills/ui-ux-pro-max/SKILL.md
+  e2fcb4b975340679 1-739
+.claude/skills/ui-ux-pro-max/data/data-provenance.json
+  e2fcb4b975340679 1-1348
+.claude/skills/ui-ux-pro-max/scripts/validate_data.py
+  e2fcb4b975340679 1-1091
+.claude/skills/ui-ux-pro-max/data/stacks/nuxt-ui.csv
+  e2fcb4b975340679 1-71
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-existing.csv
+  e2fcb4b975340679 1-3
+.claude/skills/ui-ux-pro-max/data/stacks/javafx.csv
+  e2fcb4b975340679 1-76
+.claude/skills/ui-ux-pro-max/data/ux-guidelines.csv
+  e2fcb4b975340679 1-120
+.claude/skills/ui-ux-pro-max/data/stacks/astro.csv
+  e2fcb4b975340679 1-54
+.claude/skills/ui-ux-pro-max/data/stacks/nextjs.csv
+  e2fcb4b975340679 1-62
+.claude/skills/apple-design/references/app-icons.md
+  e2fcb4b975340679 1-106
+.claude/skills/ui-ux-pro-max/data/stacks/react-native.csv
+  e2fcb4b975340679 1-52
+.claude/skills/ui-ux-pro-max/data/stacks/threejs.csv
+  e2fcb4b975340679 1-54
+.claude/skills/ui-ux-pro-max/data/google-font-licenses.json
+  e2fcb4b975340679 1-20185
+.claude/skills/ui-ux-pro-max/data/stacks/uno.csv
+  e2fcb4b975340679 1-60
+.claude/skills/apple-design/SKILL.md
+  e2fcb4b975340679 1-158
+.claude/skills/ui-ux-pro-max/data/styles.csv
+  e2fcb4b975340679 1-89
+.claude/skills/ui-ux-pro-max/scripts/core.py
+  e2fcb4b975340679 1-993
+.claude/skills/ui-ux-pro-max/scripts/search.py
+  e2fcb4b975340679 1-171
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-react-package.json
+  e2fcb4b975340679 1-5
+.claude/skills/ui-ux-pro-max/scripts/tests/test_native_desktop_stack_freshness.py
+  e2fcb4b975340679 1-176
+.claude/skills/ui-ux-pro-max/scripts/tests/test_text_layout_resilience.py
+  e2fcb4b975340679 1-120
+.claude/skills/ui-ux-pro-max/scripts/tests/test_web_stack_freshness.py
+  e2fcb4b975340679 1-177
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-package.json
+  e2fcb4b975340679 1-13
+.claude/skills/ui-ux-pro-max/scripts/tests/test_core_data_quality.py
+  e2fcb4b975340679 1-198
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/icons-curated.csv
+  e2fcb4b975340679 1-4
+.claude/skills/ui-ux-pro-max/data/google-fonts.csv
+  e2fcb4b975340679 1-1935
+.claude/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-overrides.json
+  e2fcb4b975340679 1-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "df632e19eafd00be3afde46c8c58518d425eb668",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 71495,
+      "total_deletions": 22,
+      "accepted_lines": 71475,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/88303eca0bb4ed22cbd4c9431d350e277b1ed7a110bf34e17539d8f8e8c52538",
+      "token_usage": {
+        "input_tokens": 5852280,
+        "output_tokens": 1756835,
+        "cache_read_tokens": 914885504,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
