@@ -91,4 +91,42 @@ public class LedLayoutPreviewInstrumentedTest {
                     -1, view.selectedPhysical());
         });
     }
+
+    @Test
+    public void touchSelectsTheNearestPhysicalLed() {
+        LedLayoutPreviewView view = newView();
+        final int[] selected = new int[1];
+        onMain(() -> {
+            // Give the View a real size; onTouchEvent maps x/y into the content box.
+            view.measure(android.view.View.MeasureSpec.makeMeasureSpec(800,
+                            android.view.View.MeasureSpec.EXACTLY),
+                    android.view.View.MeasureSpec.makeMeasureSpec(450,
+                            android.view.View.MeasureSpec.EXACTLY));
+            view.layout(0, 0, 800, 450);
+            view.setLayout(layout274(), -1);
+
+            // Top edge sits at the very top of the content box.
+            long down = android.os.SystemClock.uptimeMillis();
+            android.view.MotionEvent tap = android.view.MotionEvent.obtain(
+                    down, down, android.view.MotionEvent.ACTION_UP, 400f, 10f, 0);
+            view.onTouchEvent(tap);
+            tap.recycle();
+            selected[0] = view.selectedPhysical();
+        });
+        assertTrue("touch on the top edge must select a physical LED, got " + selected[0],
+                selected[0] >= 0);
+        // A second tap far away must change the selection, proving the mapping is used.
+        final int first = selected[0];
+        final int[] second = new int[1];
+        onMain(() -> {
+            long down = android.os.SystemClock.uptimeMillis();
+            android.view.MotionEvent tap = android.view.MotionEvent.obtain(
+                    down, down, android.view.MotionEvent.ACTION_UP, 400f, 440f, 0);
+            view.onTouchEvent(tap);
+            tap.recycle();
+            second[0] = view.selectedPhysical();
+        });
+        assertTrue("bottom tap must select a different physical LED than the top tap",
+                second[0] != first);
+    }
 }
