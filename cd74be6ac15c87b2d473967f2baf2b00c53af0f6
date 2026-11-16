@@ -1,0 +1,35 @@
+docs/task/00-overview.md
+  e2fcb4b975340679 142
+docs/task/06-capture.md
+  e2fcb4b975340679 54
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvServiceForegroundContractTest.java
+  e2fcb4b975340679 1-90
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "cd74be6ac15c87b2d473967f2baf2b00c53af0f6",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 208,
+      "total_deletions": 118,
+      "accepted_lines": 92,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/86bc6b055d001cfe20a2c368858eb1ae42df83873964a1d520fb643f920204c0",
+      "token_usage": {
+        "input_tokens": 5784775,
+        "output_tokens": 1656815,
+        "cache_read_tokens": 775909248,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
