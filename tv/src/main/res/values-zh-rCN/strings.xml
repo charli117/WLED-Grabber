@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="guidedstep_basic_settings_title">提示</string>
+  <string name="guidedstep_basic_settings_description">可在手机上安装官方 Android TV Remote 应用，更方便输入数字和文本</string>
+  <string name="guidedstep_second_title">连接测试</string>
+  <string name="guidedstep_section_advanced_title">高级设置</string>
+  <string name="guidedstep_section_advanced_description">以下设置保持默认即可</string>
+  <string name="guidedstep_save">保存</string>
+  <string name="guidedstep_test">测试</string>
+  <string name="guidedstep_test_description">点亮看看</string>
+  <string name="guidedstep_test_success">结果：正常。灯带不亮？可尝试更低的优先级</string>
+  <string name="guidedstep_test_host_unreachable">结果：无法连接，请检查主机和端口</string>
+  <string name="guidedstep_test_unknown_error">结果：未知错误</string>
+  <string name="guidedstep_continue">继续</string>
+  <string name="guidedstep_letsdoit">开始吧</string>
+  <string name="guidedstep_nevermind">取消</string>
+  <string name="guidedstep_cancel">取消</string>
+  <string name="guidedstep_required">必填</string>
+  <string name="toggle_activity_label">WLED Grabber（开关）</string>
+</resources>

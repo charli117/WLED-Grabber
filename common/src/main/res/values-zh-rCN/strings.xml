@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="app_name">WLED Grabber</string>
+  <string name="pref_title">设置</string>
+  <string name="enabled">已启用</string>
+  <string name="disabled">已禁用</string>
+  <string name="notification_exit_button">退出</string>
+  <string name="pref_error_missing_field">%s 不能为空</string>
+  <string name="pref_error_invalid_field" formatted="false">%s 对 %s 无效</string>
+  <string name="toast_must_give_permission">必须授予录屏权限才能采集画面。</string>
+  <string name="message_service_started">按返回键可关闭界面，屏幕内容会继续发送到 WLED</string>
+  <string name="notification_channel_label">WLED Grabber 通知</string>
+  <string name="notification_description">正在采集屏幕内容</string>
+  <string name="boot_reminder_channel">开机提醒</string>
+  <string name="boot_reminder_title">屏幕采集未在运行</string>
+  <string name="boot_reminder_text">需要时请打开 WLED Grabber 并授予录屏权限；应用不会在后台自动开始采集。</string>
+  <string name="wled_setup_title">WLED 连接</string>
+  <string name="wled_setup_host">WLED 主机或 IP</string>
+  <string name="wled_setup_http_port">WLED HTTP 端口</string>
+  <string name="wled_setup_udp_port">WLED 实时 UDP 端口</string>
+  <string name="wled_setup_ddp_port">DDP 端口（固定 4048）</string>
+  <string name="wled_setup_physical_leds">已确认的物理灯数</string>
+  <string name="wled_setup_protocol">传输协议（auto/dnrgb/ddp）</string>
+  <string name="wled_setup_rgbw">通道模式（unconfirmed/rgb/rgbw）</string>
+  <string name="wled_setup_test">测试 WLED 连接</string>
+  <string name="wled_setup_saved">已保存，下次启动生效。</string>
+  <string name="wled_setup_invalid">请先检查标红的字段再保存。</string>
+  <string name="tv_status_ready">WLED 已配置，可以开始采集。</string>
+  <string name="tv_status_sending">采集运行中，正在本机发送到 WLED；不保证逐帧送达。</string>
+  <string name="tv_status_stopped">采集已停止，WLED 关闭状态未确认。</string>
+  <string name="notification_permission_hint">通知已关闭。采集仍可运行，但前台状态可能不可见。</string>
+
+  <!-- Configuration field labels shared by mobile and TV settings -->
+  <string name="field_wled_host">WLED 主机或 IP</string>
+  <string name="field_wled_http_port">WLED HTTP 端口</string>
+  <string name="field_wled_udp_port">WLED 实时 UDP 端口</string>
+  <string name="field_wled_ddp_port">DDP 端口</string>
+  <string name="field_wled_protocol">传输协议</string>
+  <string name="field_wled_rgbw_mode">通道模式</string>
+  <string name="field_wled_rgbw_white_mode">RGBW 白色模式</string>
+  <string name="field_wled_physical_leds">物理灯数</string>
+  <string name="field_led_top">顶部灯数</string>
+  <string name="field_led_bottom">底部灯数</string>
+  <string name="field_led_left">左侧灯数</string>
+  <string name="field_led_right">右侧灯数</string>
+  <string name="field_led_gap_length">间隙长度</string>
+  <string name="field_led_gap_position">间隙位置</string>
+  <string name="field_led_input_position">输入位置</string>
+  <string name="field_led_reverse">反向顺序</string>
+  <string name="field_led_gap_mode">间隙模式</string>
+  <string name="field_led_h_depth">水平深度</string>
+  <string name="field_led_v_depth">垂直深度</string>
+  <string name="field_led_overlap">重叠</string>
+  <string name="field_led_edge_gap">边缘间隙</string>
+  <string name="field_led_corner_tl_h">左上角色点 H</string>
+  <string name="field_led_corner_tl_v">左上角色点 V</string>
+  <string name="field_led_corner_tr_h">右上角色点 H</string>
+  <string name="field_led_corner_tr_v">右上角色点 V</string>
+  <string name="field_led_corner_br_h">右下角色点 H</string>
+  <string name="field_led_corner_br_v">右下角色点 V</string>
+  <string name="field_led_corner_bl_h">左下角色点 H</string>
+  <string name="field_led_corner_bl_v">左下角色点 V</string>
+  <string name="field_capture_max_dimension">采集最大边长</string>
+  <string name="field_framerate">帧率</string>
+  <string name="field_use_avg_color">使用平均屏幕色</string>
+  <string name="field_start_on_boot">开机启动</string>
+
+  <!-- Settings chrome shared by mobile and TV -->
+  <string name="settings_title">WLED Grabber 设置</string>
+  <string name="settings_save">保存</string>
+  <string name="settings_cancel">取消</string>
+  <string name="settings_saved">已保存，下次启动生效。</string>
+
+  <!-- TV layout guided step -->
+  <string name="wled_layout_title">WLED 布局</string>
+  <string name="wled_layout_guidance">修改将在下次启动生效。停止时会发送黑帧，并在可达时确认 WLED 已关闭。</string>
+  <string name="wled_layout_reverse">反向物理顺序</string>
+  <string name="wled_layout_gap_mode">间隙模式</string>
+  <string name="wled_layout_gap_skip">跳过</string>
+  <string name="wled_layout_gap_black">黑色</string>
+  <string name="wled_layout_white_mode">RGBW 白色模式</string>
+  <string name="wled_layout_white_min_subtract">减去最小值</string>
+  <string name="wled_layout_white_preserve">保留白色</string>
+  <string name="wled_layout_avg_color">使用平均屏幕色</string>
+  <string name="wled_layout_preset_274">载入 274 灯首套预设</string>
+  <string name="wled_layout_preview">预览布局</string>
+  <string name="wled_layout_test_pattern">运行 10 秒测试图案</string>
+  <string name="wled_layout_preset_loaded">已载入 274 预设，请检查后保存。</string>
+  <string name="wled_layout_physical_too_small">物理灯数 (%1$d) 小于布局总数 (%2$d)</string>
+  <string name="wled_setup_layout_entry">布局与灯数</string>
+  <string name="wled_setup_layout_entry_desc">顶部/底部/左侧/右侧、间隙、输入位置、反向、物理灯数</string>
+  <string name="wled_setup_invalid_led_count">物理灯数无效</string>
+  <string name="wled_setup_invalid_rgbw">请确认 RGB 或 RGBW</string>
+</resources>

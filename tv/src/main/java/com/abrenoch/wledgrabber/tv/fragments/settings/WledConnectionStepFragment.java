@@ -61,8 +61,8 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
         // input position and reverse.
         actions.add(new GuidedAction.Builder(requireContext())
                 .id(ACTION_LAYOUT)
-                .title("Layout & LED count")
-                .description("Top/Bottom/Left/Right, gap, input, reverse, physical LEDs")
+                .title(getString(R.string.wled_setup_layout_entry))
+                .description(getString(R.string.wled_setup_layout_entry_desc))
                 .build());
 
         String host = controller.draft().get(ConfigFields.WLED_HOST);
@@ -130,11 +130,11 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
             String protocol = assertSubActionValue(PROTOCOL, String.class);
             String rgbw = assertSubActionValue(RGBW, String.class);
             if (physical < 1) {
-                showToast(getString(R.string.wled_setup_invalid) + " LED count");
+                showToast(getString(R.string.wled_setup_invalid_led_count));
                 return;
             }
             if ("unconfirmed".equals(rgbw)) {
-                showToast(getString(R.string.wled_setup_invalid) + " RGB/RGBW");
+                showToast(getString(R.string.wled_setup_invalid_rgbw));
                 return;
             }
             controller.set(ConfigFields.WLED_HOST, host);

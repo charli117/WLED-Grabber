@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
+import com.abrenoch.wledgrabber.common.util.ConfigFieldLabels;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
 import com.abrenoch.wledgrabber.common.util.EdgeToEdge;
@@ -75,7 +76,7 @@ public class SettingsActivity extends AppCompatActivity {
         root.addView(errorView);
 
         TextView title = new TextView(this);
-        title.setText("WLED Grabber settings");
+        title.setText(com.abrenoch.wledgrabber.common.R.string.settings_title);
         title.setTextSize(20);
         root.addView(title);
 
@@ -84,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
                 continue;
             }
             TextView label = new TextView(this);
-            label.setText(labelFor(field));
+            label.setText(ConfigFieldLabels.label(this, field));
             root.addView(label);
             View input;
             if (isBoolean(field)) {
@@ -104,10 +105,10 @@ public class SettingsActivity extends AppCompatActivity {
         LinearLayout buttons = new LinearLayout(this);
         buttons.setOrientation(LinearLayout.HORIZONTAL);
         Button save = new Button(this);
-        save.setText("Save");
+        save.setText(com.abrenoch.wledgrabber.common.R.string.settings_save);
         save.setOnClickListener(v -> save());
         Button cancel = new Button(this);
-        cancel.setText("Cancel");
+        cancel.setText(com.abrenoch.wledgrabber.common.R.string.settings_cancel);
         cancel.setOnClickListener(v -> finish());
         buttons.addView(save, new LinearLayout.LayoutParams(0,
                 ViewGroup.LayoutParams.WRAP_CONTENT, 1));
@@ -144,7 +145,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
         ValidationResult<ConfigSnapshot> result = controller.save();
         if (result.isValid()) {
-            Toast.makeText(this, "Saved. New settings apply on next start.",
+            Toast.makeText(this, com.abrenoch.wledgrabber.common.R.string.settings_saved,
                     Toast.LENGTH_LONG).show();
             finish();
         } else {
@@ -168,14 +169,6 @@ public class SettingsActivity extends AppCompatActivity {
         return ConfigFields.LED_REVERSE.equals(field)
                 || ConfigFields.USE_AVG_COLOR.equals(field)
                 || ConfigFields.BOOT.equals(field);
-    }
-
-    private static String labelFor(String field) {
-        String label = field.replace("pref_key_", "").replace('_', ' ');
-        if (label.isEmpty()) {
-            return field;
-        }
-        return Character.toUpperCase(label.charAt(0)) + label.substring(1);
     }
 
     private int dp(int value) {

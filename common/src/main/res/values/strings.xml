@@ -83,4 +83,66 @@
   <string name="tv_status_sending">Capture running. Sending locally to WLED; per-frame delivery is not acknowledged.</string>
   <string name="tv_status_stopped">Capture stopped. WLED release is not confirmed.</string>
   <string name="notification_permission_hint">Notifications are disabled. Capture can run, but foreground status may be hidden.</string>
+
+  <!-- Configuration field labels shared by mobile and TV settings -->
+  <string name="field_wled_host">WLED host or IP</string>
+  <string name="field_wled_http_port">WLED HTTP port</string>
+  <string name="field_wled_udp_port">WLED UDP realtime port</string>
+  <string name="field_wled_ddp_port">DDP port</string>
+  <string name="field_wled_protocol">Protocol</string>
+  <string name="field_wled_rgbw_mode">Channel mode</string>
+  <string name="field_wled_rgbw_white_mode">RGBW white mode</string>
+  <string name="field_wled_physical_leds">Physical LED count</string>
+  <string name="field_led_top">Top LEDs</string>
+  <string name="field_led_bottom">Bottom LEDs</string>
+  <string name="field_led_left">Left LEDs</string>
+  <string name="field_led_right">Right LEDs</string>
+  <string name="field_led_gap_length">Gap length</string>
+  <string name="field_led_gap_position">Gap position</string>
+  <string name="field_led_input_position">Input position</string>
+  <string name="field_led_reverse">Reverse order</string>
+  <string name="field_led_gap_mode">Gap mode</string>
+  <string name="field_led_h_depth">Horizontal depth</string>
+  <string name="field_led_v_depth">Vertical depth</string>
+  <string name="field_led_overlap">Overlap</string>
+  <string name="field_led_edge_gap">Edge gap</string>
+  <string name="field_led_corner_tl_h">Top-left corner H</string>
+  <string name="field_led_corner_tl_v">Top-left corner V</string>
+  <string name="field_led_corner_tr_h">Top-right corner H</string>
+  <string name="field_led_corner_tr_v">Top-right corner V</string>
+  <string name="field_led_corner_br_h">Bottom-right corner H</string>
+  <string name="field_led_corner_br_v">Bottom-right corner V</string>
+  <string name="field_led_corner_bl_h">Bottom-left corner H</string>
+  <string name="field_led_corner_bl_v">Bottom-left corner V</string>
+  <string name="field_capture_max_dimension">Capture max dimension</string>
+  <string name="field_framerate">Frame rate</string>
+  <string name="field_use_avg_color">Use average screen color</string>
+  <string name="field_start_on_boot">Start on boot</string>
+
+  <!-- Settings chrome shared by mobile and TV -->
+  <string name="settings_title">WLED Grabber settings</string>
+  <string name="settings_save">Save</string>
+  <string name="settings_cancel">Cancel</string>
+  <string name="settings_saved">Saved. New settings apply on next start.</string>
+
+  <!-- TV layout guided step -->
+  <string name="wled_layout_title">WLED layout</string>
+  <string name="wled_layout_guidance">Changes apply on next start. Stop sends black and verifies WLED off when reachable.</string>
+  <string name="wled_layout_reverse">Reverse physical order</string>
+  <string name="wled_layout_gap_mode">Gap mode</string>
+  <string name="wled_layout_gap_skip">Skip</string>
+  <string name="wled_layout_gap_black">Black</string>
+  <string name="wled_layout_white_mode">RGBW white mode</string>
+  <string name="wled_layout_white_min_subtract">Min subtract</string>
+  <string name="wled_layout_white_preserve">Preserve</string>
+  <string name="wled_layout_avg_color">Average screen color</string>
+  <string name="wled_layout_preset_274">Load 274 first-unit preset</string>
+  <string name="wled_layout_preview">Preview layout</string>
+  <string name="wled_layout_test_pattern">Run 10-second test patterns</string>
+  <string name="wled_layout_preset_loaded">274 preset loaded. Review and save.</string>
+  <string name="wled_layout_physical_too_small">Physical LEDs (%1$d) &lt; layout total (%2$d)</string>
+  <string name="wled_setup_layout_entry">Layout &amp; LED count</string>
+  <string name="wled_setup_layout_entry_desc">Top/Bottom/Left/Right, gap, input, reverse, physical LEDs</string>
+  <string name="wled_setup_invalid_led_count">Invalid physical LED count</string>
+  <string name="wled_setup_invalid_rgbw">Please confirm RGB or RGBW</string>
 </resources>

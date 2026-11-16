@@ -9,6 +9,7 @@ import androidx.leanback.widget.GuidanceStylist;
 import com.abrenoch.wledgrabber.common.R;
 import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
+import com.abrenoch.wledgrabber.common.util.ConfigFieldLabels;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
 import com.abrenoch.wledgrabber.common.util.Preferences;
@@ -69,8 +70,8 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
 
     @Override
     public GuidanceStylist.Guidance onCreateGuidance(@Nullable Bundle savedInstanceState) {
-        return new GuidanceStylist.Guidance("WLED layout",
-                "Changes apply on next start. Stop sends black and verifies WLED off when reachable.",
+        return new GuidanceStylist.Guidance(getString(R.string.wled_layout_title),
+                getString(R.string.wled_layout_guidance),
                 null, null);
     }
 
@@ -82,34 +83,39 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
         }
         actions.add(new GuidedAction.Builder(requireContext())
                 .id(REVERSE)
-                .title("Reverse physical order")
+                .title(getString(R.string.wled_layout_reverse))
                 .checkSetId(GuidedAction.CHECKBOX_CHECK_SET_ID)
                 .checked(Boolean.parseBoolean(controller.draft().get(ConfigFields.LED_REVERSE)))
                 .build());
-        String[] gapModes = {"skip", "black"};
-        actions.add(radioListAction(GAP_MODE, "Gap mode", null, (int) SET_GAP_MODE,
-                gapModes, gapModes, controller.draft().get(ConfigFields.LED_GAP_MODE)));
-        String[] whiteModes = {"min_subtract", "preserve"};
-        actions.add(radioListAction(WHITE_MODE, "RGBW white mode", null, (int) SET_WHITE_MODE,
-                whiteModes, whiteModes,
+        String[] gapValues = {"skip", "black"};
+        String[] gapLabels = {getString(R.string.wled_layout_gap_skip),
+                getString(R.string.wled_layout_gap_black)};
+        actions.add(radioListAction(GAP_MODE, getString(R.string.wled_layout_gap_mode), null,
+                (int) SET_GAP_MODE, gapLabels, gapValues,
+                controller.draft().get(ConfigFields.LED_GAP_MODE)));
+        String[] whiteValues = {"min_subtract", "preserve"};
+        String[] whiteLabels = {getString(R.string.wled_layout_white_min_subtract),
+                getString(R.string.wled_layout_white_preserve)};
+        actions.add(radioListAction(WHITE_MODE, getString(R.string.wled_layout_white_mode), null,
+                (int) SET_WHITE_MODE, whiteLabels, whiteValues,
                 controller.draft().get(ConfigFields.WLED_RGBW_WHITE_MODE)));
         actions.add(new GuidedAction.Builder(requireContext())
                 .id(AVG_COLOR)
-                .title("Average screen color")
+                .title(getString(R.string.wled_layout_avg_color))
                 .checkSetId(GuidedAction.CHECKBOX_CHECK_SET_ID)
                 .checked(Boolean.parseBoolean(controller.draft().get(ConfigFields.USE_AVG_COLOR)))
                 .build());
         actions.add(new GuidedAction.Builder(requireContext())
                 .id(PRESET_274)
-                .title("Load 274 first-unit preset")
+                .title(getString(R.string.wled_layout_preset_274))
                 .build());
         actions.add(new GuidedAction.Builder(requireContext())
                 .id(PREVIEW)
-                .title("Preview layout")
+                .title(getString(R.string.wled_layout_preview))
                 .build());
         actions.add(new GuidedAction.Builder(requireContext())
                 .id(TEST_PATTERN)
-                .title("Run 10-second test patterns")
+                .title(getString(R.string.wled_layout_test_pattern))
                 .build());
     }
 
@@ -163,7 +169,7 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
         controller.set(ConfigFields.LED_REVERSE, "true");
         controller.set(ConfigFields.LED_GAP_MODE, "skip");
         controller.set(ConfigFields.WLED_RGBW_WHITE_MODE, "min_subtract");
-        showToast("274 preset loaded. Review and save.");
+        showToast(getString(R.string.wled_layout_preset_loaded));
     }
 
     private void setField(String field, int value) {
@@ -192,7 +198,7 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
             if (physical < layoutTotal) {
                 // LedMapping rejects physical < effective, which would only surface
                 // as a silent start failure later; block it here instead.
-                showToast("Physical LEDs (" + physical + ") < layout total (" + layoutTotal + ")");
+                showToast(getString(R.string.wled_layout_physical_too_small, physical, layoutTotal));
                 return;
             }
             controller.set(ConfigFields.LED_REVERSE,
@@ -220,11 +226,7 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
         }
     }
 
-    private static String title(String field) {
-        if (ConfigFields.WLED_PHYSICAL_LEDS.equals(field)) {
-            return "Physical LED count";
-        }
-        String label = field.replace("pref_key_", "").replace('_', ' ');
-        return Character.toUpperCase(label.charAt(0)) + label.substring(1);
+    private String title(String field) {
+        return ConfigFieldLabels.label(requireContext(), field);
     }
 }
