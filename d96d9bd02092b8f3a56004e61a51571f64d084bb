@@ -1,0 +1,54 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/LayoutProbeSender.java
+  51396205a9b60a22 30-34
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/LayoutProbeSenderTest.java
+  51396205a9b60a22 1-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "d96d9bd02092b8f3a56004e61a51571f64d084bb",
+  "prompts": {
+    "51396205a9b60a22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ff5acb-12c7-4dbe-bae9-040be916a7c2",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 40,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/422e9b4b4e5c490f14001b52aedc63cb42cf3ded792865aaa51a6f1c073061ed",
+      "token_usage": {
+        "input_tokens": 1086532,
+        "output_tokens": 1025521,
+        "cache_read_tokens": 286419712,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "a5a4a2ccb1214986": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2943c44b-a2ea-4f70-bdf9-ead41d45dd47",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 4,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/9acd3eb20c6eeb7a8380e39bbe1cbf2488de6def365eab9b916c50b95a637ca2",
+      "token_usage": {
+        "input_tokens": 220507,
+        "output_tokens": 34148,
+        "cache_read_tokens": 2679168,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
