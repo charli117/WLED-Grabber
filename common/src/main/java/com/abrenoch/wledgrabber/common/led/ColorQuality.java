@@ -10,6 +10,8 @@ package com.abrenoch.wledgrabber.common.led;
  */
 public final class ColorQuality {
     public static final int LINEAR_MAX = 4095;
+    private static final int HDR_CONTRAST_PERCENT = 110;
+    private static final int HDR_SATURATION_PERCENT = 130;
     private static final int[] TO_LINEAR = new int[256];
     private static final int[] TO_SRGB = new int[LINEAR_MAX + 1];
 
@@ -42,6 +44,20 @@ public final class ColorQuality {
         int luma = (rgb[0] * 77 + rgb[1] * 150 + rgb[2] * 29) >> 8;
         for (int i = 0; i < 3; i++) {
             long value = luma + (long) (rgb[i] - luma) * percent / 100;
+            rgb[i] = (int) Math.max(0, Math.min(255, value));
+        }
+    }
+
+    /**
+     * Compensates the SDR tone-map of HDR/Dolby Vision capture: the virtual
+     * display receives a compressed SDR image, so restore a little contrast and
+     * chroma before the colour is sent to the strip. Neutral grey stays neutral.
+     */
+    public static void applyHdrCompensation(int[] rgb) {
+        int luma = (rgb[0] * 77 + rgb[1] * 150 + rgb[2] * 29) >> 8;
+        for (int i = 0; i < 3; i++) {
+            int contrast = 128 + (rgb[i] - 128) * HDR_CONTRAST_PERCENT / 100;
+            long value = luma + (long) (contrast - luma) * HDR_SATURATION_PERCENT / 100;
             rgb[i] = (int) Math.max(0, Math.min(255, value));
         }
     }

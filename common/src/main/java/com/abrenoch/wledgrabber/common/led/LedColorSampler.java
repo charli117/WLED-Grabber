@@ -88,6 +88,9 @@ public final class LedColorSampler {
         int saturation = settings.saturationPercent();
         if (averageColor) {
             integral.meanFull(channel);
+            if (settings.hdrCompensation()) {
+                ColorQuality.applyHdrCompensation(channel);
+            }
             ColorQuality.applySaturation(channel, saturation);
             for (int physical = 0; physical < physicalCount; physical++) {
                 int offset = physical * channels;
@@ -107,6 +110,9 @@ public final class LedColorSampler {
         }
         for (int i = 0; i < count; i++) {
             integral.mean(i, channel);
+            if (settings.hdrCompensation()) {
+                ColorQuality.applyHdrCompensation(channel);
+            }
             ColorQuality.applySaturation(channel, saturation);
             logicalColors[i] = (channel[0] << 16) | (channel[1] << 8) | channel[2];
         }

@@ -72,4 +72,51 @@ public class ColorQualityTest {
         assertFalse(new QualitySettings(false, false, 120, 0).isOff());
         assertFalse(new QualitySettings(false, false, 100, 20).isOff());
     }
+
+    @Test
+    public void hdrCompensationRaisesChromaAndKeepsNeutralGrayNeutral() {
+        int[] gray = {100, 100, 100};
+        ColorQuality.applyHdrCompensation(gray);
+        assertEquals(gray[0], gray[1]);
+        assertEquals(gray[1], gray[2]);
+
+        int[] rgb = {200, 40, 90};
+        int before = Math.max(rgb[0], Math.max(rgb[1], rgb[2]))
+                - Math.min(rgb[0], Math.min(rgb[1], rgb[2]));
+        ColorQuality.applyHdrCompensation(rgb);
+        int after = Math.max(rgb[0], Math.max(rgb[1], rgb[2]))
+                - Math.min(rgb[0], Math.min(rgb[1], rgb[2]));
+        assertTrue("chroma must rise: " + before + " -> " + after, after > before);
+        for (int channel : rgb) {
+            assertTrue(channel >= 0 && channel <= 255);
+        }
+    }
+
+    @Test
+    public void hdrCompensationClampsExtremesAndIsANoOpForPureWhite() {
+        int[] white = {255, 255, 255};
+        ColorQuality.applyHdrCompensation(white);
+        assertArrayEquals(new int[]{255, 255, 255}, white);
+
+        int[] black = {0, 0, 0};
+        ColorQuality.applyHdrCompensation(black);
+        assertArrayEquals(new int[]{0, 0, 0}, black);
+
+        int[] saturated = {255, 0, 0};
+        ColorQuality.applyHdrCompensation(saturated);
+        for (int channel : saturated) {
+            assertTrue(channel >= 0 && channel <= 255);
+        }
+    }
+
+    @Test
+    public void hdrCompensationIsAnExplicitQualityFlag() {
+        QualitySettings neutral = new QualitySettings(false, false, 100, 0);
+        assertTrue(neutral.isOff());
+        QualitySettings hdr = neutral.withHdrCompensation(true);
+        assertTrue(hdr.hdrCompensation());
+        assertFalse(hdr.isOff());
+        assertFalse("original settings stay immutable", neutral.hdrCompensation());
+        assertFalse(hdr.withHdrCompensation(false).hdrCompensation());
+    }
 }

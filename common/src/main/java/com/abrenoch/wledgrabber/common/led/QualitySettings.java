@@ -11,13 +11,21 @@ public final class QualitySettings {
     private final boolean linearAverage;
     private final int saturationPercent;
     private final int temporalSmoothingPercent;
+    private final boolean hdrCompensation;
 
     public QualitySettings(boolean cropBlackBars, boolean linearAverage,
                            int saturationPercent, int temporalSmoothingPercent) {
+        this(cropBlackBars, linearAverage, saturationPercent, temporalSmoothingPercent, false);
+    }
+
+    public QualitySettings(boolean cropBlackBars, boolean linearAverage,
+                           int saturationPercent, int temporalSmoothingPercent,
+                           boolean hdrCompensation) {
         this.cropBlackBars = cropBlackBars;
         this.linearAverage = linearAverage;
         this.saturationPercent = clamp(saturationPercent, 0, 200);
         this.temporalSmoothingPercent = clamp(temporalSmoothingPercent, 0, 100);
+        this.hdrCompensation = hdrCompensation;
     }
 
     public boolean cropBlackBars() {
@@ -36,11 +44,23 @@ public final class QualitySettings {
         return temporalSmoothingPercent;
     }
 
+    /** True when the active display is HDR/Dolby Vision and capture is SDR. */
+    public boolean hdrCompensation() {
+        return hdrCompensation;
+    }
+
+    /** Returns a copy with HDR compensation toggled; the receiver stays immutable. */
+    public QualitySettings withHdrCompensation(boolean enabled) {
+        return new QualitySettings(cropBlackBars, linearAverage, saturationPercent,
+                temporalSmoothingPercent, enabled);
+    }
+
     /** True when no enhancement can change the first-version output. */
     public boolean isOff() {
         return !cropBlackBars && !linearAverage
                 && saturationPercent == NEUTRAL_SATURATION
-                && temporalSmoothingPercent == NO_SMOOTHING;
+                && temporalSmoothingPercent == NO_SMOOTHING
+                && !hdrCompensation;
     }
 
     private static int clamp(int value, int min, int max) {

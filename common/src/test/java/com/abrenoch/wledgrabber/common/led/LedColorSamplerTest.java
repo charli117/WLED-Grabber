@@ -87,6 +87,48 @@ public class LedColorSamplerTest {
     }
 
     @Test
+    public void hdrCompensationRaisesSampledChroma() {
+        int width = 2;
+        int height = 2;
+        int rowStride = width * 4;
+        byte[] bytes = new byte[rowStride * height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int offset = y * rowStride + x * 4;
+                bytes[offset] = (byte) 200;
+                bytes[offset + 1] = (byte) 40;
+                bytes[offset + 2] = (byte) 90;
+                bytes[offset + 3] = (byte) 255;
+            }
+        }
+        ValidationResult<PlaneView> view = PlaneView.create(
+                ByteBuffer.wrap(bytes), width, height, rowStride, 4, 0, 0, width, height);
+        assertTrue(view.errors().toString(), view.isValid());
+        // samplePhysical only maps physical LEDs through a compiled mapping.
+        CompiledLayout layout = physicalFrame(width, height);
+
+        byte[] plain = new byte[3];
+        byte[] compensated = new byte[3];
+        assertTrue(sampler.samplePhysical(view.value(), layout, false, RgbwMode.RGB,
+                null, plain, QualitySettings.OFF));
+        assertTrue(new LedColorSampler().samplePhysical(view.value(), layout, false,
+                RgbwMode.RGB, null, compensated,
+                new QualitySettings(false, false, 100, 0, true)));
+
+        int plainChroma = chroma(plain);
+        int hdrChroma = chroma(compensated);
+        assertTrue("HDR compensation must raise chroma: "
+                + plainChroma + " -> " + hdrChroma, hdrChroma > plainChroma);
+    }
+
+    private static int chroma(byte[] rgb) {
+        int r = rgb[0] & 0xff;
+        int g = rgb[1] & 0xff;
+        int b = rgb[2] & 0xff;
+        return Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b));
+    }
+
+    @Test
     public void randomFramesMatchNaiveOracle() {
         Random random = new Random(42);
         for (int iteration = 0; iteration < 1000; iteration++) {

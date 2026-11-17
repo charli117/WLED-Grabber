@@ -126,8 +126,11 @@ public class WledScreenService extends Service {
     private int channels;
     private int frameRate;
     private boolean averageColor;
-    private com.abrenoch.wledgrabber.common.led.QualitySettings quality =
+    private volatile com.abrenoch.wledgrabber.common.led.QualitySettings quality =
             com.abrenoch.wledgrabber.common.led.QualitySettings.OFF;
+    private com.abrenoch.wledgrabber.common.led.QualitySettings baseQuality =
+            com.abrenoch.wledgrabber.common.led.QualitySettings.OFF;
+    private volatile boolean hdrCompensation;
     private boolean running;
     private boolean stopping;
     private volatile boolean releaseKnown;
@@ -315,6 +318,11 @@ public class WledScreenService extends Service {
                     if (displayId != Display.DEFAULT_DISPLAY) {
                         return;
                     }
+                    Display display = displayManager == null ? null
+                            : displayManager.getDisplay(Display.DEFAULT_DISPLAY);
+                    if (display != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        refreshHdrCompensation(display);
+                    }
                     DisplayMetrics current = new DisplayMetrics();
                     WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
                     if (wm == null) {
@@ -330,7 +338,9 @@ public class WledScreenService extends Service {
             channels = rgbwMode == RgbwMode.RGBW ? 4 : 3;
             frameRate = Math.max(1, capture.frameRate());
             averageColor = capture.useAverageColor();
-            quality = capture.quality();
+            baseQuality = capture.quality();
+            hdrCompensation = false;
+            quality = baseQuality;
             sampler.resetQualityState();
             scratch = new byte[physicalCount * channels];
             lastFrame = new byte[physicalCount * channels];
@@ -422,6 +432,12 @@ public class WledScreenService extends Service {
             streamer.start(epoch, OutputOwner.CAPTURE, physicalCount, channels);
             running = true;
             stopping = false;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && displayManager != null) {
+                Display defaultDisplay = displayManager.getDisplay(Display.DEFAULT_DISPLAY);
+                if (defaultDisplay != null) {
+                    refreshHdrCompensation(defaultDisplay);
+                }
+            }
             startHealthLoop();
             if (captureHandler != null) {
                 captureHandler.postDelayed(keepAlive, KEEP_ALIVE_MS);
@@ -435,6 +451,34 @@ public class WledScreenService extends Service {
      * observation older than 10 s is reported as stale; a changed device identity
      * stops capture instead of silently sending to a different controller.
      */
+    /**
+     * HDR/Dolby Vision content is tone-mapped into the SDR virtual display, which
+     * flattens contrast and chroma. Detect the active HDR mode and add a modest
+     * compensation while it lasts; SDR output stays byte-identical.
+     */
+    private void refreshHdrCompensation(Display display) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || display == null) {
+            hdrCompensation = false;
+            quality = baseQuality;
+            return;
+        }
+        boolean hdr = display.isHdr();
+        boolean dolbyVision = false;
+        for (int type : display.getHdrCapabilities().getSupportedHdrTypes()) {
+            if (type == Display.HdrCapabilities.HDR_TYPE_DOLBY_VISION) {
+                dolbyVision = true;
+                break;
+            }
+        }
+        boolean changed = hdr != hdrCompensation;
+        hdrCompensation = hdr;
+        quality = baseQuality.withHdrCompensation(hdr);
+        if (changed) {
+            Log.i(TAG, "hdr active=" + hdr + " dolbyVisionSupported=" + dolbyVision
+                    + " compensation=" + hdr);
+        }
+    }
+
     private void startHealthLoop() {
         WledSession.Observation first = session == null ? null : session.currentObservation();
         lastObservedAt = first == null ? System.currentTimeMillis() : first.observedAtMillis();
