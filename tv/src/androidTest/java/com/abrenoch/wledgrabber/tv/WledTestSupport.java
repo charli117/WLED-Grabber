@@ -104,6 +104,7 @@ final class WledTestSupport {
         ConfigRepository repository = new ConfigRepository(
                 new PreferencesConfigStorage(new Preferences(context)), new ConfigValidator());
         ValidationResult<ConfigSnapshot> result = repository.save(validDraft());
+        markStartupCompleted(context);
         if (!result.isValid()) {
             throw new AssertionError("seeded config is invalid: "
                     + result.errors().get(0).field() + ":"
@@ -115,6 +116,14 @@ final class WledTestSupport {
     static void clearConfig(Context context) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit().clear().commit();
+        context.getSharedPreferences("startup_setup", Context.MODE_PRIVATE)
+                .edit().clear().commit();
+    }
+
+    /** First-run onboarding must not cover the screen under test. */
+    static void markStartupCompleted(Context context) {
+        context.getSharedPreferences("startup_setup", Context.MODE_PRIVATE)
+                .edit().putBoolean("completed_v1", true).commit();
     }
 
     static void turnOffBestEffort() {

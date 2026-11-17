@@ -30,7 +30,20 @@ public final class StartupAccess {
         setup = context.getSharedPreferences("startup_setup", Context.MODE_PRIVATE);
     }
 
-    public boolean bootEnabled() { return preferences.getBoolean(R.string.pref_key_boot); }
+    /**
+     * Reads the same typed snapshot the config system writes. The legacy
+     * {@code Preferences.getBoolean(pref_key_boot)} path would throw
+     * ClassCastException because the key is stored as a String.
+     */
+    public boolean bootEnabled() {
+        ConfigRepository repository = repository();
+        if (!repository.load().isValid()) {
+            return false;
+        }
+        com.abrenoch.wledgrabber.common.led.ConfigSnapshot snapshot =
+                repository.committedSnapshot();
+        return snapshot != null && snapshot.capture().bootReminder();
+    }
     public boolean hasCompletedSetup() { return setup.getBoolean("completed_v1", false); }
 
     public boolean saveBootEnabled(boolean enabled) {

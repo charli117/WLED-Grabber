@@ -43,6 +43,8 @@ public class MobileEntryTest {
         SettingsDraftController controller = new SettingsDraftController(
                 new ConfigRepository(new PreferencesConfigStorage(new Preferences(context)),
                         new ConfigValidator()));
+        context.getSharedPreferences("startup_setup",
+                Context.MODE_PRIVATE).edit().putBoolean("completed_v1", true).commit();
         controller.load();
         controller.set(ConfigFields.WLED_HOST, "192.0.2.10");
         controller.set(ConfigFields.WLED_HTTP_PORT, "80");
