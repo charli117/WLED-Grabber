@@ -84,3 +84,6 @@ common/.../util/Preferences.kt、ConfigRepository/ConfigValidator、led配置模
 
 **2026-11-17 交付复核（状态下调为开发中）**：重新以生产调用方核对，`DeviceReadiness`、`StartConfirmation`、`ReadyDevice` 均无服务/UI 调用；`WledScreenService`、`BootActivity`、`WledTileService`、`TestPatternActivity` 只做 `ConfigValidator.validateForStart` 本地字段校验，开始前不探测设备、不比较观察 count/通道/MAC。因此“缺失/冲突能力均可见、能力不足或count不足不进入READY”仅在类级单测成立，不是运行行为。本轮另将四处重复的 host/count/rgbw 判断统一为 `validateForStart`，但不替代 START 前探测。该卡保持**开发中**，需接入观测+确认项后才可重新验收。
 
+**2026-11-17 接线完成（恢复已验收）**：新增 `StartConfirmationStore`（按设备持久化寻址确认项）与共享 `StartCaptureActivity`。用户在页内逐项确认 WLED offset/main-segment/DMX/finite timeout/max-brightness/other-senders/sync（RGBW 另有 Manual）后，应用即时探测设备，经 `DeviceReadiness` 生成 READY 才请求录屏授权，并把观察（device id/host/version/count/udp/channel/observedAt）随启动意图传入服务。服务在 `startCapture` 取得任何采集资源前重新加载确认并复验；缺失或不匹配的观察直接拒绝。回归：`StartCaptureActivityTest`（3项，API21/26/33/34）、`StartConfirmationStoreTest`（4项）、`TvServiceReadinessContractTest`（2项，API33/34），以及既有 `DeviceConfigTest` 11项。真实设备冲突/身份变化的现场证据仍归 QA-2。
+
+**残余边界（2026-11-17）**：TEST 图案宿主仍是“已保存配置 + 手动启动”的接线校验工具，未复用启动页的 READY 探测；采集启动（服务）已强制 READY。若要求 TEST 也强制探测，需要为无设备夹具增加可控端点或显式测试入口，当前不阻塞 CFG-2 的捕获启动验收。

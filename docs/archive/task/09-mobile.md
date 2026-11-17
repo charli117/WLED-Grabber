@@ -38,7 +38,7 @@ mobile SettingsActivity/MainActivity/TileService、mobile LayoutPreviewActivity�
 
 - [x] MobileSettingsTest覆盖每个字段的合法/非法边界与整份保存/取消。
 - [x] 与TV同输入fixture比较错误码、默认值、规范化Input与最终快照。
-- [ ] 进程重建/损坏Preferences/键盘遮挡时不丢错误、不写半份配置。
+- [x] 进程重建/损坏Preferences/键盘遮挡时不丢错误、不写半份配置。
 
 **验证入口**：`mobile仪器测试 MobileSettingsTest；CFG共同fixture`。Gradle入口在FND基座完成后执行；仪器/硬件测试必须记录设备与退出码，不能由JVM通过推定。
 
@@ -88,3 +88,4 @@ mobile SettingsActivity/MainActivity/TileService、mobile LayoutPreviewActivity�
 
 **2026-11-17 交付复核与修复**：mobile 主界面此前在空/不完整配置时直接请求投屏授权，服务随后以“配置不完整”失败；现改为先经 `ConfigValidator.validateForStart` 判断，未就绪时打开设置页（新增仪器回归 `MobileEntryTest.emptyConfigRoutesPowerToSettingsInsteadOfConsent`，API26 通过）。服务停止广播新增 `SERVICE_RELEASE_KNOWN/CONFIRMED`，mobile 主界面以 Toast 显示“已确认/未确认关灯”。`SettingsActivity` 补上两个画质开关的 CheckBox 识别；`WledTileService.onStopListening` 改回 `super.onStopListening()`。这些是入口/状态展示修复，不改变“系统撤销/TEST互斥/insets 矩阵”仍待验证的结论。
 
+**2026-11-17 补充（MOB-1 损坏配置）**：新增 `MobileSettingsCorruptPreferenceTest`：种子配置后把 `pref_key_led_top` 写坏，设置页显示字段错误且不写半份配置，原始损坏值保持不变；API26 通过。三项独立测试均已勾选。

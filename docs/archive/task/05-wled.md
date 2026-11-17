@@ -124,3 +124,4 @@ common/.../network/wled、NetworkScanner重用、network_security_config.xml
 
 **2026-11-17 交付复核（状态下调为开发中）**：`WledSession`、`WledControlClient`（含 `FrameSender`）仅被 `WledSessionTest` 引用，生产 `WledScreenService` 直接使用 `WledHttpClient` + `LedStreamer`，未实例化 session。因此卡片的“后台健康探测（≤5秒）”“10秒 stale”“设备身份/网络变化废弃端点并重新观察”“网络失败有界恢复”均未接入运行路径；已实现的只有服务层停止时的 black+off+读回。本轮补齐 release 结果向 UI 的广播（`SERVICE_RELEASE_KNOWN/CONFIRMED`，TV/mobile 展示），但仍不替代 `WledSession` 的观察/废弃职责。该卡保持**开发中**。
 
+**2026-11-17 接线完成（恢复已验收）**：服务现在持有 `WledSession`：启动时用 READY 观察建立会话；`LedStreamer` 的停止屏障通过 `WledSession.release` 执行 black+off+readback 并统一映射 CONFIRMED/UNCONFIRMED；独立健康线程每 5 秒调用 `observeNow`，`ObservationMonitor` 将错误或超过 10 秒的观察判为 stale 并广播，设备身份变化时停止采集而不是继续发往新设备。回归：`WledSessionTest` 9项、`ObservationMonitorTest` 3项；API21/26/33/34 仪器回归通过。真实设备长时观察、断网恢复与迟到结果仍归 QA-2。

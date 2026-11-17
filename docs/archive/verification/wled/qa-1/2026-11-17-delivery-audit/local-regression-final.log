@@ -71,6 +71,7 @@
 > Task :tv:compileDebugKotlin UP-TO-DATE
 > Task :tv:javaPreCompileDebug UP-TO-DATE
 > Task :tv:compileDebugJavaWithJavac UP-TO-DATE
+> Task :tv:bundleDebugClassesToRuntimeJar UP-TO-DATE
 > Task :tv:bundleDebugClassesToCompileJar UP-TO-DATE
 > Task :tv:compileDebugUnitTestKotlin NO-SOURCE
 > Task :tv:preDebugUnitTestBuild UP-TO-DATE
@@ -78,6 +79,7 @@
 > Task :tv:compileDebugUnitTestJavaWithJavac NO-SOURCE
 > Task :tv:processDebugJavaRes UP-TO-DATE
 > Task :tv:processDebugUnitTestJavaRes NO-SOURCE
+> Task :tv:testDebugUnitTest NO-SOURCE
 > Task :common:mergeDebugJniLibFolders UP-TO-DATE
 > Task :common:mergeDebugNativeLibs NO-SOURCE
 > Task :common:stripDebugDebugSymbols NO-SOURCE
@@ -98,14 +100,12 @@
 > Task :common:createFullJarDebug UP-TO-DATE
 > Task :common:preDebugAndroidTestBuild UP-TO-DATE
 > Task :common:generateDebugAndroidTestResValues UP-TO-DATE
-> Task :tv:bundleDebugClassesToRuntimeJar
 > Task :common:writeDebugLintModelMetadata UP-TO-DATE
-> Task :tv:testDebugUnitTest NO-SOURCE
-> Task :common:generateDebugAndroidTestLintModel UP-TO-DATE
 > Task :common:extractProguardFiles UP-TO-DATE
 > Task :common:generateDebugLintReportModel UP-TO-DATE
-> Task :common:generateDebugUnitTestLintModel UP-TO-DATE
 > Task :common:lintAnalyzeDebug UP-TO-DATE
+> Task :common:generateDebugAndroidTestLintModel UP-TO-DATE
+> Task :common:generateDebugUnitTestLintModel UP-TO-DATE
 > Task :common:lintAnalyzeDebugAndroidTest UP-TO-DATE
 > Task :common:lintAnalyzeDebugUnitTest UP-TO-DATE
 > Task :common:lintReportDebug UP-TO-DATE
@@ -124,10 +124,15 @@
 > Task :mobile:lintDebug
 > Task :tv:preDebugAndroidTestBuild SKIPPED
 > Task :tv:generateDebugAndroidTestResValues UP-TO-DATE
-> Task :tv:generateDebugAndroidTestLintModel
+> Task :tv:generateDebugAndroidTestLintModel UP-TO-DATE
 > Task :tv:extractProguardFiles UP-TO-DATE
-> Task :tv:generateDebugLintReportModel
-> Task :tv:generateDebugUnitTestLintModel
+> Task :tv:generateDebugLintReportModel UP-TO-DATE
+> Task :tv:generateDebugUnitTestLintModel UP-TO-DATE
+> Task :tv:lintAnalyzeDebug UP-TO-DATE
+> Task :tv:lintAnalyzeDebugAndroidTest UP-TO-DATE
+> Task :tv:lintAnalyzeDebugUnitTest UP-TO-DATE
+> Task :tv:lintReportDebug UP-TO-DATE
+> Task :tv:lintDebug
 > Task :mobile:mergeDebugNativeDebugMetadata NO-SOURCE
 > Task :mobile:mergeDebugShaders UP-TO-DATE
 > Task :mobile:compileDebugShaders NO-SOURCE
@@ -215,14 +220,14 @@
 > Task :mobile:mapDebugAndroidTestSourceSetPaths UP-TO-DATE
 > Task :mobile:processDebugAndroidTestManifest UP-TO-DATE
 > Task :mobile:processDebugAndroidTestResources UP-TO-DATE
-> Task :mobile:compileDebugAndroidTestJavaWithJavac UP-TO-DATE
+> Task :mobile:compileDebugAndroidTestJavaWithJavac
 > Task :mobile:mergeDebugAndroidTestShaders UP-TO-DATE
 > Task :mobile:compileDebugAndroidTestShaders NO-SOURCE
 > Task :mobile:generateDebugAndroidTestAssets UP-TO-DATE
 > Task :mobile:mergeDebugAndroidTestAssets UP-TO-DATE
 > Task :mobile:compressDebugAndroidTestAssets UP-TO-DATE
 > Task :mobile:desugarDebugAndroidTestFileDependencies UP-TO-DATE
-> Task :mobile:dexBuilderDebugAndroidTest UP-TO-DATE
+> Task :mobile:dexBuilderDebugAndroidTest
 > Task :mobile:mergeDebugAndroidTestGlobalSynthetics UP-TO-DATE
 > Task :mobile:processDebugAndroidTestJavaRes NO-SOURCE
 > Task :mobile:mergeDebugAndroidTestJavaResource UP-TO-DATE
@@ -282,6 +287,7 @@
 > Task :common:compileReleaseJavaWithJavac UP-TO-DATE
 > Task :common:processReleaseManifest UP-TO-DATE
 > Task :common:generateReleaseLintVitalModel UP-TO-DATE
+> Task :common:lintVitalAnalyzeRelease UP-TO-DATE
 > Task :common:bundleLibRuntimeToJarRelease UP-TO-DATE
 > Task :common:processReleaseJavaRes UP-TO-DATE
 > Task :common:createFullJarRelease UP-TO-DATE
@@ -334,17 +340,15 @@
 > Task :mobile:mergeReleaseNativeDebugMetadata NO-SOURCE
 > Task :mobile:checkReleaseDuplicateClasses UP-TO-DATE
 > Task :mobile:dexBuilderRelease UP-TO-DATE
+> Task :mobile:lintVitalAnalyzeRelease UP-TO-DATE
+> Task :mobile:lintVitalReportRelease UP-TO-DATE
+> Task :mobile:lintVitalRelease
 > Task :mobile:desugarReleaseFileDependencies UP-TO-DATE
 > Task :mobile:mergeReleaseStartupProfile UP-TO-DATE
 > Task :mobile:mergeExtDexRelease UP-TO-DATE
 > Task :mobile:mergeDexRelease UP-TO-DATE
 > Task :mobile:mergeReleaseArtProfile UP-TO-DATE
-> Task :tv:lintAnalyzeDebugUnitTest
 > Task :mobile:mergeReleaseGlobalSynthetics UP-TO-DATE
-> Task :common:lintVitalAnalyzeRelease UP-TO-DATE
-> Task :mobile:lintVitalAnalyzeRelease UP-TO-DATE
-> Task :mobile:lintVitalReportRelease UP-TO-DATE
-> Task :mobile:lintVitalRelease
 > Task :mobile:compileReleaseArtProfile UP-TO-DATE
 > Task :mobile:mergeReleaseShaders UP-TO-DATE
 > Task :mobile:compileReleaseShaders NO-SOURCE
@@ -379,60 +383,45 @@
 > Task :tv:processReleaseManifest UP-TO-DATE
 > Task :tv:processReleaseManifestForPackage UP-TO-DATE
 > Task :tv:processReleaseResources UP-TO-DATE
+> Task :tv:compileReleaseKotlin UP-TO-DATE
 > Task :tv:javaPreCompileRelease UP-TO-DATE
+> Task :tv:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :tv:generateReleaseLintVitalReportModel UP-TO-DATE
+> Task :tv:lintVitalAnalyzeRelease UP-TO-DATE
+> Task :tv:lintVitalReportRelease UP-TO-DATE
+> Task :tv:lintVitalRelease
 > Task :tv:mergeReleaseJniLibFolders UP-TO-DATE
 > Task :tv:mergeReleaseNativeLibs NO-SOURCE
 > Task :tv:stripReleaseDebugSymbols NO-SOURCE
 > Task :tv:extractReleaseNativeSymbolTables NO-SOURCE
 > Task :tv:mergeReleaseNativeDebugMetadata NO-SOURCE
 > Task :tv:checkReleaseDuplicateClasses UP-TO-DATE
+> Task :tv:dexBuilderRelease UP-TO-DATE
 > Task :tv:desugarReleaseFileDependencies UP-TO-DATE
 > Task :tv:mergeReleaseStartupProfile UP-TO-DATE
 > Task :tv:mergeExtDexRelease UP-TO-DATE
+> Task :tv:mergeDexRelease UP-TO-DATE
 > Task :tv:mergeReleaseArtProfile UP-TO-DATE
+> Task :tv:mergeReleaseGlobalSynthetics UP-TO-DATE
+> Task :tv:compileReleaseArtProfile UP-TO-DATE
 > Task :tv:mergeReleaseShaders UP-TO-DATE
 > Task :tv:compileReleaseShaders NO-SOURCE
 > Task :tv:generateReleaseAssets UP-TO-DATE
 > Task :tv:mergeReleaseAssets UP-TO-DATE
 > Task :tv:compressReleaseAssets UP-TO-DATE
 > Task :tv:extractReleaseVersionControlInfo UP-TO-DATE
+> Task :tv:processReleaseJavaRes UP-TO-DATE
+> Task :tv:mergeReleaseJavaResource UP-TO-DATE
 > Task :tv:optimizeReleaseResources UP-TO-DATE
 > Task :tv:collectReleaseDependencies UP-TO-DATE
 > Task :tv:sdkReleaseDependencyData UP-TO-DATE
 > Task :tv:writeReleaseAppMetadata UP-TO-DATE
 > Task :tv:writeReleaseSigningConfigVersions UP-TO-DATE
-
-> Task :tv:compileReleaseKotlin
-e: No class roots are found in the JDK path: /Users/luowei/Documents/Pycharm/hyperion-android-grabber/.toolchains/jdk-17.0.21+9/Contents/Home
-
-> Task :tv:compileReleaseJavaWithJavac
-Note: Some input files use or override a deprecated API.
-Note: Recompile with -Xlint:deprecation for details.
-Note: /Users/luowei/Documents/Pycharm/WLED-Grabber/tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/MainActivity.java uses unchecked or unsafe operations.
-Note: Recompile with -Xlint:unchecked for details.
-
-> Task :tv:generateReleaseLintVitalReportModel
-> Task :tv:lintAnalyzeDebugAndroidTest
-> Task :tv:dexBuilderRelease
-> Task :tv:mergeReleaseGlobalSynthetics UP-TO-DATE
-> Task :tv:processReleaseJavaRes UP-TO-DATE
-> Task :tv:mergeReleaseJavaResource UP-TO-DATE
-> Task :tv:lintVitalAnalyzeRelease
-> Task :tv:lintVitalReportRelease UP-TO-DATE
-> Task :tv:lintVitalRelease
-> Task :tv:mergeDexRelease
-> Task :tv:compileReleaseArtProfile
-> Task :tv:lintAnalyzeDebug
-
-> Task :tv:lintReportDebug
-Wrote HTML report to file:///Users/luowei/Documents/Pycharm/WLED-Grabber/tv/build/reports/lint-results-debug.html
-
-> Task :tv:lintDebug
-> Task :tv:packageRelease
+> Task :tv:packageRelease UP-TO-DATE
 > Task :tv:createReleaseApkListingFileRedirect UP-TO-DATE
 > Task :tv:assembleRelease
 
-BUILD SUCCESSFUL in 4s
-343 actionable tasks: 21 executed, 322 up-to-date
+BUILD SUCCESSFUL in 2s
+343 actionable tasks: 7 executed, 336 up-to-date
 files 30 links 321 errors 0
 QA-1 local regression passed

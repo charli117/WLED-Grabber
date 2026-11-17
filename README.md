@@ -46,7 +46,7 @@ WLED Grabber is an Android screen grabber that sends the colors of the screen di
 
 Software-side evidence covers the layout, sampling, protocol, lifecycle, and the target TV's capture and release paths. Release admission is still blocked by missing physical FPS/end-to-end measurements, RGBW hardware, larger LED configurations, and the remaining device/API matrix. A successful build does not imply signing, installation, or release.
 
-**Open software gaps (2026-11-17 audit)**: start-time READY gating (live probe plus observed count/channel/identity and the explicit WLED addressing confirmations), periodic device observation/stale/identity invalidation, and capture resize/rotation handling are modelled and unit-tested but are **not yet wired into the running service**. Capture currently starts after local configuration validation only. These gaps are tracked as CFG-2, NET-3, CAP-2, and TV-1 in the task audit and are not counted as delivered.
+**Software wiring status (2026-11-17)**: the start-time READY gate (explicit WLED addressing confirmations, a fresh probe and observed count/channel/identity), periodic observation with stale/identity invalidation, and resize/rotation handling are now wired into the running service. The capture service re-validates the observation before acquiring any capture resource. The remaining unverified path is resize/rotation against a live projection (API 34 captured-content resize and repeated rotation/lock cycles); it is implemented and planner-tested but has no live-projection evidence yet.
 
 ### Build
 
@@ -119,7 +119,7 @@ WLED Grabber 是一个 Android 屏幕采集应用，将画面颜色直接发送�
 
 软件侧证据覆盖布局、采样、协议、生命周期，以及目标电视的采集与释放路径。发布准入仍因缺少物理刷新率/端到端时延测量、RGBW 硬件、更大灯数配置及剩余设备/API 矩阵而阻塞。构建成功不代表已完成签名、安装或发布。
 
-**仍未接线的软件缺口（2026-11-17 复核）**：启动前 READY 门禁（实时探测 + 观察 count/通道/身份 + WLED 寻址确认项）、周期性设备观察/stale/身份变化废弃、采集 resize/旋转处理目前只有模型与单测，**未接入运行服务**；采集在本地配置校验通过后即启动。对应任务 CFG-2、NET-3、CAP-2、TV-1，不计为已交付。
+**软件接线状态（2026-11-17）**：启动前 READY 门禁（WLED 寻址确认项 + 实时探测 + 观察 count/通道/身份）、周期性设备观察与 stale/身份变化废弃、resize/旋转处理均已接入运行服务；服务在取得任何采集资源前复验观察结果。仍未取得实机证据的是活动投屏下的 resize/旋转（API 34 captured-content resize 与连续旋转/锁屏循环）：实现与规划器单测已完成，但尚无真实投屏证据。
 
 ### 构建
 

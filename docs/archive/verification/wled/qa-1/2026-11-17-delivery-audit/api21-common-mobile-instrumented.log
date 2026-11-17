@@ -1,0 +1,157 @@
+Starting a Gradle Daemon, 1 busy and 2 incompatible and 3 stopped Daemons could not be reused, use --status for details
+> Task :common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :common:preBuild UP-TO-DATE
+> Task :common:preDebugBuild UP-TO-DATE
+> Task :common:generateDebugResValues UP-TO-DATE
+> Task :common:generateDebugResources UP-TO-DATE
+> Task :common:packageDebugResources UP-TO-DATE
+> Task :common:parseDebugLocalResources UP-TO-DATE
+> Task :common:generateDebugRFile UP-TO-DATE
+> Task :common:compileDebugKotlin UP-TO-DATE
+> Task :common:javaPreCompileDebug UP-TO-DATE
+> Task :common:compileDebugJavaWithJavac UP-TO-DATE
+> Task :common:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :common:preDebugAndroidTestBuild UP-TO-DATE
+> Task :common:writeDebugAarMetadata UP-TO-DATE
+> Task :common:checkDebugAndroidTestAarMetadata UP-TO-DATE
+> Task :common:compileDebugLibraryResources UP-TO-DATE
+> Task :common:generateDebugAndroidTestResValues UP-TO-DATE
+> Task :common:mapDebugAndroidTestSourceSetPaths UP-TO-DATE
+> Task :common:generateDebugAndroidTestResources UP-TO-DATE
+> Task :common:mergeDebugAndroidTestResources UP-TO-DATE
+> Task :common:extractDeepLinksDebug UP-TO-DATE
+> Task :common:processDebugManifest UP-TO-DATE
+> Task :common:processDebugAndroidTestManifest UP-TO-DATE
+> Task :common:processDebugAndroidTestResources UP-TO-DATE
+> Task :common:compileDebugAndroidTestKotlin NO-SOURCE
+> Task :common:javaPreCompileDebugAndroidTest UP-TO-DATE
+
+> Task :common:compileDebugAndroidTestJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :common:mergeDebugAndroidTestShaders UP-TO-DATE
+> Task :common:compileDebugAndroidTestShaders NO-SOURCE
+> Task :common:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :common:mergeDebugShaders UP-TO-DATE
+> Task :common:compileDebugShaders NO-SOURCE
+> Task :common:generateDebugAssets UP-TO-DATE
+> Task :common:packageDebugAssets UP-TO-DATE
+> Task :common:mergeDebugAndroidTestAssets UP-TO-DATE
+> Task :common:compressDebugAndroidTestAssets UP-TO-DATE
+> Task :common:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :common:desugarDebugAndroidTestFileDependencies UP-TO-DATE
+> Task :common:dexBuilderDebugAndroidTest
+> Task :common:processDebugAndroidTestJavaRes NO-SOURCE
+> Task :common:processDebugJavaRes UP-TO-DATE
+> Task :common:mergeDebugAndroidTestJavaResource UP-TO-DATE
+> Task :common:checkDebugAndroidTestDuplicateClasses UP-TO-DATE
+> Task :common:mergeExtDexDebugAndroidTest UP-TO-DATE
+> Task :common:mergeProjectDexDebugAndroidTest UP-TO-DATE
+> Task :common:mergeDebugJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugNativeLibs NO-SOURCE
+> Task :common:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :common:mergeDebugAndroidTestJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :common:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :common:validateSigningDebugAndroidTest UP-TO-DATE
+> Task :common:writeDebugAndroidTestSigningConfigVersions UP-TO-DATE
+> Task :mobile:preBuild UP-TO-DATE
+> Task :mobile:preDebugBuild UP-TO-DATE
+> Task :mobile:dataBindingMergeDependencyArtifactsDebug UP-TO-DATE
+> Task :mobile:generateDebugResValues UP-TO-DATE
+> Task :mobile:generateDebugResources UP-TO-DATE
+> Task :mobile:mergeDebugResources UP-TO-DATE
+> Task :mobile:packageDebugResources UP-TO-DATE
+> Task :mobile:parseDebugLocalResources UP-TO-DATE
+> Task :mobile:dataBindingGenBaseClassesDebug UP-TO-DATE
+> Task :mobile:javaPreCompileDebug UP-TO-DATE
+> Task :mobile:checkDebugAarMetadata UP-TO-DATE
+> Task :mobile:mapDebugSourceSetPaths UP-TO-DATE
+> Task :mobile:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :mobile:extractDeepLinksDebug UP-TO-DATE
+> Task :mobile:processDebugMainManifest UP-TO-DATE
+> Task :mobile:processDebugManifest UP-TO-DATE
+> Task :mobile:processDebugManifestForPackage UP-TO-DATE
+> Task :mobile:processDebugResources UP-TO-DATE
+> Task :mobile:compileDebugJavaWithJavac UP-TO-DATE
+> Task :mobile:preDebugAndroidTestBuild SKIPPED
+> Task :mobile:dataBindingMergeDependencyArtifactsDebugAndroidTest UP-TO-DATE
+> Task :mobile:generateDebugAndroidTestResValues UP-TO-DATE
+> Task :mobile:generateDebugAndroidTestResources UP-TO-DATE
+> Task :mobile:bundleDebugClassesToCompileJar
+> Task :mobile:mergeDebugAndroidTestResources UP-TO-DATE
+> Task :mobile:dataBindingGenBaseClassesDebugAndroidTest UP-TO-DATE
+> Task :mobile:javaPreCompileDebugAndroidTest UP-TO-DATE
+> Task :mobile:checkDebugAndroidTestAarMetadata UP-TO-DATE
+> Task :mobile:mapDebugAndroidTestSourceSetPaths UP-TO-DATE
+> Task :mobile:processDebugAndroidTestManifest UP-TO-DATE
+> Task :mobile:processDebugAndroidTestResources UP-TO-DATE
+> Task :mobile:compileDebugAndroidTestJavaWithJavac
+> Task :mobile:mergeDebugShaders UP-TO-DATE
+> Task :mobile:compileDebugShaders NO-SOURCE
+> Task :mobile:generateDebugAssets UP-TO-DATE
+> Task :mobile:mergeDebugAssets UP-TO-DATE
+> Task :mobile:compressDebugAssets UP-TO-DATE
+> Task :mobile:desugarDebugFileDependencies UP-TO-DATE
+> Task :mobile:dexBuilderDebug UP-TO-DATE
+> Task :mobile:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :mobile:processDebugJavaRes NO-SOURCE
+> Task :mobile:mergeDebugJavaResource UP-TO-DATE
+> Task :mobile:checkDebugDuplicateClasses UP-TO-DATE
+> Task :mobile:mergeExtDexDebug UP-TO-DATE
+> Task :mobile:mergeLibDexDebug UP-TO-DATE
+> Task :mobile:mergeProjectDexDebug UP-TO-DATE
+> Task :mobile:mergeDebugJniLibFolders UP-TO-DATE
+> Task :mobile:mergeDebugNativeLibs NO-SOURCE
+> Task :mobile:stripDebugDebugSymbols NO-SOURCE
+> Task :mobile:validateSigningDebug UP-TO-DATE
+> Task :mobile:writeDebugAppMetadata UP-TO-DATE
+> Task :mobile:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :mobile:packageDebug UP-TO-DATE
+> Task :mobile:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :mobile:mergeDebugAndroidTestShaders UP-TO-DATE
+> Task :mobile:compileDebugAndroidTestShaders NO-SOURCE
+> Task :mobile:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :mobile:mergeDebugAndroidTestAssets UP-TO-DATE
+> Task :mobile:compressDebugAndroidTestAssets UP-TO-DATE
+> Task :mobile:desugarDebugAndroidTestFileDependencies UP-TO-DATE
+> Task :mobile:dexBuilderDebugAndroidTest
+> Task :mobile:mergeDebugAndroidTestGlobalSynthetics UP-TO-DATE
+> Task :mobile:processDebugAndroidTestJavaRes NO-SOURCE
+> Task :mobile:mergeDebugAndroidTestJavaResource UP-TO-DATE
+> Task :mobile:checkDebugAndroidTestDuplicateClasses UP-TO-DATE
+> Task :mobile:mergeExtDexDebugAndroidTest UP-TO-DATE
+> Task :mobile:mergeLibDexDebugAndroidTest UP-TO-DATE
+> Task :mobile:mergeProjectDexDebugAndroidTest UP-TO-DATE
+> Task :mobile:mergeDebugAndroidTestJniLibFolders UP-TO-DATE
+> Task :mobile:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :mobile:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :mobile:validateSigningDebugAndroidTest UP-TO-DATE
+> Task :mobile:writeDebugAndroidTestSigningConfigVersions UP-TO-DATE
+> Task :mobile:packageDebugAndroidTest UP-TO-DATE
+> Task :mobile:createDebugAndroidTestApkListingFileRedirect UP-TO-DATE
+
+> Task :mobile:connectedDebugAndroidTest
+additionalTestOutput is not supported on this device running API level 21 because the additional test output directory could not be found
+Starting 10 tests on api21-phone(AVD) - 5.0.2
+
+com.abrenoch.wledgrabber.mobile.MobileEntriesInstrumentedTest > notificationChannelsExist[api21-phone(AVD) - 5.0.2] [33mSKIPPED [0m
+
+com.abrenoch.wledgrabber.mobile.MobileEntriesInstrumentedTest > quickSettingsTileIsDeclaredAndEnabled[api21-phone(AVD) - 5.0.2] [33mSKIPPED [0m
+
+Finished 12 tests on api21-phone(AVD) - 5.0.2
+
+> Task :common:mergeDebugAndroidTestGlobalSynthetics UP-TO-DATE
+> Task :common:mergeLibDexDebugAndroidTest
+> Task :common:packageDebugAndroidTest
+> Task :common:createDebugAndroidTestApkListingFileRedirect UP-TO-DATE
+
+> Task :common:connectedDebugAndroidTest
+additionalTestOutput is not supported on this device running API level 21 because the additional test output directory could not be found
+Starting 35 tests on api21-phone(AVD) - 5.0.2
+
+Finished 35 tests on api21-phone(AVD) - 5.0.2
+
+BUILD SUCCESSFUL in 33s
+108 actionable tasks: 9 executed, 99 up-to-date

@@ -1,20 +1,29 @@
-2026-11-17 WLED Grabber delivery audit — final test counts
-Baseline: HEAD 48250d1 + working-tree fixes
+2026-11-17 WLED Grabber delivery audit — final wired test counts
+Baseline: HEAD 48250d1 + working-tree wiring
 
 JVM (./gradlew :common:testDebugUnitTest :mobile:testDebugUnitTest :tv:testDebugUnitTest)
-  common tests=221 failures=0 errors=0 skipped=0
+  common tests=227 failures=0 errors=0 skipped=0
   mobile tests=1   failures=0 errors=0 skipped=0
   tv     NO-SOURCE
 
 Lint (./gradlew :common:lintDebug :mobile:lintDebug :tv:lintDebug)
-  error=0; warnings common=99 mobile=8 tv=55
+  error=0; warnings common=101 mobile=8 tv=55
 
 Build (Debug + unsigned Release, mobile/tv)
   BUILD SUCCESSFUL; legacy/protobuf entries in both release APKs = 0
 
 Instrumented
-  API26 api26-phone: common 42/42, mobile 9/9
-  API33 wled-tv-api33: 32 passed + 3 real-device assumption skips (35 total)
+  API21 api21-phone: common 35/35, mobile 10 passed + 2 platform skips
+  API26 api26-phone: common 49/49, mobile 10/10
+  API33 wled-tv-api33: 35 passed + 3 real-device assumption skips (38 total)
+  API34 wled-tv-api34: common 49/49, mobile 10/10, tv 35 passed + 3 skips (38 total)
+
+New wiring regressions
+  CFG-2: StartCaptureActivityTest (3), StartConfirmationStoreTest (4), TvServiceReadinessContractTest (2)
+  NET-3: ObservationMonitorTest (3) + existing WledSessionTest (9)
+  TV-1: TvMainActivityTest.staleObservationBroadcastIsShownWhileRunning
+  CAP-2: CaptureResizePlannerTest (3) — implementation; live-projection resize still unverified
+  MOB-1: MobileSettingsCorruptPreferenceTest (1)
 
 Repository gate
   scripts/qa/local-regression.sh: passed

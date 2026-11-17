@@ -122,9 +122,9 @@ adb shell cmd appops get --user 0 com.abrenoch.wledgrabber PROJECT_MEDIA
 | 500/1000/2000 灯 | 未验证 |
 | ESP8266 | 保留入口/警告，未继承 ESP32 性能结论 |
 | Sony KD55XD8005 | 目标设备；采集与停止读回已验证；遥控器/大字体/物理 60fps 待验收 |
-| 启动前 READY | **未接线**：服务仅做本地 `validateForStart`，开始前不探测设备、不核对观察 count/通道/身份，也不强制 WLED 寻址确认项；对应 CFG-2 |
-| 设备观察/身份变化 | **未接线**：5 秒健康探测、10 秒 stale、MAC/网络变化废弃端点仅存在于 `WledSession` 单测；对应 NET-3 |
-| 旋转/resize | **未实现**：服务只在启动时创建一次 VirtualDisplay，无 `onCapturedContentResize`/resize/setSurface；对应 CAP-2 |
+| 启动前 READY | 已接线：`StartCaptureActivity` 要求逐项确认 WLED 寻址后即时探测，`StartConfirmationStore` 按设备保存确认；服务启动前用 `DeviceReadiness` 复验，缺失或不匹配的观察直接拒绝（CFG-2） |
+| 设备观察/身份变化 | 已接线：服务每 5 秒后台观察，超过 10 秒标记 stale；设备身份变化停止采集并保留未确认释放结果（NET-3/TV-1） |
+| 旋转/resize | 已实现、待实机验证：API 34 使用 `onCapturedContentResize`，其他版本监听默认屏变化，在同一 VirtualDisplay 上 resize + setSurface 并递增 generation；尚无活动投屏下的实机证据（CAP-2） |
 | 停止释放展示 | 前台 TV/mobile 已接入：服务广播 `SERVICE_RELEASE_KNOWN/CONFIRMED`，TV/mobile 显示已确认/未确认；通知/Tile 后台停止仍无可见结果承载，真机长时停止归 QA-2 |
 
 ## 8. APK 与安装
