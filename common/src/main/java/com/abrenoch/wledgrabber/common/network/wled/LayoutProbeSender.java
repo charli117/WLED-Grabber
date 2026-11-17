@@ -27,6 +27,11 @@ public final class LayoutProbeSender {
         if (snapshot == null || compiled == null || logical == null || logical.length == 0) {
             return false;
         }
+        String host = snapshot.device().host();
+        if (host == null || host.trim().isEmpty()) {
+            // Do not report a started pulse when there is no endpoint to send to.
+            return false;
+        }
         OutputSessionCoordinator coordinator = OutputSessionCoordinator.get();
         if (!coordinator.acquire(OutputOwner.TEST, OWNER_ID)) {
             return false;
@@ -35,7 +40,6 @@ public final class LayoutProbeSender {
         final byte[] frame = LayoutProbe.buildFrame(compiled, logical, 255, 255, 255);
         final int ledCount = compiled.mapping().physicalLedCount();
         final Protocol protocol = snapshot.device().protocol();
-        final String host = snapshot.device().host();
         final int port = protocol == Protocol.DDP
                 ? snapshot.device().ddpPort() : snapshot.device().udpPort();
         Thread worker = new Thread(() -> {
