@@ -15,6 +15,11 @@
 
 # Tool/runtime artifacts
 .omc/
+.omx/
+.gitnexus/
 .kotlin/
 .openidea/
 *.swp
+
+# Archive
+.docs/archive

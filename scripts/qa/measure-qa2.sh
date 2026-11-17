@@ -20,7 +20,7 @@ set -euo pipefail
 SERIAL="${1:-}"
 WLED_HOST="${2:-}"
 SECONDS_TO_SAMPLE="${3:-30}"
-OUT_DIR="${4:-docs/verification/wled/qa-2}"
+OUT_DIR="${4:-dist/qa2}"
 PKG="com.abrenoch.wledgrabber"
 
 if [ -z "$SERIAL" ] || [ -z "$WLED_HOST" ]; then
