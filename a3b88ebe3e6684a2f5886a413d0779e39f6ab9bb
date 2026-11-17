@@ -1,0 +1,65 @@
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/api26-common-instrumented.log
+  29959b0c80223706 1-67
+docs/archive/README.md
+  29959b0c80223706 9
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/local-regression-final.log
+  29959b0c80223706 74,82,107-108,127,129-135,223,230,290,343-345,386,388-392,399,403,405-406,413-414,420,424-425
+docs/archive/task/08-tv.md
+  29959b0c80223706 101
+docs/archive/task/09-mobile.md
+  29959b0c80223706 41,91
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/api21-common-mobile-instrumented.log
+  29959b0c80223706 1-157
+docs/archive/task/11-validation.md
+  29959b0c80223706 52
+docs/archive/task/00-overview.md
+  29959b0c80223706 13,135,143,145,149,155,157,190-191,193-194,197,199,201,209-211,234-238,246-249,251,255-257,264,387,391,402
+docs/guides/configuration-and-troubleshooting.md
+  29959b0c80223706 125-127
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/api34-all-instrumented.log
+  29959b0c80223706 1-252
+docs/archive/task/06-capture.md
+  29959b0c80223706 136
+docs/archive/task/05-wled.md
+  29959b0c80223706 127
+docs/archive/task/02-configuration.md
+  29959b0c80223706 87-89
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/test-summary.txt
+  29959b0c80223706 1-2,5,10,16-26
+README.md
+  29959b0c80223706 49,122
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/api33-tv-instrumented.log
+  29959b0c80223706 1,36,38-39,50,52,64-65,67-68,72,82-83,90,97,103,107,109-110,116,124,126-127
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/api26-mobile-instrumented.log
+  29959b0c80223706 1-112
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/tests-lint-release-after-wiring.log
+  29959b0c80223706 1-351
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "a3b88ebe3e6684a2f5886a413d0779e39f6ab9bb",
+  "prompts": {
+    "29959b0c80223706": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b8f41753-736c-4edc-a297-765fbaa66697",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 1059,
+      "total_deletions": 122,
+      "accepted_lines": 1059,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/bb329fd0934cb63d8766a2d6c1b14a16ed90875ed079478212b9fc06c3a38bbc",
+      "token_usage": {
+        "input_tokens": 179572,
+        "output_tokens": 15168,
+        "cache_read_tokens": 1650304,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
