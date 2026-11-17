@@ -1,0 +1,54 @@
+common/src/test/java/com/abrenoch/wledgrabber/common/capture/LedStreamerTest.java
+  575c369da7ebd45a 137-179
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/LedStreamer.java
+  575c369da7ebd45a 238-242
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "caa1d33bd097726ca068a8dc4090bd4dbe996432",
+  "prompts": {
+    "575c369da7ebd45a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e53d-7484-73c2-bd35-c4075ea327c7",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 49,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/a08a0cdfd85027bf03d54621cb62fc38c4cb9c85cac4cd6f578569af019f7fa5",
+      "token_usage": {
+        "input_tokens": 217728,
+        "output_tokens": 54277,
+        "cache_read_tokens": 9109301,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    },
+    "a5a4a2ccb1214986": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2943c44b-a2ea-4f70-bdf9-ead41d45dd47",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 53,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/76dbf3779fd5ba67ddff4e40a3956ec1977a9e075a1879014eff7acf779bf718",
+      "token_usage": {
+        "input_tokens": 220095,
+        "output_tokens": 33668,
+        "cache_read_tokens": 2529920,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
