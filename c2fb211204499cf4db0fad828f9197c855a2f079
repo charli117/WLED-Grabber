@@ -1,0 +1,31 @@
+common/src/test/java/com/abrenoch/wledgrabber/common/led/LedColorSamplerTest.java
+  1182dd19bb87e862 107-108,118-119,124-128
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "c2fb211204499cf4db0fad828f9197c855a2f079",
+  "prompts": {
+    "1182dd19bb87e862": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12341c9c-73e2-402d-a675-1731cda52ba7",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 11,
+      "total_deletions": 8,
+      "accepted_lines": 11,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/f9011a30777cb50c0f922d1d814cb196adad4e83ca37e0d79858fad6d1c358d1",
+      "token_usage": {
+        "input_tokens": 168737,
+        "output_tokens": 62754,
+        "cache_read_tokens": 8999424,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
