@@ -1,0 +1,33 @@
+.gitignore
+  fb124e333ccbfaac 18-19,23-25
+scripts/qa/measure-qa2.sh
+  fb124e333ccbfaac 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "78f8f3bca1f3e5c53ff5654ea18759ce2a99c4ae",
+  "prompts": {
+    "fb124e333ccbfaac": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8701f88f-25d3-44d3-80ce-8b3bd8761edd",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 1,
+      "accepted_lines": 6,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/3fa9876afb98c98d149c7e575d47254df38f8048f04f1250c83911a57d72288d",
+      "token_usage": {
+        "input_tokens": 320487,
+        "output_tokens": 53311,
+        "cache_read_tokens": 2699392,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
