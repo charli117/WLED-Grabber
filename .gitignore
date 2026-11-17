@@ -10,6 +10,7 @@
 /captures
 .externalNativeBuild
 .toolchains/
+.claude/skills/
 
 /dist/
 
