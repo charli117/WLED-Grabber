@@ -1,0 +1,38 @@
+LICENSE.txt
+  fb124e333ccbfaac 3
+privacy-policy.md
+  fb124e333ccbfaac 4,6,8-10,12,14-16,18,20-22,24,26,28,30-31,33,35,37,39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "32677087607b2f0673b28f1e4816c741b49f7ade",
+  "prompts": {
+    "fb124e333ccbfaac": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8701f88f-25d3-44d3-80ce-8b3bd8761edd",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 29,
+      "total_deletions": 48,
+      "accepted_lines": 6742,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/6b71649abebb9e011ac6125c923a6a9cdc7719ea30aa456945f98f690834242c",
+      "token_usage": {
+        "input_tokens": 319991,
+        "output_tokens": 52785,
+        "cache_read_tokens": 2534272,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  },
+  "humans": {
+    "h_3b1b2e873ac26d": {
+      "author": "罗威"
+    }
+  }
+}
