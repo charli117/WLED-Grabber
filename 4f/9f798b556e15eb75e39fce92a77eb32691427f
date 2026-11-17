@@ -1,0 +1,62 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LedColorSampler.java
+  a253b721f722567f 91-93,113-115
+common/src/test/java/com/abrenoch/wledgrabber/common/led/ColorQualityTest.java
+  1182dd19bb87e862 75-121
+common/src/test/java/com/abrenoch/wledgrabber/common/led/LedColorSamplerTest.java
+  a253b721f722567f 90-106,109-117,120-123
+  1182dd19bb87e862 107-108,118-119,124-128
+common/src/main/java/com/abrenoch/wledgrabber/common/led/QualitySettings.java
+  1182dd19bb87e862 14,18-23,28,47-57,62-63
+common/src/main/java/com/abrenoch/wledgrabber/common/WledScreenService.java
+  1182dd19bb87e862 129,131-133,321-325,341-343,435-440,454-481
+common/src/main/java/com/abrenoch/wledgrabber/common/led/ColorQuality.java
+  1182dd19bb87e862 13-14,51-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "4f9f798b556e15eb75e39fce92a77eb32691427f",
+  "prompts": {
+    "1182dd19bb87e862": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12341c9c-73e2-402d-a675-1731cda52ba7",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 191,
+      "total_deletions": 3,
+      "accepted_lines": 135,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/7867665bf385dc06077db45e54764d482937659211c05c359b38bfaf22546ac8",
+      "token_usage": {
+        "input_tokens": 145029,
+        "output_tokens": 42469,
+        "cache_read_tokens": 5378944,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "a253b721f722567f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "07b68284-4431-433f-a12b-db8d66eb1963",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": null,
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 36,
+      "overriden_lines": 0,
+      "token_usage": {
+        "input_tokens": 3876977,
+        "output_tokens": 1190872,
+        "cache_read_tokens": 474111488,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}

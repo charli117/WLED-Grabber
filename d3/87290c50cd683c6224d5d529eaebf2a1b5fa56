@@ -1,0 +1,33 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/WledScreenService.java
+  1182dd19bb87e862 129,131-133,325-329,345-347,439-444,458-485,526-532,679-724
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledHttpClient.java
+  1182dd19bb87e862 284-287
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "d387290c50cd683c6224d5d529eaebf2a1b5fa56",
+  "prompts": {
+    "1182dd19bb87e862": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12341c9c-73e2-402d-a675-1731cda52ba7",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 61,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/bcd068436167624796d98a8446dda971ea44887cf661b0fcedd9ea1eb89fb3df",
+      "token_usage": {
+        "input_tokens": 146059,
+        "output_tokens": 43331,
+        "cache_read_tokens": 5716608,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
