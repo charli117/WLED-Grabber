@@ -5,8 +5,10 @@
     android:fillViewport="true">
 
     <LinearLayout
+        android:id="@+id/start_capture_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/start_capture_scrim"
         android:orientation="vertical"
         android:padding="24dp">
 
@@ -19,6 +21,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/start_capture_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

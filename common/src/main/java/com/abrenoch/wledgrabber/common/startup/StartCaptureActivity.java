@@ -3,6 +3,7 @@ package com.abrenoch.wledgrabber.common.startup;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
 import android.view.View;
@@ -42,6 +43,8 @@ import java.util.concurrent.Executors;
  */
 public class StartCaptureActivity extends AppCompatActivity {
     public static final int REQUEST_MEDIA_PROJECTION = 1;
+    /** Returning users skip the one-time addressing confirmations. */
+    public static final String EXTRA_AUTO_START = "extra_auto_start";
 
     private final ExecutorService worker = Executors.newSingleThreadExecutor(runnable -> {
         Thread thread = new Thread(runnable, "wled-start-verify");
@@ -52,10 +55,15 @@ public class StartCaptureActivity extends AppCompatActivity {
     private ConfigSnapshot snapshot;
     private StartConfirmationStore store;
     private TextView status;
+    private TextView title;
+    private TextView description;
     private Button startButton;
+    private Button cancelButton;
+    private View root;
     private CheckBox manualWhite;
     private WledDevice observed;
     private boolean verifying;
+    private boolean autoStart;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,8 +71,12 @@ public class StartCaptureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_capture);
         store = new StartConfirmationStore(this);
         observed = BootActivity.observedFrom(savedInstanceState);
+        title = findViewById(R.id.start_capture_title);
+        description = findViewById(R.id.start_capture_description);
+        root = findViewById(R.id.start_capture_root);
         status = findViewById(R.id.start_capture_status);
         startButton = findViewById(R.id.start_capture_button);
+        cancelButton = findViewById(R.id.start_capture_cancel);
         manualWhite = findViewById(R.id.start_confirm_manual_white);
         required.add(findViewById(R.id.start_confirm_offset));
         required.add(findViewById(R.id.start_confirm_segment));
@@ -93,10 +105,63 @@ public class StartCaptureActivity extends AppCompatActivity {
                 required.add(manualWhite);
             }
             prefill();
+            autoStart = getIntent().getBooleanExtra(EXTRA_AUTO_START, false)
+                    && store.load() != null;
+            if (autoStart) {
+                enterAutoStart();
+            }
         }
 
         startButton.setOnClickListener(view -> beginVerification());
-        findViewById(R.id.start_capture_cancel).setOnClickListener(view -> finish());
+        cancelButton.setOnClickListener(view -> finish());
+    }
+
+    /**
+     * The one-time WLED addressing confirmations were already stored for this
+     * device; hide them and verify immediately so returning users never see the
+     * addressing page again.
+     */
+    private void enterAutoStart() {
+        // The gate is intentionally invisible: a translucent, preview-less window
+        // avoids the white flash between the remote press and the consent dialog.
+        root.setBackgroundColor(Color.TRANSPARENT);
+        title.setText(R.string.wled_start_title_auto);
+        title.setVisibility(View.GONE);
+        description.setVisibility(View.GONE);
+        status.setVisibility(View.GONE);
+        cancelButton.setVisibility(View.GONE);
+        startButton.setVisibility(View.GONE);
+        for (CheckBox checkBox : required) {
+            checkBox.setVisibility(View.GONE);
+        }
+        startButton.post(this::beginVerification);
+    }
+
+    private void showAutoFailure() {
+        root.setBackgroundColor(androidx.core.content.ContextCompat.getColor(
+                this, R.color.start_capture_scrim));
+        title.setVisibility(View.VISIBLE);
+        status.setVisibility(View.VISIBLE);
+        cancelButton.setVisibility(View.VISIBLE);
+        startButton.setVisibility(View.VISIBLE);
+    }
+
+    private void showAddressingConfirmations() {
+        autoStart = false;
+        root.setBackgroundColor(androidx.core.content.ContextCompat.getColor(
+                this, R.color.start_capture_scrim));
+        title.setText(R.string.wled_start_title);
+        title.setVisibility(View.VISIBLE);
+        description.setVisibility(View.VISIBLE);
+        status.setVisibility(View.VISIBLE);
+        manualWhite.setVisibility(
+                snapshot != null && snapshot.device().rgbwMode() == RgbwMode.RGBW
+                        ? View.VISIBLE : View.GONE);
+        for (CheckBox checkBox : required) {
+            checkBox.setVisibility(View.VISIBLE);
+        }
+        cancelButton.setVisibility(View.VISIBLE);
+        startButton.setVisibility(View.VISIBLE);
     }
 
     private void prefill() {
@@ -120,11 +185,21 @@ public class StartCaptureActivity extends AppCompatActivity {
         if (snapshot == null || verifying) {
             return;
         }
+        boolean allChecked = true;
         for (CheckBox checkBox : required) {
             if (!checkBox.isChecked()) {
-                status.setText(R.string.wled_start_confirm_all);
-                return;
+                allChecked = false;
+                break;
             }
+        }
+        if (!allChecked) {
+            if (autoStart) {
+                // A stored confirmation is incomplete; fall back to the explicit
+                // one-time checks instead of silently starting.
+                showAddressingConfirmations();
+            }
+            status.setText(R.string.wled_start_confirm_all);
+            return;
         }
         verifying = true;
         startButton.setEnabled(false);
@@ -163,6 +238,9 @@ public class StartCaptureActivity extends AppCompatActivity {
                 startButton.setEnabled(true);
                 if (verified == null) {
                     status.setText(getString(R.string.wled_start_failed, reason));
+                    if (autoStart) {
+                        showAutoFailure();
+                    }
                     return;
                 }
                 observed = verified.observed();

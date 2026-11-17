@@ -79,6 +79,7 @@
   <string name="wled_setup_saved">Saved. New settings apply on next start.</string>
   <string name="wled_setup_invalid">Check the highlighted fields before saving.</string>
   <string name="wled_start_title">Confirm WLED addressing</string>
+  <string name="wled_start_title_auto">Starting capture</string>
   <string name="wled_start_description">These checks describe the WLED configuration, not this app. Capture starts only after a fresh device observation matches them.</string>
   <string name="wled_start_offset">Realtime offset is 0</string>
   <string name="wled_start_segment">Main segment only is off</string>

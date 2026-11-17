@@ -25,6 +25,7 @@
   <string name="wled_setup_saved">已保存，下次启动生效。</string>
   <string name="wled_setup_invalid">请先检查标红的字段再保存。</string>
   <string name="wled_start_title">确认 WLED 寻址设置</string>
+  <string name="wled_start_title_auto">开始采集</string>
   <string name="wled_start_description">以下检查描述 WLED 端配置，不是本应用的配置。只有重新探测到的设备与这些确认项匹配后才会开始采集。</string>
   <string name="wled_start_offset">实时 offset 为 0</string>
   <string name="wled_start_segment">已关闭 main segment only</string>
