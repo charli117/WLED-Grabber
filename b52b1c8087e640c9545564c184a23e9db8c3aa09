@@ -1,0 +1,96 @@
+docs/archive/verification/wled/real-device-2026-11-17/cap-3-process-kill-restart.txt
+  1ab716eabec69aee 1-15
+docs/archive/verification/wled/real-device-2026-11-17/cap-1-cold-boot-result.txt
+  1ab716eabec69aee 1-42
+docs/archive/verification/wled/real-device-2026-11-17/final-cleanup.txt
+  1ab716eabec69aee 1-7
+docs/archive/verification/wled/real-device-2026-11-17/tv-instrumented-2026-11-17.log
+  1ab716eabec69aee 1-185
+docs/archive/task/11-validation.md
+  1ab716eabec69aee 98-99
+docs/archive/README.md
+  09e8f185162fe791 13-14
+docs/archive/verification/wled/real-device-2026-11-17/cap-1-cold-boot-pre.txt
+  1ab716eabec69aee 1-13
+docs/archive/verification/wled/real-device-2026-11-17/cap-1-screen-off-on.txt
+  1ab716eabec69aee 1-19
+docs/archive/verification/wled/real-device-2026-11-17/cap-3-stop-release.txt
+  1ab716eabec69aee 1-15
+docs/archive/verification/wled/real-device-2026-11-17/cap-1-consent-denied.txt
+  1ab716eabec69aee 1-13
+docs/archive/verification/wled/real-device-2026-11-17/qa2-fault-wled-reboot.txt
+  1ab716eabec69aee 1-20
+docs/archive/task/00-overview.md
+  1ab716eabec69aee 17-18,148-150,160,314-352,476,478-479,481,487
+docs/archive/task/06-capture.md
+  1ab716eabec69aee 60-61,140-141,145-146
+docs/archive/verification/wled/real-device-2026-11-17/tv-test-results-2026-11-17.xml
+  1ab716eabec69aee 1-43
+docs/archive/verification/wled/real-device-2026-11-17/tv-dpad-retry-2026-11-17.log
+  1ab716eabec69aee 1-115
+docs/archive/verification/wled/real-device-2026-11-17/tv-largefont-2026-11-17.log
+  1ab716eabec69aee 1-121
+docs/archive/verification/wled/real-device-2026-11-17/cap-2-rotation-attempt.txt
+  1ab716eabec69aee 1-8
+docs/archive/verification/wled/real-device-2026-11-17/cap-2-resize-single.txt
+  1ab716eabec69aee 1-15
+docs/archive/verification/wled/real-device-2026-11-17/common-test-results-2026-11-17.xml
+  1ab716eabec69aee 1-59
+docs/archive/verification/wled/real-device-2026-11-17/common-instrumented-2026-11-17.log
+  1ab716eabec69aee 1-77
+docs/archive/verification/wled/real-device-2026-11-17/test-summary.txt
+  1ab716eabec69aee 1-47
+docs/archive/verification/wled/real-device-2026-11-17/qa2-postboot-metrics.txt
+  1ab716eabec69aee 1-11
+docs/archive/verification/wled/real-device-2026-11-17/qa2-device-metrics-2026-11-17.txt
+  1ab716eabec69aee 1-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "b52b1c8087e640c9545564c184a23e9db8c3aa09",
+  "prompts": {
+    "09e8f185162fe791": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4d62e823-634b-496e-8eed-d63366157ed2",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 0,
+      "accepted_lines": 2,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/d41a5b1a1addd1e3ae1d3512e5e32c7d4a61d12deb702088d414310b7b0ca6c7",
+      "token_usage": {
+        "input_tokens": 192857,
+        "output_tokens": 14623,
+        "cache_read_tokens": 1652352,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "1ab716eabec69aee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5baa45fe-c550-420e-9d8b-e691528a2d06",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 925,
+      "total_deletions": 9,
+      "accepted_lines": 925,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/a4df802b084f73d4dd00778c3c6c6887e5c7fd0b9c3a71a2f7a76ec5d4168ccc",
+      "token_usage": {
+        "input_tokens": 633526,
+        "output_tokens": 224080,
+        "cache_read_tokens": 51111424,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
