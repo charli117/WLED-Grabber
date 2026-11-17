@@ -17,4 +17,10 @@
     <path
         android:fillColor="#FFFFFFFF"
         android:pathData="M35.325,37.125 h0.000 a2.925,2.925 0 0 1 2.925,2.925 v27.900 a2.925,2.925 0 0 1 -2.925,2.925 h-0.000 a2.925,2.925 0 0 1 -2.925,-2.925 v-27.900 a2.925,2.925 0 0 1 2.925,-2.925 z" />
+    <!-- Glass rim in the themed layer; the system tint supplies the colour. -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M45,23 h18 a22,22 0 0 1 22,22 v18 a22,22 0 0 1 -22,22 h-18 a22,22 0 0 1 -22,-22 v-18 a22,22 0 0 1 22,-22 z"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="2.5" />
 </vector>

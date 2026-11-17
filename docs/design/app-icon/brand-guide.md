@@ -1,7 +1,8 @@
 # WLED Grabber 品牌与图标规范
 
-> 版本 1.0 · 状态：资源已落地，三模块 Debug 构建通过；真机 launcher / themed icon / TV banner 显示待验收。
+> 版本 1.1 · 状态：资源已落地（v1.1 增加玻璃边框），三模块 Debug 构建通过；真机 launcher / themed icon / TV banner 显示待验收。
 > 关联技术规范：[WLED Grabber 技术架构](../architecture.md)。本文是图标、色板、字标与 Android 资源映射的唯一设计规范。
+> `concepts.png`、`color-sheet.png`、`before-after.png` 与 `kit-sheet.png` 仍是 v1.0 概念预览，不含玻璃边框；边框几何以 `source/` 母版与本文 §2.4 为准。
 
 ## 1. 设计决策
 
@@ -46,6 +47,25 @@
 - 横向 lockup：标志与字标间距 76 单位（约 1× 字标 cap height）；lockup 四周至少 0.5× 字标 cap height（≈28 单位）。
 - 最小尺寸：app icon 48dp；独立标志 24dp；通知图标 24dp；TV banner 320×180；数字 lockup 宽度 ≥ 120px。
 - 16–24px 时四段接缝会自然闭合，只剩方框轮廓，这是可接受的；不要为了小尺寸额外加细节。
+
+### 2.4 玻璃边框
+
+v1.1 在 app icon 的 Ink tile 内增加一圈玻璃质感边框。它是 tile 的容器边框，不是标志的一部分：不得改变四段色序、接缝或标志比例。
+
+| 资源 | 几何 |
+|---|---|
+| 方形母版 512 | 外框 `x=11..501`、`y=11..501`、`r=105`、描边 9；内高光 `x=19..493`、`r=97`、描边 2 |
+| 圆形母版 512 | 外框圆 `r=244`、描边 9；内高光圆 `r=236`、描边 2 |
+| 母版高光 | 全 tile 竖向白色 sheen：顶部 10% → 中部 2% → 底部 0% |
+| adaptive 108 | 外框 `x=23..85`、`r=22`、描边 2.5；内高光 `x=26..82`、`r=19`、描边 0.75；全 108 sheen 同母版 |
+| monochrome 108 | 只保留外框 `x=23..85`、`r=22`、描边 2.5，由系统 tint 着色 |
+| TV banner 320×180 | 外框 `x=2..318`、`y=2..178`、`r=4`、描边 2；内高光 `x=6..314`、`y=6..174`、`r=2.5`、描边 1 |
+
+- 边框渐变统一为白色 70%（左上）→ 30%（中部）→ 16%（右下），用透明度表达玻璃受光，不使用彩色描边。
+- 单色母版（`wled-grabber-icon-mono-dark/light.svg`）使用同几何的实色边框：深底白 32%、浅底 Ink 28%，内高光分别为 14%/12%；不加渐变，保持一色规则。
+- adaptive 的外框必须落在 72dp mask 内：`23..85` 的圆角方框在圆形与 squircle mask 下都完整可见；不要放大到 `20..88` 之外，否则圆形 mask 会切掉四角。
+- legacy 方形 PNG 的边框贴 tile 边缘；legacy 圆形 PNG 使用圆形边框。adaptive 与 legacy 的边框内缩量不同是有意为之，因为 adaptive 还要经过 launcher mask。
+- 边框是唯一的例外效果；除此之外仍禁止阴影、外发光、3D 与第二层装饰描边。
 
 ## 3. 色板
 
@@ -96,20 +116,20 @@
 
 | 资源 | 说明 |
 |---|---|
-| `common/src/main/res/drawable/ic_launcher_background.xml` | 实色 Ink 背景（API <24 兜底） |
-| `common/src/main/res/drawable-v24/ic_launcher_background.xml` | Ink → Ink Lift 径向渐变（API 24+） |
+| `common/src/main/res/drawable/ic_launcher_background.xml` | 实色 Ink 背景 + 实色玻璃边框兜底（API <24） |
+| `common/src/main/res/drawable-v24/ic_launcher_background.xml` | Ink → Ink Lift 径向渐变 + glass sheen + 渐变玻璃边框（API 24+） |
 | `common/src/main/res/drawable-v24/ic_launcher_foreground.xml` | 彩色四段，108dp 前景；标志占 40%（43.2dp） |
-| `common/src/main/res/drawable/ic_launcher_monochrome.xml` | Android 13 themed icon 单色层（白色四段） |
+| `common/src/main/res/drawable/ic_launcher_monochrome.xml` | Android 13 themed icon 单色层（白色四段 + 玻璃边框） |
 | `common/src/main/res/mipmap-anydpi-v26/ic_launcher.xml`、`ic_launcher_round.xml` | adaptive icon：background / foreground / monochrome |
 | `common/src/main/res/mipmap-{mdpi,hdpi,xhdpi,xxhdpi,xxxhdpi}/ic_launcher.png` | 48/72/96/144/192 传统方形图标 |
 | 同名 `ic_launcher_round.png` | 同尺寸圆形图标 |
 | `common/src/main/res/drawable/ic_notification_icon.xml` | 24dp 白色四段通知图标 |
-| `tv/src/main/res/drawable/banner.png` | 320×180 TV banner（mdpi） |
-| `tv/src/main/res/drawable-xhdpi/banner.png` | 640×360 TV banner（xhdpi） |
+| `tv/src/main/res/drawable/banner.png` | 320×180 TV banner（mdpi，含玻璃边框） |
+| `tv/src/main/res/drawable-xhdpi/banner.png` | 640×360 TV banner（xhdpi，含玻璃边框） |
 
 mobile 与 tv 的 `AndroidManifest.xml` 通过 common 的 application `android:icon` / `android:roundIcon` 继承图标；TV 额外使用 `android:banner="@drawable/banner"`；通知图标由两端 manifest 的 service `android:icon` 引用同一资源。
 
-adaptive 几何：108 viewport 中 `symbol × 0.225 + 25.2`；标志最远点距中心 25.2dp，小于 66dp 安全圈半径 33dp，圆形/异形 mask 下不会被裁切。可见 72dp 视口中标志约占 60%。**不要**把前景放大到 40% 以上而不重新核算安全圈。通知图标：`symbol × (20/192) + (24 − 256×20/192)/2`。
+adaptive 几何：108 viewport 中 `symbol × 0.225 + 25.2`；标志最远点距中心 25.2dp，小于 66dp 安全圈半径 33dp，圆形/异形 mask 下不会被裁切。可见 72dp 视口中标志约占 60%。**不要**把前景放大到 40% 以上而不重新核算安全圈。玻璃边框放在 background 层，几何见 §2.4：外框 23..85 完整落在 72dp mask 内。通知图标：`symbol × (20/192) + (24 − 256×20/192)/2`。
 
 ### 5.3 主题与后续 UI
 
@@ -121,17 +141,17 @@ adaptive 几何：108 viewport 中 `symbol × 0.225 + 25.2`；标志最远点距
 
 - 彩色四段只放在 Ink 或深色照片上；浅色底用 Ink 单色版。
 - 保持四边色序与顺时针方向；保持约 4 单位的转角接缝。
-- app icon 使用 Ink tile；锁屏/通知/紧凑位可用独立标志或 24dp 通知切图。
+- app icon 使用 Ink tile 与 §2.4 玻璃边框；锁屏/通知/紧凑位可用独立标志或 24dp 通知切图。
 - 大尺寸可保留渐变；小尺寸允许接缝闭合为方框，不要加细节补偿。
 - 动画/动效中，颜色流动方向与 §4.1 的顺时针索引一致。
 
 **Don't**
 
 - 不重排四色、不旋转/镜像单独一边、不闭合接缝（会改变“四段独立灯带”的含义）。
-- 不在白底上直接放彩色四段（Cyan/Amber 对比不足）；不加阴影、外发光、描边或 3D 效果。
+- 不在白底上直接放彩色四段（Cyan/Amber 对比不足）；除 §2.4 玻璃边框外，不加阴影、外发光、3D 效果或第二层装饰描边。
 - 不使用与本标志冲突的元素：彩虹径向渐变、其他应用的字母标或与本标志无关的 banner 画面。
 - 不用字母 W tile 替代本 app 图标；不把标志拉伸成非正方形。
-- 不在图标内加入小字、LED 点阵或额外装饰。
+- 不在图标内加入小字、LED 点阵或额外装饰；玻璃边框已经是唯一允许的容器装饰。
 
 ## 7. 迭代与验收
 
@@ -139,18 +159,19 @@ adaptive 几何：108 viewport 中 `symbol × 0.225 + 25.2`；标志最远点距
 
 1. 以 `source/` 下的 SVG 为唯一母版；256 网格、灯带 124×26、r13、约 4 单位接缝、固定色序，不要用位图重画。
 2. 改色只改 §2.2 的渐变端点，并保证相邻边端点同色；改形状需同步更新本文 §2.1 与所有派生资源。
-3. 字标如需改字/改重，必须用 Inter 重新转轮廓，并复核基线与词距；masters 内不允许 live text。
-4. 更新后同步替换 Android 资源，并按 §7.2 复验。
+3. 玻璃边框只改 §2.4 的几何与白色透明度；不要给边框加彩色、阴影或第二层装饰描边。
+4. 字标如需改字/改重，必须用 Inter 重新转轮廓，并复核基线与词距；masters 内不允许 live text。
+5. 更新后同步替换 Android 资源，并按 §7.2 复验。
 
 ### 7.2 重新生成与验证
 
-- 传统 PNG：从 `wled-grabber-icon-512.svg` / `wled-grabber-icon-round-512.svg` 渲染 192px，再降采样到 144/96/72/48；输出到 `mipmap-*`。
-- adaptive：前景按 `×0.225 + 25.2`、通知按 `×0.10417 − 1.333` 重算 VectorDrawable 路径与渐变坐标。
-- TV banner：`wled-grabber-banner.svg` 渲染 320×180 与 640×360，分别写入 `drawable/` 与 `drawable-xhdpi/`。
+- 传统 PNG：从 `wled-grabber-icon-512.svg` / `wled-grabber-icon-round-512.svg` 以透明底渲染 512px，再降采样到 192/144/96/72/48；输出到 `mipmap-*`。渲染后检查 48px 外框仍可见、四角透明、圆形版无方角。
+- adaptive：前景按 `×0.225 + 25.2`、通知按 `×0.10417 − 1.333` 重算 VectorDrawable 路径与渐变坐标；玻璃边框保持 §2.4 的 23..85 安全方圆角环，并在圆形与 squircle mask 预览中确认四角不被裁切。
+- TV banner：`wled-grabber-banner.svg` 渲染 320×180 与 640×360，分别写入 `drawable/` 与 `drawable-xhdpi/`；banner 使用与图标一致的玻璃边框（外框 `x=2..318`、`y=2..178`、r4、描边 2；内高光居中 6、描边 1）。
 - 构建验证（exit 0）：
   `JAVA_HOME=.toolchains/jdk-17.0.21+9/Contents/Home ./gradlew :common:assembleDebug :mobile:assembleDebug :tv:assembleDebug`
 - lint 验证（exit 0）：`:common:lintDebug`；APK 内已确认包含 adaptive foreground/background、monochrome、24dp 通知图标与 320/640 TV banner 资源。
-- 视觉验收：API 26 adaptive、API 33 themed icon、圆形 mask、API 21 legacy PNG、通知栏 24dp、TV banner 320/640；检查圆形 mask 无裁切、低亮度屏幕上 Cyan 仍可辨。
+- 视觉验收：API 26 adaptive、API 33 themed icon、圆形 mask、API 21 legacy PNG、通知栏 24dp、TV banner 320/640；检查圆形 mask 无裁切、低亮度屏幕上 Cyan 仍可辨、48px 透明 PNG 的玻璃边框仍可见。
 - 商标：WLED 是第三方开源项目，本 app 仅作为 WLED 生态的采集端；官方 Akemi 为像素灯泡字标，与本标志形态不同。公开发布前仍应做一次商标检索，不声称官方关联。
 
 ## 8. 参考

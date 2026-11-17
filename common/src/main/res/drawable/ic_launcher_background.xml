@@ -7,4 +7,15 @@
     <path
         android:fillColor="#FF0B0F1A"
         android:pathData="M0,0h108v108h-108z" />
+    <!-- Solid fallback for the adaptive glass rim (API <24 uses no gradient). -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M45,23 h18 a22,22 0 0 1 22,22 v18 a22,22 0 0 1 -22,22 h-18 a22,22 0 0 1 -22,-22 v-18 a22,22 0 0 1 22,-22 z"
+        android:strokeColor="#66FFFFFF"
+        android:strokeWidth="2.5" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M45,26 h18 a19,19 0 0 1 19,19 v18 a19,19 0 0 1 -19,19 h-18 a19,19 0 0 1 -19,-19 v-18 a19,19 0 0 1 19,-19 z"
+        android:strokeColor="#33FFFFFF"
+        android:strokeWidth="0.75" />
 </vector>
