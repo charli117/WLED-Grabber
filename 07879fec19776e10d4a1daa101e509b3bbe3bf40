@@ -1,0 +1,73 @@
+tv/src/main/java/com/abrenoch/wledgrabber/tv/views/LayoutValueRow.java
+  51396205a9b60a22 149-153
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvSetupUiTest.java
+  51396205a9b60a22 7,11,19,102-132
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvLayoutEditorTest.java
+  51396205a9b60a22 27,121,169,172,179,183,189,219-220,232-292,294-314,321,335-336,348-364
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledLayoutStepFragment.java
+  51396205a9b60a22 144
+docs/design/wled-direct-ambilight-feasibility.md
+  51396205a9b60a22 517-521,523,525
+common/src/main/java/com/abrenoch/wledgrabber/common/util/ConfigValidator.java
+  51396205a9b60a22 22,282-285
+docs/task/08-tv.md
+  51396205a9b60a22 94-95,97
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledConnectionStepFragment.java
+  51396205a9b60a22 24,26,44-46,138-139,143-144,154-225
+tv/src/main/res/values-zh-rCN/strings.xml
+  51396205a9b60a22 37-38
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/LayoutEditorActivity.java
+  51396205a9b60a22 122-125,128-129,362-365,398-402,416-417,435-438,476-483,512-513
+tv/src/main/res/values/strings.xml
+  51396205a9b60a22 39-40
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LayoutDraftCompiler.java
+  51396205a9b60a22 5,22-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "07879fec19776e10d4a1daa101e509b3bbe3bf40",
+  "prompts": {
+    "51396205a9b60a22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ff5acb-12c7-4dbe-bae9-040be916a7c2",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 1639,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/eeb9f2d69a69cf1177a6a8bc6f448caac9017aeabcfdabfe509c81bd083978b1",
+      "token_usage": {
+        "input_tokens": 1086532,
+        "output_tokens": 1025521,
+        "cache_read_tokens": 286419712,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "a5a4a2ccb1214986": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2943c44b-a2ea-4f70-bdf9-ead41d45dd47",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": null,
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 53,
+      "overriden_lines": 0,
+      "token_usage": {
+        "input_tokens": 218479,
+        "output_tokens": 30824,
+        "cache_read_tokens": 2236800,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
