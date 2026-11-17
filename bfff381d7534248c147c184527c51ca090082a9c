@@ -1,0 +1,60 @@
+common/src/main/AndroidManifest.xml
+  575c369da7ebd45a 8-10,39-42
+common/src/test/java/com/abrenoch/wledgrabber/common/startup/StartupPolicyTest.java
+  575c369da7ebd45a 1-37
+common/src/main/java/com/abrenoch/wledgrabber/common/BootActivity.java
+  575c369da7ebd45a 5-6,11-14,27-41,47-61,75-94,99-102
+common/src/main/res/values/pref_values.xml
+  51396205a9b60a22 23
+common/src/main/java/com/abrenoch/wledgrabber/common/WledBootReceiver.java
+  575c369da7ebd45a 14-15,18-19,27-32,35-47,52-58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "bfff381d7534248c147c184527c51ca090082a9c",
+  "prompts": {
+    "51396205a9b60a22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ff5acb-12c7-4dbe-bae9-040be916a7c2",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 379,
+      "total_deletions": 87,
+      "accepted_lines": 332,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/a7fb9a864b9b6fcb8a21a57cd43f86953e913ad3157b5ae2eefae38f2bba1b77",
+      "token_usage": {
+        "input_tokens": 1086532,
+        "output_tokens": 1025521,
+        "cache_read_tokens": 286419712,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "575c369da7ebd45a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e53d-7484-73c2-bd35-c4075ea327c7",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 159,
+      "total_deletions": 13,
+      "accepted_lines": 159,
+      "overriden_lines": 1,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/cdfa83c384883ea6292b570278be00ccafc6cbf6ecc69840aad2795051106757",
+      "token_usage": {
+        "input_tokens": 217728,
+        "output_tokens": 54277,
+        "cache_read_tokens": 9109301,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
