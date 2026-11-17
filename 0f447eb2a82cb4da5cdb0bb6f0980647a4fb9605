@@ -1,0 +1,56 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/WledScreenService.java
+  2e0ae9dc80cfe78b 323,435,460
+common/src/main/java/com/abrenoch/wledgrabber/common/led/ColorQuality.java
+  a253b721f722567f 55-58
+docs/design/architecture.md
+  a253b721f722567f 341-342
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "0f447eb2a82cb4da5cdb0bb6f0980647a4fb9605",
+  "prompts": {
+    "2e0ae9dc80cfe78b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2c44f435-6e55-4ae1-aedf-f47cb03c0fb8",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 3,
+      "accepted_lines": 11,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/5d74f0cf60bcdd8b6907c11a2981f650c514a9494096f2d8d743312881aeeaa1",
+      "token_usage": {
+        "input_tokens": 151193,
+        "output_tokens": 33218,
+        "cache_read_tokens": 1958272,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "a253b721f722567f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "07b68284-4431-433f-a12b-db8d66eb1963",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 8,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/9d9b877a412acd35e328f05cead84db8aa0341ad775432591ceb3836f9eba4f4",
+      "token_usage": {
+        "input_tokens": 4031413,
+        "output_tokens": 1241780,
+        "cache_read_tokens": 548066944,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
