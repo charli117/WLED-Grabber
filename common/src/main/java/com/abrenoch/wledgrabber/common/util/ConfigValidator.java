@@ -5,6 +5,7 @@ import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
 import com.abrenoch.wledgrabber.common.network.wled.DeviceEndpoint;
 import com.abrenoch.wledgrabber.common.led.GapMode;
+import com.abrenoch.wledgrabber.common.led.LayoutDraft;
 import com.abrenoch.wledgrabber.common.led.LedLayoutConfig;
 import com.abrenoch.wledgrabber.common.led.Protocol;
 import com.abrenoch.wledgrabber.common.led.QualitySettings;
@@ -47,29 +48,7 @@ public final class ConfigValidator {
         WhiteMode whiteMode = enumValue(draft, ConfigFields.WLED_RGBW_WHITE_MODE,
                 WhiteMode.class, errors);
         Integer physicalLeds = intValue(draft, ConfigFields.WLED_PHYSICAL_LEDS, 0, MAX_LEDS, errors);
-
-        Integer top = intValue(draft, ConfigFields.LED_TOP, 0, 1000, errors);
-        Integer bottom = intValue(draft, ConfigFields.LED_BOTTOM, 0, 1000, errors);
-        Integer left = intValue(draft, ConfigFields.LED_LEFT, 0, 1000, errors);
-        Integer right = intValue(draft, ConfigFields.LED_RIGHT, 0, 1000, errors);
-        Integer gapLength = intValue(draft, ConfigFields.LED_GAP_LENGTH, 0, MAX_LEDS, errors);
-        Integer gapPosition = intValue(draft, ConfigFields.LED_GAP_POSITION, 0, MAX_LEDS, errors);
-        Integer inputPosition = intValue(draft, ConfigFields.LED_INPUT_POSITION,
-                -1_000_000, 1_000_000, errors);
-        Boolean reverse = boolValue(draft, ConfigFields.LED_REVERSE, errors);
-        GapMode gapMode = enumValue(draft, ConfigFields.LED_GAP_MODE, GapMode.class, errors);
-        Integer hDepth = intValue(draft, ConfigFields.LED_H_DEPTH, 1, 100, errors);
-        Integer vDepth = intValue(draft, ConfigFields.LED_V_DEPTH, 1, 100, errors);
-        Integer overlap = intValue(draft, ConfigFields.LED_OVERLAP, 0, 100, errors);
-        Integer edgeGap = intValue(draft, ConfigFields.LED_EDGE_GAP, 0, 50, errors);
-        Integer cornerTlH = intValue(draft, ConfigFields.LED_CORNER_TL_H, 0, 100, errors);
-        Integer cornerTlV = intValue(draft, ConfigFields.LED_CORNER_TL_V, 0, 100, errors);
-        Integer cornerTrH = intValue(draft, ConfigFields.LED_CORNER_TR_H, 0, 100, errors);
-        Integer cornerTrV = intValue(draft, ConfigFields.LED_CORNER_TR_V, 0, 100, errors);
-        Integer cornerBrH = intValue(draft, ConfigFields.LED_CORNER_BR_H, 0, 100, errors);
-        Integer cornerBrV = intValue(draft, ConfigFields.LED_CORNER_BR_V, 0, 100, errors);
-        Integer cornerBlH = intValue(draft, ConfigFields.LED_CORNER_BL_H, 0, 100, errors);
-        Integer cornerBlV = intValue(draft, ConfigFields.LED_CORNER_BL_V, 0, 100, errors);
+        LayoutFields layoutFields = parseLayoutFields(draft, errors);
 
         Integer maxDimension = intValue(draft, ConfigFields.CAPTURE_MAX_DIMENSION, 1, 640, errors);
         Integer frameRate = intValue(draft, ConfigFields.FRAME_RATE, 1, 60, errors);
@@ -85,52 +64,66 @@ public final class ConfigValidator {
                     FieldError.Code.CROSS_FIELD, "RGBW requires DDP; DNRGB is not allowed"));
         }
 
-        int total = 0;
-        if (top != null && bottom != null && left != null && right != null) {
-            total = top + bottom + left + right;
-            if (total <= 0) {
-                errors.add(new FieldError(ConfigFields.LED_TOP,
-                        FieldError.Code.CROSS_FIELD, "total LED count must be positive"));
-            }
-        }
-
-        int effective = 0;
-        if (total > 0 && gapLength != null && gapPosition != null && gapMode != null) {
-            long end = (long) gapPosition + gapLength;
-            if (gapPosition > total || end > total) {
-                errors.add(new FieldError(ConfigFields.LED_GAP_LENGTH,
-                        FieldError.Code.CROSS_FIELD, "gap must stay inside the LED ring"));
-            }
-            if (gapMode == GapMode.SKIP && gapLength >= total) {
-                errors.add(new FieldError(ConfigFields.LED_GAP_LENGTH,
-                        FieldError.Code.CROSS_FIELD, "SKIP gap cannot remove every LED"));
-            }
-            effective = gapMode == GapMode.SKIP ? total - gapLength : total;
-            if (effective <= 0) {
-                errors.add(new FieldError(ConfigFields.LED_GAP_LENGTH,
-                        FieldError.Code.CROSS_FIELD, "effective LED count must be positive"));
-            }
-        }
+        int effective = validateLayoutCrossFields(layoutFields, errors);
 
         if (!errors.isEmpty()) {
             return ValidationResult.fail(errors);
         }
 
-        int normalizedInput = effective > 0 && inputPosition != null
-                ? Math.floorMod(inputPosition, effective)
+        int normalizedInput = effective > 0 && layoutFields.inputPosition != null
+                ? Math.floorMod(layoutFields.inputPosition, effective)
                 : 0;
 
         DeviceEndpoint device = new DeviceEndpoint(host, httpPort, udpPort, ddpPort,
                 protocol, rgbwMode, physicalLeds, whiteMode);
-        LedLayoutConfig layout = new LedLayoutConfig(top, bottom, left, right,
-                gapLength, gapPosition, normalizedInput, reverse, gapMode,
-                hDepth, vDepth, overlap, edgeGap,
-                cornerTlH, cornerTlV, cornerTrH, cornerTrV,
-                cornerBrH, cornerBrV, cornerBlH, cornerBlV);
+        LedLayoutConfig layout = new LedLayoutConfig(layoutFields.top, layoutFields.bottom,
+                layoutFields.left, layoutFields.right,
+                layoutFields.gapLength, layoutFields.gapPosition, normalizedInput,
+                layoutFields.reverse, layoutFields.gapMode,
+                layoutFields.hDepth, layoutFields.vDepth,
+                layoutFields.overlap, layoutFields.edgeGap,
+                layoutFields.cornerTlH, layoutFields.cornerTlV,
+                layoutFields.cornerTrH, layoutFields.cornerTrV,
+                layoutFields.cornerBrH, layoutFields.cornerBrV,
+                layoutFields.cornerBlH, layoutFields.cornerBlV);
         CaptureConfig capture = new CaptureConfig(maxDimension, frameRate, useAverageColor, boot,
                 new QualitySettings(qualityCrop, qualityLinear, qualitySaturation, qualitySmoothing));
         return ValidationResult.ok(new ConfigSnapshot(ConfigSnapshot.CURRENT_SCHEMA_VERSION, 0,
                 device, layout, capture));
+    }
+
+    /**
+     * Layout-scoped validation for the TV editor and live preview. Device endpoint,
+     * protocol and capture fields are deliberately not required: geometry can be
+     * edited before the WLED host is configured. The rules and ranges are the same
+     * ones {@link #validateForSave(ConfigDraft)} applies, not a second copy.
+     */
+    public ValidationResult<LayoutDraft> validateLayout(ConfigDraft draft) {
+        if (draft == null) {
+            return ValidationResult.fail(new FieldError(ConfigFields.SCHEMA_VERSION,
+                    FieldError.Code.CONFIG_MISSING, "draft is null"));
+        }
+        List<FieldError> errors = new ArrayList<>();
+        Integer physicalLeds = intValue(draft, ConfigFields.WLED_PHYSICAL_LEDS, 0, MAX_LEDS, errors);
+        LayoutFields layoutFields = parseLayoutFields(draft, errors);
+        int effective = validateLayoutCrossFields(layoutFields, errors);
+        if (!errors.isEmpty()) {
+            return ValidationResult.fail(errors);
+        }
+        int normalizedInput = effective > 0
+                ? Math.floorMod(layoutFields.inputPosition, effective)
+                : 0;
+        LedLayoutConfig layout = new LedLayoutConfig(layoutFields.top, layoutFields.bottom,
+                layoutFields.left, layoutFields.right,
+                layoutFields.gapLength, layoutFields.gapPosition, normalizedInput,
+                layoutFields.reverse, layoutFields.gapMode,
+                layoutFields.hDepth, layoutFields.vDepth,
+                layoutFields.overlap, layoutFields.edgeGap,
+                layoutFields.cornerTlH, layoutFields.cornerTlV,
+                layoutFields.cornerTrH, layoutFields.cornerTrV,
+                layoutFields.cornerBrH, layoutFields.cornerBrV,
+                layoutFields.cornerBlH, layoutFields.cornerBlV);
+        return ValidationResult.ok(new LayoutDraft(layout, physicalLeds == null ? 0 : physicalLeds));
     }
 
     public ValidationResult<ValidatedConfig> validateForStart(ConfigSnapshot snapshot) {
@@ -225,5 +218,121 @@ public final class ConfigValidator {
             errors.add(new FieldError(field, FieldError.Code.INVALID_VALUE, raw));
             return null;
         }
+    }
+
+    /** Raw layout fields shared by save validation and layout-only validation. */
+    private static final class LayoutFields {
+        final Integer top;
+        final Integer bottom;
+        final Integer left;
+        final Integer right;
+        final Integer gapLength;
+        final Integer gapPosition;
+        final Integer inputPosition;
+        final Boolean reverse;
+        final GapMode gapMode;
+        final Integer hDepth;
+        final Integer vDepth;
+        final Integer overlap;
+        final Integer edgeGap;
+        final Integer cornerTlH;
+        final Integer cornerTlV;
+        final Integer cornerTrH;
+        final Integer cornerTrV;
+        final Integer cornerBrH;
+        final Integer cornerBrV;
+        final Integer cornerBlH;
+        final Integer cornerBlV;
+
+        LayoutFields(Integer top, Integer bottom, Integer left, Integer right,
+                     Integer gapLength, Integer gapPosition, Integer inputPosition,
+                     Boolean reverse, GapMode gapMode,
+                     Integer hDepth, Integer vDepth, Integer overlap, Integer edgeGap,
+                     Integer cornerTlH, Integer cornerTlV,
+                     Integer cornerTrH, Integer cornerTrV,
+                     Integer cornerBrH, Integer cornerBrV,
+                     Integer cornerBlH, Integer cornerBlV) {
+            this.top = top;
+            this.bottom = bottom;
+            this.left = left;
+            this.right = right;
+            this.gapLength = gapLength;
+            this.gapPosition = gapPosition;
+            this.inputPosition = inputPosition;
+            this.reverse = reverse;
+            this.gapMode = gapMode;
+            this.hDepth = hDepth;
+            this.vDepth = vDepth;
+            this.overlap = overlap;
+            this.edgeGap = edgeGap;
+            this.cornerTlH = cornerTlH;
+            this.cornerTlV = cornerTlV;
+            this.cornerTrH = cornerTrH;
+            this.cornerTrV = cornerTrV;
+            this.cornerBrH = cornerBrH;
+            this.cornerBrV = cornerBrV;
+            this.cornerBlH = cornerBlH;
+            this.cornerBlV = cornerBlV;
+        }
+    }
+
+    private static LayoutFields parseLayoutFields(ConfigDraft draft, List<FieldError> errors) {
+        return new LayoutFields(
+                intValue(draft, ConfigFields.LED_TOP, 0, 1000, errors),
+                intValue(draft, ConfigFields.LED_BOTTOM, 0, 1000, errors),
+                intValue(draft, ConfigFields.LED_LEFT, 0, 1000, errors),
+                intValue(draft, ConfigFields.LED_RIGHT, 0, 1000, errors),
+                intValue(draft, ConfigFields.LED_GAP_LENGTH, 0, MAX_LEDS, errors),
+                intValue(draft, ConfigFields.LED_GAP_POSITION, 0, MAX_LEDS, errors),
+                intValue(draft, ConfigFields.LED_INPUT_POSITION,
+                        -1_000_000, 1_000_000, errors),
+                boolValue(draft, ConfigFields.LED_REVERSE, errors),
+                enumValue(draft, ConfigFields.LED_GAP_MODE, GapMode.class, errors),
+                intValue(draft, ConfigFields.LED_H_DEPTH, 1, 100, errors),
+                intValue(draft, ConfigFields.LED_V_DEPTH, 1, 100, errors),
+                intValue(draft, ConfigFields.LED_OVERLAP, 0, 100, errors),
+                intValue(draft, ConfigFields.LED_EDGE_GAP, 0, 50, errors),
+                intValue(draft, ConfigFields.LED_CORNER_TL_H, 0, 100, errors),
+                intValue(draft, ConfigFields.LED_CORNER_TL_V, 0, 100, errors),
+                intValue(draft, ConfigFields.LED_CORNER_TR_H, 0, 100, errors),
+                intValue(draft, ConfigFields.LED_CORNER_TR_V, 0, 100, errors),
+                intValue(draft, ConfigFields.LED_CORNER_BR_H, 0, 100, errors),
+                intValue(draft, ConfigFields.LED_CORNER_BR_V, 0, 100, errors),
+                intValue(draft, ConfigFields.LED_CORNER_BL_H, 0, 100, errors),
+                intValue(draft, ConfigFields.LED_CORNER_BL_V, 0, 100, errors));
+    }
+
+    /** @return the effective ring size, or 0 when the total/gap fields are invalid. */
+    private static int validateLayoutCrossFields(LayoutFields fields, List<FieldError> errors) {
+        int total = 0;
+        if (fields.top != null && fields.bottom != null
+                && fields.left != null && fields.right != null) {
+            total = fields.top + fields.bottom + fields.left + fields.right;
+            if (total <= 0) {
+                errors.add(new FieldError(ConfigFields.LED_TOP,
+                        FieldError.Code.CROSS_FIELD, "total LED count must be positive"));
+            }
+        }
+
+        int effective = 0;
+        if (total > 0 && fields.gapLength != null && fields.gapPosition != null
+                && fields.gapMode != null) {
+            long end = (long) fields.gapPosition + fields.gapLength;
+            if (fields.gapPosition > total || end > total) {
+                errors.add(new FieldError(ConfigFields.LED_GAP_LENGTH,
+                        FieldError.Code.CROSS_FIELD, "gap must stay inside the LED ring"));
+            }
+            if (fields.gapMode == GapMode.SKIP && fields.gapLength >= total) {
+                errors.add(new FieldError(ConfigFields.LED_GAP_LENGTH,
+                        FieldError.Code.CROSS_FIELD, "SKIP gap cannot remove every LED"));
+            }
+            effective = fields.gapMode == GapMode.SKIP
+                    ? total - fields.gapLength : total;
+            if (effective <= 0) {
+                errors.add(new FieldError(ConfigFields.LED_GAP_LENGTH,
+                        FieldError.Code.CROSS_FIELD, "effective LED count must be positive"));
+            }
+        }
+        return effective;
     }
 }

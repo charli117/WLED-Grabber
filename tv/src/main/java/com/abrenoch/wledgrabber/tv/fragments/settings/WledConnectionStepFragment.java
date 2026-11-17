@@ -18,6 +18,7 @@ import com.abrenoch.wledgrabber.common.util.Preferences;
 import com.abrenoch.wledgrabber.common.util.PreferencesConfigStorage;
 import com.abrenoch.wledgrabber.common.util.SettingsDraftController;
 import com.abrenoch.wledgrabber.common.util.ValidationResult;
+import com.abrenoch.wledgrabber.tv.activities.LayoutEditorActivity;
 import com.abrenoch.wledgrabber.tv.activities.LayoutSettingsActivity;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
     private static final long RGBW = 1006L;
     private static final long ACTION_TEST = 1007L;
     private static final long ACTION_LAYOUT = 1008L;
+    private static final long ACTION_ADVANCED = 1011L;
     private static final long FRAME_RATE = 1009L;
     private static final long LANGUAGE = 1010L;
     private static final long SET_PROTOCOL = 2001;
@@ -67,6 +69,12 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                 .id(ACTION_LAYOUT)
                 .title(getString(R.string.wled_setup_layout_entry))
                 .description(getString(R.string.wled_setup_layout_entry_desc))
+                .build());
+        actions.add(new GuidedAction.Builder(requireContext())
+                .id(ACTION_ADVANCED)
+                .title(getString(com.abrenoch.wledgrabber.tv.R.string.layout_editor_advanced_entry))
+                .description(getString(
+                        com.abrenoch.wledgrabber.tv.R.string.layout_editor_advanced_entry_desc))
                 .build());
 
         String host = controller.draft().get(ConfigFields.WLED_HOST);
@@ -125,6 +133,10 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
             return;
         }
         if (action.getId() == ACTION_LAYOUT) {
+            startActivity(new android.content.Intent(requireContext(), LayoutEditorActivity.class));
+            return;
+        }
+        if (action.getId() == ACTION_ADVANCED) {
             startActivity(new android.content.Intent(requireContext(), LayoutSettingsActivity.class));
             return;
         }
@@ -183,7 +195,7 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                 return;
             }
             showToast(getString(R.string.wled_setup_saved));
-            startActivity(new android.content.Intent(requireContext(), LayoutSettingsActivity.class));
+            startActivity(new android.content.Intent(requireContext(), LayoutEditorActivity.class));
             finishGuidedStepSupportFragments();
         } catch (AssertionError error) {
             showToast(getString(R.string.wled_setup_invalid));

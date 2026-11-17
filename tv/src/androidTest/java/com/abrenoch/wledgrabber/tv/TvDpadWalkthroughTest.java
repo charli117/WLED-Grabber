@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.abrenoch.wledgrabber.tv.activities.LayoutSettingsActivity;
+import com.abrenoch.wledgrabber.tv.activities.LayoutEditorActivity;
 import com.abrenoch.wledgrabber.tv.activities.ManualSetupActivity;
 
 import org.junit.Test;
@@ -33,6 +33,21 @@ public class TvDpadWalkthroughTest {
                     android.view.KeyEvent.ACTION_UP, keyCode));
         });
         Thread.sleep(60);
+    }
+
+    /**
+     * ActivityScenario-based tests run after these walkthroughs. Finish the
+     * activity and wait for DESTROYED so MonitoringInstrumentation does not see
+     * an unstopped activity and force-stop the shared app process.
+     */
+    private static void finishAndWait(Activity activity) throws InterruptedException {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish);
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        long deadline = System.currentTimeMillis() + 3000;
+        while (!activity.isDestroyed() && System.currentTimeMillis() < deadline) {
+            Thread.sleep(50);
+            InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        }
     }
 
     @Test
@@ -64,7 +79,7 @@ public class TvDpadWalkthroughTest {
                 }
             }
         } finally {
-            InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish);
+            finishAndWait(activity);
             WledTestSupport.clearConfig(InstrumentationRegistry.getInstrumentation()
                     .getTargetContext());
         }
@@ -76,9 +91,9 @@ public class TvDpadWalkthroughTest {
                 .getTargetContext());
         WledTestSupport.seedConfig(InstrumentationRegistry.getInstrumentation()
                 .getTargetContext());
-        Activity activity = launch(LayoutSettingsActivity.class);
+        Activity activity = launch(LayoutEditorActivity.class);
         try {
-            for (int i = 0; i < 34; i++) {
+            for (int i = 0; i < 40; i++) {
                 tap(activity, android.view.KeyEvent.KEYCODE_DPAD_DOWN);
             }
             for (int i = 0; i < 10; i++) {
@@ -87,7 +102,7 @@ public class TvDpadWalkthroughTest {
             tap(activity, android.view.KeyEvent.KEYCODE_BACK);
             InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         } finally {
-            InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish);
+            finishAndWait(activity);
             WledTestSupport.clearConfig(InstrumentationRegistry.getInstrumentation()
                     .getTargetContext());
         }

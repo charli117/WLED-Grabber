@@ -52,6 +52,9 @@
         <activity
             android:name=".activities.LayoutSettingsActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.LayoutEditorActivity"
+            android:exported="false" />
 
     </application>
 

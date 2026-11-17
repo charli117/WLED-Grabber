@@ -105,7 +105,9 @@ public final class LedLayoutPreviewView extends View {
         stroke.setStrokeWidth(dp(2));
         canvas.drawPath(boundary, stroke);
 
-        int labelStride = Math.max(1, model.physicalCount() / 32);
+        // Ambient labels stay sparse; the selected LED is always labelled. Large
+        // rings (200+) otherwise collide at the four corner segments on a TV.
+        int labelStride = Math.max(1, model.physicalCount() / 20);
         for (PreviewModel.PreviewRect rect : model.rects()) {
             float l = left + (float) rect.hmin() * width;
             float r = left + (float) rect.hmax() * width;

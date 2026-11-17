@@ -49,6 +49,15 @@ public class TvSetupUiTest {
     public void tearDown() {
         if (activity != null) {
             InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish);
+            try {
+                long deadline = System.currentTimeMillis() + 3000;
+                while (!activity.isDestroyed() && System.currentTimeMillis() < deadline) {
+                    Thread.sleep(50);
+                    InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             activity = null;
         }
         WledTestSupport.clearConfig(context);

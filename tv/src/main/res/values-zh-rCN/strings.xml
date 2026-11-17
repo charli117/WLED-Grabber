@@ -17,4 +17,38 @@
   <string name="guidedstep_cancel">取消</string>
   <string name="guidedstep_required">必填</string>
   <string name="toggle_activity_label">WLED Grabber（开关）</string>
+
+  <!-- TV-2 实时 LED 布局编辑器 -->
+  <string name="layout_editor_title">LED 布局</string>
+  <string name="layout_editor_hint">左右键调整 · 确认键精确输入</string>
+  <string name="layout_editor_section_shape">形状</string>
+  <string name="layout_editor_section_mapping">映射</string>
+  <string name="layout_editor_section_sampling">采样</string>
+  <string name="layout_editor_section_corners">四角</string>
+  <string name="layout_editor_section_verify">灯带验证</string>
+  <string name="layout_editor_status">共 %1$d 灯 · 有效 %2$d · 尾灯 %3$d</string>
+  <string name="layout_editor_status_unconfirmed">共 %1$d 灯 · 有效 %2$d · 未设置物理灯数</string>
+  <string name="layout_editor_input_map">输入位置 %1$d · 物理 0 对应逻辑 %2$d</string>
+  <string name="layout_editor_on">开</string>
+  <string name="layout_editor_off">关</string>
+  <string name="layout_editor_auto">按灯数自动分配四周</string>
+  <string name="layout_editor_auto_applied">已套用自动布局，请检查后保存。</string>
+  <string name="layout_editor_auto_needs_count">请先设置已确认的物理灯数。</string>
+  <string name="layout_editor_save">保存</string>
+  <string name="layout_editor_cancel">取消</string>
+  <string name="layout_editor_exact_title">%1$s</string>
+  <string name="layout_editor_exact_hint">精确数值</string>
+  <string name="layout_editor_error_empty">必填</string>
+  <string name="layout_editor_error_number">请输入数字</string>
+  <string name="layout_editor_error_range">超出范围</string>
+  <string name="layout_editor_error_cross">与当前布局不兼容</string>
+  <string name="layout_editor_error_invalid">无效值</string>
+  <string name="layout_editor_geometry">布局几何</string>
+  <string name="layout_editor_limit">已到边界</string>
+  <string name="layout_editor_configure_device">请先配置 WLED 连接，再验证灯带。</string>
+  <string name="layout_editor_saved">布局已保存，下次启动生效。</string>
+  <string name="layout_editor_advanced_title">高级选项</string>
+  <string name="layout_editor_advanced_guidance">RGBW 白色模式、平均色、采集尺寸与画质。修改在下次启动生效。</string>
+  <string name="layout_editor_advanced_entry">高级选项</string>
+  <string name="layout_editor_advanced_entry_desc">RGBW 白色模式、平均色、采集尺寸、画质</string>
 </resources>

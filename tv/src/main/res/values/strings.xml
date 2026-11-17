@@ -19,4 +19,38 @@
   <string name="guidedstep_required">Required</string>
   <!--This is the title for a custom launcher activity - hence including the app's name, with the action noted (toggle the grabber)-->
   <string name="toggle_activity_label">WLED Grabber (Toggle)</string>
+
+  <!-- TV-2 live LED layout editor -->
+  <string name="layout_editor_title">LED layout</string>
+  <string name="layout_editor_hint">Left/Right adjust · OK exact value</string>
+  <string name="layout_editor_section_shape">Shape</string>
+  <string name="layout_editor_section_mapping">Mapping</string>
+  <string name="layout_editor_section_sampling">Sampling</string>
+  <string name="layout_editor_section_corners">Corners</string>
+  <string name="layout_editor_section_verify">Verify on the strip</string>
+  <string name="layout_editor_status">%1$d total · %2$d effective · %3$d tail</string>
+  <string name="layout_editor_status_unconfirmed">%1$d total · %2$d effective · physical count not set</string>
+  <string name="layout_editor_input_map">Input %1$d · physical 0 maps to logical %2$d</string>
+  <string name="layout_editor_on">On</string>
+  <string name="layout_editor_off">Off</string>
+  <string name="layout_editor_auto">Auto-distribute from LED count</string>
+  <string name="layout_editor_auto_applied">Auto layout applied. Review and save.</string>
+  <string name="layout_editor_auto_needs_count">Set the confirmed physical LED count first.</string>
+  <string name="layout_editor_save">Save</string>
+  <string name="layout_editor_cancel">Cancel</string>
+  <string name="layout_editor_exact_title">%1$s</string>
+  <string name="layout_editor_exact_hint">Exact value</string>
+  <string name="layout_editor_error_empty">Required</string>
+  <string name="layout_editor_error_number">Enter a number</string>
+  <string name="layout_editor_error_range">Out of range</string>
+  <string name="layout_editor_error_cross">Does not fit the current layout</string>
+  <string name="layout_editor_error_invalid">Invalid value</string>
+  <string name="layout_editor_geometry">Layout geometry</string>
+  <string name="layout_editor_limit">Limit reached</string>
+  <string name="layout_editor_configure_device">Configure the WLED connection before probing the strip.</string>
+  <string name="layout_editor_saved">Layout saved. Changes apply on next start.</string>
+  <string name="layout_editor_advanced_title">Advanced options</string>
+  <string name="layout_editor_advanced_guidance">RGBW white mode, average color, capture size and quality. Changes apply on next start.</string>
+  <string name="layout_editor_advanced_entry">Advanced options</string>
+  <string name="layout_editor_advanced_entry_desc">RGBW white mode, average color, capture size, quality</string>
 </resources>

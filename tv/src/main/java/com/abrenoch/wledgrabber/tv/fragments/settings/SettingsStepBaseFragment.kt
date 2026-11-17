@@ -108,7 +108,8 @@ internal abstract class SettingsStepBaseFragment : GuidedStepSupportFragment() {
             try {
                 Integer.parseInt(it)
             } catch (ignored: Exception){
-                showToast(getString(com.abrenoch.wledgrabber.common.R.string.pref_error_invalid_field, it, getString(com.abrenoch.wledgrabber.common.R.string.pref_title_reconnect_delay)))
+                showToast(getString(com.abrenoch.wledgrabber.common.R.string.pref_error_invalid_field, it,
+                        findActionByIdRecursive(actionId)?.title ?: ""))
                 throw AssertionError("$actionId is not a valid int")
             }
         }

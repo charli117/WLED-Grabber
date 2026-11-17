@@ -11,6 +11,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
+import com.abrenoch.wledgrabber.common.led.FirstUnitPreset;
 import com.abrenoch.wledgrabber.common.network.wled.ProbeResult;
 import com.abrenoch.wledgrabber.common.network.wled.WledHttpClient;
 import com.abrenoch.wledgrabber.common.util.ConfigDraft;
@@ -37,7 +38,7 @@ final class WledTestSupport {
     static final int DEFAULT_HTTP_PORT = 80;
     static final int DEFAULT_UDP_PORT = 21324;
     static final int DEFAULT_DDP_PORT = 4048;
-    static final int PHYSICAL_LEDS_274 = 274;
+    static final int PHYSICAL_LEDS_274 = FirstUnitPreset.PHYSICAL_LED_COUNT;
 
     private WledTestSupport() {
     }
@@ -74,7 +75,7 @@ final class WledTestSupport {
      * pinned LAY-1/CONFIG values so the TV TEST host can run unchanged.
      */
     static ConfigDraft validDraft() {
-        return new ConfigDraft()
+        ConfigDraft draft = new ConfigDraft()
                 .set(ConfigFields.SCHEMA_VERSION, "1")
                 .set(ConfigFields.WLED_HOST, host())
                 .set(ConfigFields.WLED_HTTP_PORT, Integer.toString(httpPort()))
@@ -83,29 +84,12 @@ final class WledTestSupport {
                 .set(ConfigFields.WLED_PROTOCOL, "auto")
                 .set(ConfigFields.WLED_RGBW_MODE, "rgb")
                 .set(ConfigFields.WLED_RGBW_WHITE_MODE, "min_subtract")
-                .set(ConfigFields.WLED_PHYSICAL_LEDS, Integer.toString(PHYSICAL_LEDS_274))
-                .set(ConfigFields.LED_TOP, "86")
-                .set(ConfigFields.LED_BOTTOM, "90")
-                .set(ConfigFields.LED_LEFT, "49")
-                .set(ConfigFields.LED_RIGHT, "49")
-                .set(ConfigFields.LED_GAP_LENGTH, "0")
-                .set(ConfigFields.LED_GAP_POSITION, "0")
-                .set(ConfigFields.LED_INPUT_POSITION, "161")
-                .set(ConfigFields.LED_REVERSE, "true")
-                .set(ConfigFields.LED_GAP_MODE, "skip")
-                .set(ConfigFields.LED_H_DEPTH, "8")
-                .set(ConfigFields.LED_V_DEPTH, "5")
-                .set(ConfigFields.LED_OVERLAP, "0")
-                .set(ConfigFields.LED_EDGE_GAP, "0")
-                .set(ConfigFields.LED_CORNER_TL_H, "0")
-                .set(ConfigFields.LED_CORNER_TL_V, "0")
-                .set(ConfigFields.LED_CORNER_TR_H, "100")
-                .set(ConfigFields.LED_CORNER_TR_V, "0")
-                .set(ConfigFields.LED_CORNER_BR_H, "100")
-                .set(ConfigFields.LED_CORNER_BR_V, "100")
-                .set(ConfigFields.LED_CORNER_BL_H, "0")
-                .set(ConfigFields.LED_CORNER_BL_V, "100")
-                .set(ConfigFields.CAPTURE_MAX_DIMENSION, "640")
+                .set(ConfigFields.WLED_PHYSICAL_LEDS, Integer.toString(PHYSICAL_LEDS_274));
+        for (java.util.Map.Entry<String, String> entry
+                : FirstUnitPreset.layoutValues().entrySet()) {
+            draft.set(entry.getKey(), entry.getValue());
+        }
+        draft.set(ConfigFields.CAPTURE_MAX_DIMENSION, "640")
                 .set(ConfigFields.FRAME_RATE, "30")
                 .set(ConfigFields.USE_AVG_COLOR, "false")
                 .set(ConfigFields.BOOT, "false")
@@ -113,6 +97,7 @@ final class WledTestSupport {
                 .set(ConfigFields.QUALITY_LINEAR_AVERAGE, "false")
                 .set(ConfigFields.QUALITY_SATURATION, "100")
                 .set(ConfigFields.QUALITY_SMOOTHING, "0");
+        return draft;
     }
 
     static ConfigSnapshot seedConfig(Context context) {
