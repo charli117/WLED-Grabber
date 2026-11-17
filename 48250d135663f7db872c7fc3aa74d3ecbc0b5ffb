@@ -1,0 +1,28 @@
+.gitignore
+  h_3b1b2e873ac26d 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "48250d135663f7db872c7fc3aa74d3ecbc0b5ffb",
+  "prompts": {
+    "fbd0a7434a0e56c7": {
+      "agent_id": {
+        "tool": "known_human",
+        "id": "known_human_session",
+        "model": "unknown"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 0,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    }
+  },
+  "humans": {
+    "h_3b1b2e873ac26d": {
+      "author": "罗威"
+    }
+  }
+}
