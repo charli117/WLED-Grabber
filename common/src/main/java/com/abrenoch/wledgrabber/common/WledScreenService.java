@@ -107,6 +107,7 @@ public class WledScreenService extends Service {
     private byte[] scratch;
     private byte[] lastFrame;
     private final FrameTimingStats samplingMicros = new FrameTimingStats(600);
+    private final FrameTimingStats captureAgeMicros = new FrameTimingStats(600);
     private final FrameTimingStats sendIntervalMicros = new FrameTimingStats(600);
     private long lastSentAtMicros;
     private CompiledLayout layout;
@@ -604,6 +605,13 @@ public class WledScreenService extends Service {
             if (image == null) {
                 return;
             }
+            long capturedNanos = image.getTimestamp();
+            if (capturedNanos > 0) {
+                long ageMicros = (System.nanoTime() - capturedNanos) / 1000;
+                if (ageMicros >= 0 && ageMicros < 5_000_000L) {
+                    captureAgeMicros.recordMicros(ageMicros);
+                }
+            }
             ValidationResult<PlaneView> plane = ImagePlaneView.from(image);
             if (!plane.isValid()) {
                 return;
@@ -657,14 +665,20 @@ public class WledScreenService extends Service {
         }
         Log.i(TAG, String.format(java.util.Locale.US,
                 "qa2 sampling_us p50=%d p95=%d p99=%d max=%d n=%d; "
+                        + "capture_age_us p50=%d p95=%d p99=%d max=%d n=%d; "
                         + "interval_us p50=%d p95=%d p99=%d max=%d n=%d",
                 samplingMicros.percentileMicros(50), samplingMicros.percentileMicros(95),
                 samplingMicros.percentileMicros(99), samplingMicros.maxMicros(),
                 samplingMicros.size(),
+                captureAgeMicros.percentileMicros(50),
+                captureAgeMicros.percentileMicros(95),
+                captureAgeMicros.percentileMicros(99), captureAgeMicros.maxMicros(),
+                captureAgeMicros.size(),
                 sendIntervalMicros.percentileMicros(50), sendIntervalMicros.percentileMicros(95),
                 sendIntervalMicros.percentileMicros(99), sendIntervalMicros.maxMicros(),
                 sendIntervalMicros.size()));
         samplingMicros.reset();
+        captureAgeMicros.reset();
         sendIntervalMicros.reset();
         lastSentAtMicros = 0;
     }
