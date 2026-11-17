@@ -1,0 +1,37 @@
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/WledTestSupport.java
+  e2fcb4b975340679 107,119-126
+common/src/main/java/com/abrenoch/wledgrabber/common/startup/StartupAccess.java
+  e2fcb4b975340679 33-46
+mobile/src/androidTest/java/com/abrenoch/wledgrabber/mobile/MobileSettingsFormTest.java
+  e2fcb4b975340679 48-49
+mobile/src/androidTest/java/com/abrenoch/wledgrabber/mobile/MobileEntryTest.java
+  e2fcb4b975340679 46-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "1da5401fa13b993e4258c59933f6ef35079b581c",
+  "prompts": {
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 56,
+      "total_deletions": 10,
+      "accepted_lines": 55,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/dc57ea9661a1814691ce36687a086a7fe4fab6ccfcc2a18403fba256bda354d7",
+      "token_usage": {
+        "input_tokens": 6331089,
+        "output_tokens": 1949854,
+        "cache_read_tokens": 1220511872,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
