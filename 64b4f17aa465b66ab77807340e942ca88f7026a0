@@ -1,0 +1,101 @@
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/startup/StartConfirmationStoreTest.java
+  986df162cfe35a5c 1-77
+common/src/main/java/com/abrenoch/wledgrabber/common/startup/StartCaptureActivity.java
+  986df162cfe35a5c 1-220
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/WledTestSupport.java
+  986df162cfe35a5c 125-126
+common/src/main/java/com/abrenoch/wledgrabber/common/BootActivity.java
+  986df162cfe35a5c 15-25,27-31,36-37,49,58,87,104-107,110,133-182,207,237-302,314,319-323,331-341
+  c11d8d3f446312c6 48,50-54,57,59-63,67-71,75
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/WledTileService.java
+  986df162cfe35a5c 98-101
+common/src/main/res/values/strings.xml
+  986df162cfe35a5c 81-98,101
+common/src/main/java/com/abrenoch/wledgrabber/common/WledBootReceiver.java
+  986df162cfe35a5c 70-71
+common/src/main/java/com/abrenoch/wledgrabber/common/ToggleActivity.java
+  986df162cfe35a5c 13-15,28,32,45,59
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/ObservationMonitorTest.java
+  986df162cfe35a5c 1-82
+common/src/main/res/layout/activity_start_capture.xml
+  986df162cfe35a5c 1-104
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledSession.java
+  986df162cfe35a5c 34-35
+common/src/main/java/com/abrenoch/wledgrabber/common/startup/StartConfirmationStore.java
+  986df162cfe35a5c 1-70
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/MainActivity.java
+  986df162cfe35a5c 62-63,67-69,176-177,180
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/MainActivity.java
+  986df162cfe35a5c 104,140,144-146
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvMainActivityTest.java
+  986df162cfe35a5c 24,114-136
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/startup/BootActivityStatusInstrumentedTest.java
+  986df162cfe35a5c 124,127-133,137,140,142
+common/src/main/java/com/abrenoch/wledgrabber/common/led/CaptureResizePlanner.java
+  986df162cfe35a5c 1-69
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/ObservationMonitor.java
+  986df162cfe35a5c 1-14
+common/src/main/res/values-zh-rCN/strings.xml
+  986df162cfe35a5c 27-44,47
+common/src/test/java/com/abrenoch/wledgrabber/common/led/CaptureResizePlannerTest.java
+  986df162cfe35a5c 1-63
+mobile/src/androidTest/java/com/abrenoch/wledgrabber/mobile/MobileSettingsCorruptPreferenceTest.java
+  986df162cfe35a5c 1-78
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/startup/StartCaptureActivityTest.java
+  986df162cfe35a5c 1-110
+common/src/main/AndroidManifest.xml
+  986df162cfe35a5c 43-44
+common/src/main/java/com/abrenoch/wledgrabber/common/WledScreenService.java
+  986df162cfe35a5c 19,22,42,47-49,51,54,56,63-67,76-77,95,113-120,134-138,150-155,257-270,296-325,365-376,404-406,417-419,424,432-569,580,582,682,702,711-712,760-766,827-828
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvServiceReadinessContractTest.java
+  986df162cfe35a5c 1-96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "64b4f17aa465b66ab77807340e942ca88f7026a0",
+  "prompts": {
+    "986df162cfe35a5c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ce6dc9be-bcc9-45da-890e-3374d2e0c5a9",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 2704,
+      "total_deletions": 446,
+      "accepted_lines": 2561,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/83d12e1b2be57f502ed0ea7a3501ca748a2cec92cbd66c60d907af13163445fe",
+      "token_usage": {
+        "input_tokens": 2452126,
+        "output_tokens": 773227,
+        "cache_read_tokens": 408341504,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "c11d8d3f446312c6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a67e3a00-566d-4906-b016-a21da8fd52a5",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 18,
+      "total_deletions": 0,
+      "accepted_lines": 18,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/6990dcbcd6d90478173187836e30ccad254b31234fa89f228babdc4846a3baab",
+      "token_usage": {
+        "input_tokens": 193968,
+        "output_tokens": 22739,
+        "cache_read_tokens": 2405888,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
