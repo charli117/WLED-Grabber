@@ -1,0 +1,35 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/led/ColorQuality.java
+  a253b721f722567f 13-14,51-64
+common/src/main/java/com/abrenoch/wledgrabber/common/led/QualitySettings.java
+  a253b721f722567f 14,18-23,28,47-57,62-63
+common/src/test/java/com/abrenoch/wledgrabber/common/led/ColorQualityTest.java
+  a253b721f722567f 75-121
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "3524df27fe4655624e5e5722dd427341d5cc3eea",
+  "prompts": {
+    "a253b721f722567f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "07b68284-4431-433f-a12b-db8d66eb1963",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 463,
+      "total_deletions": 50,
+      "accepted_lines": 416,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/41daeb32fefb86ed93bd1e15686960fc6c8996e40a26ddf246843c2b4787c153",
+      "token_usage": {
+        "input_tokens": 3874099,
+        "output_tokens": 1188058,
+        "cache_read_tokens": 470121216,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
