@@ -131,10 +131,6 @@ public class WledScreenService extends Service {
     private com.abrenoch.wledgrabber.common.led.QualitySettings baseQuality =
             com.abrenoch.wledgrabber.common.led.QualitySettings.OFF;
     private volatile boolean hdrCompensation;
-    private long diagR;
-    private long diagG;
-    private long diagB;
-    private int diagFrames;
     private boolean running;
     private boolean stopping;
     private volatile boolean releaseKnown;
@@ -523,13 +519,6 @@ public class WledScreenService extends Service {
             lastObservedAt = observedAt;
             notifyActivity();
         }
-        if (observation != null && observation.device() != null
-                && observation.device().capabilities() != null) {
-            Log.i(TAG, "diag wled live=" + observation.device().capabilities().live()
-                    + " udp=" + observation.device().capabilities().udpPort()
-                    + " count=" + observation.device().capabilities().observedLedCount()
-                    + " err=" + observation.error());
-        }
         if (observation != null && observation.identityChanged()) {
             mainHandler.post(() -> stopCapture("device identity changed"));
         }
@@ -676,52 +665,6 @@ public class WledScreenService extends Service {
                 return;
             }
             samplingMicros.recordMicros((System.nanoTime() - sampleStartNanos) / 1000);
-            for (int i = 0; i < physicalCount; i++) {
-                int offset = i * channels;
-                diagR += scratch[offset] & 0xff;
-                diagG += scratch[offset + 1] & 0xff;
-                diagB += scratch[offset + 2] & 0xff;
-            }
-            diagFrames++;
-            if (diagFrames >= 120) {
-                int satSum = 0;
-                int s0 = scratch[0] & 0xff;
-                int s1 = scratch[1] & 0xff;
-                int s2 = scratch[2] & 0xff;
-                int q1 = 0;
-                int q2 = 0;
-                int q3 = 0;
-                int q4 = 0;
-                for (int i = 0; i < physicalCount; i++) {
-                    int offset = i * channels;
-                    int r = scratch[offset] & 0xff;
-                    int g = scratch[offset + 1] & 0xff;
-                    int b = scratch[offset + 2] & 0xff;
-                    int mx = Math.max(r, Math.max(g, b));
-                    int mn = Math.min(r, Math.min(g, b));
-                    satSum += mx - mn;
-                    if (i == physicalCount / 4) {
-                        q1 = (r << 16) | (g << 8) | b;
-                    } else if (i == physicalCount / 2) {
-                        q2 = (r << 16) | (g << 8) | b;
-                    } else if (i == (physicalCount * 3) / 4) {
-                        q3 = (r << 16) | (g << 8) | b;
-                    } else if (i == physicalCount - 1) {
-                        q4 = (r << 16) | (g << 8) | b;
-                    }
-                }
-                Log.i(TAG, String.format(java.util.Locale.US,
-                        "diag sample avg rgb=(%d,%d,%d) sat=%d leds=[%06x,%06x,%06x,%06x,%06x]",
-                        diagR / (diagFrames * physicalCount),
-                        diagG / (diagFrames * physicalCount),
-                        diagB / (diagFrames * physicalCount),
-                        satSum / physicalCount,
-                        (s0 << 16) | (s1 << 8) | s2, q1, q2, q3, q4));
-                diagR = 0;
-                diagG = 0;
-                diagB = 0;
-                diagFrames = 0;
-            }
             byte[] frame = lastFrame;
             if (frame == null) {
                 return;
