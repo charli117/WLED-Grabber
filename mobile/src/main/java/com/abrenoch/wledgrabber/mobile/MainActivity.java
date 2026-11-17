@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.abrenoch.wledgrabber.common.BootActivity;
+import com.abrenoch.wledgrabber.common.startup.StartupSetupActivity;
 import com.abrenoch.wledgrabber.common.WledScreenService;
 import com.abrenoch.wledgrabber.common.util.EdgeToEdge;
 import com.abrenoch.wledgrabber.common.util.NotificationPermission;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        findViewById(R.id.startup_settings).setOnClickListener(view -> StartupSetupActivity.open(this));
         EdgeToEdge.apply(this, findViewById(android.R.id.content));
         mMediaProjectionManager = (MediaProjectionManager)
                                         getSystemService(Context.MEDIA_PROJECTION_SERVICE);
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mMessageReceiver, new IntentFilter(WledScreenService.BROADCAST_FILTER));
         checkForInstance();
+        if (savedInstanceState == null) StartupSetupActivity.showIfNeeded(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

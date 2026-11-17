@@ -21,12 +21,7 @@
             android:parentActivityName=".MainActivity">
         </activity>
 
-        <activity android:name="com.abrenoch.wledgrabber.common.BootActivity"
-            android:finishOnTaskLaunch ="true"
-            android:noHistory="true"
-            android:launchMode="singleInstance"
-            android:clearTaskOnLaunch="true">
-        </activity>
+        <!-- BootActivity is declared once in common; consent results must survive its child Activity. -->
 
         <service
             android:name=".WledTileService"

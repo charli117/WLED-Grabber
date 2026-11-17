@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="startup_title">首次启动设置</string>
+    <string name="startup_description">选择是否在设备开机后自动采集画面。自动采集仅支持已授予全部所需权限的 Android 10（API 29）；其他版本仍可手动采集。本页面不会启动采集，也不代表已通过真机冷启动验证。</string>
+    <string name="startup_boot_enabled">设备开机后自动启动采集</string>
+    <string name="startup_capabilities_title">当前设备权限状态</string>
+    <string name="startup_platform_supported">Android API %1$d：支持自动采集的平台</string>
+    <string name="startup_platform_unsupported">Android API %1$d：不支持自动采集，请使用手动模式</string>
+    <string name="startup_projection">持久屏幕采集权限（PROJECT_MEDIA）</string>
+    <string name="startup_background_launch">后台启动／悬浮窗权限</string>
+    <string name="startup_background">后台运行权限</string>
+    <string name="startup_battery">电池优化豁免</string>
+    <string name="startup_capability_status">%1$s：%2$s</string>
+    <string name="startup_granted">已授予</string>
+    <string name="startup_not_granted">未授予</string>
+    <string name="startup_request_battery">允许不受限制的电池使用</string>
+    <string name="startup_request_overlay">允许显示在其他应用上层</string>
+    <string name="startup_adb_title">管理员 ADB 设置</string>
+    <string name="startup_adb_explanation">仅适用于经过管理员确认的 Android 10（API 29）设备。普通应用无法自行授予持久 PROJECT_MEDIA 权限。管理员须在已授权的电脑上审核并执行以下 ADB 命令；复制不会执行命令。这些命令会授予敏感的屏幕采集及后台权限。返回本页面后会重新读取实际状态；手动使用不需要这些授权。</string>
+    <string name="startup_copy_commands">复制 ADB 命令</string>
+    <string name="startup_commands_copied">已复制 ADB 命令，未执行任何命令</string>
+    <string name="startup_clipboard_unavailable">剪贴板不可用，请在已授权的电脑上参照上方命令操作。</string>
+    <string name="startup_access_present">所需权限已具备。继续仅保存开机采集选项；采集配置和真机冷启动行为仍需另行验证。</string>
+    <string name="startup_access_missing">暂时无法启用自动采集。请在 Android 10（API 29）上授予全部所需权限，关闭开机自动采集，或选择手动使用。</string>
+    <string name="startup_manual_hint">继续将保存为关闭开机自动采集。之后可在主界面手动启动采集。</string>
+    <string name="startup_continue">继续</string>
+    <string name="startup_manual_only">手动使用 — 关闭开机自动采集</string>
+    <string name="startup_back_hint">返回将取消设置，不保存本次选择，也不会标记设置完成。</string>
+    <string name="startup_save_failed">无法保存设置，本次设置未完成。请检查现有配置和存储后重试。</string>
+    <string name="startup_settings_fallback">无法打开对应权限页面。请在系统设置中找到本应用，完成后返回此处。</string>
+    <string name="startup_settings_unavailable">无法打开系统设置。请联系设备管理员，或选择手动使用。</string>
+</resources>

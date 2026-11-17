@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abrenoch.wledgrabber.common.BootActivity;
+import com.abrenoch.wledgrabber.common.startup.StartupSetupActivity;
 import com.abrenoch.wledgrabber.common.WledScreenService;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
 import com.abrenoch.wledgrabber.common.led.RgbwMode;
@@ -71,6 +72,7 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
         if (!initIfConfigured()){
             startSetup();
         }
+        if (savedInstanceState == null) StartupSetupActivity.showIfNeeded(this);
 
 
     }
@@ -108,6 +110,7 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
         mRecorderRunning = false;
 
         setContentView(R.layout.activity_main);
+        findViewById(R.id.startup_settings).setOnClickListener(view -> StartupSetupActivity.open(this));
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         mMediaProjectionManager = (MediaProjectionManager)
                                         getSystemService(Context.MEDIA_PROJECTION_SERVICE);

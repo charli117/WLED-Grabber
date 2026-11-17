@@ -20,7 +20,7 @@
     <integer name="pref_default_reconnect_delay" translatable="false">5</integer>
 
     <string name="pref_key_boot" translatable="false">pref_key_start_on_boot</string>
-    <bool name="pref_default_boot" translatable="false">false</bool>
+    <bool name="pref_default_boot" translatable="false">true</bool>
 
     <string name="pref_key_framerate" translatable="false">pref_key_framerate</string>
     <integer name="pref_default_framerate" translatable="false">30</integer>
