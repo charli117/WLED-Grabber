@@ -1,0 +1,94 @@
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/tests-lint-release-after-fixes.log
+  986df162cfe35a5c 1-358
+CLAUDE.md
+  c11d8d3f446312c6 4,11
+docs/archive/README.md
+  c11d8d3f446312c6 9-10
+docs/archive/task/00-overview.md
+  c11d8d3f446312c6 13-14,135,143,145,149,153-157,178-260,378-392,396
+docs/guides/configuration-and-troubleshooting.md
+  c11d8d3f446312c6 125-128
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/local-regression-final.log
+  986df162cfe35a5c 1-438
+docs/archive/task/10-release-migration.md
+  c11d8d3f446312c6 51-52,88
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/api26-common-mobile-instrumented.log
+  986df162cfe35a5c 1-154
+docs/archive/task/07-preview.md
+  c11d8d3f446312c6 87-88
+docs/archive/task/08-tv.md
+  c11d8d3f446312c6 52-53
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/api33-tv-instrumented.log
+  986df162cfe35a5c 1-140
+docs/archive/task/05-wled.md
+  c11d8d3f446312c6 125-126
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/api26-mobile-instrumented-rerun.log
+  986df162cfe35a5c 1-108
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/jvm-tests-build.log
+  986df162cfe35a5c 1-162
+README.md
+  c11d8d3f446312c6 49-50,122
+docs/archive/task/02-configuration.md
+  c11d8d3f446312c6 85-86
+docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/test-summary.txt
+  986df162cfe35a5c 17
+AGENTS.md
+  c11d8d3f446312c6 4,11
+docs/design/architecture.md
+  c11d8d3f446312c6 4-5
+docs/archive/task/06-capture.md
+  c11d8d3f446312c6 95-96
+docs/archive/task/11-validation.md
+  c11d8d3f446312c6 52-53,94
+docs/archive/task/09-mobile.md
+  c11d8d3f446312c6 89-90
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "5fa3da3d0df1af6ec4fc2ee020b3762735cfcdd7",
+  "prompts": {
+    "986df162cfe35a5c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ce6dc9be-bcc9-45da-890e-3374d2e0c5a9",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 70,
+      "total_deletions": 0,
+      "accepted_lines": 1431,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/dc4c0cada4195d76ea3ce013856ec160440c0fdf91f07721c1d904a0c4039a6e",
+      "token_usage": {
+        "input_tokens": 2298834,
+        "output_tokens": 516448,
+        "cache_read_tokens": 218224000,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "c11d8d3f446312c6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a67e3a00-566d-4906-b016-a21da8fd52a5",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 146,
+      "total_deletions": 30,
+      "accepted_lines": 146,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/0ed418c690753b5b929807929a1dbc60aea2c17ad1726acbd0410b21e588016b",
+      "token_usage": {
+        "input_tokens": 191474,
+        "output_tokens": 20689,
+        "cache_read_tokens": 1970688,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
