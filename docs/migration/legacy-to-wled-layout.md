@@ -20,7 +20,7 @@
 | X LED Count / Y LED Count | **不迁移为灯数**。只影响旧应用采集缩放；按实际 Top/Bottom/Left/Right 重建 |
 | Frame Rate | 保留能力；新配置独立保存，首套验收需显式选择 60，不能用默认 30 代替门禁 |
 | Average Color | 保留能力；平均模式仍执行 Gap/尾黑，不再隐式检测黑边 |
-| Grab on Boot | 改为**开机提醒**；不自动申请投屏/启动前台采集，需用户前台授权 |
+| Grab on Boot | 改为**受控自启动**：仅 API 29 且录屏/后台/电池授权与配置齐全时经 BootActivity 申请授权，其余情况为开机提醒；不自动复用旧录屏令牌 |
 | 旧服务器布局 | 用四边数量、Gap、Input、Reverse、Depth、Overlap、Edge Gap、四角重建 |
 | 实际接线 | 用物理索引/侧别预览和三种测试图案确认，不凭旧 X/Y 或起点直觉推断 |
 

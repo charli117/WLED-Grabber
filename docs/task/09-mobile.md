@@ -4,7 +4,7 @@
 > 状态权威：[00-overview.md](00-overview.md)；本册编制时全部待开发。功能实现/设备验收尚未发生。
 > 唯一技术来源：[最终技术方案](../design/wled-direct-ambilight-feasibility.md)；源码/决策/固定资料见其附录A/B/C。
 
-> 2026-11-17 需求增补：[默认后台与自启动](../verification/wled/cap-1/android10-background-autostart.md)。本机后台权限/白名单已设置；boot 默认值、启动目标和实际冷启动验收仍待处理，不将当前“仅提醒”标作自启动完成。
+> 2026-11-17 需求增补：[默认后台与自启动](../verification/wled/cap-1/android10-background-autostart.md)。本机后台权限/白名单已设置；自启动已按受控路径实现（`bfff381`：仅 API 29 且授权与配置齐全时启动，否则降级提醒），主界面新增启动设置入口，真实冷启动与重启保持未实测，不因源码实现标作设备验收完成。
 
 ## 模块边界
 

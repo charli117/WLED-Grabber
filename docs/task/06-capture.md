@@ -6,7 +6,7 @@
 
 > 2026-11-17 补充：[Android 10 TV 设备侧持续授权](../verification/wled/cap-1/android10-persistent-consent.md)仅在用户明确选择后配置。AppOps 读回不代替新会话/重启/拒绝授权测试；保留 token 不重用、前台服务及其他 API 的验收契约。
 
-> 2026-11-17 需求增补：[默认后台与自启动](../verification/wled/cap-1/android10-background-autostart.md)。本机后台权限/白名单已设置；boot 默认值、启动目标和实际冷启动验收仍待处理，不将当前“仅提醒”标作自启动完成。
+> 2026-11-17 需求增补：[默认后台与自启动](../verification/wled/cap-1/android10-background-autostart.md)。本机后台权限/白名单已设置；自启动已按受控路径实现（`bfff381`：仅 API 29 且授权与配置齐全时启动，否则降级提醒），真实冷启动与重启保持未实测，不因源码实现标作设备验收完成。
 
 ## 模块边界
 
@@ -52,6 +52,8 @@ common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer
 **证据（2026-11-16，本地部分）**：`CaptureSession`纯状态机7个测试通过，覆盖拒绝/重入/连续点击/重复result/空result/投影或display失败/服务重建/旧token不重用；Android服务已改为前台化后再getMediaProjection、注册MediaProjection.Callback后再创建display、START_NOT_STICKY；manifest含FOREGROUND_SERVICE/FOREGROUND_SERVICE_MEDIA_PROJECTION/POST_NOTIFICATIONS、service exported=false且foregroundServiceType=mediaProjection；boot receiver改为通知提醒而非启动Activity。API21/26/33/34/35仪器测试与真实设备授权未执行，CAP-1保持“待验证”，不声称设备验收完成。证据见`docs/verification/wled/cap-1/`。
 
 **证据（2026-11-17，Sony KD-55XD8005 / Android 10 / API 29 真机）**：真机首轮发现两处违反§6.2契约的缺陷——(1) `startForegroundService()` 后的配置校验早退未调用 `startForeground()`，系统抛 `RemoteServiceException` 杀死进程；(2) 服务用 `getParcelableExtra("data")` 取录屏令牌，而 `BootActivity` 以 `putExtras(data)` 写入的是系统内部 key，projection 恒为 null。修复：`startForegroundSafely()` 前置到任何早退之前；`getMediaProjection(resultCode, intent)` 与上游一致；新增 `CaptureSession.rejectStart()` 规定“未前台化不得中止启动”（先RED后GREEN），并把 `WledScreenService` 的启动/投影/display/停止全流程接入 `CaptureSession`，使原有顺序约束测试首次约束生产路径。复测证据：`dumpsys display` 去重 uniqueId=1（640×360，owner=wledgrabber）、`dumpsys media_projection`=1条TYPE_SCREEN_CAPTURE、服务 `isForeground=true`、完整session无FGS/SecurityException；端到端 WLED `/json/info` 显示 `live=true, lm=UDP, lip=10.245.0.109`（电视IP）、`fps≈35–45`；停止后 service=0、display=0、WLED退出live。JVM `:common:testDebugUnitTest` 160个用例0失败。**设备端（2026-11-17）**：新增`TvServiceForegroundContractTest`——以 `RESULT_CANCELED`（等价拒绝授权）经 `startForegroundService()` 拉起服务；若前台契约被违反，系统会抛 `RemoteServiceException` 杀死进程，测试便无法到达断言。API 33/34 TV 模拟器均通过，且拒绝启动后输出租约为 `NONE`。common 仪器 14/14 与 TV 仪器 10/10 已在 API 21/26/33/34 跑通。**仍未覆盖**：真实授权撤销/锁屏/旋转组合；`POST_NOTIFICATIONS` 撤销后启动在 API 33 模拟器上会使测试进程被系统终止，未纳入稳定回归，保持未验证。
+
+**证据（2026-11-17，自启动实现，`bfff381`）**：`StartupPolicy`/`StartupAccess`/`StartupSetupActivity` 与新 `BootActivity` 自动路径落地——仅 API 29、`PROJECT_MEDIA`、后台启动、后台执行、电池豁免与配置全部就绪时才判定 `START_CAPTURE`，否则保留提醒；`claimBootAttempt` 以 `boot_count` 把自动尝试限制为每次真实开机一次；先发提醒兜底，服务经 `BROADCAST_FILTER` 确认推流后才撤销。`StartupPolicyTest` 4 项通过；两组 startup 仪器用例未执行；`:common:testDebugUnitTest`、`:mobile:testDebugUnitTest` 与 `:tv:assembleDebug` 通过。真实冷启动、重启保持、息屏与厂商限制未实测。
 
 <a id="cap-2"></a>
 

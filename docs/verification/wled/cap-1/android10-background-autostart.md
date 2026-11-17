@@ -1,6 +1,6 @@
 # Android 10 TV 后台运行设置与自启动需求增补
 
-> 日期：2026-11-17。状态：**本机后台权限/电池优化白名单已配置并读回；应用默认行为与开机自启动尚未实现或验收**。
+> 日期：2026-11-17。状态：**本机后台权限/电池优化白名单已配置并读回；开机自启动已按受控路径实现（提交 `bfff381`），真实冷启动与重启保持未实测**。
 > 范围：用户指定 Sony `BRAVIA 4K UR3`，Android 10 / API 29，ADB `10.245.0.109:5555`，用户 `0`，仅 `com.abrenoch.wledgrabber`。
 
 ## 1. 本机后台权限：已执行
@@ -33,31 +33,37 @@ adb -P 5037 -s 10.245.0.109:5555 shell dumpsys deviceidle whitelist -com.abrenoc
 
 这是已连接电视的系统管理配置，不是 APK 在所有设备上自动获取了这些权限；也不是永不被回收、屏幕关闭后仍采集或重启后自动采集的证明。原有用户停止/息屏/授权撤销释放行为不因后台白名单而取消。
 
-## 2. 自启动：当前实现与缺口
+## 2. 自启动：实现现状（已实现，冷启动未实测）
 
-- 已安装包具备 `RECEIVE_BOOT_COMPLETED: granted=true`；设备 PackageManager 列出了 `.common.WledBootReceiver` 的 `BOOT_COMPLETED` 注册。
-- 当前源码 `common/src/main/java/com/abrenoch/wledgrabber/common/WledBootReceiver.java:25–32` 只在 boot 偏好开启时调用 `postReminder`，不启动应用界面或采集。通知点击后才进入 `BootActivity` 并申请新会话。
-- `common/src/main/res/values/pref_values.xml:23` 的源码默认值 `pref_default_boot=false`；`CaptureConfig.bootReminder()` 也明确表达提醒语义。本轮未读取/修改设备内已保存的 boot 偏好，不把源码默认值当成用户当前配置。
-- 所以，收到开机广播的权限、后台白名单、录屏持续允许、用户自启动偏好、真正开机启动是不同条件；不能把前三项配置完成记为最后一项实现。
+实现前源码在 `WledBootReceiver` 中只调用 `postReminder`，且 `pref_default_boot=false`。提交 `bfff381` 之后：
 
-GitNexus 对 `WledBootReceiver.onReceive` 的 upstream impact 返回 `UNKNOWN`、0 个已解析 caller/process；Manifest 和设备注册证实它由 Android 系统触发，不能据图中 0 个调用者当成低风险或未使用。索引落后当前提交，代码修复前需重新核对。
+- `StartupPolicy`（纯策略）按平台版本、`PROJECT_MEDIA`、后台启动（悬浮窗或 device owner）、后台执行（两个 AppOps）、电池豁免五项授权决定 `START_CAPTURE` / `REMIND`；只有 API 29 自动路径经过审计，其余版本保持手动采集。
+- `StartupAccess` 只持久化用户选择（boot 偏好，以及 `startup_setup` 中的完成标记与开机尝试）；系统授权每次实时读取，不做缓存。`claimBootAttempt` 用 `Settings.Global` 的 `boot_count` 保证每次真实开机只尝试一次。
+- `WledBootReceiver` 在偏好开启且录屏服务未运行时调用 `StartupAccess.status().onBoot(...)`：配置与授权齐全则先发提醒作为兜底，再以 `EXTRA_AUTOMATIC_BOOT` 启动 `BootActivity`；其余情况维持提醒。服务确认推流后（`BROADCAST_FILTER` 成功）撤销提醒，出错或 10 秒超时则保留提醒。
+- `BootActivity` 自动路径在配置缺失、授权缺失或用户取消时降级为提醒，且不会在旋转后重复申请授权。
+- `StartupSetupActivity` 展示实时授权状态，可复制管理员 ADB 命令但自身不执行；用户未完成设置时，主界面入口会引导进入。
+- 源码默认值 `pref_default_boot=true` 只影响新安装，设备内已保存的偏好不被改写。
+
+仍未验证：真实开机冷启动、重启保持、息屏与厂商限制下的实际推流，以及其他 API 版本。设置页文案也明确说明它不启动采集、不能证明冷启动。
+
+GitNexus 对 `WledBootReceiver.onReceive` 的 upstream impact 返回 `UNKNOWN`、0 个已解析 caller/process；Manifest 和设备注册证实它由 Android 系统触发，不能据图中 0 个调用者当成低风险或未使用。
 
 ## 3. 新需求与待确认公共边界
 
-用户新增“app 允许默认后台运行及自启动”。它已纳入 CAP-1 / MOB-2 / QA-1 范围，但**开机后是进入待机还是直接开始采集/驱动灯带**尚待明确；后台系统设置已独立完成，不等待该产品决策。
+用户新增“app 允许默认后台运行及自启动”。它已纳入 CAP-1 / MOB-2 / QA-1 范围。开机后的目标行为已于实现时确定：授权与配置齐全则直接开始采集，否则降级为提醒（见 §2）；后台系统设置不依赖该决策。
 
-后续实现须将默认偏好、显式关闭/撤销、配置或授权缺失、重复开机事件和平台不允许的启动分开处理；复用当前共享启动/验证/释放入口，不新增独立 sender，不保存或重放旧录屏 token，不用 root、全局放宽或伪造系统事件替代平台许可。
+实现已把默认偏好、显式关闭/撤销、配置或授权缺失、重复开机事件和平台不允许的启动分开处理；复用共享启动/验证/释放入口，不新增独立 sender，不保存或重放旧录屏 token，不用 root、全局放宽或伪造系统事件替代平台许可。
 
-TDD 提议补充公共边界：`BOOT_COMPLETED → WledBootReceiver → 可观察启动/提醒结果`，以及配置仓库的默认值与显式关闭保存。它应覆盖默认行为、幂等与失败降级；纯 JVM/合成广播不能证明真实冷启动、Sony 的系统界面行为或其他 Android 版本兼容性。须与原先提议的公共 seams 一并经用户确认后才新增测试。
+已补充公共边界测试：`StartupPolicyTest` 4 项 JVM 用例覆盖“授权齐全启动 / 显式关闭优先 / 缺配置或缺任一授权降级提醒 / 其他版本不继承 API 29 例外”；仪器用例 `StartupSetupActivityTest`（7 项）与 `StartupSettingsInstrumentedTest`（3 项）覆盖默认开启、显式关闭与完成标记持久化、缺授权不可持久化为自动设置、不支持平台不展示授权入口、D-pad 与返回取消。两组仪器用例本次未执行；`claimBootAttempt` 的每次开机仅一次语义尚无直接测试。纯 JVM/合成广播不能证明真实冷启动、Sony 的系统界面行为或其他 Android 版本兼容性。
 
 ## 4. 验收分层
 
 | 项目 | 本次状态 |
 |---|---|
 | 指定包后台两个 AppOps、白名单设置及独立读回 | 通过 |
-| 既有录屏 allow、开机 receiver 注册和 permission 检查 | 已核对，不等于自启动已运行 |
-| APK 新装默认开启及已有用户显式关闭的迁移规则 | 待实现/确认，未修改生产代码 |
-| 真正开机后应用/采集自动启动 | 待行为确认、TDD 实现与冷启动实测 |
+| 既有录屏 allow、开机 receiver 注册和 permission 检查 | 已核对；receiver 已改按 §2 受控路径启动 |
+| APK 新装默认开启及已有用户显式关闭的迁移规则 | 已实现：新装默认 `true`，已保存偏好不改写；设置页写回用户选择 |
+| 真正开机后应用/采集自动启动 | 已实现受控路径；真机冷启动与重启保持未实测 |
 | 重启保持、后台长时运行、其他 API/厂商 | 未执行，不由本次读回外推 |
 
 关联：[录屏持续授权](android10-persistent-consent.md)、[初审与 TDD 边界](../../../fixes/2026-11-17-completion-audit.md)。

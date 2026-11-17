@@ -33,7 +33,7 @@
 | 布局 | 四边数量、SKIP/BLACK、Input/Reverse、深度、Overlap、Edge Gap、四角；平均色也遵守物理映射和黑灯规则 |
 | 设备 | 单设备LAN；RGB、RGBW均首版；DDP因RGBW为必做，不延期 |
 | 产品 | TV优先且mobile完整配置；共用预览、三种测试图案；保留与后端无关的主界面动效等体验，不扩大为UI重写 |
-| 平台 | minSdk21、compileSdk35、targetSdk35；授权、通知、磁贴、开机提醒及横竖屏按平台规则适配 |
+| 平台 | minSdk21、compileSdk35、targetSdk35；授权、通知、磁贴、开机自启动/提醒及横竖屏按平台规则适配 |
 | 身份 | WLED Grabber，`com.abrenoch.wledgrabber`；major破坏性版本，仅侧载；图标、色板、字标与资源映射见[品牌与图标规范](app-icon/brand-guide.md) |
 | 性能 | 首套274灯目标60fps；达不到则发布门禁未通过，不静默改为30fps |
 | 延后 | 仅SMP-3的黑边检测、线性平均、饱和度、平滑等增强；默认关闭 |
@@ -157,7 +157,7 @@ flowchart LR
 | `pref_key_capture_max_dimension` | int，1..640 | 640；不放大源画面，首版不提供960选项 |
 | `pref_key_framerate` | int，1..60 | 保留30默认及10/15/24/30/60选项；首套验收显式选择60，不用默认30替代门禁 |
 | `pref_key_use_avg_color` | bool | false；整域平均仍执行Gap/尾黑 |
-| `pref_key_boot` | bool | false；UI改为“开机提醒”，不沿用自动复用录屏授权的语义 |
+| `pref_key_boot` | bool | true（仅新安装，已保存偏好不改写）；受控自启动，不沿用自动复用录屏授权的语义 |
 
 `schemaVersion/revision`、`DeviceEndpoint`（host、已验证地址、网络身份、分离端口）、`WledDevice`（MAC/版本/观察count/能力/observedAt）与用户确认结果由CFG统一定义持久化/内存边界。能力观察不是偏好默认值；`ProbeResult(device, capabilities, observedAt, error)`一次解析复用。`unconfirmed/0`只用于草稿，不得流入ValidatedConfig。高层策略和证据不能压成一个“connected”布尔值。
 
@@ -380,7 +380,7 @@ VALIDATING在用户前台操作后异步完成设备与配置验证，再显示�
 - `MediaProjection.Callback.onStop` 统一清理reader/display/projection/thread/队列；VirtualDisplay.Callback不能替代它。
 - API34+ 用 captured-content resize回调处理单应用窗口和旋转；低版本用display/configuration变化。在原VirtualDisplay上resize/setSurface，先停止旧reader回调，生成新计划，再接受新generation；不能重复createVirtualDisplay。
 - 息屏统一停止发送并release；如系统已撤销投屏，亮屏只显示“需重新授权”，不承诺无感续采。仍有效会话的恢复与已终止会话严格区分。
-- target35开机接收器只提供用户可见提醒入口，不从BOOT_COMPLETED启动mediaProjection FGS，不后台强拉Activity；通知权限被拒则下次前台显示提示。
+- target35开机接收器默认只提供用户可见提醒入口，不从BOOT_COMPLETED直接启动mediaProjection FGS；仅当用户已显式开启自启动且平台与授权满足 §6.2.2 的受控条件时，才经 `BootActivity` 申请授权，其余情况不后台强拉Activity；通知权限被拒则下次前台显示提示。
 - service和内部Activity默认不导出；launcher/tile/boot入口按平台需求声明exported及系统权限。控制广播保持进程内或显式受限，不把capture intent暴露给外部。
 
 ### 6.2.1 用户选择的 Android 10 TV 持续授权
@@ -389,11 +389,13 @@ VALIDATING在用户前台操作后异步完成设备与配置验证，再显示�
 
 2026-11-17 Sony Android 10 设备已完成指定包 `default → allow` 并读回；新会话免弹窗、进程重建与重启保持仍待实测。调用链、作用范围、命令、撤销及验收分层见[设备授权记录](../verification/wled/cap-1/android10-persistent-consent.md)，不得据此提升 CAP-1/QA 状态。
 
-### 6.2.2 默认后台与自启动需求增补（待实现）
+### 6.2.2 默认后台与自启动需求增补（受控路径已实现）
 
 2026-11-17 用户补充“默认后台运行及自启动”。已在指定 Sony Android 10 设备为新版包显式设置 `RUN_IN_BACKGROUND=allow`、`RUN_ANY_IN_BACKGROUND=allow` 并加入 deviceidle user 白名单，独立读回通过；这是本机设置，不是 APK 自动获得系统权限，也不改变停止/息屏/撤销后的释放契约。
 
-上文“开机只提醒”仍是**当前实现**，不是新增自启动需求的完成状态：boot 源码默认值仍为 false，receiver 仍只发提醒。开机后进入待机还是直接采集的目标及新增公共测试边界待确认，随后再以 TDD 修改默认值/启动策略并执行真实冷启动验收。系统权限、用户偏好和可运行的新录屏会话须分层验证，不以后台白名单或广播注册代替自动启动证据；不缓存旧 token、不绕过平台许可、不扩展权限到旧包或其他应用。
+开机自启动随后按受控路径实现（提交 `bfff381`），取代上文“开机只提醒”：boot 源码默认值改为 true（只影响新安装，已保存偏好不被改写）。`WledBootReceiver` 在偏好开启、录屏服务未运行且配置就绪时调用 `StartupPolicy.onBoot`；只有平台为 API 29、`PROJECT_MEDIA` 已 allow、具备后台启动条件（悬浮窗或 device owner）、两个后台 AppOps 均 allow、已加入电池优化白名单时，才判定 `START_CAPTURE`：先发提醒兜底，再启动 `BootActivity` 申请授权，服务经 `BROADCAST_FILTER` 确认推流后撤销提醒，出错或 10 秒超时保留提醒。其他版本与其他情况一律降级为用户可见提醒。`claimBootAttempt` 以 `Settings.Global.boot_count` 保证每次真实开机只尝试一次；不缓存旧 token、不绕过平台许可、不扩展权限到旧包或其他应用。
+
+系统权限、用户偏好和可运行的新录屏会话仍须分层验证：真实冷启动、重启保持、息屏与厂商限制未实测，不以后台白名单、广播注册或源码实现代替自动启动证据。
 
 命令、撤销、当前调用链及待验收项见[后台运行与自启动记录](../verification/wled/cap-1/android10-background-autostart.md)。该增补归属 CAP-1 / MOB-2 / QA-1，不自动提升现有任务状态。
 
@@ -518,7 +520,7 @@ NSD浏览`_wled._tcp.`，解析的port是HTTP端口，不是UDP；缓存service�
 | LED Layout | T/B/L/R、物理数量、Gap length/position、Input、Reverse | TV实时布局编辑器（D-pad步进、精确输入、实时预览、逐边/Input校验） |
 | Advanced Layout | H/V Depth、Overlap、Edge Gap、四角、SKIP/BLACK、RGBW白模式、平均色、采集长边、画质 | 两端均首版；TV高级选项步骤，不能只给手机配置提示 |
 | Preview | 共用预览、274预设、288参考向量、三种图案、逐边/输入位置点亮校验 | 两端各有独立LayoutPreviewActivity；TV编辑器内联实时预览 |
-| Capturing / General | 帧率、开机提醒、权限/状态 | 录屏授权/通知/Tile/系统insets按平台适配 |
+| Capturing / General | 帧率、自启动设置、权限/状态 | 录屏授权/通知/Tile/系统insets按平台适配 |
 
 手机：空配置点击电源先进入WLED设置/扫描，完成确认后返回主界面再授权。TV：沿用改造后的`NetworkScanActivity → ScanResultActivity`导航，再进入Connection → Layout（实时编辑器，含预览/测试）→ Advanced（可选）→ Capturing。保留主界面与非后端相关交互；设置保存失败不启动、不假显示已保存。同一字段只在上述唯一页面出现：物理数量只在布局编辑器，RGBW white mode/平均色/采集长边/画质只在高级选项，连接步骤不再重复。
 
@@ -573,7 +575,7 @@ mobile/tv目前同applicationId，继续输出**同ID的替代APK**，不承诺�
 | Priority / Reconnect / Reconnect Delay | 删除；用受限健康观察和显式会话恢复，不模拟旧TCP优先级 |
 | X/Y LED Count | 只影响旧采集缩放，不能转换灯数；按实际四边数量重建 |
 | Frame Rate / Average Color | 保留能力和共享设置入口；新配置独立保存，平均色仍执行Gap/尾黑 |
-| Grab on Boot | 改为开机提醒，需用户前台授权；权限被拒在下次前台提示 |
+| Grab on Boot | 受控自启动：仅 API 29 且授权与配置齐全时经 BootActivity 申请授权，其余情况开机提醒；权限被拒在下次前台提示 |
 | 旧服务器布局 | 按四边/Gap/Input/Reverse/Depth/Overlap/Edge Gap/四角重建，参考§4向量 |
 | 实际接线 | 预览物理索引及三种图案确认，不用旧X/Y或起点直觉推断 |
 | 首套274 | 使用§4.5预设；RGBW需另测，不能把WS2815当RGBW |
@@ -769,7 +771,7 @@ A01–A14为稳定追溯ID，任务卡可引用；它们是已经纳入正文的
 | network/Hyperion.java、HyperionThread.java、HyperionProto.proto及生成代码 | 最终删除；改由LedStreamer和network/wled的WledDevice/WledSession/WledUdpTransport/WledHttpClient/WledDiscovery承担职责 | NET、CAP、REL |
 | network/NetworkScanner.java、util/HyperionScannerTask.java | 枚举排序/监听职责迁入WledDiscovery；必要的UI任务适配更名WledScannerTask，不重复探测和AsyncTask发送；不用bool HostProbe抽象 | NET、TV、REL |
 | HyperionScreenEncoder / HyperionScreenEncoderBase | 更名ScreenEncoder / ScreenEncoderBase，替换采样和租约发布；Base若只剩重复职责可合并，不强留空抽象 | CAP、SMP、REL |
-| HyperionScreenService / HyperionNotification / HyperionGrabberBootReceiver | 更名ScreenGrabberService / GrabberNotification / GrabberBootReceiver，统一状态/停止与开机提醒 | CAP、REL |
+| HyperionScreenService / HyperionNotification / HyperionGrabberBootReceiver | 更名ScreenGrabberService / GrabberNotification / GrabberBootReceiver，统一状态/停止与开机自启动/提醒 | CAP、REL |
 | util/HyperionGrabberOptions / mobile的HyperionGrabberTileService | 更名GrabberOptions / GrabberTileService；前者只组装快照，后者走用户授权入口 | CFG、MOB、REL |
 | 两端MainActivity/SettingsActivity、TV BasicSettingsStepFragment与扫描/结果页 | 保留UI框架和导航，完整新设置；移除旧TestTask及旧字段 | TV、MOB |
 | 新common/views/LedLayoutPreviewView、共享图案控制器、两端LayoutPreviewActivity | 共用计划/测试writer，宿主只管理主题导航和生命周期 | PRE |
