@@ -1,0 +1,45 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/startup/StartCaptureActivity.java
+  a253b721f722567f 6,46-47,58-59,61-62,66,74-76,79,108-112,116-164,188,191-192,195-203,241-243
+common/src/main/res/values/styles.xml
+  a253b721f722567f 12-23
+common/src/main/AndroidManifest.xml
+  a253b721f722567f 44
+common/src/main/res/layout/activity_start_capture.xml
+  a253b721f722567f 8,11,24
+common/src/main/res/values/strings.xml
+  a253b721f722567f 82
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/startup/StartCaptureActivityTest.java
+  a253b721f722567f 14,91-121,132-135,138-140
+common/src/main/res/values-zh-rCN/strings.xml
+  a253b721f722567f 28
+common/src/main/res/values/colors.xml
+  a253b721f722567f 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "030e1002038f431289d12fd0e9a55357c2051cf7",
+  "prompts": {
+    "a253b721f722567f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "07b68284-4431-433f-a12b-db8d66eb1963",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 717,
+      "total_deletions": 145,
+      "accepted_lines": 411,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/cfafa1b06bd3b453d80768b25a8a396561e357fcc1f04e3f0bd178723d4115f0",
+      "token_usage": {
+        "input_tokens": 2333194,
+        "output_tokens": 944706,
+        "cache_read_tokens": 319324928,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
