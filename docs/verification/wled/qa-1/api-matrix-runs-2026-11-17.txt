@@ -1,27 +1,26 @@
-# API 矩阵仪器测试运行记录 2026-11-17（更新）
+# API 矩阵仪器测试运行记录（模拟器复测，真实设备离线）
 
-环境：macOS / Apple Silicon；Gradle 8.9 + AGP 8.7.2 + JDK 17.0.21；`ANDROID_SERIAL` 逐台指定。
+环境：macOS / Apple Silicon；Gradle 8.9 + AGP 8.7.2 + JDK 17.0.21。
+本次全部通过 Android 模拟器执行（不在内网，电视与真实 WLED 不可达）。
 
-| API | 设备/镜像 | 模块与结果 | 结论 |
-|---|---|---|---|
-| 21 | `api21-phone`（5.0.2 arm64） | common 14/14、mobile 3/3 | PASS |
-| 26 | `api26-phone`（8.0.0 arm64） | common 14/14、mobile 3/3 | PASS |
-| 29 | Sony KD-55XD8005（真机） | common 2/2、tv 8/8（wledHost=10.245.0.99） | PASS（软件侧） |
-| 33 | `wled-tv-api33`（android-tv 13） | common 14/14、mobile 3/3、tv 8/8 | PASS |
-| 34 | `wled-tv-api34`（android-tv 14） | common 14/14、mobile 3/3、tv 8/8 | PASS |
-| 35 | `api35-phone`（15 google_apis） | common 2/2、mobile 1/1；tv 5/7 | 部分覆盖（无 android-tv 镜像） |
+| API | 镜像 | common | mobile | tv |
+|---|---|---|---|---|
+| 21 | `api21-phone` 5.0.2 | **28/28** | **10**（Tile/通知渠道按 API 跳过） | 不适用（无 leanback） |
+| 26 | `api26-phone` 8.0.0 | **41/41** | **8/8** | 不适用 |
+| 33 | `wled-tv-api33` 13 | **41/41** | 8/8 | **32**（29 通过 + 3 真实设备跳过） |
+| 34 | `wled-tv-api34` 14 | **38/38** | 8/8 | **32**（29 通过 + 3 真实设备跳过） |
 
-## 本轮新增设备端用例
+## 本轮修复的两个测试基建问题
 
-- `common` `ImageReaderLifecycleInstrumentedTest`：真实 Surface 生产者 20 帧 acquired==closed；maxImages 超限被拒。
-- `common` `OutputOwnershipInstrumentedTest`：CAPTURE/TEST 互斥、release 需匹配 id+epoch、宿主退出可重取。
-- `common` `LedLayoutPreviewInstrumentedTest`：D-pad 走到 273/0 并钳位、resize 保持选中、错误态阻断、触摸命中不同物理灯。
-- `common` `WledHttpFailureInstrumentedTest`：静默服务器 TIMEOUT、关闭端口 CONNECT_FAILURE、不误报 turnOff。
-- `tv` `TvTestPatternLifecycleTest`：测试图案宿主退出释放 TEST 租约，随后 CAPTURE 可取得。
-- `mobile` `MobileSettingsFormTest`：全字段非空本地化标签、recreate 后保留值。
+1. **测试 APK targetSdk = 21**：`common/build.gradle` 缺 `targetSdk`，androidTest APK 以
+   21 打包，Android 14 会对 targetSdk < 23 的应用弹出 `ACTION_REVIEW_PERMISSIONS`
+   复核页并盖住被测 Activity，导致 `StartupSetupActivityTest` 全部 45s 超时。
+   已在 common 的 `defaultConfig` 补 `targetSdk 35`，API 34 common 恢复 38/38。
+2. **平台 API 守卫**：`MobileEntriesInstrumentedTest` 的 TileService(API 24+)与
+   NotificationChannel(API 26+)在 API 21 上不存在，已加 `assumeTrue` 跳过。
 
 ## 仍未覆盖
 
-- API 23 无镜像；API 35 未跑新增用例（无 android-tv 镜像）。
-- 授权拒绝/旋转/锁屏/撤销、真实断网/路由变更、进程被杀后的 ownership 复位。
-- RGBW 样机两模式、端到端物理时延、物理 FPS。
+- 真实设备：Sony KD-55XD8005 与 WLED `10.245.0.99` 均不在内网，3 个真实设备用例为
+  `ASSUMPTION_FAILED` 跳过；`QA-2` 物理 FPS/端到端时延仍需测量设备。
+- API 23 未建镜像；API 35 无 android-tv 镜像。

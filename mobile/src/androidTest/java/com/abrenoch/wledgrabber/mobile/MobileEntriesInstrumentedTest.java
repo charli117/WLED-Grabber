@@ -35,6 +35,8 @@ public class MobileEntriesInstrumentedTest {
 
     @Test
     public void quickSettingsTileIsDeclaredAndEnabled() {
+        org.junit.Assume.assumeTrue("TileService requires API 24+",
+                android.os.Build.VERSION.SDK_INT >= 24);
         PackageManager manager = context().getPackageManager();
         Intent intent = new Intent(context(), WledTileService.class)
                 .setAction(TileService.ACTION_QS_TILE);
@@ -56,6 +58,8 @@ public class MobileEntriesInstrumentedTest {
 
     @Test
     public void notificationChannelsExist() {
+        org.junit.Assume.assumeTrue("Notification channels require API 26+",
+                android.os.Build.VERSION.SDK_INT >= 26);
         NotificationManager manager = (NotificationManager)
                 context().getSystemService(Context.NOTIFICATION_SERVICE);
         assertNotNull(manager);
