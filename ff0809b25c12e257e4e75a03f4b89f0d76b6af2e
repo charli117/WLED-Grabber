@@ -1,0 +1,111 @@
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/WledTestSupport.java
+  51396205a9b60a22 14,41,78,87-92,100
+tv/src/main/res/layout/layout_editor_row.xml
+  51396205a9b60a22 1-25
+common/src/test/java/com/abrenoch/wledgrabber/common/config/SettingsDraftControllerLayoutTest.java
+  e2fcb4b975340679 1-141
+tv/src/main/res/layout/activity_layout_editor.xml
+  51396205a9b60a22 1-109
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/LayoutEditorActivity.java
+  51396205a9b60a22 1-663
+common/src/test/java/com/abrenoch/wledgrabber/common/led/LayoutDraftCompilerTest.java
+  e2fcb4b975340679 1-55
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LayoutDraftCompiler.java
+  e2fcb4b975340679 1-25
+tv/src/main/java/com/abrenoch/wledgrabber/tv/views/LayoutValueRow.java
+  51396205a9b60a22 1-209
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledLayoutStepFragment.java
+  51396205a9b60a22 18,24-28,38-40,62-63,73-82,85,87-88,92,99,115,121,126-128,138-140,143,146,150-152
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvSetupUiTest.java
+  51396205a9b60a22 52-60
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvLayoutEditorTest.java
+  e2fcb4b975340679 65-66,68-69
+  51396205a9b60a22 1-64,67,70-311
+tv/src/main/res/drawable/layout_editor_row_background.xml
+  51396205a9b60a22 1-24
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvDpadWalkthroughTest.java
+  51396205a9b60a22 7,38-52,82,94,96,105
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/SettingsStepBaseFragment.kt
+  51396205a9b60a22 111-112
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LayoutDraft.java
+  e2fcb4b975340679 1-50
+tv/src/main/res/values-zh-rCN/strings.xml
+  51396205a9b60a22 20-53
+tv/src/main/AndroidManifest.xml
+  51396205a9b60a22 55-57
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LayoutAutoDistribute.java
+  e2fcb4b975340679 1-53
+common/src/test/java/com/abrenoch/wledgrabber/common/config/LayoutDraftValidationTest.java
+  e2fcb4b975340679 1-78
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvLayoutFlowTest.java
+  51396205a9b60a22 3,5-6,14-19,22,36-37,41-42,61-64,66-69,73,78-79,84,89-141
+  e2fcb4b975340679 142-143
+common/src/main/java/com/abrenoch/wledgrabber/common/views/LedLayoutPreviewView.java
+  51396205a9b60a22 108-110
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledConnectionStepFragment.java
+  e2fcb4b975340679 198
+  51396205a9b60a22 21,42,73-78,136-139
+common/src/test/java/com/abrenoch/wledgrabber/common/led/LayoutAutoDistributeTest.java
+  e2fcb4b975340679 1-72
+common/src/main/java/com/abrenoch/wledgrabber/common/util/SettingsDraftController.java
+  e2fcb4b975340679 3,5-8,43-118
+tv/src/main/res/values/strings.xml
+  51396205a9b60a22 22-55
+common/src/test/java/com/abrenoch/wledgrabber/common/led/FirstUnitPresetTest.java
+  51396205a9b60a22 1-46
+common/src/main/java/com/abrenoch/wledgrabber/common/led/FirstUnitPreset.java
+  51396205a9b60a22 1-46
+docs/task/08-tv.md
+  51396205a9b60a22 96
+common/src/main/java/com/abrenoch/wledgrabber/common/util/ConfigValidator.java
+  e2fcb4b975340679 8,51,67,73-74,79-88,95-128,222-337
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "ff0809b25c12e257e4e75a03f4b89f0d76b6af2e",
+  "prompts": {
+    "51396205a9b60a22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ff5acb-12c7-4dbe-bae9-040be916a7c2",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 1679,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/5abaaf8d0ec59b3870515410159e21baa4d31a1c672b2807a0ccf451156e5909",
+      "token_usage": {
+        "input_tokens": 1001908,
+        "output_tokens": 736249,
+        "cache_read_tokens": 199942144,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 799,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/ad03fce5ccc404d4437718889449fc4a1f5870afdef86505558c1c786f9f1944",
+      "token_usage": {
+        "input_tokens": 6299724,
+        "output_tokens": 1915987,
+        "cache_read_tokens": 1158746496,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
