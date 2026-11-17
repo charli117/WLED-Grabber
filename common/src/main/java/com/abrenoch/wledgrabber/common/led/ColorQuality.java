@@ -52,6 +52,10 @@ public final class ColorQuality {
      * Compensates the SDR tone-map of HDR/Dolby Vision capture: the virtual
      * display receives a compressed SDR image, so restore a little contrast and
      * chroma before the colour is sent to the strip. Neutral grey stays neutral.
+     *
+     * <p>Integer curve: contrast 110%, saturation 130%, then clamp. Dark values
+     * below ~15 can reach black and highlights above ~241 can clip; pure black,
+     * white and the primary colours are unchanged.</p>
      */
     public static void applyHdrCompensation(int[] rgb) {
         int luma = (rgb[0] * 77 + rgb[1] * 150 + rgb[2] * 29) >> 8;

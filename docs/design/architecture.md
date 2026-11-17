@@ -338,6 +338,8 @@ WLED auto-white 会重算 W；应用白色变成 (0,0,0,255) 后再被自动模�
 
 BLACK gap 与尾灯始终为全通道 0。输出保持 RGB/RGBW 语义顺序，物理 GRB 等颜色顺序由 WLED 处理；应用不二次交换、不默认增加 gamma、饱和度或平滑。
 
+HDR/Dolby Vision：MediaProjection 虚拟显示只接受 SDR，HDR 片源会被 tone-map 后采集。`WledScreenService` 在采集开始与 `DisplayListener.onDisplayChanged` 时读取 `Display.isHdr()`（**API 26+**；API 24–25 不启用该补偿），并记录 `getHdrCapabilities()` 中的 Dolby Vision 支持；HDR 激活期间对采样颜色应用固定对比度 +10%、饱和度 +30% 的补偿，SDR 输出保持字节不变。限制：`isHdr()` 反映**显示器当前模式**而非内容本身，HDR 常开的电视可能对 SDR 内容也返回 true 并触发补偿；补偿与用户饱和度设置串联，最高约 2.6 倍。该补偿只针对 HDR→SDR 的压缩损失，不替代 WLED 侧 gamma/白平衡设置。
+
 
 <a id="lifecycle"></a>
 

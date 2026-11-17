@@ -320,7 +320,7 @@ public class WledScreenService extends Service {
                     }
                     Display display = displayManager == null ? null
                             : displayManager.getDisplay(Display.DEFAULT_DISPLAY);
-                    if (display != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    if (display != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         refreshHdrCompensation(display);
                     }
                     DisplayMetrics current = new DisplayMetrics();
@@ -432,7 +432,7 @@ public class WledScreenService extends Service {
             streamer.start(epoch, OutputOwner.CAPTURE, physicalCount, channels);
             running = true;
             stopping = false;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && displayManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && displayManager != null) {
                 Display defaultDisplay = displayManager.getDisplay(Display.DEFAULT_DISPLAY);
                 if (defaultDisplay != null) {
                     refreshHdrCompensation(defaultDisplay);
@@ -457,7 +457,7 @@ public class WledScreenService extends Service {
      * compensation while it lasts; SDR output stays byte-identical.
      */
     private void refreshHdrCompensation(Display display) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || display == null) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || display == null) {
             hdrCompensation = false;
             quality = baseQuality;
             return;
