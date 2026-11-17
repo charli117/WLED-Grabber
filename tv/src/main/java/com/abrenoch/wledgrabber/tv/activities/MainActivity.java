@@ -80,12 +80,33 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!initIfConfigured()){
-            startSetup();
+        if (!initIfConfigured()) {
+            if (hasSavedAddressing()) {
+                // The WLED endpoint is already configured; only the layout or
+                // channel mode is incomplete. Do not send returning users back
+                // through the first-run addressing wizard.
+                initActivity();
+            } else {
+                startSetup();
+            }
         }
         if (savedInstanceState == null) StartupSetupActivity.showIfNeeded(this);
 
 
+    }
+
+    /** @return whether a WLED host and physical count were already saved. */
+    private boolean hasSavedAddressing() {
+        ConfigRepository repository = new ConfigRepository(
+                new PreferencesConfigStorage(new Preferences(this)), new ConfigValidator());
+        ValidationResult<ConfigSnapshot> loaded = repository.load();
+        ConfigSnapshot snapshot = repository.committedSnapshot();
+        if (!loaded.isValid() || snapshot == null) {
+            return false;
+        }
+        String host = snapshot.device().host();
+        return host != null && !host.trim().isEmpty()
+                && snapshot.device().physicalLedCount() > 0;
     }
 
     /** @return whether the activity was initialized */
@@ -174,7 +195,10 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
                         return;
                     }
                     startActivity(new Intent(this,
-                            com.abrenoch.wledgrabber.common.startup.StartCaptureActivity.class));
+                            com.abrenoch.wledgrabber.common.startup.StartCaptureActivity.class)
+                            .putExtra(
+                                    com.abrenoch.wledgrabber.common.startup.StartCaptureActivity
+                                            .EXTRA_AUTO_START, true));
                 } else {
                     stopScreenRecorder();
                     mRecorderRunning = false;

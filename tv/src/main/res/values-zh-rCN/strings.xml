@@ -53,4 +53,7 @@
   <string name="layout_editor_advanced_guidance">RGBW 白色模式、平均色、采集尺寸与画质。修改在下次启动生效。</string>
   <string name="layout_editor_advanced_entry">高级选项</string>
   <string name="layout_editor_advanced_entry_desc">RGBW 白色模式、平均色、采集尺寸、画质</string>
+  <string name="wled_setup_edit_connection">编辑 WLED 连接</string>
+  <string name="wled_setup_edit_connection_desc">修改主机、端口、协议或通道模式</string>
+  <string name="wled_setup_complete_layout">请先完成 LED 布局再开始采集。</string>
 </resources>

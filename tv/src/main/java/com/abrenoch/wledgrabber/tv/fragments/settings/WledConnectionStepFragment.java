@@ -12,6 +12,7 @@ import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
 import com.abrenoch.wledgrabber.common.network.wled.Capabilities;
 import com.abrenoch.wledgrabber.common.network.wled.ProbeResult;
 import com.abrenoch.wledgrabber.common.network.wled.WledHttpClient;
+import com.abrenoch.wledgrabber.common.startup.StartCaptureActivity;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
 import com.abrenoch.wledgrabber.common.util.Preferences;
@@ -20,6 +21,7 @@ import com.abrenoch.wledgrabber.common.util.SettingsDraftController;
 import com.abrenoch.wledgrabber.common.util.ValidationResult;
 import com.abrenoch.wledgrabber.tv.activities.LayoutEditorActivity;
 import com.abrenoch.wledgrabber.tv.activities.LayoutSettingsActivity;
+import com.abrenoch.wledgrabber.tv.activities.ManualSetupActivity;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,9 +43,12 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
     private static final long ACTION_TEST = 1007L;
     private static final long ACTION_LAYOUT = 1008L;
     private static final long ACTION_ADVANCED = 1011L;
+    private static final long ACTION_EDIT_CONNECTION = 1012L;
     /** Public for the merge regression test in the TV test module. */
     public static final int REQUEST_LAYOUT = 4201;
     public static final int REQUEST_ADVANCED = 4202;
+    public static final int REQUEST_EDIT_CONNECTION = 4203;
+    public static final String EXTRA_EDIT_CONNECTION = "extra_edit_connection";
     private static final long FRAME_RATE = 1009L;
     private static final long LANGUAGE = 1010L;
     private static final long SET_PROTOCOL = 2001;
@@ -52,6 +57,8 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
 
     private final ExecutorService probeExecutor = Executors.newSingleThreadExecutor();
     private SettingsDraftController controller;
+    private boolean editMode;
+    private boolean addressingVisible;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,14 +68,16 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                 new PreferencesConfigStorage(new Preferences(requireContext())),
                 new ConfigValidator()));
         controller.load();
+        editMode = requireActivity().getIntent()
+                .getBooleanExtra(EXTRA_EDIT_CONNECTION, false);
+        addressingVisible = editMode || !isStartConfigured();
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onCreateActions(List<GuidedAction> actions, @Nullable Bundle savedInstanceState) {
-        // Direct entry so layout/LED-count settings are reachable without first
-        // saving this step; the layout page owns physical LEDs, T/B/L/R, gap,
-        // input position and reverse.
+        // The hub keeps layout/advanced/preview reachable; addressing fields are
+        // only shown on first use or when the user explicitly edits the endpoint.
         actions.add(new GuidedAction.Builder(requireContext())
                 .id(ACTION_LAYOUT)
                 .title(getString(R.string.wled_setup_layout_entry))
@@ -80,32 +89,43 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                 .description(getString(
                         com.abrenoch.wledgrabber.tv.R.string.layout_editor_advanced_entry_desc))
                 .build());
+        if (!addressingVisible) {
+            actions.add(new GuidedAction.Builder(requireContext())
+                    .id(ACTION_EDIT_CONNECTION)
+                    .title(getString(com.abrenoch.wledgrabber.tv.R.string
+                            .wled_setup_edit_connection))
+                    .description(getString(com.abrenoch.wledgrabber.tv.R.string
+                            .wled_setup_edit_connection_desc))
+                    .build());
+        } else {
+            String host = controller.draft().get(ConfigFields.WLED_HOST);
+            actions.add(new GuidedAction.Builder(requireContext())
+                    .id(HOST)
+                    .title(getString(R.string.wled_setup_host))
+                    .description(host == null ? "" : host)
+                    .descriptionEditable(true)
+                    .build());
+            actions.add(unSignedNumberAction(HTTP_PORT, getString(R.string.wled_setup_http_port),
+                    controller.draft().get(ConfigFields.WLED_HTTP_PORT)));
+            actions.add(unSignedNumberAction(UDP_PORT, getString(R.string.wled_setup_udp_port),
+                    controller.draft().get(ConfigFields.WLED_UDP_PORT)));
+            actions.add(unSignedNumberAction(DDP_PORT, getString(R.string.wled_setup_ddp_port),
+                    controller.draft().get(ConfigFields.WLED_DDP_PORT)));
+        }
 
-        String host = controller.draft().get(ConfigFields.WLED_HOST);
-        String protocol = controller.draft().get(ConfigFields.WLED_PROTOCOL);
-        String rgbw = controller.draft().get(ConfigFields.WLED_RGBW_MODE);
-
-        actions.add(new GuidedAction.Builder(requireContext())
-                .id(HOST)
-                .title(getString(R.string.wled_setup_host))
-                .description(host == null ? "" : host)
-                .descriptionEditable(true)
-                .build());
-        actions.add(unSignedNumberAction(HTTP_PORT, getString(R.string.wled_setup_http_port),
-                controller.draft().get(ConfigFields.WLED_HTTP_PORT)));
-        actions.add(unSignedNumberAction(UDP_PORT, getString(R.string.wled_setup_udp_port),
-                controller.draft().get(ConfigFields.WLED_UDP_PORT)));
-        actions.add(unSignedNumberAction(DDP_PORT, getString(R.string.wled_setup_ddp_port),
-                controller.draft().get(ConfigFields.WLED_DDP_PORT)));
         actions.add(unSignedNumberAction(FRAME_RATE, getString(R.string.field_framerate),
                 controller.draft().get(ConfigFields.FRAME_RATE)));
 
-        String[] protocols = {"auto", "dnrgb", "ddp"};
-        actions.add(radioListAction(PROTOCOL, getString(R.string.wled_setup_protocol), null,
-                (int) SET_PROTOCOL, protocols, protocols, protocol));
-        String[] rgbwModes = {"unconfirmed", "rgb", "rgbw"};
-        actions.add(radioListAction(RGBW, getString(R.string.wled_setup_rgbw), null,
-                (int) SET_RGBW, rgbwModes, rgbwModes, rgbw));
+        if (addressingVisible) {
+            String[] protocols = {"auto", "dnrgb", "ddp"};
+            String protocol = controller.draft().get(ConfigFields.WLED_PROTOCOL);
+            actions.add(radioListAction(PROTOCOL, getString(R.string.wled_setup_protocol), null,
+                    (int) SET_PROTOCOL, protocols, protocols, protocol));
+            String[] rgbwModes = {"unconfirmed", "rgb", "rgbw"};
+            String rgbw = controller.draft().get(ConfigFields.WLED_RGBW_MODE);
+            actions.add(radioListAction(RGBW, getString(R.string.wled_setup_rgbw), null,
+                    (int) SET_RGBW, rgbwModes, rgbwModes, rgbw));
+        }
 
         String[] languageValues = {WledGrabberApp.LANGUAGE_SYSTEM,
                 WledGrabberApp.LANGUAGE_ZH, WledGrabberApp.LANGUAGE_EN};
@@ -115,10 +135,12 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                 (int) SET_LANGUAGE, languageLabels, languageValues,
                 WledGrabberApp.currentLanguage(requireContext())));
 
-        actions.add(new GuidedAction.Builder(requireContext())
-                .id(ACTION_TEST)
-                .title(getString(R.string.wled_setup_test))
-                .build());
+        if (addressingVisible) {
+            actions.add(new GuidedAction.Builder(requireContext())
+                    .id(ACTION_TEST)
+                    .title(getString(R.string.wled_setup_test))
+                    .build());
+        }
     }
 
     @Override
@@ -144,6 +166,13 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                     requireContext(), LayoutSettingsActivity.class), REQUEST_ADVANCED);
             return;
         }
+        if (action.getId() == ACTION_EDIT_CONNECTION) {
+            android.content.Intent intent = new android.content.Intent(
+                    requireContext(), ManualSetupActivity.class);
+            intent.putExtra(EXTRA_EDIT_CONNECTION, true);
+            startActivityForResult(intent, REQUEST_EDIT_CONNECTION);
+            return;
+        }
         if (action.getId() == ACTION_TEST) {
             testConnection();
             return;
@@ -162,8 +191,18 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
         if (resultCode != android.app.Activity.RESULT_OK) {
             return;
         }
+        if (requestCode == REQUEST_EDIT_CONNECTION) {
+            controller.load();
+            requireActivity().recreate();
+            return;
+        }
         if (requestCode == REQUEST_LAYOUT || requestCode == REQUEST_ADVANCED) {
             mergeChildSave();
+            if (!editMode && addressingVisible && isStartConfigured()) {
+                // First-run layout is now complete: rebuild this page as the
+                // configured hub so the addressing fields do not reappear.
+                requireActivity().recreate();
+            }
         }
     }
 
@@ -238,24 +277,29 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
 
     private void save() {
         try {
-            String host = assertStringValue(HOST);
-            int httpPort = assertIntValue(HTTP_PORT);
-            int udpPort = assertIntValue(UDP_PORT);
-            int ddpPort = assertIntValue(DDP_PORT);
-            int frameRate = assertIntValue(FRAME_RATE);
-            String protocol = assertSubActionValue(PROTOCOL, String.class);
-            String rgbw = assertSubActionValue(RGBW, String.class);
-            if ("unconfirmed".equals(rgbw)) {
-                showToast(getString(R.string.wled_setup_invalid_rgbw));
-                return;
+            if (addressingVisible) {
+                String host = assertStringValue(HOST);
+                int httpPort = assertIntValue(HTTP_PORT);
+                int udpPort = assertIntValue(UDP_PORT);
+                int ddpPort = assertIntValue(DDP_PORT);
+                int frameRate = assertIntValue(FRAME_RATE);
+                String protocol = assertSubActionValue(PROTOCOL, String.class);
+                String rgbw = assertSubActionValue(RGBW, String.class);
+                if ("unconfirmed".equals(rgbw)) {
+                    showToast(getString(R.string.wled_setup_invalid_rgbw));
+                    return;
+                }
+                controller.set(ConfigFields.WLED_HOST, host);
+                controller.set(ConfigFields.WLED_HTTP_PORT, Integer.toString(httpPort));
+                controller.set(ConfigFields.WLED_UDP_PORT, Integer.toString(udpPort));
+                controller.set(ConfigFields.WLED_DDP_PORT, Integer.toString(ddpPort));
+                controller.set(ConfigFields.FRAME_RATE, Integer.toString(frameRate));
+                controller.set(ConfigFields.WLED_PROTOCOL, protocol);
+                controller.set(ConfigFields.WLED_RGBW_MODE, rgbw);
+            } else {
+                controller.set(ConfigFields.FRAME_RATE,
+                        Integer.toString(assertIntValue(FRAME_RATE)));
             }
-            controller.set(ConfigFields.WLED_HOST, host);
-            controller.set(ConfigFields.WLED_HTTP_PORT, Integer.toString(httpPort));
-            controller.set(ConfigFields.WLED_UDP_PORT, Integer.toString(udpPort));
-            controller.set(ConfigFields.WLED_DDP_PORT, Integer.toString(ddpPort));
-            controller.set(ConfigFields.FRAME_RATE, Integer.toString(frameRate));
-            controller.set(ConfigFields.WLED_PROTOCOL, protocol);
-            controller.set(ConfigFields.WLED_RGBW_MODE, rgbw);
 
             ValidationResult<ConfigSnapshot> result = controller.save();
             if (!result.isValid()) {
@@ -265,11 +309,37 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                 return;
             }
             showToast(getString(R.string.wled_setup_saved));
-            startActivity(new android.content.Intent(requireContext(), LayoutEditorActivity.class));
-            finishGuidedStepSupportFragments();
+            if (editMode) {
+                // The edit page returns to the settings hub, which reloads the
+                // committed snapshot instead of advancing into capture.
+                requireActivity().setResult(android.app.Activity.RESULT_OK);
+                finishGuidedStepSupportFragments();
+                requireActivity().finish();
+                return;
+            }
+            if (new ConfigValidator().validateForStart(result.value()).isValid()) {
+                startActivity(new android.content.Intent(
+                        requireContext(), StartCaptureActivity.class)
+                        .putExtra(StartCaptureActivity.EXTRA_AUTO_START, true));
+                finishGuidedStepSupportFragments();
+                requireActivity().finish();
+            } else {
+                // First-run addressing saved, but the layout is not startable yet:
+                // keep this page open so the layout editor can return here.
+                showToast(getString(com.abrenoch.wledgrabber.tv.R.string
+                        .wled_setup_complete_layout));
+                startActivityForResult(new android.content.Intent(
+                        requireContext(), LayoutEditorActivity.class), REQUEST_LAYOUT);
+            }
         } catch (AssertionError error) {
             showToast(getString(R.string.wled_setup_invalid));
         }
+    }
+
+    private boolean isStartConfigured() {
+        ConfigSnapshot committed = controller.committedSnapshot();
+        return committed != null
+                && new ConfigValidator().validateForStart(committed).isValid();
     }
 
     private void testConnection() {

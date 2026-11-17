@@ -55,4 +55,7 @@
   <string name="layout_editor_advanced_guidance">RGBW white mode, average color, capture size and quality. Changes apply on next start.</string>
   <string name="layout_editor_advanced_entry">Advanced options</string>
   <string name="layout_editor_advanced_entry_desc">RGBW white mode, average color, capture size, quality</string>
+  <string name="wled_setup_edit_connection">Edit WLED connection</string>
+  <string name="wled_setup_edit_connection_desc">Change host, ports, protocol or channel mode</string>
+  <string name="wled_setup_complete_layout">Complete the LED layout before starting capture.</string>
 </resources>
