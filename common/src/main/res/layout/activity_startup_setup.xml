@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/startup_scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,6 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:targetApi="p"
             android:accessibilityHeading="true"
             android:text="@string/startup_title"
             android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -40,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            tools:targetApi="p"
             android:accessibilityHeading="true"
             android:text="@string/startup_capabilities_title"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -99,12 +102,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            tools:targetApi="p"
             android:accessibilityHeading="true"
             android:text="@string/startup_adb_title"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/startup_adb_explanation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

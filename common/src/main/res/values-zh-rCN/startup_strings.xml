@@ -17,6 +17,7 @@
     <string name="startup_request_overlay">允许显示在其他应用上层</string>
     <string name="startup_adb_title">管理员 ADB 设置</string>
     <string name="startup_adb_explanation">仅适用于经过管理员确认的 Android 10（API 29）设备。普通应用无法自行授予持久 PROJECT_MEDIA 权限。管理员须在已授权的电脑上审核并执行以下 ADB 命令；复制不会执行命令。这些命令会授予敏感的屏幕采集及后台权限。返回本页面后会重新读取实际状态；手动使用不需要这些授权。</string>
+    <string name="startup_adb_unsupported">此 Android 版本不提供管理员 ADB 设置。请关闭开机自动采集并使用手动模式。</string>
     <string name="startup_copy_commands">复制 ADB 命令</string>
     <string name="startup_commands_copied">已复制 ADB 命令，未执行任何命令</string>
     <string name="startup_clipboard_unavailable">剪贴板不可用，请在已授权的电脑上参照上方命令操作。</string>

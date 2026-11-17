@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.abrenoch.wledgrabber.common.startup.StartupAccess;
 import androidx.annotation.Nullable;
@@ -25,14 +26,27 @@ public class BootActivity extends AppCompatActivity {
     }
     public static final int REQUEST_MEDIA_PROJECTION = 1;
     public static final String EXTRA_AUTOMATIC_BOOT = "automatic_boot";
+    private static final String STATE_START_DEADLINE = "start_deadline";
+    private static final String STATE_AWAITING_CONSENT = "awaiting_consent";
+    private boolean awaitingConsent;
+    private long startDeadline;
     private final Handler timeout = new Handler(Looper.getMainLooper());
     private boolean automatic;
     private boolean observingStart;
+    private boolean queryingExistingService;
     private final BroadcastReceiver startStatus = new BroadcastReceiver() {
         @Override public void onReceive(Context context, Intent intent) {
             if (intent.getBooleanExtra(WledScreenService.BROADCAST_TAG, false)) {
                 WledBootReceiver.dismissReminder(BootActivity.this);
                 finish();
+            } else if (queryingExistingService) {
+                stopObservingStart();
+                if (automatic) {
+                    WledBootReceiver.postReminder(BootActivity.this);
+                    finish();
+                } else {
+                    requestConsent();
+                }
             } else if (intent.getStringExtra(WledScreenService.BROADCAST_ERROR) != null) {
                 WledBootReceiver.postReminder(BootActivity.this);
                 finish();
@@ -45,10 +59,24 @@ public class BootActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         automatic = getIntent().getBooleanExtra(EXTRA_AUTOMATIC_BOOT, false);
+        awaitingConsent = savedInstanceState != null
+                && savedInstanceState.getBoolean(STATE_AWAITING_CONSENT, false);
+        // Let Android deliver the outstanding result before querying an idle service again.
+        if (awaitingConsent) return;
+        startDeadline = savedInstanceState == null ? 0
+                : savedInstanceState.getLong(STATE_START_DEADLINE, 0);
         StartupAccess access = new StartupAccess(this);
-        if (access.captureServiceRunning()) {
-            if (automatic) WledBootReceiver.dismissReminder(this);
-            finish();
+        if (startDeadline > 0 || access.captureServiceRunning()) {
+            // Presence prevents duplicate starts; only an actual running status is success.
+            queryingExistingService = true;
+            observeStart();
+            try {
+                startService(new Intent(this, WledScreenService.class)
+                        .setAction(WledScreenService.GET_STATUS));
+            } catch (RuntimeException unavailable) {
+                if (automatic) WledBootReceiver.postReminder(this);
+                finish();
+            }
             return;
         }
         if (automatic && (!access.bootEnabled() || !access.hasCompletedSetup()
@@ -59,9 +87,14 @@ public class BootActivity extends AppCompatActivity {
         }
         // The system restores an outstanding consent result; never request it twice on rotation.
         if (savedInstanceState != null) return;
+        requestConsent();
+    }
+
+    private void requestConsent() {
         MediaProjectionManager manager = (MediaProjectionManager)
                 getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         if (manager != null) {
+            awaitingConsent = true;
             startActivityForResult(manager.createScreenCaptureIntent(), REQUEST_MEDIA_PROJECTION);
         } else {
             finish();
@@ -72,15 +105,11 @@ public class BootActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_MEDIA_PROJECTION) {
+            awaitingConsent = false;
             if (resultCode == Activity.RESULT_OK && data != null) {
                 if (automatic) {
-                    observingStart = true;
-                    LocalBroadcastManager.getInstance(this).registerReceiver(startStatus,
-                            new IntentFilter(WledScreenService.BROADCAST_FILTER));
-                    timeout.postDelayed(() -> {
-                        WledBootReceiver.postReminder(this);
-                        finish();
-                    }, 10_000L);
+                    queryingExistingService = false;
+                    observeStart();
                 }
                 try {
                     startScreenRecorder(this, resultCode, data);
@@ -96,9 +125,34 @@ public class BootActivity extends AppCompatActivity {
         }
     }
 
-    @Override protected void onDestroy() {
+    private void observeStart() {
+        if (observingStart) return;
+        observingStart = true;
+        if (startDeadline == 0) startDeadline = SystemClock.elapsedRealtime() + 10_000L;
+        LocalBroadcastManager.getInstance(this).registerReceiver(startStatus,
+                new IntentFilter(WledScreenService.BROADCAST_FILTER));
+        timeout.postDelayed(() -> {
+            if (automatic) WledBootReceiver.postReminder(this);
+            finish();
+        }, Math.max(0, startDeadline - SystemClock.elapsedRealtime()));
+    }
+
+    @Override protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        // Restore the waiting phase/deadline, never the screen-capture authorization result.
+        state.putBoolean(STATE_AWAITING_CONSENT, awaitingConsent);
+        if (observingStart) state.putLong(STATE_START_DEADLINE, startDeadline);
+    }
+
+    private void stopObservingStart() {
         timeout.removeCallbacksAndMessages(null);
         if (observingStart) LocalBroadcastManager.getInstance(this).unregisterReceiver(startStatus);
+        observingStart = false;
+        startDeadline = 0;
+    }
+
+    @Override protected void onDestroy() {
+        stopObservingStart();
         super.onDestroy();
     }
 

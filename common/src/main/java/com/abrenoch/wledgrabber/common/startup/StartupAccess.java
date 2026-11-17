@@ -31,18 +31,16 @@ public final class StartupAccess {
     }
 
     /**
-     * Reads the same typed snapshot the config system writes. The legacy
-     * {@code Preferences.getBoolean(pref_key_boot)} path would throw
-     * ClassCastException because the key is stored as a String.
+     * Reads the config system's String-backed boot choice independently. Only a
+     * valid false opts out; invalid config retains reminders but cannot start capture.
      */
     public boolean bootEnabled() {
-        ConfigRepository repository = repository();
-        if (!repository.load().isValid()) {
-            return false;
+        try {
+            String raw = preferences.rawStringWithDefault(R.string.pref_key_boot, "bool");
+            return raw == null || !"false".equalsIgnoreCase(raw.trim());
+        } catch (ClassCastException invalidStoredType) {
+            return true;
         }
-        com.abrenoch.wledgrabber.common.led.ConfigSnapshot snapshot =
-                repository.committedSnapshot();
-        return snapshot != null && snapshot.capture().bootReminder();
     }
     public boolean hasCompletedSetup() { return setup.getBoolean("completed_v1", false); }
 

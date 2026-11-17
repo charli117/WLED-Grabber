@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Test-only platform boundary: hold GET_STATUS replies without real screen capture. -->
+        <activity android:name="com.abrenoch.wledgrabber.common.startup.BootStatusHarnessActivity"
+            android:theme="@style/Theme.Transparent" android:exported="false" />
+    </application>
+</manifest>

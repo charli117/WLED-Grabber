@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.abrenoch.wledgrabber.common.R;
+import com.abrenoch.wledgrabber.common.util.LocaleHelper;
 
 /** Setup only: observes access and saves a boot preference; never starts capture. */
 public final class StartupSetupActivity extends AppCompatActivity {
@@ -40,6 +41,11 @@ public final class StartupSetupActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.wrap(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup_setup);
@@ -55,13 +61,14 @@ public final class StartupSetupActivity extends AppCompatActivity {
             error.setVisibility(View.GONE);
             refreshStatus();
         });
-        ((TextView) findViewById(R.id.startup_commands)).setText(StartupAccess.commands(this));
         findViewById(R.id.startup_copy_commands).setOnClickListener(view -> copyCommands());
-        findViewById(R.id.startup_battery_settings).setOnClickListener(view ->
-                openSettings(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-                        Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
-        findViewById(R.id.startup_overlay_settings).setOnClickListener(view ->
-                openSettings(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Settings.ACTION_SETTINGS));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            findViewById(R.id.startup_battery_settings).setOnClickListener(view ->
+                    openSettings(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                            Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
+            findViewById(R.id.startup_overlay_settings).setOnClickListener(view ->
+                    openSettings(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Settings.ACTION_SETTINGS));
+        }
         continueButton.setOnClickListener(view -> complete(bootEnabled.isChecked()));
         findViewById(R.id.startup_manual_only).setOnClickListener(view -> complete(false));
     }
@@ -90,7 +97,12 @@ public final class StartupSetupActivity extends AppCompatActivity {
         findViewById(R.id.startup_battery_settings).setEnabled(
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !status.batteryExempt());
         findViewById(R.id.startup_overlay_settings).setEnabled(
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !status.backgroundLaunchAllowed());
+                status.platformSupported() && !status.backgroundLaunchAllowed());
+        findViewById(R.id.startup_copy_commands).setEnabled(status.platformSupported());
+        ((TextView) findViewById(R.id.startup_commands)).setText(status.platformSupported()
+                ? StartupAccess.commands(this) : "");
+        ((TextView) findViewById(R.id.startup_adb_explanation)).setText(status.platformSupported()
+                ? R.string.startup_adb_explanation : R.string.startup_adb_unsupported);
         boolean allowed = status.automaticCaptureAvailable();
         continueButton.setEnabled(!bootEnabled.isChecked() || allowed);
         ((TextView) findViewById(R.id.startup_completion_hint)).setText(

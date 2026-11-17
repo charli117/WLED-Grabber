@@ -101,6 +101,8 @@ public class StartupSetupActivityTest {
     public void dpadCanChangeDraftAndBackCancelsWithoutPersistingIt() {
         assertTrue(new StartupAccess(context).saveBootEnabled(false));
         launch();
+        // Previous Espresso clicks use touch mode; a remote direction enters D-pad navigation.
+        InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_DOWN);
         InstrumentationRegistry.getInstrumentation().runOnMainSync(() ->
                 activity.findViewById(R.id.startup_boot_enabled).requestFocus());
         InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_CENTER);

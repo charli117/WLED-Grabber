@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import androidx.test.platform.app.InstrumentationRegistry;
+import com.abrenoch.wledgrabber.common.R;
+import com.abrenoch.wledgrabber.common.util.Preferences;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,6 +56,54 @@ public class StartupSettingsInstrumentedTest {
         assertTrue(restored.hasCompletedSetup());
         assertTrue(repository.load().isValid());
         assertEquals(25, repository.committedSnapshot().capture().frameRate());
+    }
+
+    @Test public void invalidFrameRateDoesNotHideDefaultBootChoiceOrPersistDefaults() {
+        Preferences preferences = new Preferences(isolated);
+        preferences.putInt(R.string.pref_key_framerate, 0);
+
+        StartupAccess access = new StartupAccess(isolated);
+        assertTrue(access.bootEnabled());
+        assertFalse(access.configurationReady());
+        assertFalse(preferences.contains(R.string.pref_key_boot));
+        assertEquals("0", preferences.getString(R.string.pref_key_framerate, null));
+    }
+
+    @Test public void stringBootChoiceUsesConfigBooleanSyntaxWithoutRepairingInvalidFields() {
+        Preferences preferences = new Preferences(isolated);
+        preferences.putInt(R.string.pref_key_framerate, 0);
+        preferences.putString(R.string.pref_key_boot, " TrUe ");
+
+        StartupAccess access = new StartupAccess(isolated);
+        assertTrue(access.bootEnabled());
+        assertFalse(access.configurationReady());
+        assertFalse(access.saveBootEnabled(false));
+        assertEquals(" TrUe ", preferences.getString(R.string.pref_key_boot, null));
+        assertEquals("0", preferences.getString(R.string.pref_key_framerate, null));
+
+        preferences.putString(R.string.pref_key_boot, " FaLsE ");
+        assertFalse(new StartupAccess(isolated).bootEnabled());
+        assertEquals(" FaLsE ", preferences.getString(R.string.pref_key_boot, null));
+        assertEquals("0", preferences.getString(R.string.pref_key_framerate, null));
+    }
+
+    @Test public void malformedBootStringsFailClosedWithoutBeingRewritten() {
+        Preferences preferences = new Preferences(isolated);
+        for (String malformed : new String[] { "", " ", "yes", "1", "trueish" }) {
+            preferences.putString(R.string.pref_key_boot, malformed);
+            assertTrue(new StartupAccess(isolated).bootEnabled());
+            assertFalse(new StartupAccess(isolated).configurationReady());
+            assertEquals(malformed, preferences.getString(R.string.pref_key_boot, null));
+        }
+    }
+
+    @Test public void nativeBooleanBootValueFailsClosedWithoutTypeCrashOrRewrite() {
+        Preferences preferences = new Preferences(isolated);
+        preferences.putBoolean(R.string.pref_key_boot, true);
+
+        assertTrue(new StartupAccess(isolated).bootEnabled());
+        assertFalse(new StartupAccess(isolated).configurationReady());
+        assertTrue(preferences.getBoolean(R.string.pref_key_boot));
     }
 
     @Test public void missingGrantsCannotBePersistedAsSuccessfulAutomaticSetup() {

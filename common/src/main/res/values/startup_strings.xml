@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<!-- This setup surface is localized in English and Simplified Chinese; other locales fall back to English. -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="startup_title">Startup setup</string>
     <string name="startup_description">Choose whether to start capture after boot. Automatic capture is supported only on Android 10 (API 29) with all required access. Manual capture remains available on other versions. This page does not start capture or verify a physical cold boot.</string>
     <string name="startup_boot_enabled">Start automatically after boot</string>
@@ -17,6 +18,7 @@
     <string name="startup_request_overlay">Allow display over other apps</string>
     <string name="startup_adb_title">Administrator ADB setup</string>
     <string name="startup_adb_explanation">For administrator-reviewed Android 10 (API 29) devices only. An ordinary app cannot grant itself persistent PROJECT_MEDIA access. An administrator must review and run these ADB commands from an authorized computer; copying does not execute them. These commands grant sensitive screen-capture and background access. Return to this page to refresh the actual status. Manual use does not require these grants.</string>
+    <string name="startup_adb_unsupported">Administrator ADB setup is not offered on this Android version. Keep automatic boot capture off and use manual capture.</string>
     <string name="startup_copy_commands">Copy ADB commands</string>
     <string name="startup_commands_copied">ADB commands copied; nothing was executed</string>
     <string name="startup_clipboard_unavailable">Clipboard unavailable. Read the commands above on an authorized computer.</string>
