@@ -40,6 +40,8 @@
             android:launchMode="singleTop" android:exported="false" />
         <activity android:name=".startup.StartupSetupActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" android:exported="false" />
+        <activity android:name=".startup.StartCaptureActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" android:exported="false" />
         <activity android:name=".views.LayoutPreviewActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

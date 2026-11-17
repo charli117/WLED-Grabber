@@ -2,7 +2,6 @@ package com.abrenoch.wledgrabber.mobile;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,13 +9,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +21,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.abrenoch.wledgrabber.common.BootActivity;
 import com.abrenoch.wledgrabber.common.startup.StartupSetupActivity;
 import com.abrenoch.wledgrabber.common.WledScreenService;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
@@ -45,11 +41,8 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
                 com.abrenoch.wledgrabber.common.util.LocaleHelper.wrap(newBase));
     }
 
-    public static final int REQUEST_MEDIA_PROJECTION = 1;
     public static final int REQUEST_NOTIFICATIONS = 2;
-    private static final String TAG = "DEBUG";
     private boolean mRecorderRunning = false;
-    private static MediaProjectionManager mMediaProjectionManager;
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -82,8 +75,6 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
         setContentView(R.layout.activity_main);
         findViewById(R.id.startup_settings).setOnClickListener(view -> StartupSetupActivity.open(this));
         EdgeToEdge.apply(this, findViewById(android.R.id.content));
-        mMediaProjectionManager = (MediaProjectionManager)
-                                        getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
         ImageView iv = findViewById(R.id.power_toggle);
         iv.setOnClickListener(this);
@@ -110,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
             if (NotificationPermission.requestIfNeeded(this, REQUEST_NOTIFICATIONS)) {
                 return;
             }
-            startProjection();
+            startCaptureFlow();
         } else {
             stopScreenRecorder();
             mRecorderRunning = false;
@@ -135,26 +126,6 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_MEDIA_PROJECTION) {
-            if (resultCode != Activity.RESULT_OK) {
-                Toast.makeText(this, com.abrenoch.wledgrabber.common.R.string.toast_must_give_permission, Toast.LENGTH_SHORT).show();
-                if (mRecorderRunning) {
-                    stopScreenRecorder();
-                }
-                mRecorderRunning = false;
-                setImageViews(false, true);
-                return;
-            }
-            Log.i(TAG, "Starting screen capture");
-            startScreenRecorder(resultCode, (Intent) data.clone());
-            mRecorderRunning = true;
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
@@ -166,14 +137,13 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
                         com.abrenoch.wledgrabber.common.R.string.notification_permission_hint,
                         Toast.LENGTH_LONG).show();
             }
-            startProjection();
+            startCaptureFlow();
         }
     }
 
-    private void startProjection() {
-        mRecorderRunning = true;
-        startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(),
-                REQUEST_MEDIA_PROJECTION);
+    private void startCaptureFlow() {
+        startActivity(new Intent(this,
+                com.abrenoch.wledgrabber.common.startup.StartCaptureActivity.class));
     }
 
     @Override
@@ -209,10 +179,6 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
             intent.setAction(WledScreenService.GET_STATUS);
             startService(intent);
         }
-    }
-
-    public void startScreenRecorder(int resultCode, Intent data) {
-        BootActivity.startScreenRecorder(this, resultCode, data);
     }
 
     public void stopScreenRecorder() {

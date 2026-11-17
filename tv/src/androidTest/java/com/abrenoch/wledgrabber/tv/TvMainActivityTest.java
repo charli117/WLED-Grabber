@@ -21,6 +21,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertEquals;
 
 /** TV-1 main surface with a committed 274 configuration: ready state, no onboarding. */
 @RunWith(AndroidJUnit4.class)
@@ -108,6 +109,29 @@ public class TvMainActivityTest {
 
         onView(withId(R.id.power_toggle)).perform(click());
         onView(withId(R.id.layout_editor_title)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void staleObservationBroadcastIsShownWhileRunning() {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity = InstrumentationRegistry.getInstrumentation().startActivitySync(intent);
+
+        Intent status = new Intent(WledScreenService.BROADCAST_FILTER);
+        status.putExtra(WledScreenService.BROADCAST_TAG, true);
+        status.putExtra(WledScreenService.BROADCAST_OBSERVATION_STALE, true);
+        androidx.localbroadcastmanager.content.LocalBroadcastManager
+                .getInstance(InstrumentationRegistry.getInstrumentation().getTargetContext())
+                .sendBroadcast(status);
+
+        final String[] text = new String[1];
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            android.widget.TextView view = activity.findViewById(R.id.grabberStartedText);
+            text[0] = view == null ? null : view.getText().toString();
+        });
+        assertEquals(activity.getString(
+                        com.abrenoch.wledgrabber.common.R.string.tv_status_observation_stale),
+                text[0]);
     }
 
     private static void sendReleaseBroadcast(boolean confirmed) {

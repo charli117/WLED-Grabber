@@ -122,6 +122,8 @@ final class WledTestSupport {
                 .edit().clear().commit();
         context.getSharedPreferences("startup_setup", Context.MODE_PRIVATE)
                 .edit().clear().commit();
+        context.getSharedPreferences("wled_start_confirmation", Context.MODE_PRIVATE)
+                .edit().clear().commit();
     }
 
     /** First-run onboarding must not cover the screen under test. */

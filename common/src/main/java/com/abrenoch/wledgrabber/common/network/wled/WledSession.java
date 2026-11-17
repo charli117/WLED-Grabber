@@ -31,8 +31,8 @@ public final class WledSession {
         private final ProbeError error;
         private final boolean identityChanged;
 
-        private Observation(WledDevice device, long observedAtMillis,
-                            ProbeError error, boolean identityChanged) {
+        Observation(WledDevice device, long observedAtMillis,
+                    ProbeError error, boolean identityChanged) {
             this.device = device;
             this.observedAtMillis = observedAtMillis;
             this.error = error;

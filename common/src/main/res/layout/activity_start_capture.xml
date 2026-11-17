@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/start_capture_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wled_start_title"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/wled_start_description" />
+
+        <TextView
+            android:id="@+id/start_capture_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="#b00020" />
+
+        <CheckBox
+            android:id="@+id/start_confirm_offset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wled_start_offset" />
+
+        <CheckBox
+            android:id="@+id/start_confirm_segment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wled_start_segment" />
+
+        <CheckBox
+            android:id="@+id/start_confirm_dmx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wled_start_dmx" />
+
+        <CheckBox
+            android:id="@+id/start_confirm_timeout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wled_start_timeout" />
+
+        <CheckBox
+            android:id="@+id/start_confirm_brightness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wled_start_brightness" />
+
+        <CheckBox
+            android:id="@+id/start_confirm_senders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wled_start_senders" />
+
+        <CheckBox
+            android:id="@+id/start_confirm_sync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wled_start_sync" />
+
+        <CheckBox
+            android:id="@+id/start_confirm_manual_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wled_start_manual_white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/start_capture_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/wled_start_cancel" />
+
+            <Button
+                android:id="@+id/start_capture_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/wled_start_continue" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

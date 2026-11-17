@@ -16,8 +16,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.WindowManager;
 
 import androidx.core.app.ServiceCompat;
@@ -37,20 +39,31 @@ import com.abrenoch.wledgrabber.common.led.ClassicLedLayout;
 import com.abrenoch.wledgrabber.common.led.CompiledLayout;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
 import com.abrenoch.wledgrabber.common.led.LedColorSampler;
+import com.abrenoch.wledgrabber.common.led.LedLayoutConfig;
 import com.abrenoch.wledgrabber.common.led.PlaneView;
 import com.abrenoch.wledgrabber.common.led.Protocol;
 import com.abrenoch.wledgrabber.common.led.RgbwMode;
 import com.abrenoch.wledgrabber.common.led.WhiteMode;
-import com.abrenoch.wledgrabber.common.network.wled.StateReadResult;
+import com.abrenoch.wledgrabber.common.network.wled.DeviceReadiness;
+import com.abrenoch.wledgrabber.common.network.wled.ReadyDevice;
+import com.abrenoch.wledgrabber.common.network.wled.StartConfirmation;
 import com.abrenoch.wledgrabber.common.network.wled.UdpDatagramSink;
+import com.abrenoch.wledgrabber.common.network.wled.WledDevice;
 import com.abrenoch.wledgrabber.common.network.wled.WledHttpClient;
 import com.abrenoch.wledgrabber.common.network.wled.WledPowerOn;
+import com.abrenoch.wledgrabber.common.network.wled.WledSession;
 import com.abrenoch.wledgrabber.common.network.wled.WledUdpTransport;
+import com.abrenoch.wledgrabber.common.startup.StartConfirmationStore;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
 import com.abrenoch.wledgrabber.common.util.Preferences;
 import com.abrenoch.wledgrabber.common.util.PreferencesConfigStorage;
 import com.abrenoch.wledgrabber.common.util.ValidationResult;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * WLED direct capture service: captures the screen, samples the four-side layout, and streams colors to a single WLED controller.
@@ -60,6 +73,8 @@ public class WledScreenService extends Service {
     public static final String BROADCAST_TAG = "SERVICE_STATUS";
     public static final String BROADCAST_RELEASE_KNOWN = "SERVICE_RELEASE_KNOWN";
     public static final String BROADCAST_RELEASE_CONFIRMED = "SERVICE_RELEASE_CONFIRMED";
+    public static final String BROADCAST_OBSERVATION_STALE = "SERVICE_OBSERVATION_STALE";
+    public static final String BROADCAST_OBSERVED_AT = "SERVICE_OBSERVED_AT";
     public static final String BROADCAST_FILTER = "SERVICE_FILTER";
     private static final String BASE = "com.abrenoch.wledgrabber.service.";
     public static final String ACTION_START = BASE + "ACTION_START";
@@ -77,6 +92,7 @@ public class WledScreenService extends Service {
     private final CaptureSession captureSession = new CaptureSession();
     private final LedColorSampler sampler = new LedColorSampler();
     private final Object lock = new Object();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     private MediaProjectionManager projectionManager;
     private MediaProjection projection;
@@ -94,6 +110,14 @@ public class WledScreenService extends Service {
     private final FrameTimingStats sendIntervalMicros = new FrameTimingStats(600);
     private long lastSentAtMicros;
     private CompiledLayout layout;
+    private LedLayoutConfig layoutConfig;
+    private int captureWidth;
+    private int captureHeight;
+    private int captureDensityDpi;
+    private int captureMaxDimension = 640;
+    private int captureGeneration;
+    private DisplayManager displayManager;
+    private DisplayManager.DisplayListener displayListener;
     private RgbwMode rgbwMode;
     private WhiteMode whiteMode;
     private Protocol protocol;
@@ -107,6 +131,11 @@ public class WledScreenService extends Service {
     private boolean stopping;
     private volatile boolean releaseKnown;
     private volatile boolean releaseConfirmed;
+    private volatile boolean observationStale;
+    private volatile long lastObservedAt;
+    private WledSession session;
+    private ScheduledExecutorService healthExecutor;
+    private ScheduledFuture<?> healthTask;
     private long epoch;
     private long outputEpoch;
     private long lastFrameAt;
@@ -117,6 +146,12 @@ public class WledScreenService extends Service {
         public void onStop() {
             captureSession.onProjectionRevoked();
             stopCapture("projection revoked");
+        }
+
+        @Override
+        public void onCapturedContentResize(int width, int height) {
+            // API 34+: single-app window or rotation changed the captured content.
+            postResize(width, height, captureDensityDpi);
         }
     };
 
@@ -219,6 +254,20 @@ public class WledScreenService extends Service {
                 failStart("WLED configuration is incomplete");
                 return;
             }
+            WledDevice observed = BootActivity.observedFrom(intent);
+            StartConfirmation confirmation = new StartConfirmationStore(this).load();
+            if (observed == null || confirmation == null) {
+                captureSession.rejectStart();
+                failStart("device verification required");
+                return;
+            }
+            ValidationResult<ReadyDevice> readiness = new DeviceReadiness()
+                    .evaluate(snapshot.device(), observed, confirmation);
+            if (!readiness.isValid()) {
+                captureSession.rejectStart();
+                failStart("device not ready: " + readiness.errors().get(0).code().name());
+                return;
+            }
             if (!outputCoordinator.acquire(OutputOwner.CAPTURE, OUTPUT_OWNER_ID)) {
                 captureSession.rejectStart();
                 failStart("output already owned by another session");
@@ -244,6 +293,36 @@ public class WledScreenService extends Service {
                 return;
             }
             layout = compiled.value();
+            layoutConfig = snapshot.layout();
+            captureWidth = size.width();
+            captureHeight = size.height();
+            captureDensityDpi = metrics.densityDpi;
+            captureMaxDimension = capture.maxDimension();
+            captureGeneration = 0;
+            displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+            displayListener = new DisplayManager.DisplayListener() {
+                @Override
+                public void onDisplayAdded(int displayId) {
+                }
+
+                @Override
+                public void onDisplayRemoved(int displayId) {
+                }
+
+                @Override
+                public void onDisplayChanged(int displayId) {
+                    if (displayId != Display.DEFAULT_DISPLAY) {
+                        return;
+                    }
+                    DisplayMetrics current = new DisplayMetrics();
+                    WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+                    if (wm == null) {
+                        return;
+                    }
+                    wm.getDefaultDisplay().getRealMetrics(current);
+                    postResize(current.widthPixels, current.heightPixels, current.densityDpi);
+                }
+            };
             rgbwMode = snapshot.device().rgbwMode();
             whiteMode = snapshot.device().whiteMode();
             protocol = snapshot.device().protocol();
@@ -283,11 +362,18 @@ public class WledScreenService extends Service {
             // WLED only outputs while its master power is on; realtime UDP frames
             // alone do not switch it on. The worker keeps this off the main thread.
             WledPowerOn.async(httpClient, host, httpPort, "wled-power-on");
-            streamer = new LedStreamer(framePool, frameSink, reason -> {
-                boolean off = httpClient.turnOff(host, httpPort);
-                StateReadResult state = httpClient.readState(host, httpPort);
-                return off && state.isSuccess() && !state.on() && !state.live();
-            }, 3000);
+            final ReadyDevice readyDevice = readiness.value();
+            final WledSession activeSession = new WledSession(httpClient,
+                    (count, rgbw) -> sendFrame(transport,
+                            new byte[count * (rgbw ? 4 : 3)], count, rgbw ? 4 : 3),
+                    System::currentTimeMillis);
+            activeSession.start(readyDevice);
+            session = activeSession;
+            // The streamer's stop barrier sends black first; the session release
+            // then re-sends black, posts off and verifies the readback in one place.
+            streamer = new LedStreamer(framePool, frameSink, reason ->
+                    activeSession.release(reason).status()
+                            == WledSession.ReleaseStatus.CONFIRMED, 3000);
 
             if (!captureSession.requestProjection()) {
                 failStarted("projection already requested");
@@ -315,7 +401,9 @@ public class WledScreenService extends Service {
             captureHandler = new Handler(captureThread.getLooper());
             reader = ImageReader.newInstance(size.width(), size.height(),
                     PixelFormat.RGBA_8888, 3);
-            reader.setOnImageAvailableListener(this::onImageAvailable, captureHandler);
+            final int initialGeneration = captureGeneration;
+            reader.setOnImageAvailableListener(
+                    source -> onImageAvailable(source, initialGeneration), captureHandler);
             virtualDisplay = projection.createVirtualDisplay("wled-capture",
                     size.width(), size.height(), metrics.densityDpi,
                     DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
@@ -326,15 +414,157 @@ public class WledScreenService extends Service {
                 return;
             }
             captureSession.createDisplay(true);
+            if (displayManager != null) {
+                displayManager.registerDisplayListener(displayListener, mainHandler);
+            }
             epoch = System.currentTimeMillis();
             streamer.start(epoch, OutputOwner.CAPTURE, physicalCount, channels);
             running = true;
             stopping = false;
+            startHealthLoop();
             if (captureHandler != null) {
                 captureHandler.postDelayed(keepAlive, KEEP_ALIVE_MS);
             }
             notifyActivity();
         }
+    }
+
+    /**
+     * WLED observation is a background HTTP readback at most once per 5 s. An
+     * observation older than 10 s is reported as stale; a changed device identity
+     * stops capture instead of silently sending to a different controller.
+     */
+    private void startHealthLoop() {
+        WledSession.Observation first = session == null ? null : session.currentObservation();
+        lastObservedAt = first == null ? System.currentTimeMillis() : first.observedAtMillis();
+        observationStale = false;
+        healthExecutor = Executors.newSingleThreadScheduledExecutor(runnable -> {
+            Thread thread = new Thread(runnable, "wled-health");
+            thread.setDaemon(true);
+            return thread;
+        });
+        healthTask = healthExecutor.scheduleWithFixedDelay(this::observeOnce,
+                WledSession.HEALTH_INTERVAL_MS, WledSession.HEALTH_INTERVAL_MS,
+                TimeUnit.MILLISECONDS);
+    }
+
+    private void observeOnce() {
+        WledSession current;
+        synchronized (lock) {
+            if (!running || stopping) {
+                return;
+            }
+            current = session;
+        }
+        if (current == null) {
+            return;
+        }
+        WledSession.Observation observation;
+        try {
+            observation = current.observeNow();
+        } catch (RuntimeException error) {
+            observation = null;
+        }
+        long now = System.currentTimeMillis();
+        boolean stale = com.abrenoch.wledgrabber.common.network.wled.ObservationMonitor
+                .isStale(observation, now);
+        long observedAt = observation == null ? lastObservedAt : observation.observedAtMillis();
+        if (stale != observationStale || observedAt != lastObservedAt) {
+            observationStale = stale;
+            lastObservedAt = observedAt;
+            notifyActivity();
+        }
+        if (observation != null && observation.identityChanged()) {
+            mainHandler.post(() -> stopCapture("device identity changed"));
+        }
+    }
+
+    private void stopHealthLoop() {
+        if (healthTask != null) {
+            healthTask.cancel(false);
+            healthTask = null;
+        }
+        if (healthExecutor != null) {
+            healthExecutor.shutdownNow();
+            healthExecutor = null;
+        }
+    }
+
+    /**
+     * Rebuilds the sampling plan and swaps the ImageReader surface on the same
+     * VirtualDisplay. Runs on the capture thread, so an in-flight old-generation
+     * image finishes before the reader is replaced; old callbacks are rejected by
+     * the generation check.
+     */
+    private void postResize(int sourceWidth, int sourceHeight, int densityDpi) {
+        Handler handler = captureHandler;
+        if (handler == null) {
+            return;
+        }
+        handler.post(() -> applyCaptureSize(sourceWidth, sourceHeight, densityDpi));
+    }
+
+    private void applyCaptureSize(int sourceWidth, int sourceHeight, int densityDpi) {
+        synchronized (lock) {
+            if (!running || stopping || virtualDisplay == null
+                    || layoutConfig == null || reader == null || captureHandler == null) {
+                return;
+            }
+        }
+        ValidationResult<com.abrenoch.wledgrabber.common.led.CaptureResizePlanner.Plan> planned =
+                com.abrenoch.wledgrabber.common.led.CaptureResizePlanner.plan(
+                        layoutConfig, physicalCount, sourceWidth, sourceHeight,
+                        captureMaxDimension, captureWidth, captureHeight, captureGeneration);
+        if (!planned.isValid()) {
+            mainHandler.post(() -> stopCapture("resize layout invalid"));
+            return;
+        }
+        if (!planned.value().changed()) {
+            return;
+        }
+        final int width = planned.value().width();
+        final int height = planned.value().height();
+        final int generation = (int) planned.value().generation();
+        final CompiledLayout nextLayout = planned.value().layout();
+        ImageReader replacement;
+        try {
+            replacement = ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 3);
+        } catch (RuntimeException unavailable) {
+            return;
+        }
+        replacement.setOnImageAvailableListener(
+                source -> onImageAvailable(source, generation), captureHandler);
+        VirtualDisplay display = virtualDisplay;
+        try {
+            display.resize(width, height, densityDpi);
+            display.setSurface(replacement.getSurface());
+        } catch (RuntimeException failed) {
+            replacement.close();
+            return;
+        }
+        ImageReader previous = reader;
+        reader = replacement;
+        layout = nextLayout;
+        captureWidth = width;
+        captureHeight = height;
+        captureDensityDpi = densityDpi;
+        captureGeneration = generation;
+        if (previous != null) {
+            previous.setOnImageAvailableListener(null, null);
+            previous.close();
+        }
+    }
+
+    private void stopDisplayListener() {
+        if (displayManager != null && displayListener != null) {
+            try {
+                displayManager.unregisterDisplayListener(displayListener);
+            } catch (IllegalArgumentException ignored) {
+                // Already unregistered.
+            }
+        }
+        displayListener = null;
+        displayManager = null;
     }
 
     private boolean sendFrame(WledUdpTransport transport, byte[] data, int leds, int ledChannels) {
@@ -347,9 +577,9 @@ public class WledScreenService extends Service {
         return transport.sendRgb(data, leds);
     }
 
-    private void onImageAvailable(ImageReader source) {
+    private void onImageAvailable(ImageReader source, int generation) {
         synchronized (lock) {
-            if (!running || stopping) {
+            if (!running || stopping || generation != captureGeneration) {
                 return;
             }
         }
@@ -449,6 +679,7 @@ public class WledScreenService extends Service {
             running = false;
         }
         captureSession.beginStop();
+        stopDisplayListener();
         if (virtualDisplay != null) {
             virtualDisplay.release();
             virtualDisplay = null;
@@ -468,6 +699,7 @@ public class WledScreenService extends Service {
             captureThread = null;
             captureHandler = null;
         }
+        stopHealthLoop();
         if (streamer != null) {
             LedStreamer.StopResult stop = streamer.stop(reason);
             // A completed or timed-out release has a displayable result; a timeout
@@ -476,6 +708,8 @@ public class WledScreenService extends Service {
             releaseConfirmed = stop != null && stop.releaseCalled() && stop.releaseOk();
             streamer = null;
         }
+        session = null;
+        observationStale = false;
         if (sink != null) {
             sink.close();
             sink = null;
@@ -523,6 +757,13 @@ public class WledScreenService extends Service {
         Log.w(TAG, "capture start failed: " + error);
         captureSession.resetToIdle();
         startError = error;
+        stopDisplayListener();
+        stopHealthLoop();
+        if (session != null) {
+            // Nothing was streamed; invalidate without sending off to the device.
+            session.invalidate();
+            session = null;
+        }
         if (virtualDisplay != null) {
             virtualDisplay.release();
             virtualDisplay = null;
@@ -583,6 +824,8 @@ public class WledScreenService extends Service {
         intent.putExtra(BROADCAST_ERROR, startError);
         intent.putExtra(BROADCAST_RELEASE_KNOWN, releaseKnown);
         intent.putExtra(BROADCAST_RELEASE_CONFIRMED, releaseConfirmed);
+        intent.putExtra(BROADCAST_OBSERVATION_STALE, observationStale);
+        intent.putExtra(BROADCAST_OBSERVED_AT, lastObservedAt);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

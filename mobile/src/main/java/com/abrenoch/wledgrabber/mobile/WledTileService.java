@@ -15,7 +15,6 @@ import androidx.core.app.TaskStackBuilder;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.abrenoch.wledgrabber.common.BootActivity;
 import com.abrenoch.wledgrabber.common.WledScreenService;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
@@ -96,11 +95,10 @@ public class WledTileService extends TileService {
                 boolean setupStarted = startSetupIfNeeded();
 
                 if (!setupStarted){
-                    final Intent i = new Intent(this, BootActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION
-                            |Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
-                            |Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(i);
+                    startActivity(new Intent(this,
+                            com.abrenoch.wledgrabber.common.startup.StartCaptureActivity.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_NO_ANIMATION));
                 }
 
             };

@@ -67,7 +67,8 @@ public class WledBootReceiver extends BroadcastReceiver {
                     NotificationManager.IMPORTANCE_DEFAULT);
             manager.createNotificationChannel(channel);
         }
-        Intent launch = new Intent(context, BootActivity.class);
+        Intent launch = new Intent(context,
+                com.abrenoch.wledgrabber.common.startup.StartCaptureActivity.class);
         launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         int flags = PendingIntent.FLAG_UPDATE_CURRENT;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

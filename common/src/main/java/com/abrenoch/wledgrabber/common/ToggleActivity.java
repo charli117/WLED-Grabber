@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.abrenoch.wledgrabber.common.startup.StartCaptureActivity;
+
+/** Secondary launcher surface: stop a running capture or enter the shared start gate. */
 public class ToggleActivity extends AppCompatActivity {
 
     @Override
@@ -18,39 +20,18 @@ public class ToggleActivity extends AppCompatActivity {
         super.attachBaseContext(
                 com.abrenoch.wledgrabber.common.util.LocaleHelper.wrap(newBase));
     }
-    public static final int REQUEST_MEDIA_PROJECTION = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        boolean serviceRunning = checkForInstance();
-
-        if (serviceRunning) {
+        if (checkForInstance()) {
             stopService();
             finish();
         } else {
-            requestPermission();
-        }
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_MEDIA_PROJECTION) {
-            if (resultCode == Activity.RESULT_OK) {
-                startScreenRecorder(this, resultCode, data);
-            }
-
+            startActivity(new Intent(this, StartCaptureActivity.class));
             finish();
-
         }
-    }
-
-    private static void startScreenRecorder(Context context, int resultCode, Intent data) {
-        BootActivity.startScreenRecorder(context, resultCode, data);
     }
 
     /** @return whether the service is running */
@@ -60,9 +41,8 @@ public class ToggleActivity extends AppCompatActivity {
             intent.setAction(WledScreenService.GET_STATUS);
             startService(intent);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     private boolean isServiceRunning() {
@@ -76,18 +56,7 @@ public class ToggleActivity extends AppCompatActivity {
         return false;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void requestPermission(){
-        MediaProjectionManager manager = (MediaProjectionManager)
-                getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        if (manager != null) {
-            startActivityForResult(manager.createScreenCaptureIntent(), REQUEST_MEDIA_PROJECTION);
-        }
-    }
-
-    /** stop recording & stop service */
-
-     private void stopService() {
+    private void stopService() {
         Intent stopIntent = new Intent(ToggleActivity.this, WledScreenService.class);
         stopIntent.setAction(WledScreenService.ACTION_EXIT);
         startService(stopIntent);

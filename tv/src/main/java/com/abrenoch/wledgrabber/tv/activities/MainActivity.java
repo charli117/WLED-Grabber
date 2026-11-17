@@ -59,10 +59,14 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
                     WledScreenService.BROADCAST_RELEASE_KNOWN, false);
             boolean releaseConfirmed = intent.getBooleanExtra(
                     WledScreenService.BROADCAST_RELEASE_CONFIRMED, false);
+            boolean observationStale = intent.getBooleanExtra(
+                    WledScreenService.BROADCAST_OBSERVATION_STALE, false);
             TextView status = findViewById(R.id.grabberStartedText);
             if (status != null) {
                 int text = checked
-                        ? com.abrenoch.wledgrabber.common.R.string.tv_status_sending
+                        ? (observationStale
+                                ? com.abrenoch.wledgrabber.common.R.string.tv_status_observation_stale
+                                : com.abrenoch.wledgrabber.common.R.string.tv_status_sending)
                         : releaseKnown && releaseConfirmed
                                 ? com.abrenoch.wledgrabber.common.R.string.tv_status_stopped_confirmed
                                 : com.abrenoch.wledgrabber.common.R.string.tv_status_stopped;
@@ -169,12 +173,12 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
                         startActivity(new Intent(this, LayoutEditorActivity.class));
                         return;
                     }
-                    startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(),
-                            REQUEST_MEDIA_PROJECTION);
+                    startActivity(new Intent(this,
+                            com.abrenoch.wledgrabber.common.startup.StartCaptureActivity.class));
                 } else {
                     stopScreenRecorder();
+                    mRecorderRunning = false;
                 }
-                mRecorderRunning = !mRecorderRunning;
                 break;
             case R.id.settingsButton:
                 startSettings();

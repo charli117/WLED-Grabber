@@ -121,21 +121,25 @@ public class BootActivityStatusInstrumentedTest {
         assertEquals(0, BootStatusHarnessActivity.consentRequests.get());
     }
 
-    @Test public void manualEntryCanRequestFreshConsentWhenExistingServiceIsIdle() {
+    @Test public void manualEntryDoesNotRequestConsentWithoutVerifiedDevice() {
         launchStatusHarness(false);
         sendStatus(false, null);
-        assertEquals(1, BootStatusHarnessActivity.consentRequests.get());
+        long deadline = SystemClock.elapsedRealtime() + 2_000;
+        while (!boot.isFinishing() && SystemClock.elapsedRealtime() < deadline) {
+            SystemClock.sleep(20);
+        }
+        assertTrue("Unverified manual entry must close instead of requesting consent",
+                boot.isFinishing());
+        assertEquals(0, BootStatusHarnessActivity.consentRequests.get());
         assertEquals(1, BootStatusHarnessActivity.statusQueries.get());
-        assertFalse(boot.isFinishing());
     }
 
-    @Test public void manualConsentWaitSurvivesRecreationWithoutASecondRequest() {
+    @Test public void manualUnverifiedEntryKeepsNoConsentAfterIdleStatus() {
         launchStatusHarness(false);
         sendStatus(false, null);
-        assertEquals(1, BootStatusHarnessActivity.consentRequests.get());
-        recreateBoot();
+        SystemClock.sleep(300);
         sendStatus(false, null);
-        assertEquals("Recreation while awaiting consent must not request it again", 1,
+        assertEquals("No consent may be requested without a verified device", 0,
                 BootStatusHarnessActivity.consentRequests.get());
     }
 
