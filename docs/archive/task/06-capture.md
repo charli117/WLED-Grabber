@@ -92,6 +92,8 @@ common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer
 
 **证据（2026-11-17，设备端 reader）**：新增`ImageReaderLifecycleInstrumentedTest`，用真实 `ImageReader`+`Surface` 生产者验证：20 帧连续 `acquireLatestImage`→`ImagePlaneView.from` 几何正确（320×180）→`close`，**acquired 与 closed 严格相等（无泄漏、无双重关闭）**；`maxImages=3` 时第四次获取被系统以 `IllegalStateException` 拒绝，证明服务必须先 close 再 acquire。API **21 / 33 / 34** 均 11/11 通过。另有真机/模拟器场景验证（2026-11-17）：API 26 手机模拟器 0→90→0 旋转、锁屏唤醒后 Activity 均存活、无崩溃；仍未覆盖：API 34+ 单应用窗口 resize、100 次旋转/锁屏/撤销组合。
 
+**2026-11-17 交付复核（状态下调为开发中）**：生产 `WledScreenService` 没有任何 resize/rotation 处理——全仓无 `onCapturedContentResize`、`VirtualDisplay.Callback`、`virtualDisplay.resize/setSurface`，只在启动时 `createVirtualDisplay` 一次；`ImageLifecycle`/`GenerationGate` 也无生产调用方，服务是在 `onImageAvailable` 的 `finally` 直接关闭 Image。卡片交付物“处理全屏/单应用窗口、低版本方向变化及API34+ resize；同display换surface，generation拒绝旧回调”和验收“所有输出尺寸匹配当次generation；旧generation提交数0；重复createVirtualDisplay数0”均未实现。该卡保持**开发中**。
+
 <a id="cap-3"></a>
 
 ## CAP-3 — 唯一输出所有者、三帧池与停止屏障

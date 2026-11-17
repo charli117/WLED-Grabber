@@ -1,0 +1,21 @@
+2026-11-17 WLED Grabber delivery audit — final test counts
+Baseline: HEAD 48250d1 + working-tree fixes
+
+JVM (./gradlew :common:testDebugUnitTest :mobile:testDebugUnitTest :tv:testDebugUnitTest)
+  common tests=221 failures=0 errors=0 skipped=0
+  mobile tests=1   failures=0 errors=0 skipped=0
+  tv     NO-SOURCE
+
+Lint (./gradlew :common:lintDebug :mobile:lintDebug :tv:lintDebug)
+  error=0; warnings common=99 mobile=8 tv=55
+
+Build (Debug + unsigned Release, mobile/tv)
+  BUILD SUCCESSFUL; legacy/protobuf entries in both release APKs = 0
+
+Instrumented
+  API26 api26-phone: common 42/42, mobile 9/9
+  API33 wled-tv-api33: 32 passed + 3 real-device assumption skips (35 total)
+
+Repository gate
+  scripts/qa/local-regression.sh: passed
+  docs: 30 files / 321 links / 0 errors

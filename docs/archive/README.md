@@ -6,6 +6,8 @@
 
 本轮启动审查的最终证据：[2026-11-17 启动设置与修复验证快照](verification/wled/startup/final-verification-2026-11-17.md)。该快照补齐归档过程中仍在执行的测试，不修改此前中间记录。
 
+> 2026-11-17 交付复核：任务册 [00-overview.md](task/00-overview.md) 继续作为任务状态台账，逐卡复核结论与新增证据见其 §5.2。复核后 **CFG-2、NET-3、CAP-2 为开发中，TV-1 为待验证**（生产接线缺口，不满足归档条件）；REL-1 升级为已验收。**本轮不新增归档**：未闭环的卡、证据与仍有效的产品文档均不满足“已彻底解决或确认过期/失效”的条件。本轮原始日志新增于 [verification/wled/qa-1/2026-11-17-delivery-audit/](verification/wled/qa-1/2026-11-17-delivery-audit/)。任务册是“归档但继续更新状态”的具名例外；其余归档文件仍保持归档时点内容。
+
 当前有效文档：
 
 - 技术规范：[docs/design/architecture.md](../design/architecture.md)

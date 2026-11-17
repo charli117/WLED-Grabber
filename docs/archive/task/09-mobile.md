@@ -86,3 +86,5 @@ mobile SettingsActivity/MainActivity/TileService、mobile LayoutPreviewActivity�
 
 **当前进展（2026-11-16，未验收）**：进程级`OutputSessionCoordinator`已接入旧`HyperionScreenService`的CAPTURE与`TestPatternActivity`的TEST，二者互斥且旧epoch不能释放新owner；mobile菜单已接Preview/TestPatternActivity，Tile setup守卫改用`ConfigRepository`。通知拒绝提示、授权撤销、target35 insets、完整API矩阵与真机入口测试仍未完成。本卡保持“开发中”。
 
+**2026-11-17 交付复核与修复**：mobile 主界面此前在空/不完整配置时直接请求投屏授权，服务随后以“配置不完整”失败；现改为先经 `ConfigValidator.validateForStart` 判断，未就绪时打开设置页（新增仪器回归 `MobileEntryTest.emptyConfigRoutesPowerToSettingsInsteadOfConsent`，API26 通过）。服务停止广播新增 `SERVICE_RELEASE_KNOWN/CONFIRMED`，mobile 主界面以 Toast 显示“已确认/未确认关灯”。`SettingsActivity` 补上两个画质开关的 CheckBox 识别；`WledTileService.onStopListening` 改回 `super.onStopListening()`。这些是入口/状态展示修复，不改变“系统撤销/TEST互斥/insets 矩阵”仍待验证的结论。
+

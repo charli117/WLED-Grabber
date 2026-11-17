@@ -46,6 +46,8 @@ WLED Grabber is an Android screen grabber that sends the colors of the screen di
 
 Software-side evidence covers the layout, sampling, protocol, lifecycle, and the target TV's capture and release paths. Release admission is still blocked by missing physical FPS/end-to-end measurements, RGBW hardware, larger LED configurations, and the remaining device/API matrix. A successful build does not imply signing, installation, or release.
 
+**Open software gaps (2026-11-17 audit)**: start-time READY gating (live probe plus observed count/channel/identity and the explicit WLED addressing confirmations), periodic device observation/stale/identity invalidation, and capture resize/rotation handling are modelled and unit-tested but are **not yet wired into the running service**. Capture currently starts after local configuration validation only. These gaps are tracked as CFG-2, NET-3, CAP-2, and TV-1 in the task audit and are not counted as delivered.
+
 ### Build
 
 Requirements: JDK 17 and Android SDK 35.
@@ -116,6 +118,8 @@ WLED Grabber 是一个 Android 屏幕采集应用，将画面颜色直接发送�
 | 目标硬件 | Sony KD-55XD8005（Android 10 TV）+ ESP32-WROOM-32D + 274 × WS2815 RGB；遥控器、大字体与物理输出验收待完成。 |
 
 软件侧证据覆盖布局、采样、协议、生命周期，以及目标电视的采集与释放路径。发布准入仍因缺少物理刷新率/端到端时延测量、RGBW 硬件、更大灯数配置及剩余设备/API 矩阵而阻塞。构建成功不代表已完成签名、安装或发布。
+
+**仍未接线的软件缺口（2026-11-17 复核）**：启动前 READY 门禁（实时探测 + 观察 count/通道/身份 + WLED 寻址确认项）、周期性设备观察/stale/身份变化废弃、采集 resize/旋转处理目前只有模型与单测，**未接入运行服务**；采集在本地配置校验通过后即启动。对应任务 CFG-2、NET-3、CAP-2、TV-1，不计为已交付。
 
 ### 构建
 

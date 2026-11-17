@@ -48,6 +48,8 @@
 
 **证据（2026-11-16，本地未验收）**：唯一入口改为`WledScreenService`，旧`HyperionScreenService/Encoder/Thread/proto`与protobuf插件/依赖已删除；包目录、namespace、applicationId、service/action/channel、主题与活动UI字符串迁移到`com.abrenoch.wledgrabber`；多语言`values-*`活动品牌清理；Debug+unsigned Release+三模块lint通过；156 JVM测试通过；APK内旧身份/protobuf命中0；merged manifest为`com.abrenoch.wledgrabber`、versionCode 1012/2012、versionName 1.0。未安装、未签名、未发布；真机采集/关灯读回与Sony/RGBW验收未执行。翻译完整度仍有缺口（未翻译项回退默认文案，已用lint抑制并记录），不阻塞构建但不声称翻译全覆盖。REL-1保持“待验证”。证据见`docs/verification/wled/rel-1/`。2026-11-17：应用图标、自适应图标（含 Android 13 monochrome）、24dp 通知图标与 TV banner 已按[品牌与图标规范](../../design/app-icon/brand-guide.md)替换；三模块 Debug 构建与 `:common:lintDebug` 通过（exit 0）。真机 launcher/themed icon/TV banner 显示待验收。
 
+**2026-11-17 交付复核（升级为已验收）**：活动源码与根/模块构建文件对 `Hyperion`/`protobuf`/`ButterKnife`/`jcenter` 的检索均为 0；type5/WLED 旧分支为 0；`git ls-files` 中无旧协议源。重新运行三模块 Debug + unsigned Release + lint（error 0）通过；归档的 `artifact-audit.txt` 记录 merged manifest 为 `com.abrenoch.wledgrabber`、APK 旧身份/protobuf 条目为 0。REL-1 的验收范围是“唯一后端与旧产物清理”，真机采集/关灯属于 QA-2；据此升级为**已验收**，但签名/安装/发布仍未执行。
+
 <a id="rel-2"></a>
 
 ## REL-2 — 配置重建、故障排查与侧载说明
@@ -82,4 +84,6 @@
 - 失效链接0；所有未测试组合标注未验证；签名/发布完成的虚假表述0。
 
 **证据（2026-11-16）**：`docs/migration/legacy-to-wled-layout.md`交付；链接检查19个文档、217处链接0错误；旧字段映射/274参数/Input/Reverse/DDP/auto-white/RELEASE_UNCONFIRMED排障全部覆盖；README与合并APK manifest的package/versionCode/versionName/权限已对照（仍为旧身份`com.abrenoch.hyperiongrabber`，签名/发布/硬件未完成）。**2026-11-17 复核**：本地回归 `scripts/qa/local-regression.sh` 通过——25 个文档、241 处链接、0 错误；`docs/migration/legacy-to-wled-layout.md` 仍覆盖旧 Host/Port/Priority/X/Y/帧率/平均色/开机行为的映射或“不迁移”解释；QA-1 已验收（JVM 187/0、lint 0 error、Debug+Release 构建）。三项独立测试全部勾选，REL-2 验收通过。证据见`docs/verification/wled/rel-2/` 与 `docs/verification/wled/qa-1/`。
+
+**2026-11-17 交付复核**：`scripts/qa/check-doc-links.py` 复核 **30 个文档、321 处链接、0 错误**（本轮新增 §5.2 与交付复核证据后）；映射/侧载/隐私/停止限制章节与当前代码一致；REL-2 保持**已验收**。本轮没有新增迁移说明文件，旧字段映射仍以 `docs/archive/migration/legacy-to-wled-layout.md` 为历史证据。
 

@@ -122,3 +122,5 @@ common/.../network/wled、NetworkScanner重用、network_security_config.xml
 
 **证据（2026-11-17，读回字段兼容）**：真机WLED 16.0.1的`/json/state`**不包含`live`字段**（实时中也不含，`/json/info`才有），旧`readState`要求两者都在，导致读回恒`MISSING_FIELD`、release永远`UNCONFIRMED`。改为：`on`仍取`/json/state`，缺失`live`时回退读取`/json/info`的`live`；两者都缺才报`MISSING_FIELD`。新增JVM回归`liveFallsBackToInfoWhenStateOmitsIt`（先RED后GREEN，断言两次请求）。真机10秒测试图案用例`tenSecondPatternConfirmsRelease`因此从失败转为通过：`release CONFIRMED`，POST `{"on":false,"live":false,"tt":0}`后`/json/state`的`on=false`且`/json/info`的`live=false`。
 
+**2026-11-17 交付复核（状态下调为开发中）**：`WledSession`、`WledControlClient`（含 `FrameSender`）仅被 `WledSessionTest` 引用，生产 `WledScreenService` 直接使用 `WledHttpClient` + `LedStreamer`，未实例化 session。因此卡片的“后台健康探测（≤5秒）”“10秒 stale”“设备身份/网络变化废弃端点并重新观察”“网络失败有界恢复”均未接入运行路径；已实现的只有服务层停止时的 black+off+读回。本轮补齐 release 结果向 UI 的广播（`SERVICE_RELEASE_KNOWN/CONFIRMED`，TV/mobile 展示），但仍不替代 `WledSession` 的观察/废弃职责。该卡保持**开发中**。
+

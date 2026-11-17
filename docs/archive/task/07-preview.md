@@ -84,3 +84,5 @@ common/.../views/LedLayoutPreviewView、共享测试图案控制器；双端仅�
 
 **证据（2026-11-16，本地部分）**：`LedTestPattern`、`TestPatternSession`、`TestPatternRunner`、`TestPatternActivity`落地；6个`LedPatternTest`与3个`TestPatternRunnerTest`通过，覆盖274/288四边色、SKIP/BLACK与尾黑、行走像素逐物理灯恰好1次、RGBW向量、10秒/取消/捕获互斥、三帧池流控与黑帧最后发送。TEST宿主已通过同一`WledHttpClient`执行`turnOff`+`readState`，只有off/live均false才显示CONFIRMED；否则UNCONFIRMED。宿主慢网络/退出/旋转/Activity停止与仪器测试未完成，PRE-2保持“待验证”。证据见`docs/verification/wled/test-host/`。
 
+**2026-11-17 交付复核与修复**：复核发现 TEST 宿主与 TV 布局探针只发 UDP 实时帧、未调用 `turnOn`；WLED 主电源为关时（例如刚停止采集后）图案/探针不可见。已新增 `WledPowerOn.async`，服务、TEST 宿主复用；TV 布局探针同时在结束时发送全黑帧，避免白色脉冲滞留到设备超时。另发现 `LayoutProbeSender` 固定构造 3 字节帧、只按 `protocol==DDP` 选路：RGBW+AUTO 会错走 DNRGB，RGBW+DDP 会错用 0x0B RGB 而非 0x1B。已改为 `Transport.resolve` + 按通道数构造 RGBW 帧（`LayoutProbe.buildFrame(..., channels, whiteMode, ...)`），新增 JVM 回归 `rgbwFrameUsesFourChannelsAndWhiteSynthesis`、`transportFollowsTheObservedChannelMode`、`WledPowerOnTest`。本轮 221 JVM 与 API26/33 相关仪器通过；真机视觉确认与慢网络组合仍归 QA-2。
+

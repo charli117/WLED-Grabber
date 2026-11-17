@@ -1,0 +1,162 @@
+Starting a Gradle Daemon, 2 incompatible Daemons could not be reused, use --status for details
+> Task :common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :common:preBuild UP-TO-DATE
+> Task :common:preDebugBuild UP-TO-DATE
+> Task :common:generateDebugResValues
+> Task :common:generateDebugResources
+> Task :common:packageDebugResources
+> Task :common:preDebugUnitTestBuild UP-TO-DATE
+> Task :common:javaPreCompileDebug
+> Task :mobile:preBuild UP-TO-DATE
+> Task :mobile:preDebugBuild UP-TO-DATE
+> Task :common:javaPreCompileDebugUnitTest
+> Task :common:parseDebugLocalResources
+> Task :mobile:dataBindingMergeDependencyArtifactsDebug
+> Task :mobile:generateDebugResValues
+> Task :mobile:generateDebugResources
+> Task :common:generateDebugRFile
+> Task :mobile:mergeDebugResources
+> Task :mobile:packageDebugResources
+> Task :mobile:javaPreCompileDebug
+> Task :mobile:parseDebugLocalResources
+> Task :common:generateDebugUnitTestStubRFile
+> Task :common:compileDebugLibraryResources
+> Task :mobile:dataBindingGenBaseClassesDebug
+> Task :mobile:mapDebugSourceSetPaths
+> Task :common:writeDebugAarMetadata
+> Task :mobile:createDebugCompatibleScreenManifests
+> Task :common:extractDeepLinksDebug
+> Task :mobile:checkDebugAarMetadata
+> Task :mobile:extractDeepLinksDebug
+> Task :mobile:preDebugUnitTestBuild UP-TO-DATE
+> Task :mobile:javaPreCompileDebugUnitTest
+> Task :mobile:processDebugJavaRes NO-SOURCE
+> Task :mobile:processDebugUnitTestJavaRes NO-SOURCE
+> Task :tv:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :tv:preBuild UP-TO-DATE
+> Task :tv:preDebugBuild UP-TO-DATE
+> Task :common:processDebugManifest
+> Task :tv:dataBindingMergeDependencyArtifactsDebug
+> Task :mobile:processDebugMainManifest
+> Task :mobile:processDebugManifest
+> Task :tv:generateDebugResValues
+> Task :tv:generateDebugResources
+> Task :tv:packageDebugResources
+> Task :tv:parseDebugLocalResources
+> Task :tv:checkDebugAarMetadata
+> Task :tv:mapDebugSourceSetPaths
+> Task :tv:createDebugCompatibleScreenManifests
+> Task :tv:extractDeepLinksDebug
+> Task :tv:processDebugMainManifest
+> Task :tv:processDebugManifest
+> Task :tv:processDebugManifestForPackage
+> Task :tv:javaPreCompileDebug
+> Task :tv:preDebugUnitTestBuild UP-TO-DATE
+> Task :mobile:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :tv:javaPreCompileDebugUnitTest
+> Task :common:mergeDebugShaders
+> Task :common:compileDebugShaders NO-SOURCE
+> Task :common:generateDebugAssets UP-TO-DATE
+> Task :common:packageDebugAssets
+> Task :mobile:mergeDebugShaders
+> Task :mobile:compileDebugShaders NO-SOURCE
+> Task :mobile:generateDebugAssets UP-TO-DATE
+> Task :mobile:mergeDebugAssets
+> Task :mobile:compressDebugAssets
+> Task :tv:mergeDebugResources
+> Task :mobile:desugarDebugFileDependencies
+> Task :tv:dataBindingGenBaseClassesDebug
+
+> Task :common:compileDebugKotlin
+w: file:///Users/luowei/Documents/Pycharm/WLED-Grabber/common/src/main/java/com/abrenoch/wledgrabber/common/util/Preferences.kt:5:8 'class PreferenceManager : Any' is deprecated. Deprecated in Java.
+w: file:///Users/luowei/Documents/Pycharm/WLED-Grabber/common/src/main/java/com/abrenoch/wledgrabber/common/util/Preferences.kt:13:31 'class PreferenceManager : Any' is deprecated. Deprecated in Java.
+w: file:///Users/luowei/Documents/Pycharm/WLED-Grabber/common/src/main/java/com/abrenoch/wledgrabber/common/util/Preferences.kt:13:49 'static fun getDefaultSharedPreferences(p0: Context!): SharedPreferences!' is deprecated. Deprecated in Java.
+
+> Task :tv:processDebugResources
+
+> Task :common:compileDebugJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :mobile:processDebugManifestForPackage
+> Task :common:processDebugJavaRes
+> Task :common:bundleLibRuntimeToJarDebug
+> Task :common:bundleLibCompileToJarDebug
+> Task :common:compileDebugUnitTestKotlin NO-SOURCE
+> Task :mobile:processDebugResources
+> Task :common:compileDebugUnitTestJavaWithJavac
+> Task :common:processDebugUnitTestJavaRes
+> Task :common:testDebugUnitTest
+
+> Task :mobile:compileDebugJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :mobile:bundleDebugClassesToRuntimeJar
+> Task :mobile:bundleDebugClassesToCompileJar
+> Task :mobile:compileDebugUnitTestJavaWithJavac
+> Task :mobile:testDebugUnitTest
+
+> Task :tv:compileDebugKotlin
+w: file:///Users/luowei/Documents/Pycharm/WLED-Grabber/tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/SettingsStepBaseFragment.kt:143:39 Unchecked cast of 'Any?' to 'T (of fun <T : Any> assertSubActionValue)'.
+w: file:///Users/luowei/Documents/Pycharm/WLED-Grabber/tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/SettingsStepBaseFragment.kt:150:46 Unchecked cast of 'String' to 'T (of fun <T : Any> assertSubActionValue)'.
+
+> Task :mobile:dexBuilderDebug
+
+> Task :tv:compileDebugJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/luowei/Documents/Pycharm/WLED-Grabber/tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/MainActivity.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :tv:processDebugJavaRes
+> Task :tv:bundleDebugClassesToRuntimeJar
+> Task :tv:bundleDebugClassesToCompileJar
+> Task :tv:compileDebugUnitTestKotlin NO-SOURCE
+> Task :tv:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :tv:processDebugUnitTestJavaRes NO-SOURCE
+> Task :mobile:mergeDebugGlobalSynthetics
+> Task :tv:testDebugUnitTest NO-SOURCE
+> Task :common:mergeDebugJniLibFolders
+> Task :common:mergeDebugNativeLibs NO-SOURCE
+> Task :common:copyDebugJniLibsProjectOnly
+> Task :mobile:checkDebugDuplicateClasses
+> Task :mobile:mergeDebugJniLibFolders
+> Task :mobile:mergeDebugNativeLibs NO-SOURCE
+> Task :mobile:stripDebugDebugSymbols NO-SOURCE
+> Task :mobile:validateSigningDebug
+> Task :mobile:writeDebugAppMetadata
+> Task :mobile:writeDebugSigningConfigVersions
+> Task :tv:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :tv:mergeDebugShaders
+> Task :tv:compileDebugShaders NO-SOURCE
+> Task :tv:generateDebugAssets UP-TO-DATE
+> Task :mobile:mergeProjectDexDebug
+> Task :tv:mergeDebugAssets
+> Task :tv:compressDebugAssets
+> Task :tv:desugarDebugFileDependencies
+> Task :mobile:mergeLibDexDebug
+> Task :mobile:mergeDebugJavaResource
+> Task :tv:dexBuilderDebug
+> Task :tv:mergeDebugGlobalSynthetics
+> Task :tv:mergeDebugJniLibFolders
+> Task :tv:checkDebugDuplicateClasses
+> Task :tv:mergeDebugNativeLibs NO-SOURCE
+> Task :tv:stripDebugDebugSymbols NO-SOURCE
+> Task :tv:validateSigningDebug
+> Task :tv:writeDebugAppMetadata
+> Task :tv:writeDebugSigningConfigVersions
+> Task :tv:mergeLibDexDebug
+> Task :tv:mergeProjectDexDebug
+> Task :tv:mergeDebugJavaResource
+> Task :mobile:mergeExtDexDebug
+> Task :mobile:packageDebug
+> Task :mobile:createDebugApkListingFileRedirect
+> Task :mobile:assembleDebug
+> Task :tv:mergeExtDexDebug
+> Task :tv:packageDebug
+> Task :tv:createDebugApkListingFileRedirect
+> Task :tv:assembleDebug
+
+BUILD SUCCESSFUL in 22s
+102 actionable tasks: 102 executed

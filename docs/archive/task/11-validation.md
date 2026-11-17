@@ -49,6 +49,8 @@
 
 **证据（2026-11-17，真机/AVD）**：JVM **166通过/0失败**；三模块lint **error 0**（warnings common 94 / mobile 8 / tv 49）；三模块Debug与unsigned Release构建退出0；仪器测试：**Sony KD-55XD8005（API 29）common 2/2、tv 7/7**（含真实WLED `10.245.0.99`能力探测、状态读回、10秒测试图案release CONFIRMED），**API 34 AVD mobile 1/1**。期间修复两处真机缺陷：`TestPatternActivity`/`LayoutPreviewActivity`缺少AppCompat主题导致启动崩溃（已在common manifest指定`Theme.AppCompat.NoActionBar`）；WLED 16.x `/json/state`不含`live`导致读回恒`MISSING_FIELD`（改为回退`/json/info`，新增JVM回归`liveFallsBackToInfoWhenStateOmitsIt`）。API 21/26/33/35仍未运行，保持待验证。
 
+**证据（2026-11-17 交付复核，本轮）**：JVM **221通过/0失败**（common 221、mobile 1、tv NO-SOURCE）；三模块 lint **error 0**（common 99 / mobile 8 / tv 55 warnings）；Debug 与 unsigned Release 构建 exit 0。仪器复跑：**API 26 `api26-phone` common 42/42、mobile 9/9**（含新增 `MobileEntryTest.emptyConfigRoutesPowerToSettingsInsteadOfConsent`）；**API 33 `wled-tv-api33` 32 通过 + 3 真机用例跳过**（含新增 `TvMainActivityTest.releaseBroadcastShowsConfirmedOrUnconfirmedStatus` 与 `smallStripScanResultStillOpensMainSurface`）。API 21/23/29/34/35 与真机矩阵本轮未复跑，保持待验证。新增证据归档：`docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/`（JVM/构建、lint/Release、API26、API33 原始日志）；`.omc/artifacts/` 同名文件为可删除的工作区运行产物。QA-1 维持**已验收**是就“本地可复跑门禁”而言，不表示发布或物理验收。
+
 <a id="qa-2"></a>
 
 ## QA-2 — 274/60fps、RGBW与故障实机验收
@@ -88,6 +90,8 @@
 **硬件阻塞（2026-11-16）**：当前无 Sony 电视、274 WS2815+ESP32、RGBW 样机、500/1000/2000 灯配置或物理测量设备；`adb devices` 为空。未开始可复核实验，未产生 fps/延迟/稳定性数据。必测项与量化门槛见[hardware-blocked.md](../verification/wled/qa-2/hardware-blocked.md)。QA-2 保持“待开发/BLOCKED”，不以 JVM 或 UDP 频率代替物理验收。
 
 **实测（2026-11-17，Sony KD-55XD8005 + WLED_TV 274 RGB @10.245.0.99，640长边，60fps配置）**：采样 p50≈3.3ms、**p95≈4.05–4.5ms**、**p99≈4.5–4.9ms**（≤5/≤8 达标）；**发送间隔 p95≈17.3ms**（≤20 达标）；WLED `leds.fps` 30次1秒采样 **min=66 / avg=107.4**（≥59 且1秒窗口≥55 达标）；启动自动开灯、静态画面1秒心跳保持 live、停止后 `on=false/live=false` 并经 HTTP 读回 CONFIRMED。30分钟soak与内存净增结果见下方复核记录。**仍缺**：端到端物理时延（需光感/高速相机或等效测量设备）、RGBW 样机两模式、500/1000/2000 灯配置、Sony 遥控器大字体实测。按卡片自身口径，QA-2 保持 BLOCKED，不标 PASS。硬件就绪后的执行步骤见[qa2-runbook.md](../verification/wled/qa-2/qa2-runbook.md)，软件侧复测可用`scripts/qa/measure-qa2.sh`。
+
+**2026-11-17 交付复核补充**：32分钟soak（UTC 2026-11-16T18:05–18:38）已完成：`FATAL EXCEPTION`/ANR 均为 0，TOTAL PSS 93,288→68,632 KB（净降），采样 p95 3.9–4.4ms、发送间隔 p95 17.3–17.6ms，满足“无崩溃/无持续增长”的稳定性口径。仍缺的四项（物理FPS/端到端、RGBW样机、500/1000/2000灯、Sony遥控器大字体）没有变化；故障矩阵（丢包/乱序/断网/断HTTP/WLED重启/进程kill/息屏）未系统执行。QA-2 继续 BLOCKED。
 
 <a id="qa-3"></a>
 

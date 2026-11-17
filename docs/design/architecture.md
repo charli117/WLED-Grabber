@@ -1,6 +1,8 @@
 # WLED Grabber 技术架构
 
 > 本文是架构、参数、协议、生命周期与兼容要求的唯一技术规范。关联文档：[品牌与图标规范](app-icon/brand-guide.md)、[配置与排障手册](../guides/configuration-and-troubleshooting.md)。
+>
+> 实现状态与未闭环项见[任务册 §5.2 交付证据复核](../archive/task/00-overview.md#delivery-audit-2026-11-17)（2026-11-17）。本文描述目标契约，不等于全部已实现、待发布或生产验收。
 
 ## 阅读导航
 

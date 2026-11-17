@@ -82,3 +82,5 @@ common/.../util/Preferences.kt、ConfigRepository/ConfigValidator、led配置模
 
 **证据（2026-11-16）**：`DeviceEndpoint`（HTTP/UDP/DDP分离）、`Capabilities`/`ChannelHint`、`WledDevice`、`ProbeResult`、`StartConfirmation`、`Transport`、`ReadyDevice`、`DeviceReadiness`、`DeviceState` 落地；11个`DeviceConfigTest`通过。覆盖HTTP非80、UDP自定义、DDP4048固定、缺失能力、RGBW冲突、身份变更、count减少、schema变更、旧快照不被通道变更修改、配置/观察时间戳独立；`Transport`无type5。androidTest APK编译通过（未连设备执行）。证据见`docs/verification/wled/cfg-2/`。
 
+**2026-11-17 交付复核（状态下调为开发中）**：重新以生产调用方核对，`DeviceReadiness`、`StartConfirmation`、`ReadyDevice` 均无服务/UI 调用；`WledScreenService`、`BootActivity`、`WledTileService`、`TestPatternActivity` 只做 `ConfigValidator.validateForStart` 本地字段校验，开始前不探测设备、不比较观察 count/通道/MAC。因此“缺失/冲突能力均可见、能力不足或count不足不进入READY”仅在类级单测成立，不是运行行为。本轮另将四处重复的 host/count/rgbw 判断统一为 `validateForStart`，但不替代 START 前探测。该卡保持**开发中**，需接入观测+确认项后才可重新验收。
+
