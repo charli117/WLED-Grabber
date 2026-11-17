@@ -55,13 +55,20 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
             if (error != null) {
                 Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
             }
+            boolean releaseKnown = intent.getBooleanExtra(
+                    WledScreenService.BROADCAST_RELEASE_KNOWN, false);
+            boolean releaseConfirmed = intent.getBooleanExtra(
+                    WledScreenService.BROADCAST_RELEASE_CONFIRMED, false);
             TextView status = findViewById(R.id.grabberStartedText);
             if (status != null) {
-                status.setText(checked
+                int text = checked
                         ? com.abrenoch.wledgrabber.common.R.string.tv_status_sending
-                        : com.abrenoch.wledgrabber.common.R.string.tv_status_stopped);
+                        : releaseKnown && releaseConfirmed
+                                ? com.abrenoch.wledgrabber.common.R.string.tv_status_stopped_confirmed
+                                : com.abrenoch.wledgrabber.common.R.string.tv_status_stopped;
+                status.setText(text);
             }
-            setImageViews(checked, true);
+            setImageViews(checked, true, checked || releaseKnown);
         }
     };
 
@@ -98,6 +105,15 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
         return true;
     }
 
+    /** Full start gate; kept separate so a scan result can still open the main surface. */
+    private boolean isStartConfigured() {
+        ConfigRepository repository = new ConfigRepository(
+                new PreferencesConfigStorage(new Preferences(this)), new ConfigValidator());
+        ValidationResult<ConfigSnapshot> loaded = repository.load();
+        return loaded.isValid()
+                && new ConfigValidator().validateForStart(loaded.value()).isValid();
+    }
+
     private void startSetup() {
         // Start onboarding (setup)
         Intent intent = new Intent(this, NetworkScanActivity.class);
@@ -129,7 +145,9 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
         setImageViews(mRecorderRunning, false);
         TextView status = findViewById(R.id.grabberStartedText);
         if (status != null) {
-            status.setText(com.abrenoch.wledgrabber.common.R.string.tv_status_ready);
+            status.setText(isStartConfigured()
+                    ? com.abrenoch.wledgrabber.common.R.string.tv_status_ready
+                    : com.abrenoch.wledgrabber.common.R.string.tv_status_layout_required);
         }
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -144,6 +162,13 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
         switch (view.getId()) {
             case R.id.power_toggle:
                 if (!mRecorderRunning) {
+                    if (!isStartConfigured()) {
+                        Toast.makeText(this,
+                                com.abrenoch.wledgrabber.common.R.string.tv_status_layout_required,
+                                Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(this, LayoutEditorActivity.class));
+                        return;
+                    }
                     startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(),
                             REQUEST_MEDIA_PROJECTION);
                 } else {
@@ -221,6 +246,10 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
     }
 
     private void setImageViews(boolean running, boolean animated) {
+        setImageViews(running, animated, running);
+    }
+
+    private void setImageViews(boolean running, boolean animated, boolean showMessage) {
         View rainbow = findViewById(R.id.sweepGradientView);
         View message = findViewById(R.id.grabberStartedText);
         if (running) {
@@ -234,10 +263,10 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
         } else {
             if (animated){
                 fadeView(rainbow, false);
-                fadeView(message, false);
+                fadeView(message, showMessage);
             } else {
                 rainbow.setVisibility(View.INVISIBLE);
-                message.setVisibility(View.INVISIBLE);
+                message.setVisibility(showMessage ? View.VISIBLE : View.INVISIBLE);
             }
         }
     }

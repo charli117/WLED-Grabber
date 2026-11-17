@@ -61,9 +61,23 @@ public final class LayoutProbe {
      */
     public static byte[] buildFrame(CompiledLayout compiled, int[] logicals,
                                     int red, int green, int blue) {
+        return buildFrame(compiled, logicals, 3, null, red, green, blue);
+    }
+
+    /**
+     * Same as {@link #buildFrame(CompiledLayout, int[], int, int, int)} but packs
+     * RGB or RGBW bytes. RGBW uses the same white synthesis as the capture path,
+     * so the pulse matches the configured strip format.
+     */
+    public static byte[] buildFrame(CompiledLayout compiled, int[] logicals, int channels,
+                                    WhiteMode whiteMode, int red, int green, int blue) {
+        if (compiled == null || logicals == null || (channels != 3 && channels != 4)
+                || (channels == 4 && whiteMode == null)) {
+            throw new IllegalArgumentException("compiled/logicals/channels required");
+        }
         LedMapping mapping = compiled.mapping();
         int physicalCount = mapping.physicalLedCount();
-        byte[] frame = new byte[physicalCount * 3];
+        byte[] frame = new byte[physicalCount * channels];
         int logicalCount = mapping.logicalToPhysical().length;
         for (int logical : logicals) {
             if (logical < 0 || logical >= logicalCount || mapping.isLogicalBlack(logical)) {
@@ -73,9 +87,14 @@ public final class LayoutProbe {
             if (physical < 0 || physical >= physicalCount) {
                 continue;
             }
-            frame[physical * 3] = (byte) red;
-            frame[physical * 3 + 1] = (byte) green;
-            frame[physical * 3 + 2] = (byte) blue;
+            int offset = physical * channels;
+            if (channels == 3) {
+                frame[offset] = (byte) red;
+                frame[offset + 1] = (byte) green;
+                frame[offset + 2] = (byte) blue;
+            } else {
+                RgbwConverter.write(red, green, blue, whiteMode, frame, offset);
+            }
         }
         return frame;
     }

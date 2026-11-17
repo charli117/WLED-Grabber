@@ -23,6 +23,7 @@ import com.abrenoch.wledgrabber.common.led.RgbwMode;
 import com.abrenoch.wledgrabber.common.network.wled.StateReadResult;
 import com.abrenoch.wledgrabber.common.network.wled.UdpDatagramSink;
 import com.abrenoch.wledgrabber.common.network.wled.WledHttpClient;
+import com.abrenoch.wledgrabber.common.network.wled.WledPowerOn;
 import com.abrenoch.wledgrabber.common.network.wled.WledUdpTransport;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
@@ -89,10 +90,7 @@ public class TestPatternActivity extends AppCompatActivity {
         ValidationResult<ConfigSnapshot> loaded = repository.load();
         ConfigSnapshot snapshot = repository.committedSnapshot();
         if (!loaded.isValid() || snapshot == null
-                || snapshot.device().host() == null
-                || snapshot.device().host().trim().isEmpty()
-                || snapshot.device().physicalLedCount() < 1
-                || snapshot.device().rgbwMode() == RgbwMode.UNCONFIRMED) {
+                || !new ConfigValidator().validateForStart(snapshot).isValid()) {
             status.setText("Configure a confirmed WLED device before TEST.");
             return;
         }
@@ -152,6 +150,8 @@ public class TestPatternActivity extends AppCompatActivity {
         host = snapshot.device().host();
         httpPort = snapshot.device().httpPort();
         httpClient = new WledHttpClient();
+        // UDP realtime frames do not turn the master power on.
+        WledPowerOn.async(httpClient, host, httpPort, "wled-test-power-on");
         LedStreamer streamer = new LedStreamer(pool, frameSink, reason -> {
             boolean off = httpClient.turnOff(host, httpPort);
             StateReadResult stateRead = httpClient.readState(host, httpPort);

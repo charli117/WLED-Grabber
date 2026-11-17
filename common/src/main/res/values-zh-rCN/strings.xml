@@ -27,6 +27,10 @@
   <string name="tv_status_ready">WLED 已配置，可以开始采集。</string>
   <string name="tv_status_sending">采集运行中，正在本机发送到 WLED；不保证逐帧送达。</string>
   <string name="tv_status_stopped">采集已停止，WLED 关闭状态未确认。</string>
+  <string name="tv_status_stopped_confirmed">采集已停止，已读回确认 WLED 关闭。</string>
+  <string name="tv_status_layout_required">请先在布局编辑器中设置有效的 LED 布局。</string>
+  <string name="toast_release_confirmed">采集已停止，已确认 WLED 关闭。</string>
+  <string name="toast_release_unconfirmed">采集已停止，WLED 关闭状态未确认。</string>
   <string name="notification_permission_hint">通知已关闭。采集仍可运行，但前台状态可能不可见。</string>
 
   <!-- Configuration field labels shared by mobile and TV settings -->

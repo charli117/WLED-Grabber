@@ -18,7 +18,6 @@ import android.text.TextUtils;
 import com.abrenoch.wledgrabber.common.BootActivity;
 import com.abrenoch.wledgrabber.common.WledScreenService;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
-import com.abrenoch.wledgrabber.common.led.RgbwMode;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
 import com.abrenoch.wledgrabber.common.util.NotificationPermission;
@@ -68,7 +67,7 @@ public class WledTileService extends TileService {
 
     @Override
     public void onStopListening() {
-        super.onTileRemoved();
+        super.onStopListening();
         mHandle.postDelayed(unregisterReceiverRunner, REMOVE_LISTENER_DELAY);
     }
 
@@ -141,10 +140,7 @@ public class WledTileService extends TileService {
         ValidationResult<ConfigSnapshot> loaded = repository.load();
         ConfigSnapshot snapshot = repository.committedSnapshot();
         boolean configured = loaded.isValid() && snapshot != null
-                && snapshot.device().host() != null
-                && !snapshot.device().host().trim().isEmpty()
-                && snapshot.device().physicalLedCount() > 0
-                && snapshot.device().rgbwMode() != RgbwMode.UNCONFIRMED;
+                && new ConfigValidator().validateForStart(snapshot).isValid();
         if (!configured){
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             settingsIntent.putExtra(SettingsActivity.EXTRA_SHOW_TOAST_KEY, SettingsActivity.EXTRA_SHOW_TOAST_SETUP_REQUIRED_FOR_QUICK_TILE);

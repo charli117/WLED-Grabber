@@ -27,8 +27,14 @@ import android.widget.Toast;
 import com.abrenoch.wledgrabber.common.BootActivity;
 import com.abrenoch.wledgrabber.common.startup.StartupSetupActivity;
 import com.abrenoch.wledgrabber.common.WledScreenService;
+import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
+import com.abrenoch.wledgrabber.common.util.ConfigRepository;
+import com.abrenoch.wledgrabber.common.util.ConfigValidator;
 import com.abrenoch.wledgrabber.common.util.EdgeToEdge;
 import com.abrenoch.wledgrabber.common.util.NotificationPermission;
+import com.abrenoch.wledgrabber.common.util.Preferences;
+import com.abrenoch.wledgrabber.common.util.PreferencesConfigStorage;
+import com.abrenoch.wledgrabber.common.util.ValidationResult;
 
 public class MainActivity extends AppCompatActivity implements ImageView.OnClickListener,
         ImageView.OnFocusChangeListener {
@@ -55,6 +61,15 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
                     (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
                             !WledTileService.isListening())) {
                 Toast.makeText(getBaseContext(), error, Toast.LENGTH_LONG).show();
+            }
+            if (!checked && intent.getBooleanExtra(
+                    WledScreenService.BROADCAST_RELEASE_KNOWN, false)) {
+                boolean confirmed = intent.getBooleanExtra(
+                        WledScreenService.BROADCAST_RELEASE_CONFIRMED, false);
+                Toast.makeText(getBaseContext(),
+                        confirmed ? com.abrenoch.wledgrabber.common.R.string.toast_release_confirmed
+                                : com.abrenoch.wledgrabber.common.R.string.toast_release_unconfirmed,
+                        Toast.LENGTH_LONG).show();
             }
             setImageViews(checked, checked);
         }
@@ -88,6 +103,10 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
     @Override
     public void onClick(View view) {
         if (!mRecorderRunning) {
+            if (!isStartConfigured()) {
+                startActivity(new Intent(this, SettingsActivity.class));
+                return;
+            }
             if (NotificationPermission.requestIfNeeded(this, REQUEST_NOTIFICATIONS)) {
                 return;
             }
@@ -96,6 +115,15 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
             stopScreenRecorder();
             mRecorderRunning = false;
         }
+    }
+
+    /** Empty/incomplete configuration goes to settings first, not to consent. */
+    private boolean isStartConfigured() {
+        ConfigRepository repository = new ConfigRepository(
+                new PreferencesConfigStorage(new Preferences(this)), new ConfigValidator());
+        ValidationResult<ConfigSnapshot> loaded = repository.load();
+        return loaded.isValid()
+                && new ConfigValidator().validateForStart(loaded.value()).isValid();
     }
 
     @Override

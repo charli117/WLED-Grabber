@@ -19,10 +19,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertTrue;
 
 /** MOB-2 entry smoke: MainActivity exposes the single capture entry after config seeding. */
@@ -37,6 +39,22 @@ public class MobileEntryTest {
             onView(withId(R.id.power_toggle)).check(matches(isDisplayed()));
             onView(withId(R.id.power_toggle)).check(matches(isClickable()));
         }
+    }
+
+    @Test
+    public void emptyConfigRoutesPowerToSettingsInsteadOfConsent() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        seed(context);
+        android.preference.PreferenceManager.getDefaultSharedPreferences(context)
+                .edit().clear().commit();
+        context.getSharedPreferences("startup_setup", Context.MODE_PRIVATE)
+                .edit().putBoolean("completed_v1", true).commit();
+
+        try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
+            onView(withId(R.id.power_toggle)).perform(click());
+        }
+        onView(withText(com.abrenoch.wledgrabber.common.R.string.settings_title))
+                .check(matches(isDisplayed()));
     }
 
     private static void seed(Context context) {

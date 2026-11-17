@@ -20,6 +20,18 @@ import static org.junit.Assert.assertTrue;
 public class LayoutProbeSenderTest {
 
     @Test
+    public void transportFollowsTheObservedChannelMode() {
+        ConfigSnapshot rgb = new ConfigValidator().validateForSave(
+                ConfigTestData.validDraft()).value();
+        assertEquals(Transport.DNRGB, LayoutProbeSender.transportFor(rgb));
+
+        ConfigSnapshot rgbw = new ConfigValidator().validateForSave(
+                ConfigTestData.validDraft()
+                        .set(ConfigFields.WLED_RGBW_MODE, "rgbw")).value();
+        assertEquals(Transport.DDP, LayoutProbeSender.transportFor(rgbw));
+    }
+
+    @Test
     public void emptyHostDoesNotStartAPulseOrTakeTheOutputLease() {
         ConfigSnapshot snapshot = new ConfigValidator().validateForSave(
                 ConfigTestData.validDraft().set(ConfigFields.WLED_HOST, "")).value();

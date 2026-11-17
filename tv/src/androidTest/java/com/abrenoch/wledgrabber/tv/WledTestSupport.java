@@ -101,9 +101,13 @@ final class WledTestSupport {
     }
 
     static ConfigSnapshot seedConfig(Context context) {
+        return seedDraft(context, validDraft());
+    }
+
+    static ConfigSnapshot seedDraft(Context context, ConfigDraft draft) {
         ConfigRepository repository = new ConfigRepository(
                 new PreferencesConfigStorage(new Preferences(context)), new ConfigValidator());
-        ValidationResult<ConfigSnapshot> result = repository.save(validDraft());
+        ValidationResult<ConfigSnapshot> result = repository.save(draft);
         markStartupCompleted(context);
         if (!result.isValid()) {
             throw new AssertionError("seeded config is invalid: "

@@ -429,6 +429,10 @@ public class LayoutEditorActivity extends LeanbackActivity {
             }
             return;
         }
+        if (!new ConfigValidator().validateForStart(snapshot.value()).isValid()) {
+            toast(R.string.layout_editor_configure_device);
+            return;
+        }
         int[] logical = side == null
                 ? new int[]{LayoutProbe.inputLogical(layout.layout())}
                 : LayoutProbe.logicalForSide(layout.layout(), side);

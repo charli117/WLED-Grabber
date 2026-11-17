@@ -218,7 +218,9 @@ public class SettingsActivity extends AppCompatActivity {
     private static boolean isBoolean(String field) {
         return ConfigFields.LED_REVERSE.equals(field)
                 || ConfigFields.USE_AVG_COLOR.equals(field)
-                || ConfigFields.BOOT.equals(field);
+                || ConfigFields.BOOT.equals(field)
+                || ConfigFields.QUALITY_CROP_BLACK_BARS.equals(field)
+                || ConfigFields.QUALITY_LINEAR_AVERAGE.equals(field);
     }
 
     private int dp(int value) {

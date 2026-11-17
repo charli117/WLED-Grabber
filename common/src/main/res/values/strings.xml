@@ -81,6 +81,10 @@
   <string name="tv_status_ready">WLED configured. Ready to start.</string>
   <string name="tv_status_sending">Capture running. Sending locally to WLED; per-frame delivery is not acknowledged.</string>
   <string name="tv_status_stopped">Capture stopped. WLED release is not confirmed.</string>
+  <string name="tv_status_stopped_confirmed">Capture stopped. WLED release confirmed by readback.</string>
+  <string name="tv_status_layout_required">Set a valid LED layout before starting capture.</string>
+  <string name="toast_release_confirmed">Capture stopped. WLED release confirmed.</string>
+  <string name="toast_release_unconfirmed">Capture stopped. WLED release is not confirmed.</string>
   <string name="notification_permission_hint">Notifications are disabled. Capture can run, but foreground status may be hidden.</string>
 
   <!-- Configuration field labels shared by mobile and TV settings -->

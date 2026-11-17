@@ -93,6 +93,24 @@ public class LayoutProbeTest {
     }
 
     @Test
+    public void rgbwFrameUsesFourChannelsAndWhiteSynthesis() {
+        CompiledLayout compiled = compile(
+                config(2, 2, 1, 1, false, GapMode.SKIP, 0, 0));
+        int physical = compiled.mapping().logicalToPhysical(0);
+
+        byte[] minSubtract = LayoutProbe.buildFrame(compiled, new int[]{0}, 4,
+                WhiteMode.MIN_SUBTRACT, 255, 255, 255);
+        assertEquals(compiled.mapping().physicalLedCount() * 4, minSubtract.length);
+        assertArrayEquals(new byte[]{0, 0, 0, (byte) 255},
+                java.util.Arrays.copyOfRange(minSubtract, physical * 4, physical * 4 + 4));
+
+        byte[] preserve = LayoutProbe.buildFrame(compiled, new int[]{0}, 4,
+                WhiteMode.PRESERVE, 255, 255, 255);
+        assertArrayEquals(new byte[]{(byte) 255, (byte) 255, (byte) 255, (byte) 255},
+                java.util.Arrays.copyOfRange(preserve, physical * 4, physical * 4 + 4));
+    }
+
+    @Test
     public void gapBlackLedsAreNotLit() {
         CompiledLayout compiled = compile(
                 config(4, 0, 0, 0, false, GapMode.SKIP, 1, 2));

@@ -44,6 +44,7 @@ import com.abrenoch.wledgrabber.common.led.WhiteMode;
 import com.abrenoch.wledgrabber.common.network.wled.StateReadResult;
 import com.abrenoch.wledgrabber.common.network.wled.UdpDatagramSink;
 import com.abrenoch.wledgrabber.common.network.wled.WledHttpClient;
+import com.abrenoch.wledgrabber.common.network.wled.WledPowerOn;
 import com.abrenoch.wledgrabber.common.network.wled.WledUdpTransport;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
@@ -57,6 +58,8 @@ import com.abrenoch.wledgrabber.common.util.ValidationResult;
 public class WledScreenService extends Service {
     public static final String BROADCAST_ERROR = "SERVICE_ERROR";
     public static final String BROADCAST_TAG = "SERVICE_STATUS";
+    public static final String BROADCAST_RELEASE_KNOWN = "SERVICE_RELEASE_KNOWN";
+    public static final String BROADCAST_RELEASE_CONFIRMED = "SERVICE_RELEASE_CONFIRMED";
     public static final String BROADCAST_FILTER = "SERVICE_FILTER";
     private static final String BASE = "com.abrenoch.wledgrabber.service.";
     public static final String ACTION_START = BASE + "ACTION_START";
@@ -102,6 +105,8 @@ public class WledScreenService extends Service {
             com.abrenoch.wledgrabber.common.led.QualitySettings.OFF;
     private boolean running;
     private boolean stopping;
+    private volatile boolean releaseKnown;
+    private volatile boolean releaseConfirmed;
     private long epoch;
     private long outputEpoch;
     private long lastFrameAt;
@@ -180,6 +185,8 @@ public class WledScreenService extends Service {
         if (!captureSession.beginStart() || !captureSession.validationPassed()) {
             return false;
         }
+        releaseKnown = false;
+        releaseConfirmed = false;
         boolean granted = intent.getIntExtra(EXTRA_RESULT_CODE, 0) == Activity.RESULT_OK;
         if (!captureSession.onConsentResult(granted)) {
             // Started via startForegroundService(): satisfy the contract before bailing out.
@@ -207,10 +214,7 @@ public class WledScreenService extends Service {
             ValidationResult<ConfigSnapshot> loaded = repository.load();
             ConfigSnapshot snapshot = repository.committedSnapshot();
             if (!loaded.isValid() || snapshot == null
-                    || snapshot.device().host() == null
-                    || snapshot.device().host().trim().isEmpty()
-                    || snapshot.device().physicalLedCount() < 1
-                    || snapshot.device().rgbwMode() == RgbwMode.UNCONFIRMED) {
+                    || !new ConfigValidator().validateForStart(snapshot).isValid()) {
                 captureSession.rejectStart();
                 failStart("WLED configuration is incomplete");
                 return;
@@ -276,7 +280,9 @@ public class WledScreenService extends Service {
             };
             final String host = snapshot.device().host();
             final int httpPort = snapshot.device().httpPort();
-            requestWledPowerOn(httpClient, host, httpPort);
+            // WLED only outputs while its master power is on; realtime UDP frames
+            // alone do not switch it on. The worker keeps this off the main thread.
+            WledPowerOn.async(httpClient, host, httpPort, "wled-power-on");
             streamer = new LedStreamer(framePool, frameSink, reason -> {
                 boolean off = httpClient.turnOff(host, httpPort);
                 StateReadResult state = httpClient.readState(host, httpPort);
@@ -329,24 +335,6 @@ public class WledScreenService extends Service {
             }
             notifyActivity();
         }
-    }
-
-    /**
-     * WLED only outputs while its master power is on; realtime UDP frames alone do
-     * not switch it on. Runs off the main thread for the no-main-thread-network rule.
-     */
-    private void requestWledPowerOn(WledHttpClient client, String host, int port) {
-        Thread worker = new Thread(() -> {
-            try {
-                if (!client.turnOn(host, port)) {
-                    Log.w(TAG, "WLED power-on not acknowledged");
-                }
-            } catch (RuntimeException e) {
-                Log.w(TAG, "WLED power-on failed", e);
-            }
-        }, "wled-power-on");
-        worker.setDaemon(true);
-        worker.start();
     }
 
     private boolean sendFrame(WledUdpTransport transport, byte[] data, int leds, int ledChannels) {
@@ -481,7 +469,11 @@ public class WledScreenService extends Service {
             captureHandler = null;
         }
         if (streamer != null) {
-            streamer.stop(reason);
+            LedStreamer.StopResult stop = streamer.stop(reason);
+            // A completed or timed-out release has a displayable result; a timeout
+            // must surface as UNCONFIRMED rather than as "no result".
+            releaseKnown = stop != null && (stop.releaseCalled() || stop.timedOut());
+            releaseConfirmed = stop != null && stop.releaseCalled() && stop.releaseOk();
             streamer = null;
         }
         if (sink != null) {
@@ -589,6 +581,8 @@ public class WledScreenService extends Service {
         Intent intent = new Intent(BROADCAST_FILTER);
         intent.putExtra(BROADCAST_TAG, running);
         intent.putExtra(BROADCAST_ERROR, startError);
+        intent.putExtra(BROADCAST_RELEASE_KNOWN, releaseKnown);
+        intent.putExtra(BROADCAST_RELEASE_CONFIRMED, releaseConfirmed);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
