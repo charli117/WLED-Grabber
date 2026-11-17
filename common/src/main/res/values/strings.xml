@@ -73,7 +73,6 @@
   <string name="wled_setup_http_port">WLED HTTP port</string>
   <string name="wled_setup_udp_port">WLED UDP realtime port</string>
   <string name="wled_setup_ddp_port">DDP port (fixed 4048)</string>
-  <string name="wled_setup_physical_leds">Confirmed physical LED count</string>
   <string name="wled_setup_protocol">Protocol (auto/dnrgb/ddp)</string>
   <string name="wled_setup_rgbw">Channel mode (unconfirmed/rgb/rgbw)</string>
   <string name="wled_setup_test">Test WLED connection</string>

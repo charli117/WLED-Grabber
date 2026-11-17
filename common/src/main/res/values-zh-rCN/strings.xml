@@ -19,7 +19,6 @@
   <string name="wled_setup_http_port">WLED HTTP 端口</string>
   <string name="wled_setup_udp_port">WLED 实时 UDP 端口</string>
   <string name="wled_setup_ddp_port">DDP 端口（固定 4048）</string>
-  <string name="wled_setup_physical_leds">已确认的物理灯数</string>
   <string name="wled_setup_protocol">传输协议（auto/dnrgb/ddp）</string>
   <string name="wled_setup_rgbw">通道模式（unconfirmed/rgb/rgbw）</string>
   <string name="wled_setup_test">测试 WLED 连接</string>

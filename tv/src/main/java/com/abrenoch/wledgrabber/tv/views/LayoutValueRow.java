@@ -146,6 +146,11 @@ public final class LayoutValueRow extends LinearLayout {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (isHorizontalKey(keyCode)) {
             if (kind != Kind.ACTION && listener != null) {
+                if (kind != Kind.NUMBER && event.getRepeatCount() > 0) {
+                    // A held key must not flip a toggle/choice on every repeat;
+                    // only the initial press changes those values.
+                    return true;
+                }
                 int direction = keyCode == KeyEvent.KEYCODE_DPAD_RIGHT ? 1 : -1;
                 int magnitude = kind == Kind.NUMBER ? stepForRepeat(event.getRepeatCount()) : 1;
                 listener.onAdjust(this, direction * magnitude);

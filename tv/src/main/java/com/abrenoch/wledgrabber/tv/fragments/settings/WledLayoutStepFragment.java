@@ -141,6 +141,7 @@ public class WledLayoutStepFragment extends SettingsStepBaseFragment {
                 return;
             }
             showToast(getString(com.abrenoch.wledgrabber.common.R.string.wled_setup_saved));
+            requireActivity().setResult(android.app.Activity.RESULT_OK);
             finishGuidedStepSupportFragments();
         } catch (AssertionError error) {
             showToast(getString(com.abrenoch.wledgrabber.common.R.string.wled_setup_invalid));

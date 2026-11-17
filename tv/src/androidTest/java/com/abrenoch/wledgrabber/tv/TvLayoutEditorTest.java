@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -117,6 +118,7 @@ public class TvLayoutEditorTest {
 
         try (ActivityScenario<LayoutEditorActivity> scenario =
                      ActivityScenario.launch(LayoutEditorActivity.class)) {
+            awaitWindowFocus(scenario);
             focusRow(scenario, LayoutEditorActivity.ACTION_PRESET_274);
             InstrumentationRegistry.getInstrumentation()
                     .sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_CENTER);
@@ -164,23 +166,27 @@ public class TvLayoutEditorTest {
     }
 
     @Test
-    public void exactEntryReplacesTheValue() {
+    public void exactEntryReplacesTheValue() throws Exception {
         try (ActivityScenario<LayoutEditorActivity> scenario =
                      ActivityScenario.launch(LayoutEditorActivity.class)) {
+            awaitWindowFocus(scenario);
             scenario.onActivity(activity -> {
                 LayoutValueRow top = findRow(activity, ConfigFields.LED_TOP);
                 top.requestFocus();
                 assertTrue(top.onKeyDown(KeyEvent.KEYCODE_DPAD_CENTER,
                         keyDown(KeyEvent.KEYCODE_DPAD_CENTER)));
             });
+            InstrumentationRegistry.getInstrumentation().waitForIdleSync();
             androidx.test.espresso.Espresso.onView(
                             androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom(
                                     android.widget.EditText.class))
+                    .inRoot(androidx.test.espresso.matcher.RootMatchers.isDialog())
                     .perform(androidx.test.espresso.action.ViewActions.replaceText("99"),
                             androidx.test.espresso.action.ViewActions.closeSoftKeyboard());
             androidx.test.espresso.Espresso.onView(
                             androidx.test.espresso.matcher.ViewMatchers.withText(
                                     android.R.string.ok))
+                    .inRoot(androidx.test.espresso.matcher.RootMatchers.isDialog())
                     .perform(androidx.test.espresso.action.ViewActions.click());
             scenario.onActivity(activity -> assertEquals("99",
                     String.valueOf(findRow(activity, ConfigFields.LED_TOP).displayValue())));
@@ -210,7 +216,8 @@ public class TvLayoutEditorTest {
     public void focusReturnsFromSaveToTheLastRow() throws Exception {
         try (ActivityScenario<LayoutEditorActivity> scenario =
                      ActivityScenario.launch(LayoutEditorActivity.class)) {
-            focusRow(scenario, LayoutEditorActivity.ACTION_TEST);
+            awaitWindowFocus(scenario);
+            focusRow(scenario, ConfigFields.LED_CORNER_BL_V);
             // Reach Save the way a remote user does, then walk back up.
             InstrumentationRegistry.getInstrumentation()
                     .sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -222,14 +229,96 @@ public class TvLayoutEditorTest {
                     .sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_UP);
             InstrumentationRegistry.getInstrumentation().waitForIdleSync();
             scenario.onActivity(activity -> assertTrue("last row should regain focus",
-                    findRow(activity, LayoutEditorActivity.ACTION_TEST).isFocused()));
+                    findRow(activity, ConfigFields.LED_CORNER_BL_V).isFocused()));
         }
+    }
+
+    @Test
+    public void verifySectionDownReachesTheCornerSection() throws Exception {
+        try (ActivityScenario<LayoutEditorActivity> scenario =
+                     ActivityScenario.launch(LayoutEditorActivity.class)) {
+            awaitWindowFocus(scenario);
+            focusRow(scenario, LayoutEditorActivity.ACTION_TEST);
+            InstrumentationRegistry.getInstrumentation()
+                    .sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_DOWN);
+            InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+            scenario.onActivity(activity -> {
+                android.view.View focus = activity.getCurrentFocus();
+                assertTrue("Down from Test must enter the corner section, focus=" + focus,
+                        findRow(activity, ConfigFields.LED_CORNER_TL_H).isFocused());
+            });
+        }
+    }
+
+    @Test
+    public void holdingAToggleDoesNotFlipOnKeyRepeat() {
+        try (ActivityScenario<LayoutEditorActivity> scenario =
+                     ActivityScenario.launch(LayoutEditorActivity.class)) {
+            scenario.onActivity(activity -> {
+                LayoutValueRow reverse = findRow(activity, ConfigFields.LED_REVERSE);
+                String on = activity.getString(
+                        com.abrenoch.wledgrabber.tv.R.string.layout_editor_on);
+                String off = activity.getString(
+                        com.abrenoch.wledgrabber.tv.R.string.layout_editor_off);
+                assertEquals(on, String.valueOf(reverse.displayValue()));
+
+                long now = android.os.SystemClock.uptimeMillis();
+                KeyEvent repeat = new KeyEvent(now, now, KeyEvent.ACTION_DOWN,
+                        KeyEvent.KEYCODE_DPAD_RIGHT, 3);
+                reverse.onKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT, repeat);
+                assertEquals("repeat must not flip the toggle",
+                        on, String.valueOf(reverse.displayValue()));
+
+                reverse.onKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT,
+                        keyDown(KeyEvent.KEYCODE_DPAD_RIGHT));
+                assertEquals(off, String.valueOf(reverse.displayValue()));
+            });
+        }
+    }
+
+    @Test
+    public void saveBlocksPhysicalCountBelowTheLayout() {
+        ConfigRepository repository = repository();
+        assertTrue(repository.save(WledTestSupport.validDraft()
+                .set(ConfigFields.WLED_PHYSICAL_LEDS, "100")).isValid());
+
+        try (ActivityScenario<LayoutEditorActivity> scenario =
+                     ActivityScenario.launch(LayoutEditorActivity.class)) {
+            scenario.onActivity(activity -> {
+                activity.findViewById(com.abrenoch.wledgrabber.tv.R.id.layout_editor_save)
+                        .performClick();
+                assertFalse("save must not accept physical < effective",
+                        activity.isFinishing());
+            });
+        }
+        assertEquals(100, repository().load().value().device().physicalLedCount());
+    }
+
+    @Test
+    public void saveRejectsACompileInvalidLayout() {
+        ConfigRepository repository = repository();
+        assertTrue(repository.save(WledTestSupport.validDraft()
+                .set(ConfigFields.LED_CORNER_TR_H, "0")).isValid());
+        long revision = repository.committedSnapshot().revision();
+
+        try (ActivityScenario<LayoutEditorActivity> scenario =
+                     ActivityScenario.launch(LayoutEditorActivity.class)) {
+            scenario.onActivity(activity -> {
+                activity.findViewById(com.abrenoch.wledgrabber.tv.R.id.layout_editor_save)
+                        .performClick();
+                assertFalse("save must stay on the editor for invalid geometry",
+                        activity.isFinishing());
+            });
+        }
+        assertEquals("invalid geometry must not write a new revision",
+                revision, repository().load().value().revision());
     }
 
     @Test
     public void dpadDownMovesFocusToTheNextRow() throws Exception {
         try (ActivityScenario<LayoutEditorActivity> scenario =
                      ActivityScenario.launch(LayoutEditorActivity.class)) {
+            awaitWindowFocus(scenario);
             focusRow(scenario, ConfigFields.WLED_PHYSICAL_LEDS);
             InstrumentationRegistry.getInstrumentation()
                     .sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -243,7 +332,8 @@ public class TvLayoutEditorTest {
     public void focusReachesSaveAfterTheLastRow() throws Exception {
         try (ActivityScenario<LayoutEditorActivity> scenario =
                      ActivityScenario.launch(LayoutEditorActivity.class)) {
-            focusRow(scenario, LayoutEditorActivity.ACTION_TEST);
+            awaitWindowFocus(scenario);
+            focusRow(scenario, ConfigFields.LED_CORNER_BL_V);
             // Inject from the test thread so ViewRootImpl performs real focus
             // navigation instead of dispatching straight to the focused view.
             InstrumentationRegistry.getInstrumentation()
@@ -252,6 +342,23 @@ public class TvLayoutEditorTest {
             scenario.onActivity(activity -> assertTrue("save button should receive focus",
                     activity.findViewById(com.abrenoch.wledgrabber.tv.R.id.layout_editor_save)
                             .isFocused()));
+        }
+    }
+
+    /**
+     * ActivityScenario reports RESUMED before the window owns input focus; key
+     * injection before that lands outside the activity and makes focus tests flaky.
+     */
+    private static void awaitWindowFocus(ActivityScenario<LayoutEditorActivity> scenario)
+            throws InterruptedException {
+        long deadline = System.currentTimeMillis() + 5000;
+        while (System.currentTimeMillis() < deadline) {
+            final boolean[] focused = new boolean[1];
+            scenario.onActivity(activity -> focused[0] = activity.hasWindowFocus());
+            if (focused[0]) {
+                return;
+            }
+            Thread.sleep(50);
         }
     }
 

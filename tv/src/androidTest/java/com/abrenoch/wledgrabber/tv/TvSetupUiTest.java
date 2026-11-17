@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.fragment.app.Fragment;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
@@ -14,6 +16,7 @@ import com.abrenoch.wledgrabber.common.util.Preferences;
 import com.abrenoch.wledgrabber.common.util.PreferencesConfigStorage;
 import com.abrenoch.wledgrabber.common.util.ValidationResult;
 import com.abrenoch.wledgrabber.tv.activities.ManualSetupActivity;
+import com.abrenoch.wledgrabber.tv.fragments.settings.WledConnectionStepFragment;
 
 import org.junit.After;
 import org.junit.Before;
@@ -94,6 +97,37 @@ public class TvSetupUiTest {
         assertEquals(WledTestSupport.ddpPort(), loaded.value().device().ddpPort());
         assertEquals(WledTestSupport.PHYSICAL_LEDS_274,
                 loaded.value().device().physicalLedCount());
+    }
+
+    @Test
+    public void childLayoutSaveSurvivesConnectionStepSave() {
+        activity = launchManualSetup();
+        Fragment fragment = ((androidx.fragment.app.FragmentActivity) activity)
+                .getSupportFragmentManager().findFragmentById(android.R.id.content);
+        assertTrue(fragment instanceof WledConnectionStepFragment);
+        WledConnectionStepFragment step = (WledConnectionStepFragment) fragment;
+
+        // Simulate the editor page saving a different layout while this step stays open.
+        ConfigRepository childSave = repository();
+        assertTrue(childSave.save(WledTestSupport.validDraft()
+                .set(ConfigFields.LED_TOP, "90")).isValid());
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(() ->
+                step.onActivityResult(WledConnectionStepFragment.REQUEST_LAYOUT,
+                        Activity.RESULT_OK, null));
+
+        onView(withText(activity.getString(R.string.guidedstep_save))).perform(click());
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+
+        ValidationResult<ConfigSnapshot> loaded = repository().load();
+        assertTrue(loaded.errors().toString(), loaded.isValid());
+        assertEquals("child layout must survive the connection-step save",
+                90, loaded.value().layout().top());
+        assertEquals(WledTestSupport.host(), loaded.value().device().host());
+    }
+
+    private ConfigRepository repository() {
+        return new ConfigRepository(new PreferencesConfigStorage(new Preferences(context)),
+                new ConfigValidator());
     }
 
     private Activity launchManualSetup() {

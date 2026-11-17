@@ -34,6 +34,8 @@
   <string name="layout_editor_auto">按灯数自动分配四周</string>
   <string name="layout_editor_auto_applied">已套用自动布局，请检查后保存。</string>
   <string name="layout_editor_auto_needs_count">请先设置已确认的物理灯数。</string>
+  <string name="layout_editor_auto_too_many">自动分配最多支持 4000 灯。</string>
+  <string name="layout_editor_no_side_leds">该边没有灯。</string>
   <string name="layout_editor_save">保存</string>
   <string name="layout_editor_cancel">取消</string>
   <string name="layout_editor_exact_title">%1$s</string>

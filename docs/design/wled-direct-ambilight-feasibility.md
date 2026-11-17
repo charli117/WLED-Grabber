@@ -514,15 +514,15 @@ NSD浏览`_wled._tcp.`，解析的port是HTTP端口，不是UDP；缓存service�
 
 | 分组 | 共同字段与动作 | 宿主差异 |
 |---|---|---|
-| WLED Connection | host、HTTP端口、UDP realtime端口、只读DDP端口、协议、明确通道格式、RGBW白模式、物理数量/观察值、自动探测、扫描/测试 | 手机Preference；TV GuidedStep首步，缺设备保留手动入口 |
-| LED Layout | T/B/L/R、Gap length/position、Input、Reverse | TV D-pad可编辑并显示实际物理0对应槽位 |
-| Advanced Layout | H/V Depth、Overlap、Edge Gap、四角、SKIP/BLACK | 两端均首版，TV不能只给手机配置提示 |
-| Preview | 共用预览、274预设、288参考向量、三种图案、逐边/输入位置点亮校验 | 两端各有独立LayoutPreviewActivity |
-| Capturing / General | 帧率、平均色、长边上限、开机提醒、权限/状态 | 录屏授权/通知/Tile/系统insets按平台适配 |
+| WLED Connection | host、HTTP端口、UDP realtime端口、只读DDP端口、协议、明确通道格式、自动探测、扫描/测试 | 手机Preference；TV GuidedStep首步，缺设备保留手动入口 |
+| LED Layout | T/B/L/R、物理数量、Gap length/position、Input、Reverse | TV实时布局编辑器（D-pad步进、精确输入、实时预览、逐边/Input校验） |
+| Advanced Layout | H/V Depth、Overlap、Edge Gap、四角、SKIP/BLACK、RGBW白模式、平均色、采集长边、画质 | 两端均首版；TV高级选项步骤，不能只给手机配置提示 |
+| Preview | 共用预览、274预设、288参考向量、三种图案、逐边/输入位置点亮校验 | 两端各有独立LayoutPreviewActivity；TV编辑器内联实时预览 |
+| Capturing / General | 帧率、开机提醒、权限/状态 | 录屏授权/通知/Tile/系统insets按平台适配 |
 
-手机：空配置点击电源先进入WLED设置/扫描，完成确认后返回主界面再授权。TV：沿用改造后的`NetworkScanActivity → ScanResultActivity`导航，再进入Connection → Layout → Advanced → Preview → Capturing。保留主界面与非后端相关交互；设置保存失败不启动、不假显示已保存。
+手机：空配置点击电源先进入WLED设置/扫描，完成确认后返回主界面再授权。TV：沿用改造后的`NetworkScanActivity → ScanResultActivity`导航，再进入Connection → Layout（实时编辑器，含预览/测试）→ Advanced（可选）→ Capturing。保留主界面与非后端相关交互；设置保存失败不启动、不假显示已保存。同一字段只在上述唯一页面出现：物理数量只在布局编辑器，RGBW white mode/平均色/采集长边/画质只在高级选项，连接步骤不再重复。
 
-复用`SettingsStepBaseFragment`的`unSignedNumberAction`、`radioListAction`和现有Preference listener适配职责，`assertIntValue`等校验统一委托ConfigValidator，不复制规则。扫描`saveResult()`保存确认的WLED端点，不能继续写旧Host/Port；删除TV TestTask独立网络分支。
+复用`SettingsStepBaseFragment`的`unSignedNumberAction`、`radioListAction`和现有Preference listener适配职责，`assertIntValue`等校验统一委托ConfigValidator，不复制规则；TV实时布局编辑器通过共享`ConfigValidator.validateLayout`/`SettingsDraftController`完成草稿校验与原子保存。扫描`saveResult()`保存确认的WLED端点，不能继续写旧Host/Port；删除TV TestTask独立网络分支。
 
 RGB模式隐藏White Mode；unconfirmed模式提示确认硬件而不自动假定RGB。修改草稿即时刷新预览，**不热更新正在发送的快照**；运行中保存显式提示“下次启动生效”。错误、单位、默认值和资源均共享，TV大字体/D-pad焦点完整可达。
 

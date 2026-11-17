@@ -2,6 +2,7 @@ package com.abrenoch.wledgrabber.common.led;
 
 import com.abrenoch.wledgrabber.common.util.ConfigDraft;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
+import com.abrenoch.wledgrabber.common.util.FieldError;
 import com.abrenoch.wledgrabber.common.util.ValidationResult;
 
 /**
@@ -18,7 +19,16 @@ public final class LayoutDraftCompiler {
         if (!validated.isValid()) {
             return ValidationResult.fail(validated.errors());
         }
-        LayoutDraft layout = validated.value();
+        return compileValidated(validated.value(), captureWidth, captureHeight);
+    }
+
+    /** Compiles an already validated draft without repeating field validation. */
+    public static ValidationResult<CompiledLayout> compileValidated(
+            LayoutDraft layout, int captureWidth, int captureHeight) {
+        if (layout == null) {
+            return ValidationResult.fail(new FieldError(ConfigFields.LAYOUT_GEOMETRY,
+                    FieldError.Code.CONFIG_MISSING, "layout draft is null"));
+        }
         return new ClassicLedLayout().compile(layout.layout(),
                 layout.previewPhysicalLedCount(), captureWidth, captureHeight);
     }

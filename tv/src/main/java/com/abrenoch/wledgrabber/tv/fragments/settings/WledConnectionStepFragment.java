@@ -21,7 +21,9 @@ import com.abrenoch.wledgrabber.common.util.ValidationResult;
 import com.abrenoch.wledgrabber.tv.activities.LayoutEditorActivity;
 import com.abrenoch.wledgrabber.tv.activities.LayoutSettingsActivity;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -34,12 +36,14 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
     private static final long HTTP_PORT = 1001L;
     private static final long UDP_PORT = 1002L;
     private static final long DDP_PORT = 1003L;
-    private static final long PHYSICAL_LEDS = 1004L;
     private static final long PROTOCOL = 1005L;
     private static final long RGBW = 1006L;
     private static final long ACTION_TEST = 1007L;
     private static final long ACTION_LAYOUT = 1008L;
     private static final long ACTION_ADVANCED = 1011L;
+    /** Public for the merge regression test in the TV test module. */
+    public static final int REQUEST_LAYOUT = 4201;
+    public static final int REQUEST_ADVANCED = 4202;
     private static final long FRAME_RATE = 1009L;
     private static final long LANGUAGE = 1010L;
     private static final long SET_PROTOCOL = 2001;
@@ -93,8 +97,6 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                 controller.draft().get(ConfigFields.WLED_UDP_PORT)));
         actions.add(unSignedNumberAction(DDP_PORT, getString(R.string.wled_setup_ddp_port),
                 controller.draft().get(ConfigFields.WLED_DDP_PORT)));
-        actions.add(unSignedNumberAction(PHYSICAL_LEDS, getString(R.string.wled_setup_physical_leds),
-                controller.draft().get(ConfigFields.WLED_PHYSICAL_LEDS)));
         actions.add(unSignedNumberAction(FRAME_RATE, getString(R.string.field_framerate),
                 controller.draft().get(ConfigFields.FRAME_RATE)));
 
@@ -133,11 +135,13 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
             return;
         }
         if (action.getId() == ACTION_LAYOUT) {
-            startActivity(new android.content.Intent(requireContext(), LayoutEditorActivity.class));
+            startActivityForResult(new android.content.Intent(
+                    requireContext(), LayoutEditorActivity.class), REQUEST_LAYOUT);
             return;
         }
         if (action.getId() == ACTION_ADVANCED) {
-            startActivity(new android.content.Intent(requireContext(), LayoutSettingsActivity.class));
+            startActivityForResult(new android.content.Intent(
+                    requireContext(), LayoutSettingsActivity.class), REQUEST_ADVANCED);
             return;
         }
         if (action.getId() == ACTION_TEST) {
@@ -145,6 +149,78 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
             return;
         }
         super.onGuidedActionClicked(action);
+    }
+
+    /**
+     * A child page writes the whole config through its own repository. Without
+     * merging on return, the next Save here would persist this fragment's stale
+     * draft and silently undo the child's layout/advanced changes.
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != android.app.Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_LAYOUT || requestCode == REQUEST_ADVANCED) {
+            mergeChildSave();
+        }
+    }
+
+    /**
+     * Reloads the committed snapshot, then re-applies only the fields this step
+     * owns from the current UI. The layout editor owns the physical count and the
+     * layout fields; the advanced page owns white mode/capture/quality. Both
+     * child pages save the whole config, so this step must not write its stale
+     * draft over them.
+     */
+    private void mergeChildSave() {
+        Map<String, String> own = new LinkedHashMap<>();
+        own.put(ConfigFields.WLED_HOST,
+                description(HOST, controller.draft().get(ConfigFields.WLED_HOST)));
+        own.put(ConfigFields.WLED_HTTP_PORT,
+                description(HTTP_PORT, controller.draft().get(ConfigFields.WLED_HTTP_PORT)));
+        own.put(ConfigFields.WLED_UDP_PORT,
+                description(UDP_PORT, controller.draft().get(ConfigFields.WLED_UDP_PORT)));
+        own.put(ConfigFields.WLED_DDP_PORT,
+                description(DDP_PORT, controller.draft().get(ConfigFields.WLED_DDP_PORT)));
+        own.put(ConfigFields.FRAME_RATE,
+                description(FRAME_RATE, controller.draft().get(ConfigFields.FRAME_RATE)));
+        own.put(ConfigFields.WLED_PROTOCOL,
+                selectedValue(PROTOCOL, controller.draft().get(ConfigFields.WLED_PROTOCOL)));
+        own.put(ConfigFields.WLED_RGBW_MODE,
+                selectedValue(RGBW, controller.draft().get(ConfigFields.WLED_RGBW_MODE)));
+
+        controller.load();
+        for (Map.Entry<String, String> entry : own.entrySet()) {
+            controller.set(entry.getKey(), entry.getValue());
+        }
+    }
+
+    private String description(long actionId, String fallback) {
+        GuidedAction action = findActionById(actionId);
+        if (action == null || action.getDescription() == null) {
+            return fallback == null ? "" : fallback;
+        }
+        return action.getDescription().toString();
+    }
+
+    private String selectedValue(long actionId, String fallback) {
+        GuidedAction action = findActionById(actionId);
+        if (action != null && action.getSubActions() != null) {
+            for (GuidedAction sub : action.getSubActions()) {
+                if (!sub.isChecked()) {
+                    continue;
+                }
+                if (sub instanceof SettingsStepBaseFragment.ValueGuidedAction) {
+                    Object value = ((SettingsStepBaseFragment.ValueGuidedAction) sub)
+                            .getValue();
+                    return value == null ? fallback : value.toString();
+                }
+                return sub.getTitle() == null ? fallback : sub.getTitle().toString();
+            }
+        }
+        return fallback;
     }
 
     /** Language is a UI preference, so it applies on Save together with the config. */
@@ -166,14 +242,9 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
             int httpPort = assertIntValue(HTTP_PORT);
             int udpPort = assertIntValue(UDP_PORT);
             int ddpPort = assertIntValue(DDP_PORT);
-            int physical = assertIntValue(PHYSICAL_LEDS);
             int frameRate = assertIntValue(FRAME_RATE);
             String protocol = assertSubActionValue(PROTOCOL, String.class);
             String rgbw = assertSubActionValue(RGBW, String.class);
-            if (physical < 1) {
-                showToast(getString(R.string.wled_setup_invalid_led_count));
-                return;
-            }
             if ("unconfirmed".equals(rgbw)) {
                 showToast(getString(R.string.wled_setup_invalid_rgbw));
                 return;
@@ -182,7 +253,6 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
             controller.set(ConfigFields.WLED_HTTP_PORT, Integer.toString(httpPort));
             controller.set(ConfigFields.WLED_UDP_PORT, Integer.toString(udpPort));
             controller.set(ConfigFields.WLED_DDP_PORT, Integer.toString(ddpPort));
-            controller.set(ConfigFields.WLED_PHYSICAL_LEDS, Integer.toString(physical));
             controller.set(ConfigFields.FRAME_RATE, Integer.toString(frameRate));
             controller.set(ConfigFields.WLED_PROTOCOL, protocol);
             controller.set(ConfigFields.WLED_RGBW_MODE, rgbw);

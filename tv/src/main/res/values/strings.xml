@@ -36,6 +36,8 @@
   <string name="layout_editor_auto">Auto-distribute from LED count</string>
   <string name="layout_editor_auto_applied">Auto layout applied. Review and save.</string>
   <string name="layout_editor_auto_needs_count">Set the confirmed physical LED count first.</string>
+  <string name="layout_editor_auto_too_many">Auto-distribute supports at most 4000 LEDs.</string>
+  <string name="layout_editor_no_side_leds">This side has no LEDs.</string>
   <string name="layout_editor_save">Save</string>
   <string name="layout_editor_cancel">Cancel</string>
   <string name="layout_editor_exact_title">%1$s</string>

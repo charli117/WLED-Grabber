@@ -19,6 +19,7 @@ import java.util.List;
 /** Pure configuration validation; no Android Resources and no unchecked parsing. */
 public final class ConfigValidator {
     public static final int MAX_LEDS = 65536;
+    public static final int MAX_LEDS_PER_SIDE = 1000;
     public static final int FIXED_DDP_PORT = 4048;
 
     public ValidationResult<ConfigSnapshot> validateForSave(ConfigDraft draft) {
@@ -278,10 +279,10 @@ public final class ConfigValidator {
 
     private static LayoutFields parseLayoutFields(ConfigDraft draft, List<FieldError> errors) {
         return new LayoutFields(
-                intValue(draft, ConfigFields.LED_TOP, 0, 1000, errors),
-                intValue(draft, ConfigFields.LED_BOTTOM, 0, 1000, errors),
-                intValue(draft, ConfigFields.LED_LEFT, 0, 1000, errors),
-                intValue(draft, ConfigFields.LED_RIGHT, 0, 1000, errors),
+                intValue(draft, ConfigFields.LED_TOP, 0, MAX_LEDS_PER_SIDE, errors),
+                intValue(draft, ConfigFields.LED_BOTTOM, 0, MAX_LEDS_PER_SIDE, errors),
+                intValue(draft, ConfigFields.LED_LEFT, 0, MAX_LEDS_PER_SIDE, errors),
+                intValue(draft, ConfigFields.LED_RIGHT, 0, MAX_LEDS_PER_SIDE, errors),
                 intValue(draft, ConfigFields.LED_GAP_LENGTH, 0, MAX_LEDS, errors),
                 intValue(draft, ConfigFields.LED_GAP_POSITION, 0, MAX_LEDS, errors),
                 intValue(draft, ConfigFields.LED_INPUT_POSITION,

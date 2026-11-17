@@ -119,10 +119,14 @@ public class LayoutEditorActivity extends LeanbackActivity {
         android.view.View cancel = findViewById(R.id.layout_editor_cancel);
         save.setOnClickListener(v -> saveAndFinish());
         cancel.setOnClickListener(v -> finish());
-        LayoutValueRow lastRow = rows.get(ACTION_TEST);
+        LayoutValueRow lastRow = null;
+        for (LayoutValueRow row : rows.values()) {
+            lastRow = row;
+        }
         if (lastRow != null) {
             // ScrollView-based lists do not reliably hand focus to a sibling
-            // below them; pin the exit explicitly for D-pad users.
+            // below them; pin the insertion-order last row (currently the last
+            // corner) so every row stays reachable with the remote.
             lastRow.setNextFocusDownId(R.id.layout_editor_save);
             lastRow.setNextDownView(save);
             save.setNextFocusUpId(lastRow.getId());
@@ -355,6 +359,10 @@ public class LayoutEditorActivity extends LeanbackActivity {
             toast(R.string.layout_editor_auto_needs_count);
             return;
         }
+        if (layout.physicalLedCount() > 4 * ConfigValidator.MAX_LEDS_PER_SIDE) {
+            toast(R.string.layout_editor_auto_too_many);
+            return;
+        }
         int[] sides = LayoutAutoDistribute.distribute(
                 layout.physicalLedCount(), captureWidth, captureHeight);
         Map<String, String> values = new LinkedHashMap<>();
@@ -387,6 +395,11 @@ public class LayoutEditorActivity extends LeanbackActivity {
     }
 
     private void probe(Side side) {
+        String host = controller.draft().get(ConfigFields.WLED_HOST);
+        if (host == null || host.trim().isEmpty()) {
+            toast(R.string.layout_editor_configure_device);
+            return;
+        }
         ValidationResult<LayoutDraft> validated = controller.validateLayout();
         if (!validated.isValid()) {
             showError(validated.errors().get(0));
@@ -400,8 +413,8 @@ public class LayoutEditorActivity extends LeanbackActivity {
                     layout.physicalLedCount(), layout.effectiveLedCount()));
             return;
         }
-        ValidationResult<CompiledLayout> compiled = LayoutDraftCompiler.compileForPreview(
-                controller.draft(), captureWidth, captureHeight);
+        ValidationResult<CompiledLayout> compiled = LayoutDraftCompiler.compileValidated(
+                layout, captureWidth, captureHeight);
         if (!compiled.isValid()) {
             showError(compiled.errors().get(0));
             return;
@@ -419,6 +432,10 @@ public class LayoutEditorActivity extends LeanbackActivity {
         int[] logical = side == null
                 ? new int[]{LayoutProbe.inputLogical(layout.layout())}
                 : LayoutProbe.logicalForSide(layout.layout(), side);
+        if (logical.length == 0) {
+            toast(R.string.layout_editor_no_side_leds);
+            return;
+        }
         if (LayoutProbeSender.pulse(snapshot.value(), compiled.value(), logical)) {
             toast(getString(com.abrenoch.wledgrabber.common.R.string.wled_probe_sent,
                     logical.length));
@@ -456,6 +473,14 @@ public class LayoutEditorActivity extends LeanbackActivity {
                     layout.physicalLedCount(), layout.effectiveLedCount()));
             return false;
         }
+        // The editor already shows "layout geometry" errors from the preview;
+        // refuse to persist a draft the service's compiler will reject.
+        ValidationResult<CompiledLayout> compiled = LayoutDraftCompiler.compileValidated(
+                layout, captureWidth, captureHeight);
+        if (!compiled.isValid()) {
+            showError(compiled.errors().get(0));
+            return false;
+        }
         ValidationResult<ConfigSnapshot> saved = controller.save();
         if (!saved.isValid()) {
             showError(saved.errors().get(0));
@@ -484,8 +509,8 @@ public class LayoutEditorActivity extends LeanbackActivity {
             preview.setError(message);
             return;
         }
-        ValidationResult<CompiledLayout> compiled = LayoutDraftCompiler.compileForPreview(
-                controller.draft(), captureWidth, captureHeight);
+        ValidationResult<CompiledLayout> compiled = LayoutDraftCompiler.compileValidated(
+                validated.value(), captureWidth, captureHeight);
         if (!compiled.isValid()) {
             FieldError error = compiled.errors().get(0);
             String message = describe(error);
