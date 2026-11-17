@@ -235,6 +235,11 @@ public final class LedStreamer {
             }
             boolean shouldStop;
             synchronized (lock) {
+                // An offer may have arrived since the first pending check. Keep
+                // the final empty check and idle transition atomic with offer().
+                if (pending != null) {
+                    continue;
+                }
                 shouldStop = stopping;
                 if (!shouldStop) {
                     writerRunning = false;

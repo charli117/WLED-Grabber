@@ -134,6 +134,50 @@ public class LedStreamerTest {
     }
 
     @Test
+    public void sparseOffersEventuallyDrainWithoutAnotherOfferOrStopStress() {
+        FramePool pool = new FramePool(FRAME_BYTES);
+        RecordingSink sink = new RecordingSink();
+        LedStreamer streamer = new LedStreamer(pool, sink, reason -> true, 2000);
+        streamer.start(1, OutputOwner.CAPTURE, LEDS, CHANNELS);
+
+        try {
+            // Exercise the drain-to-idle race through public behavior. Scheduling is
+            // probabilistic: neither the sink nor metrics can pause the idle transition.
+            int frames = 10000;
+            for (int id = 0; id < frames; id++) {
+                FrameLease lease = pool.acquire(1, 1, id, CHANNELS, LEDS);
+                assertTrue("a drained frame must return its lease", lease != null);
+                writeId(lease, id);
+                assertTrue(streamer.offer(lease));
+
+                long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(2);
+                LedStreamer.Metrics metrics = streamer.metrics();
+                while (metrics.sent() < id + 1 && System.nanoTime() < deadline) {
+                    Thread.yield();
+                    metrics = streamer.metrics();
+                }
+                assertEquals("accepted frame must drain without another offer or stop; "
+                                + "pending=" + metrics.pending()
+                                + ", inFlight=" + metrics.inFlight()
+                                + ", poolInUse=" + metrics.poolInUse(),
+                        id + 1, metrics.sent());
+                assertFalse(metrics.pending());
+                assertFalse(metrics.inFlight());
+                assertEquals(0, metrics.poolInUse());
+            }
+            assertEquals(frames - 1, sink.lastId);
+            assertEquals(frames, sink.sent);
+            assertEquals(0, sink.tears);
+            assertEquals(0, sink.outOfOrder);
+            assertEquals(0, pool.inUse());
+            assertEquals(OutputOwner.CAPTURE, streamer.owner());
+        } finally {
+            // Cleanup must not rescue a stranded frame before the liveness assertions.
+            streamer.stop("end");
+        }
+    }
+
+    @Test
     public void stopSendsBlackAfterLastColourAndThenReleases() throws Exception {
         FramePool pool = new FramePool(FRAME_BYTES);
         BlockingSink sink = new BlockingSink();
