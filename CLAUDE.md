@@ -1,7 +1,7 @@
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **hyperion-android-grabber** (879 symbols, 1622 relationships, 70 execution flows).
+This project is indexed by GitNexus as **WLED-Grabber** (3820 symbols, 11319 relationships, 313 execution flows).
 
 > Index stale? Run `node .gitnexus/run.cjs analyze --index-only` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? Bootstrap with `npx`, `bunx`, or `pnpm dlx` — e.g. `bunx gitnexus@latest analyze` (npm 11 npx crash; #1939).
 
@@ -25,10 +25,10 @@ This project is indexed by GitNexus as **hyperion-android-grabber** (879 symbols
 
 | Resource | Use for |
 | --- | --- |
-| `gitnexus://repo/hyperion-android-grabber/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/hyperion-android-grabber/clusters` | All functional areas |
-| `gitnexus://repo/hyperion-android-grabber/processes` | All execution flows |
-| `gitnexus://repo/hyperion-android-grabber/process/{name}` | Step-by-step execution trace |
+| `gitnexus://repo/WLED-Grabber/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/WLED-Grabber/clusters` | All functional areas |
+| `gitnexus://repo/WLED-Grabber/processes` | All execution flows |
+| `gitnexus://repo/WLED-Grabber/process/{name}` | Step-by-step execution trace |
 
 ## CLI
 
