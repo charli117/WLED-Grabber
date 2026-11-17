@@ -1,0 +1,13 @@
+### top activity
+    mResumedActivity: ActivityRecord{8a87efb u0 com.abrenoch.wledgrabber/.common.startup.StartCaptureActivity t1814}
+### start gate status
+text='已取消录屏授权，未开始任何采集。' desc='' rid='start_capture_status' cls='TextView' checked=false center=(960, 196)
+text='取消' desc='' rid='start_capture_cancel' cls='Button' checked=false center=(504, 759)
+text='验证并开始' desc='' rid='start_capture_button' cls='Button' checked=false center=(1416, 759)
+### service / projection / display
+0
+0
+0
+### app fatal
+### restore appops
+PROJECT_MEDIA: allow; time=+4m29s446ms ago; rejectTime=+21s614ms ago

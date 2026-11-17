@@ -1,0 +1,8 @@
+### before rotation
+mViewports=[DisplayViewport{type=INTERNAL, valid=true, displayId=0, uniqueId='local:0', physicalPort=0, orientation=0
+### request user_rotation=1
+mViewports=[DisplayViewport{type=INTERNAL, valid=true, displayId=0, uniqueId='local:0', physicalPort=0, orientation=1
+### reset rotation
+mViewports=[DisplayViewport{type=INTERNAL, valid=true, displayId=0, uniqueId='local:0', physicalPort=0, orientation=0
+### capture still alive
+1

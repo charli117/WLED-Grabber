@@ -1,0 +1,47 @@
+# 2026-11-17 真机设备测试证据摘要
+
+设备：Sony BRAVIA 4K UR3（`BRAVIA_UR3`，Android 10 / API 29，1920×1080 / 320dpi，`10.245.0.109:5555`）
+WLED：`10.245.0.99`，WLED 16.0.1，274 RGB；Mac 与 WLED 不同网段，读回经电视 shell 的 `nc`
+安装产物：`dist/wled-grabber-tv-1.0-2012-debug.apk`（versionCode 2012，targetSdk 35）
+安装校验：电视上 `pm path` 拉取的 base.apk 与 dist 产物 SHA256 一致（`280f6fd96b95ad8a26180174bee4461a51955035c36534a9ff781fd89c6f5070`）
+
+## 仪器测试（真实电视）
+
+| 套件 | 结果 | 原始日志 |
+|---|---|---|
+| TV（wledHost=10.245.0.99） | 35 项：34 通过 + 1 首次超时；失败项单跑通过 | `tv-instrumented-2026-11-17.log`、`tv-dpad-retry-2026-11-17.log`、`tv-test-results-2026-11-17.xml` |
+| common（真实电视） | 50 项：49 通过 + 1 平台跳过（API34 专属），0 失败 | `common-instrumented-2026-11-17.log`、`common-test-results-2026-11-17.xml` |
+| TV，font_scale=1.5 | 35/35 通过，0 跳过 | `tv-largefont-2026-11-17.log` |
+
+首次失败：`TvDpadWalkthroughTest.connectionStepSurvivesDownAndBack`，`startActivitySync` 45 秒内未 idle；单跑通过，判定为真机冷启动抖动。3 个真机 WLED 用例（能力探测、状态读回、10 秒测试图案 release CONFIRMED）本次实际执行并通过。
+
+## 手动场景
+
+| 场景 | 结果 | 证据 |
+|---|---|---|
+| 端到端采集 | 启动后 WLED `on=true, live=true, lm=UDP, lip=10.245.0.109`；停止后 `on=false, live=false` 读回，服务/投影/虚拟显示归零 | `cap-3-stop-release.txt`、`final-cleanup.txt` |
+| CAP-2 真实投屏 resize | 同一 VirtualDisplay（uniqueId 不变）640×360→640×512→640×360；采集持续 | `cap-2-resize-single.txt` |
+| CAP-2 真实投屏旋转 | 同一 VirtualDisplay 640×360→360×640→640×360；采集持续 | `cap-2-rotation-attempt.txt`、logcat 中 `Display device changed` |
+| CAP-1 息屏/亮屏 | 息屏与亮屏期间前台服务=1、projection=1，qa2 持续，无应用崩溃 | `cap-1-screen-off-on.txt` |
+| CAP-1 拒绝授权 | 系统确认页“取消”后返回“已取消录屏授权，未开始任何采集。”；服务/投影/显示=0 | `cap-1-consent-denied.txt` |
+| CAP-3 进程被杀 | force-stop 后资源=0，WLED 实时超时退出；重启应用可重新采集，无陈旧所有权/崩溃 | `cap-3-process-kill-restart.txt` |
+| QA-2 WLED 重启 | `POST {"rb":true}` 后 uptime 归零，12 秒内 `live=true/lm=UDP/lip=电视IP` 恢复 | `qa2-fault-wled-reboot.txt` |
+| CAP-1 冷启动 | 开机广播拉起 BootActivity → 新授权 → 前台服务；服务=1、projection=1、虚拟显示单实例、WLED live=true；兜底通知 id=42 转入 mArchive（已撤销）；随后停止并归零 | `cap-1-cold-boot-pre.txt`、`cap-1-cold-boot-result.txt` |
+
+## QA-2 软件侧指标（真实电视，640 长边 / 60fps / 274 灯）
+
+- 采样：稳态 p95≈4.61–5.01ms、p99≈5.17–5.80ms；启动首窗 p95≈5.21ms、p99≈8.07ms。
+- 发送间隔：稳态 p95≈17.49–17.77ms。
+- WLED `info.leds.fps`：30 秒样本 min=69、avg=108.4（仅 show-layer 计数，**不是物理 FPS 证据**）。
+- 原始：`qa2-device-metrics-2026-11-17.txt`、`qa2-postboot-metrics.txt`。
+
+## 未执行 / 仍阻塞
+
+- 连续 100 次 resize/旋转：本机每次强制显示配置变更都会触发 Sony SystemUI 的 `InfoBoard` 自身崩溃（`IllegalStateException: Task already scheduled or cancelled`），应用进程不受影响；未执行高频循环。CAP-2 保持待验证。
+- API 34 单应用窗口 resize：本机 API 29，无 `onCapturedContentResize`。
+- 系统主动撤销活跃投屏：API 29 无 `cmd media_projection` 入口。
+- 真实断网/丢包/乱序：无 root，切断网络会同时断开 adb。
+- 物理 FPS / 端到端 p95：无光感/高速相机；未用 `info.leds.fps` 替代。
+- RGBW 样机两模式、500/1000/2000 灯、ESP8266：无硬件。
+
+结论：真机可执行的采集生命周期、授权拒绝、resize/旋转、停止释放、进程被杀、WLED 重启恢复与冷启动均已取得原始证据；CAP-2 的 100 次循环/API34 项与 QA-2 的物理测量/RGBW/多灯数仍阻塞，不升级状态。

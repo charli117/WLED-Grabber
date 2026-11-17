@@ -1,0 +1,15 @@
+### service
+0
+### projection count
+0
+### virtual display
+0
+### wled info
+{"name": "WLED_TV", "ver": "16.0.1", "uptime": 3063309, "leds": {"count": 274, "rgbw": false, "fps": 0, "maxpwr": 850}, "live": false, "lm": "", "lip": "", "wifi": {"signal": 62, "channel": 11}, "freeheap": 121328}
+### wled state
+{"on": false, "bri": 255, "live": null, "lm": null, "lip": null, "mainseg": 0}
+### service log
+--------- beginning of main
+--------- beginning of system
+11-17 21:48:18.333 12178 12178 I WledScreenService: capture stopping: user stop
+### app fatals

@@ -1,0 +1,42 @@
+### waiting for adb 2026-11-17T13:55:54Z
+adb device after 2s
+boot_completed after 6s more
+### settle 35s for boot receiver + auto start
+### post-boot state 2026-11-17T13:56:39Z
+font_scale=1.0
+top=    mResumedActivity: ActivityRecord{e61938 u0 com.gathin.tvhome/.MainActivity t1743}
+boot_activity=0
+service_foreground=1
+projection=1
+virtual_display=5
+reminder_notification=2
+### wled
+{"name": "WLED_TV", "ver": "16.0.1", "uptime": 316, "leds": {"count": 274, "rgbw": false, "fps": 14, "maxpwr": 850}, "live": true, "lm": "UDP", "lip": "10.245.0.109", "wifi": {"signal": 42, "channel": 1}, "freeheap": 122340}
+### app logs since boot
+11-17 21:56:19.460  2802  2901 I ActivityManager: Start proc 6626:com.abrenoch.wledgrabber/u0a198 for broadcast {com.abrenoch.wledgrabber/com.abrenoch.wledgrabber.common.WledBootReceiver}
+### post-boot single instance check 2026-11-17T13:56:53Z
+vd_instances=1
+projection_instances=1
+notification:
+    NotificationRecord(0x00288fcb: pkg=com.abrenoch.wledgrabber user=UserHandle{0} id=1 tag=null importance=3 key=0|com.abrenoch.wledgrabber|1|null|10198appImportanceLocked=false: Notification(channel=com.abrenoch.wledgrabber.notification pri=0 contentView=null vibrate=null sound=null defaults=0x0 flags=0x62 color=0x00000000 actions=1 vis=PRIVATE))
+      icon=Icon(typ=RESOURCE pkg=com.abrenoch.wledgrabber id=0x7f080069) / com.abrenoch.wledgrabber:drawable/ic_notification_icon
+    StatusBarNotification(pkg=com.abrenoch.wledgrabber user=UserHandle{0} id=42 tag=null key=0|com.abrenoch.wledgrabber|42|null|10198: Notification(channel=com.abrenoch.wledgrabber.boot pri=0 contentView=null vibrate=null sound=null defaults=0x0 flags=0x10 color=0x00000000 vis=PRIVATE))
+        NotificationChannel{mId='com.abrenoch.wledgrabber.boot', mName=开机提醒, mDescription=, mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mFgServiceShown=false, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=true, mImportanceLockedByOEM=false, mImportanceLockedDefaultApp=false}
+    post_frequency{user_id=0,pkg=com.abrenoch.wledgrabber,day=0,count=79,muted=0/0,demoted=0}
+    post_frequency{user_id=0,pkg=com.abrenoch.wledgrabber.common.test,day=0,count=9,muted=0/0,demoted=0}
+### boot receiver/activity logs
+11-17 21:56:22.040 D/SurfaceFlinger( 2483): onHandleDestroyed, markLayerPendingRemovalLocked: com.abrenoch.wledgrabber/com.abrenoch.wledgrabber.common.BootActivity#0
+11-17 21:56:22.049 D/SurfaceFlinger( 2483): onHandleDestroyed, markLayerPendingRemovalLocked: AppWindowToken{c91866c token=Token{452d31f ActivityRecord{c5966be u0 com.abrenoch.wledgrabber/.common.BootActivity t1744}}}#0
+11-17 21:56:22.051 D/SurfaceFlinger( 2483): onHandleDestroyed, markLayerPendingRemovalLocked: AppWindowToken{c91866c token=Token{452d31f ActivityRecord{c5966be u0 com.abrenoch.wledgrabber/.common.BootActivity t1744}}}#0
+11-17 21:56:22.052 D/SurfaceFlinger( 2483): mLayersPendingRemoval, layerRemoved, make not visible: AppWindowToken{c91866c token=Token{452d31f ActivityRecord{c5966be u0 com.abrenoch.wledgrabber/.common.BootActivity t1744}}}#0
+11-17 21:56:22.052 D/SurfaceFlinger( 2483): mLayersPendingRemoval, layerRemoved, make not visible: 8cdb9a3 com.abrenoch.wledgrabber/com.abrenoch.wledgrabber.common.BootActivity#0
+11-17 21:56:22.052 D/SurfaceFlinger( 2483): mLayersPendingRemoval, release: 8cdb9a3 com.abrenoch.wledgrabber/com.abrenoch.wledgrabber.common.BootActivity#0
+11-17 21:56:22.052 D/SurfaceFlinger( 2483): mLayersPendingRemoval, release: com.abrenoch.wledgrabber/com.abrenoch.wledgrabber.common.BootActivity#0
+11-17 21:56:22.052 D/SurfaceFlinger( 2483): mLayersPendingRemoval, release: AppWindowToken{c91866c token=Token{452d31f ActivityRecord{c5966be u0 com.abrenoch.wledgrabber/.common.BootActivity t1744}}}#0
+11-17 21:56:24.066 D/SurfaceFlinger( 2483): onHandleDestroyed, markLayerPendingRemovalLocked: 8cdb9a3 com.abrenoch.wledgrabber/com.abrenoch.wledgrabber.common.BootActivity#0
+11-17 21:56:24.068 D/SurfaceFlinger( 2483): mLayersPendingRemoval, release: 8cdb9a3 com.abrenoch.wledgrabber/com.abrenoch.wledgrabber.common.BootActivity#0
+### stop to leave device clean
+service=0
+projection=0
+vd=0
+{"name": "WLED_TV", "ver": "16.0.1", "uptime": 336, "leds": {"count": 274, "rgbw": false, "fps": 0, "maxpwr": 850}, "live": false, "lm": "", "lip": "", "wifi": {"signal": 40, "channel": 1}, "freeheap": 122340}

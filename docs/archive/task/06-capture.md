@@ -57,6 +57,8 @@ common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer
 
 **2026-11-17 第二轮复核（残留项）**：`UdpDatagramSink` 构造在服务主线程执行 `InetAddress.getByName`；IP 直连不触发 DNS，域名 host 仍可能占用主线程。CAP-1 的量化项“主线程网络调用=0”因此未完全满足；本轮不改代码（GitNexus impact=CRITICAL，需单独的启动前预解析设计），在任务册 §5.3 记录为未闭环项。`BootActivity` 自动入口现已在请求授权前增加实时探测与确认匹配，但本次未在真机冷启动上复验。
 
+**2026-11-17 真机复测（Sony BRAVIA 4K UR3 / API 29，`10.245.0.109`）**：系统确认页选择“取消”后，启动页显示“已取消录屏授权，未开始任何采集。”，服务/投影/虚拟显示均为 0；采集中息屏与亮屏后前台服务与 projection 均保持 1，qa2 指标持续，无应用崩溃；`user_rotation` 强制旋转后同一 VirtualDisplay 尺寸交换且采集保持（见 CAP-2）。冷启动：`BOOT_COMPLETED` 拉起 `WledBootReceiver`→`BootActivity`，实时探测并匹配已保存确认后自动进入新授权与前台服务；服务=1、projection=1、虚拟显示单实例、WLED `live=true/lm=UDP/lip=电视IP`，兜底通知 id=42 已撤销（mArchive）。系统主动撤销活跃投屏在 API 29 无 adb 入口，仍待补；主线程 DNS 残留项不变。证据：`docs/archive/verification/wled/real-device-2026-11-17/`。
+
 <a id="cap-2"></a>
 
 ## CAP-2 — Image关闭、resize与generation隔离
@@ -135,6 +137,10 @@ common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer
 
 **证据（2026-11-17，设备端所有权）**：新增`OutputOwnershipInstrumentedTest`，在真实 Android runtime 验证：CAPTURE 与 TEST 互斥（TEST 持有期间 CAPTURE 启动被拒）、release 必须匹配 owner id 与 epoch（错误 id/错误 owner/过期 epoch 均不释放）、Activity 退出释放后重新进入可再次取得且 epoch 递增、TEST 释放后 CAPTURE 可接管。API **21 / 33 / 34** 均 9/9 通过（含既有 2 个配置/夹具用例）。另新增`WledHttpFailureInstrumentedTest`：本地 socket 接受连接但不应答时，`probe`/`readState` 均返回 `TIMEOUT` 且 probe 在 5s 内返回，`turnOff` 不误报成功；端口关闭返回 `CONNECT_FAILURE`。另有真机验证（2026-11-17）：测试图案持有 TEST 租约后 `am force-stop` 杀进程，重启服务无“output already owned”、无崩溃，证明 ownership 随进程复位。仍未覆盖：真实断网/路由变更、授权撤销。
 
+**2026-11-17 真机故障复测**：停止后服务/投影/虚拟显示=0，WLED `on=false/live=false` 读回 CONFIRMED；`am force-stop` 杀进程后资源=0、WLED 实时会话超时退出，重启应用可重新采集且无陈旧所有权/崩溃；采集中 WLED `{"rb":true}` 重启后 uptime 归零并在 12 秒内恢复 `live=true/lm=UDP/lip=电视IP`。真实断网/系统撤销仍未覆盖。证据：`docs/archive/verification/wled/real-device-2026-11-17/`。
+
 **2026-11-17 实现完成（保持待验证）**：新增纯决策 `CaptureResizePlanner`（3项 JVM 测试：相同尺寸不重编译、旋转重建布局并递增 generation、长边预算）。服务在 API 34 `MediaProjection.Callback.onCapturedContentResize` 与所有版本的 `DisplayManager` 默认屏变化回调中，把 resize 投递到 capture 线程：重新 fit/compile 布局，在**同一** VirtualDisplay 上 `resize` + `setSurface`，递增 generation 并摘除旧 reader 回调；旧 generation 的帧被丢弃。仍缺：活动投屏下的 API34 单应用窗口 resize、连续 100 次旋转/锁屏/撤销仪器证据（需用户授权投屏），因此卡片保持待验证。
 
 **2026-11-17 第二轮复核**：`ImageLifecycle`/`GenerationGate` 仍仅被 `ScreenEncoderLifecycleTest` 引用；生产服务使用 `onImageAvailable` 的 try/finally 关闭与 `captureGeneration` 比较，行为目标（每个 Image 恰好关闭一次、旧 generation 拒绝）由该内联实现承担。本轮 API21/26/34 common 仪器（含 `ImageReaderLifecycleInstrumentedTest`）通过，但活动投屏 resize/100 次循环证据仍缺，不因复跑升级 CAP-2。
+
+**2026-11-17 真机投屏 resize/旋转证据**：在真实 MediaProjection 会话中，`wm size 1280x1024` 使同一 VirtualDisplay（uniqueId `virtual:com.abrenoch.wledgrabber,10198,wled-capture,0` 不变）从 640×360 resize 到 640×512，`wm size reset` 后回到 640×360；`user_rotation=1` 使同一 VD 从 640×360 变为 360×640，恢复后回到 640×360。期间服务持续前台、projection 保持 1、qa2 指标继续，无应用进程崩溃。每次强制显示配置变更都会触发 Sony SystemUI 的 `InfoBoard` 自身异常（`IllegalStateException: Task already scheduled or cancelled`），与应用无关；为避免反复重启系统 UI，未执行 100 次循环。API 29 无 `onCapturedContentResize`，API34 单应用窗口 resize 仍无法在本机验证。CAP-2 保持**待验证**。证据：`docs/archive/verification/wled/real-device-2026-11-17/`。

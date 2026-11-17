@@ -1,0 +1,13 @@
+### pre-reboot state 2026-11-17T13:55:25Z
+service=0
+projection=0
+font_scale=1.0
+PROJECT_MEDIA: allow; time=+56s924ms ago
+RUN_IN_BACKGROUND: allow
+RUN_ANY_IN_BACKGROUND: allow
+SYSTEM_ALERT_WINDOW: allow
+user,com.abrenoch.wledgrabber,10198
+boot_pref=
+    <string name="device_id">b8d61a5396f4</string>
+{"name": "WLED_TV", "ver": "16.0.1", "uptime": 241, "leds": {"count": 274, "rgbw": false, "fps": 0, "maxpwr": 850}, "live": false, "lm": "", "lip": "", "wifi": {"signal": 38, "channel": 1}, "freeheap": 122352}
+### rebooting

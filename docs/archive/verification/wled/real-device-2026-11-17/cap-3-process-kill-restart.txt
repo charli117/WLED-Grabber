@@ -1,0 +1,15 @@
+### pid before
+12178
+### force-stop
+### after kill: service/projection/display
+0
+0
+0
+### wled after kill (realtime timeout expected)
+{"name": "WLED_TV", "ver": "16.0.1", "uptime": 30, "leds": {"count": 274, "rgbw": false, "fps": 62, "maxpwr": 850}, "live": false, "lm": "", "lip": "", "wifi": {"signal": 38, "channel": 1}, "freeheap": 122436}
+### restart app and capture
+tap 'start_capture_button' at 1416,759
+1
+1
+{"name": "WLED_TV", "ver": "16.0.1", "uptime": 54, "leds": {"count": 274, "rgbw": false, "fps": 50, "maxpwr": 850}, "live": true, "lm": "UDP", "lip": "10.245.0.109", "wifi": {"signal": 40, "channel": 1}, "freeheap": 122340}
+### app fatal

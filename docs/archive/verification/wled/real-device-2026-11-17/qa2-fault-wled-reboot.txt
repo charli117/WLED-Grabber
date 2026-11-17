@@ -1,0 +1,20 @@
+### before reboot uptime
+{"name": "WLED_TV", "ver": "16.0.1", "uptime": 3063480, "leds": {"count": 274, "rgbw": false, "fps": 89, "maxpwr": 850}, "live": true, "lm": "UDP", "lip": "10.245.0.109", "wifi": {"signal": 64, "channel": 11}, "freeheap": 120388}
+### POST reboot
+/1.0 200 OK
+Content-Length: 16
+Content-Type: application/json
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: *
+Access-Control-Allow-Headers: *
+Connection: close
+
+{"success":true}
+### wait 12s
+{"name": "WLED_TV", "ver": "16.0.1", "uptime": 18, "leds": {"count": 274, "rgbw": false, "fps": 108, "maxpwr": 850}, "live": true, "lm": "UDP", "lip": "10.245.0.109", "wifi": {"signal": 38, "channel": 1}, "freeheap": 121596}
+### service qa2 / observation
+11-17 21:51:22.312 12178 14046 I WledScreenService: qa2 sampling_us p50=3776 p95=4872 p99=5310 max=5599 n=301; interval_us p50=16653 p95=17741 p99=18331 max=32449 n=300
+11-17 21:51:27.328 12178 14046 I WledScreenService: qa2 sampling_us p50=3787 p95=4755 p99=5526 max=7813 n=301; interval_us p50=16651 p95=17609 p99=18426 max=21898 n=300
+11-17 21:51:32.345 12178 14046 I WledScreenService: qa2 sampling_us p50=3788 p95=4778 p99=5375 max=5552 n=301; interval_us p50=16649 p95=17735 p99=18190 max=18539 n=300
+11-17 21:51:37.362 12178 14046 I WledScreenService: qa2 sampling_us p50=3736 p95=4732 p99=5563 max=6693 n=301; interval_us p50=16669 p95=17814 p99=18438 max=20125 n=300
+1

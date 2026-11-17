@@ -1,0 +1,11 @@
+# QA-2 post-boot clean measurement 2026-11-17T13:59:55Z
+# device=Sony BRAVIA 4K UR3 API29; wled=10.245.0.99 274 RGB
+11-17 21:59:25.378  6626  7878 I WledScreenService: qa2 sampling_us p50=3918 p95=5208 p99=8072 max=18325 n=301; interval_us p50=16690 p95=30493 p99=48136 max=5432457 n=300
+11-17 21:59:30.442  6626  7878 I WledScreenService: qa2 sampling_us p50=3935 p95=4818 p99=5243 max=5490 n=301; interval_us p50=16665 p95=17605 p99=18121 max=32428 n=300
+11-17 21:59:35.509  6626  7878 I WledScreenService: qa2 sampling_us p50=3809 p95=4614 p99=5507 max=5989 n=301; interval_us p50=16655 p95=17614 p99=22979 max=32601 n=300
+11-17 21:59:40.527  6626  7878 I WledScreenService: qa2 sampling_us p50=3787 p95=4936 p99=5327 max=5738 n=301; interval_us p50=16674 p95=17487 p99=17888 max=18304 n=300
+11-17 21:59:45.559  6626  7878 I WledScreenService: qa2 sampling_us p50=3929 p95=5005 p99=5797 max=7691 n=301; interval_us p50=16672 p95=17650 p99=18411 max=27028 n=300
+11-17 21:59:50.592  6626  7878 I WledScreenService: qa2 sampling_us p50=3934 p95=4865 p99=5173 max=5425 n=301; interval_us p50=16662 p95=17773 p99=18132 max=32882 n=300
+11-17 21:59:55.609  6626  7878 I WledScreenService: qa2 sampling_us p50=3838 p95=4728 p99=5356 max=5714 n=301; interval_us p50=16644 p95=17528 p99=17964 max=18481 n=300
+## wled
+{"name": "WLED_TV", "ver": "16.0.1", "uptime": 511, "leds": {"count": 274, "rgbw": false, "fps": 85, "maxpwr": 850}, "live": true, "lm": "UDP", "lip": "10.245.0.109", "wifi": {"signal": 44, "channel": 1}, "freeheap": 119496}

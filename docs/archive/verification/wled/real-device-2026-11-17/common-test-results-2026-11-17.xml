@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.abrenoch.wledgrabber.common.capture.ImageReaderLifecycleInstrumentedTest" tests="49" failures="0" errors="0" skipped="1" time="33.287" timestamp="2026-11-17T13:42:36" hostname="localhost">
+  <properties>
+    <property name="device" value="BRAVIA 4K UR3 - 10" />
+    <property name="flavor" value="" />
+    <property name="project" value=":common" />
+  </properties>
+  <testcase name="readerRejectsAcquireBeyondMaxImages" classname="com.abrenoch.wledgrabber.common.capture.ImageReaderLifecycleInstrumentedTest" time="0.012" />
+  <testcase name="producerFramesAreReadableAndClosedExactlyOnce" classname="com.abrenoch.wledgrabber.common.capture.ImageReaderLifecycleInstrumentedTest" time="0.01" />
+  <testcase name="captureCanStartAfterTestStops" classname="com.abrenoch.wledgrabber.common.capture.OutputOwnershipInstrumentedTest" time="0.024" />
+  <testcase name="captureAndTestAreMutuallyExclusive" classname="com.abrenoch.wledgrabber.common.capture.OutputOwnershipInstrumentedTest" time="0.002" />
+  <testcase name="activityExitReleasesAndReentryCanRetake" classname="com.abrenoch.wledgrabber.common.capture.OutputOwnershipInstrumentedTest" time="0.003" />
+  <testcase name="releaseRequiresMatchingOwnerAndEpoch" classname="com.abrenoch.wledgrabber.common.capture.OutputOwnershipInstrumentedTest" time="0.029" />
+  <testcase name="saveWritesOneVisibleRevisionAndBypassDoesNotReplaceSnapshot" classname="com.abrenoch.wledgrabber.common.config.PreferencesConfigStorageInstrumentedTest" time="0.06" />
+  <testcase name="sharedFixtureClassesAndAssetsAreAvailable" classname="com.abrenoch.wledgrabber.common.fixtures.FixtureAvailabilityTest" time="0.002" />
+  <testcase name="silentServerSurfacesAsTimeout" classname="com.abrenoch.wledgrabber.common.network.wled.WledHttpFailureInstrumentedTest" time="3.07" />
+  <testcase name="refusedPortSurfacesAsConnectFailure" classname="com.abrenoch.wledgrabber.common.network.wled.WledHttpFailureInstrumentedTest" time="0.002" />
+  <testcase name="manualEntryDoesNotRequestConsentWithoutVerifiedDevice" classname="com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest" time="1.073" />
+  <testcase name="explicitRunningStatusIsRequiredBeforeDismissingReminder" classname="com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest" time="0.577" />
+  <testcase name="failedExistingServiceKeepsAutomaticReminder" classname="com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest" time="0.616" />
+  <testcase name="manualUnverifiedEntryKeepsNoConsentAfterIdleStatus" classname="com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest" time="0.734" />
+  <testcase name="recreatingStatusWaitDoesNotResetDeadlineOrRequestConsentAgain" classname="com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest" time="10.587" />
+  <testcase name="idleServiceDoesNotCountAsSuccessfulAutomaticCapture" classname="com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest" time="0.633" />
+  <testcase name="incompleteConfigurationDisablesStart" classname="com.abrenoch.wledgrabber.common.startup.StartCaptureActivityTest" time="0.436" />
+  <testcase name="uncheckedConfirmationsBlockBeforeAnyProbe" classname="com.abrenoch.wledgrabber.common.startup.StartCaptureActivityTest" time="0.625" />
+  <testcase name="validConfigShowsEveryRequiredConfirmation" classname="com.abrenoch.wledgrabber.common.startup.StartCaptureActivityTest" time="0.351" />
+  <testcase name="clearRemovesTheStoredDevice" classname="com.abrenoch.wledgrabber.common.startup.StartConfirmationStoreTest" time="0.01" />
+  <testcase name="emptyStoreHasNoConfirmation" classname="com.abrenoch.wledgrabber.common.startup.StartConfirmationStoreTest" time="0.0" />
+  <testcase name="savesAndRestoresEveryFlag" classname="com.abrenoch.wledgrabber.common.startup.StartConfirmationStoreTest" time="0.043" />
+  <testcase name="rgbwWithoutManualWhiteIsNotComplete" classname="com.abrenoch.wledgrabber.common.startup.StartConfirmationStoreTest" time="0.011" />
+  <testcase name="booleanTypedBootChoiceRetainsReminderWithoutStartingCapture" classname="com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest" time="0.048" />
+  <testcase name="automaticAttemptRemainsClaimedAfterAdapterReconstructionInSameBoot" classname="com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest" time="0.002" />
+  <testcase name="disabledBootWithInvalidFrameRateRemainsSilentWithoutRepairingFields" classname="com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest" time="0.091" />
+  <testcase name="enabledBootWithInvalidFrameRateRetainsReminderWithoutStartingCapture" classname="com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest" time="0.026" />
+  <testcase name="savedOptOutSuppressesBootReminderAndActivity" classname="com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest" time="0.018" />
+  <testcase name="malformedBootChoiceRetainsReminderWithoutStartingCapture" classname="com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest" time="0.056" />
+  <testcase name="unfinishedFirstOpenFallsBackToUserActionInsteadOfCapture" classname="com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest" time="0.033" />
+  <testcase name="unrelatedOrMissingBroadcastHasNoStartupSideEffects" classname="com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest" time="0.006" />
+  <testcase name="malformedBootStringsFailClosedWithoutBeingRewritten" classname="com.abrenoch.wledgrabber.common.startup.StartupSettingsInstrumentedTest" time="0.044" />
+  <testcase name="invalidFrameRateDoesNotHideDefaultBootChoiceOrPersistDefaults" classname="com.abrenoch.wledgrabber.common.startup.StartupSettingsInstrumentedTest" time="0.031" />
+  <testcase name="missingGrantsCannotBePersistedAsSuccessfulAutomaticSetup" classname="com.abrenoch.wledgrabber.common.startup.StartupSettingsInstrumentedTest" time="0.03" />
+  <testcase name="stringBootChoiceUsesConfigBooleanSyntaxWithoutRepairingInvalidFields" classname="com.abrenoch.wledgrabber.common.startup.StartupSettingsInstrumentedTest" time="0.019" />
+  <testcase name="explicitDisableAndCompletionSurviveReconstructionWithoutChangingFrameRate" classname="com.abrenoch.wledgrabber.common.startup.StartupSettingsInstrumentedTest" time="0.059" />
+  <testcase name="nativeBooleanBootValueFailsClosedWithoutTypeCrashOrRewrite" classname="com.abrenoch.wledgrabber.common.startup.StartupSettingsInstrumentedTest" time="0.033" />
+  <testcase name="firstOpenDefaultsToBootCaptureWithoutInventingCompletedSetup" classname="com.abrenoch.wledgrabber.common.startup.StartupSettingsInstrumentedTest" time="0.0" />
+  <testcase name="missingAccessDisablesAutomaticCompletion" classname="com.abrenoch.wledgrabber.common.startup.StartupSetupActivityTest" time="0.347" />
+  <testcase name="savedBootOptOutCanCompleteWithoutAutomaticCaptureAccess" classname="com.abrenoch.wledgrabber.common.startup.StartupSetupActivityTest" time="0.627" />
+  <testcase name="pageHonorsSavedChineseLanguage" classname="com.abrenoch.wledgrabber.common.startup.StartupSetupActivityTest" time="0.316" />
+  <testcase name="firstOpenOffersBootCaptureButDoesNotMarkSetupComplete" classname="com.abrenoch.wledgrabber.common.startup.StartupSetupActivityTest" time="0.263" />
+  <testcase name="dpadCanChangeDraftAndBackCancelsWithoutPersistingIt" classname="com.abrenoch.wledgrabber.common.startup.StartupSetupActivityTest" time="0.37" />
+  <testcase name="manualUseCompletesWithBootDisabled" classname="com.abrenoch.wledgrabber.common.startup.StartupSetupActivityTest" time="0.632" />
+  <testcase name="unsupportedPlatformDoesNotOfferOverlayOrAdbGrants" classname="com.abrenoch.wledgrabber.common.startup.StartupSetupActivityTest" time="0.004">
+    <skipped />
+  </testcase>
+  <testcase name="dpadWalksToTheLastLedAndBack" classname="com.abrenoch.wledgrabber.common.views.LedLayoutPreviewInstrumentedTest" time="0.092" />
+  <testcase name="errorStateBlocksDpadSelection" classname="com.abrenoch.wledgrabber.common.views.LedLayoutPreviewInstrumentedTest" time="0.031" />
+  <testcase name="touchSelectsTheNearestPhysicalLed" classname="com.abrenoch.wledgrabber.common.views.LedLayoutPreviewInstrumentedTest" time="0.001" />
+  <testcase name="selectionSurvivesResize" classname="com.abrenoch.wledgrabber.common.views.LedLayoutPreviewInstrumentedTest" time="0.001" />
+</testsuite>

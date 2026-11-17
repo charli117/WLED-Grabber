@@ -95,6 +95,8 @@
 
 **2026-11-17 交付复核补充**：32分钟soak（UTC 2026-11-16T18:05–18:38）已完成：`FATAL EXCEPTION`/ANR 均为 0，TOTAL PSS 93,288→68,632 KB（净降），采样 p95 3.9–4.4ms、发送间隔 p95 17.3–17.6ms，满足“无崩溃/无持续增长”的稳定性口径。仍缺的四项（物理FPS/端到端、RGBW样机、500/1000/2000灯、Sony遥控器大字体）没有变化；故障矩阵（丢包/乱序/断网/断HTTP/WLED重启/进程kill/息屏）未系统执行。QA-2 继续 BLOCKED。
 
+**2026-11-17 真机复测（同日二轮，Sony BRAVIA 4K UR3 / API 29 + WLED 16.0.1 274 RGB，640 长边/60fps）**：稳态采样 p95 4.61–5.01ms / p99 5.17–5.80ms（启动首窗 p95 5.21/p99 8.07），发送间隔 p95 17.49–17.77ms；WLED `info.leds.fps` 30 样本 min=69/avg=108.4（仅 show-layer，不作物理证据）。故障：WLED `{"rb":true}` 重启后 12 秒内恢复 `live=true`；`am force-stop` 后资源归零并可重开；停止 release CONFIRMED。`font_scale=1.5` 下 TV 全量仪器 35/35 通过；TV/common 仪器 35+50 项在真机复跑（TV 首次 D-pad 超时为冷启动抖动，单跑通过）。仍缺：物理 FPS/端到端 p95、RGBW 样机两模式、500/1000/2000 灯、ESP8266、真实断网/丢包/乱序（无 root，断网会断开 adb）、100 次 resize/旋转（Sony SystemUI 在显示配置变更时自身崩溃）。QA-2 保持 BLOCKED。证据：`docs/archive/verification/wled/real-device-2026-11-17/`。
+
 <a id="qa-3"></a>
 
 ## QA-3 — 最终需求闭环与发布准入记录

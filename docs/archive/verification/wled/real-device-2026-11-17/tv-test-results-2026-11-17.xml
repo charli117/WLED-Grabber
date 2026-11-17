@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.abrenoch.wledgrabber.tv.TvDpadWalkthroughTest" tests="35" failures="0" errors="0" skipped="0" time="64.521" timestamp="2026-11-17T13:53:54" hostname="localhost">
+  <properties>
+    <property name="device" value="BRAVIA 4K UR3 - 10" />
+    <property name="flavor" value="" />
+    <property name="project" value=":tv" />
+  </properties>
+  <testcase name="connectionStepSurvivesDownAndBack" classname="com.abrenoch.wledgrabber.tv.TvDpadWalkthroughTest" time="2.878" />
+  <testcase name="layoutStepSurvivesFullDpadWalk" classname="com.abrenoch.wledgrabber.tv.TvDpadWalkthroughTest" time="4.578" />
+  <testcase name="verifySectionDownReachesTheCornerSection" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.994" />
+  <testcase name="physicalCountStartsFromTheEffectiveRingWhenUnconfirmed" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.669" />
+  <testcase name="holdingAToggleDoesNotFlipOnKeyRepeat" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.567" />
+  <testcase name="saveBlocksPhysicalCountBelowTheLayout" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.626" />
+  <testcase name="focusReturnsFromSaveToTheLastRow" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="2.721" />
+  <testcase name="autoDistributeWritesAllFourSidesForTheConfirmedCount" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.493" />
+  <testcase name="dpadStepsTheFocusedFieldWithoutTouchingTheCommittedConfig" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.666" />
+  <testcase name="dpadDownMovesFocusToTheNextRow" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.478" />
+  <testcase name="saveRejectsACompileInvalidLayout" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.822" />
+  <testcase name="savePersistsTheAdjustedLayout" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.647" />
+  <testcase name="presetActionRestoresTheFirstUnitLayout" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.603" />
+  <testcase name="focusReachesSaveAfterTheLastRow" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="0.607" />
+  <testcase name="exactEntryReplacesTheValue" classname="com.abrenoch.wledgrabber.tv.TvLayoutEditorTest" time="1.671" />
+  <testcase name="editorShowsLivePreviewShapeRowsAndVerifyActions" classname="com.abrenoch.wledgrabber.tv.TvLayoutFlowTest" time="0.569" />
+  <testcase name="advancedStepKeepsCaptureAndQualityButNotGeometry" classname="com.abrenoch.wledgrabber.tv.TvLayoutFlowTest" time="0.737" />
+  <testcase name="mainShowsReadyStatusAndControls" classname="com.abrenoch.wledgrabber.tv.TvMainActivityTest" time="0.601" />
+  <testcase name="smallStripScanResultStillOpensMainSurface" classname="com.abrenoch.wledgrabber.tv.TvMainActivityTest" time="0.28" />
+  <testcase name="releaseBroadcastShowsConfirmedOrUnconfirmedStatus" classname="com.abrenoch.wledgrabber.tv.TvMainActivityTest" time="0.325" />
+  <testcase name="staleObservationBroadcastIsShownWhileRunning" classname="com.abrenoch.wledgrabber.tv.TvMainActivityTest" time="0.25" />
+  <testcase name="invalidLayoutPowerOpensEditorInsteadOfConsent" classname="com.abrenoch.wledgrabber.tv.TvMainActivityTest" time="0.751" />
+  <testcase name="incompleteConfigurationStartReleasesOutputOwnership" classname="com.abrenoch.wledgrabber.tv.TvServiceForegroundContractTest" time="2.044" />
+  <testcase name="rejectedStartStillForegroundsAndDoesNotCrash" classname="com.abrenoch.wledgrabber.tv.TvServiceForegroundContractTest" time="1.959" />
+  <testcase name="startWithoutObservationIsRejectedBeforeCapture" classname="com.abrenoch.wledgrabber.tv.TvServiceReadinessContractTest" time="2.02" />
+  <testcase name="startWithMismatchedObservationIsRejectedBeforeCapture" classname="com.abrenoch.wledgrabber.tv.TvServiceReadinessContractTest" time="2.138" />
+  <testcase name="childLayoutSaveSurvivesConnectionStepSave" classname="com.abrenoch.wledgrabber.tv.TvSetupUiTest" time="1.466" />
+  <testcase name="savePersistsWholeSeededSnapshot" classname="com.abrenoch.wledgrabber.tv.TvSetupUiTest" time="1.353" />
+  <testcase name="connectionStepShowsSeededDeviceAndActions" classname="com.abrenoch.wledgrabber.tv.TvSetupUiTest" time="1.164" />
+  <testcase name="tenSecondPatternConfirmsRelease" classname="com.abrenoch.wledgrabber.tv.TvTestPatternDeviceTest" time="10.599" />
+  <testcase name="leavingThePatternActivityReleasesTheOutputLease" classname="com.abrenoch.wledgrabber.tv.TvTestPatternLifecycleTest" time="0.193" />
+  <testcase name="previewThenPatternThenExitKeepsAFreeOwner" classname="com.abrenoch.wledgrabber.tv.TvTestPatternLifecycleTest" time="0.442" />
+  <testcase name="unreachableDeviceStillReachesTerminalUnconfirmed" classname="com.abrenoch.wledgrabber.tv.TvTestPatternSlowNetworkTest" time="10.303" />
+  <testcase name="deviceReportsWledCapabilities" classname="com.abrenoch.wledgrabber.tv.TvWledDeviceTest" time="0.061" />
+  <testcase name="stateEndpointIsReadableThroughRestrictedClient" classname="com.abrenoch.wledgrabber.tv.TvWledDeviceTest" time="0.26" />
+</testsuite>

@@ -1,0 +1,7 @@
+### final cleanup 2026-11-17T14:00:08Z
+service=0
+projection=0
+vd=0
+{"name": "WLED_TV", "ver": "16.0.1", "uptime": 524, "leds": {"count": 274, "rgbw": false, "fps": 0, "maxpwr": 850}, "live": false, "lm": "", "lip": "", "wifi": {"signal": 34, "channel": 1}, "freeheap": 122368}
+font_scale=1.0
+wm_size=Physical size: 1920x1080 

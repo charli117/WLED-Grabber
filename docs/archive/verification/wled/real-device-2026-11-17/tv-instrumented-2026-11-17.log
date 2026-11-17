@@ -1,0 +1,185 @@
+Starting a Gradle Daemon, 1 incompatible Daemon could not be reused, use --status for details
+
+> Configure project :common
+Passing custom test runner argument android.testInstrumentationRunnerArguments.wledHost from gradle.properties or command line is not compatible with configuration caching. Please specify this argument using android gradle dsl.
+
+> Task :common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :common:preBuild UP-TO-DATE
+> Task :common:preDebugBuild UP-TO-DATE
+> Task :common:generateDebugResValues UP-TO-DATE
+> Task :common:generateDebugResources UP-TO-DATE
+> Task :common:packageDebugResources UP-TO-DATE
+> Task :common:parseDebugLocalResources UP-TO-DATE
+> Task :common:generateDebugRFile UP-TO-DATE
+> Task :common:compileDebugKotlin UP-TO-DATE
+> Task :common:javaPreCompileDebug UP-TO-DATE
+> Task :common:compileDebugJavaWithJavac UP-TO-DATE
+> Task :common:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :common:preDebugAndroidTestBuild UP-TO-DATE
+> Task :common:writeDebugAarMetadata UP-TO-DATE
+> Task :common:checkDebugAndroidTestAarMetadata UP-TO-DATE
+> Task :common:compileDebugLibraryResources UP-TO-DATE
+> Task :common:generateDebugAndroidTestResValues UP-TO-DATE
+> Task :common:mapDebugAndroidTestSourceSetPaths UP-TO-DATE
+> Task :common:generateDebugAndroidTestResources UP-TO-DATE
+> Task :common:mergeDebugAndroidTestResources UP-TO-DATE
+> Task :common:extractDeepLinksDebug UP-TO-DATE
+> Task :common:processDebugManifest UP-TO-DATE
+> Task :common:processDebugAndroidTestManifest UP-TO-DATE
+> Task :common:processDebugAndroidTestResources UP-TO-DATE
+> Task :common:compileDebugAndroidTestKotlin NO-SOURCE
+> Task :common:javaPreCompileDebugAndroidTest UP-TO-DATE
+
+> Task :common:compileDebugAndroidTestJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :common:mergeDebugAndroidTestShaders UP-TO-DATE
+> Task :common:compileDebugAndroidTestShaders NO-SOURCE
+> Task :common:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :common:mergeDebugShaders UP-TO-DATE
+> Task :common:compileDebugShaders NO-SOURCE
+> Task :common:generateDebugAssets UP-TO-DATE
+> Task :common:packageDebugAssets UP-TO-DATE
+> Task :common:mergeDebugAndroidTestAssets UP-TO-DATE
+> Task :common:compressDebugAndroidTestAssets UP-TO-DATE
+> Task :common:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :common:desugarDebugAndroidTestFileDependencies UP-TO-DATE
+> Task :common:dexBuilderDebugAndroidTest
+> Task :common:mergeDebugAndroidTestGlobalSynthetics UP-TO-DATE
+> Task :common:processDebugAndroidTestJavaRes NO-SOURCE
+> Task :common:processDebugJavaRes UP-TO-DATE
+> Task :common:mergeDebugAndroidTestJavaResource UP-TO-DATE
+> Task :common:checkDebugAndroidTestDuplicateClasses UP-TO-DATE
+> Task :common:mergeExtDexDebugAndroidTest UP-TO-DATE
+> Task :common:mergeLibDexDebugAndroidTest UP-TO-DATE
+> Task :common:mergeDebugJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugNativeLibs NO-SOURCE
+> Task :common:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :common:mergeDebugAndroidTestJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :common:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :common:validateSigningDebugAndroidTest UP-TO-DATE
+> Task :common:writeDebugAndroidTestSigningConfigVersions UP-TO-DATE
+> Task :tv:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :tv:preBuild UP-TO-DATE
+> Task :tv:preDebugBuild UP-TO-DATE
+> Task :common:mergeProjectDexDebugAndroidTest
+> Task :tv:dataBindingMergeDependencyArtifactsDebug UP-TO-DATE
+> Task :tv:generateDebugResValues UP-TO-DATE
+> Task :tv:generateDebugResources UP-TO-DATE
+> Task :tv:mergeDebugResources UP-TO-DATE
+> Task :tv:packageDebugResources UP-TO-DATE
+> Task :tv:parseDebugLocalResources UP-TO-DATE
+> Task :tv:dataBindingGenBaseClassesDebug UP-TO-DATE
+> Task :tv:checkDebugAarMetadata UP-TO-DATE
+> Task :tv:mapDebugSourceSetPaths UP-TO-DATE
+> Task :tv:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :tv:extractDeepLinksDebug UP-TO-DATE
+> Task :tv:processDebugMainManifest UP-TO-DATE
+> Task :tv:processDebugManifest UP-TO-DATE
+> Task :tv:processDebugManifestForPackage UP-TO-DATE
+> Task :tv:processDebugResources UP-TO-DATE
+> Task :tv:compileDebugKotlin UP-TO-DATE
+> Task :tv:javaPreCompileDebug UP-TO-DATE
+> Task :tv:compileDebugJavaWithJavac UP-TO-DATE
+> Task :tv:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :tv:preDebugAndroidTestBuild SKIPPED
+> Task :tv:dataBindingMergeDependencyArtifactsDebugAndroidTest UP-TO-DATE
+> Task :tv:generateDebugAndroidTestResValues UP-TO-DATE
+> Task :tv:generateDebugAndroidTestResources UP-TO-DATE
+> Task :tv:mergeDebugAndroidTestResources UP-TO-DATE
+> Task :tv:dataBindingGenBaseClassesDebugAndroidTest UP-TO-DATE
+> Task :tv:checkDebugAndroidTestAarMetadata UP-TO-DATE
+> Task :tv:mapDebugAndroidTestSourceSetPaths UP-TO-DATE
+> Task :tv:processDebugAndroidTestManifest UP-TO-DATE
+> Task :tv:processDebugAndroidTestResources UP-TO-DATE
+> Task :tv:compileDebugAndroidTestKotlin NO-SOURCE
+> Task :tv:javaPreCompileDebugAndroidTest UP-TO-DATE
+> Task :tv:compileDebugAndroidTestJavaWithJavac UP-TO-DATE
+> Task :tv:mergeDebugShaders UP-TO-DATE
+> Task :tv:compileDebugShaders NO-SOURCE
+> Task :tv:generateDebugAssets UP-TO-DATE
+> Task :tv:mergeDebugAssets UP-TO-DATE
+> Task :tv:compressDebugAssets UP-TO-DATE
+> Task :tv:desugarDebugFileDependencies UP-TO-DATE
+> Task :tv:dexBuilderDebug UP-TO-DATE
+> Task :tv:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :tv:processDebugJavaRes UP-TO-DATE
+> Task :tv:mergeDebugJavaResource UP-TO-DATE
+> Task :tv:checkDebugDuplicateClasses UP-TO-DATE
+> Task :tv:mergeExtDexDebug UP-TO-DATE
+> Task :tv:mergeLibDexDebug UP-TO-DATE
+> Task :tv:mergeProjectDexDebug UP-TO-DATE
+> Task :tv:mergeDebugJniLibFolders UP-TO-DATE
+> Task :tv:mergeDebugNativeLibs NO-SOURCE
+> Task :tv:stripDebugDebugSymbols NO-SOURCE
+> Task :tv:validateSigningDebug UP-TO-DATE
+> Task :tv:writeDebugAppMetadata UP-TO-DATE
+> Task :tv:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :tv:packageDebug UP-TO-DATE
+> Task :tv:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :tv:mergeDebugAndroidTestShaders UP-TO-DATE
+> Task :tv:compileDebugAndroidTestShaders NO-SOURCE
+> Task :tv:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :tv:mergeDebugAndroidTestAssets UP-TO-DATE
+> Task :tv:compressDebugAndroidTestAssets UP-TO-DATE
+> Task :tv:desugarDebugAndroidTestFileDependencies UP-TO-DATE
+> Task :tv:dexBuilderDebugAndroidTest UP-TO-DATE
+> Task :tv:mergeDebugAndroidTestGlobalSynthetics UP-TO-DATE
+> Task :tv:processDebugAndroidTestJavaRes NO-SOURCE
+> Task :tv:mergeDebugAndroidTestJavaResource UP-TO-DATE
+> Task :tv:checkDebugAndroidTestDuplicateClasses UP-TO-DATE
+> Task :tv:mergeExtDexDebugAndroidTest UP-TO-DATE
+> Task :tv:mergeLibDexDebugAndroidTest UP-TO-DATE
+> Task :tv:mergeProjectDexDebugAndroidTest UP-TO-DATE
+> Task :tv:mergeDebugAndroidTestJniLibFolders UP-TO-DATE
+> Task :tv:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :tv:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :tv:validateSigningDebugAndroidTest UP-TO-DATE
+> Task :tv:writeDebugAndroidTestSigningConfigVersions UP-TO-DATE
+> Task :tv:packageDebugAndroidTest UP-TO-DATE
+> Task :tv:createDebugAndroidTestApkListingFileRedirect UP-TO-DATE
+
+> Task :tv:connectedDebugAndroidTest
+Starting 35 tests on BRAVIA 4K UR3 - 10
+
+BRAVIA 4K UR3 - 10 Tests 0/35 completed. (0 skipped) (0 failed)
+
+> Task :common:packageDebugAndroidTest
+
+> Task :tv:connectedDebugAndroidTest
+
+com.abrenoch.wledgrabber.tv.TvDpadWalkthroughTest > connectionStepSurvivesDownAndBack[BRAVIA 4K UR3 - 10] [31mFAILED [0m
+	java.lang.RuntimeException: Could not launch intent Intent { flg=0x14000000 cmp=com.abrenoch.wledgrabber/.tv.activities.ManualSetupActivity } within 45000 milliseconds. Perhaps the main thread has not gone idle within a reasonable amount of time? There could be an animation or something constantly repainting the screen. Or the activity is doing network calls on creation? See the threaddump logs. For your reference the last time the event queue was idle before your activity launch request was 1794922531555 and now the last time the queue went idle was: 1794922536894. If these numbers are the same your activity might be hogging the event queue.
+	at androidx.test.runner.MonitoringInstrumentation.startActivitySync(MonitoringInstrumentation.java:537)
+
+BRAVIA 4K UR3 - 10 Tests 1/35 completed. (0 skipped) (1 failed)
+BRAVIA 4K UR3 - 10 Tests 5/35 completed. (0 skipped) (1 failed)
+BRAVIA 4K UR3 - 10 Tests 19/35 completed. (0 skipped) (1 failed)
+BRAVIA 4K UR3 - 10 Tests 24/35 completed. (0 skipped) (1 failed)
+BRAVIA 4K UR3 - 10 Tests 29/35 completed. (0 skipped) (1 failed)
+BRAVIA 4K UR3 - 10 Tests 32/35 completed. (0 skipped) (1 failed)
+BRAVIA 4K UR3 - 10 Tests 33/35 completed. (0 skipped) (1 failed)
+Finished 35 tests on BRAVIA 4K UR3 - 10
+
+> Task :tv:connectedDebugAndroidTest
+Tests on BRAVIA 4K UR3 - 10 failed: There was 1 failure(s).
+
+> Task :tv:connectedDebugAndroidTest FAILED
+> Task :common:createDebugAndroidTestApkListingFileRedirect UP-TO-DATE
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':tv:connectedDebugAndroidTest'.
+> There were failing tests. See the report at: file:///Users/luowei/Documents/Pycharm/WLED-Grabber/tv/build/reports/androidTests/connected/debug/index.html
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2m 20s
+109 actionable tasks: 5 executed, 104 up-to-date

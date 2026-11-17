@@ -10,6 +10,8 @@
 
 > 2026-11-17 第二轮复核：任务册 [§5.3](task/00-overview.md#second-audit-2026-11-17) 记录 JVM/lint/构建/API21/26/33/34 仪器与 local-regression 复跑；更正 §5.2.2 #1 的类级接线声明并补充 `BootActivity` 授权前实时探测。**仍不新增业务归档**：CAP-2（活动投屏证据）、主线程 DNS 残留、QA-2/QA-3 均未闭环。本轮原始日志新增于 [verification/wled/qa-1/2026-11-17-second-audit/](verification/wled/qa-1/2026-11-17-second-audit/)。
 
+> 2026-11-17 真机设备复测：任务册 [§5.4](task/00-overview.md#real-device-audit-2026-11-17) 记录 Sony BRAVIA 4K UR3（API 29）+ WLED 16.0.1 274 RGB 的实机安装、TV/common 仪器复跑、大字体与真实投屏 resize/旋转、冷启动与故障恢复。**仍不新增业务归档**：CAP-2（100 次循环/API34 项）、主线程 DNS 残留、QA-2（物理 FPS/端到端、RGBW、大灯数）/QA-3 均未闭环，无状态升级。本轮原始日志新增于 [verification/wled/real-device-2026-11-17/](verification/wled/real-device-2026-11-17/)。
+
 当前有效文档：
 
 - 技术规范：[docs/design/architecture.md](../design/architecture.md)

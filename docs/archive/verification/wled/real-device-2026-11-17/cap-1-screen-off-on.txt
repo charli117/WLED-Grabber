@@ -1,0 +1,19 @@
+### screen off (keyevent 26)
+  mWakefulness=Asleep
+1
+1
+### screen on
+  mWakefulness=Awake
+1
+1
+### qa2 after wake
+11-17 21:47:42.012 12178 12676 I WledScreenService: qa2 sampling_us p50=3642 p95=4885 p99=5625 max=6159 n=301; interval_us p50=16667 p95=17713 p99=18333 max=18797 n=300
+11-17 21:47:47.028 12178 12676 I WledScreenService: qa2 sampling_us p50=3651 p95=4865 p99=5439 max=5690 n=301; interval_us p50=16642 p95=17602 p99=18289 max=18684 n=300
+11-17 21:47:58.895 12178 12676 I WledScreenService: qa2 sampling_us p50=3568 p95=5886 p99=7585 max=14298 n=301; interval_us p50=16695 p95=27842 p99=37727 max=6558233 n=300
+### app crashes
+11-17 21:46:34.395 30860 30860 E AndroidRuntime: FATAL EXCEPTION: main
+11-17 21:46:34.395 30860 30860 E AndroidRuntime: Process: com.android.systemui, PID: 30860
+11-17 21:46:38.458 12888 12888 E AndroidRuntime: FATAL EXCEPTION: main
+11-17 21:46:38.458 12888 12888 E AndroidRuntime: Process: com.android.systemui, PID: 12888
+11-17 21:48:03.544  9738 13347 E AndroidRuntime: FATAL EXCEPTION: ServiceMsgReceiverThread
+11-17 21:48:03.544  9738 13347 E AndroidRuntime: Process: com.sony.dtv.connecteddevicesettings, PID: 9738
