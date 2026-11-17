@@ -136,7 +136,10 @@ public final class LayoutValueRow extends LinearLayout {
 
     private void updateContentDescription() {
         if (kind == Kind.ACTION) {
-            setContentDescription(titleView.getText());
+            CharSequence value = valueView.getText();
+            setContentDescription(value == null || value.length() == 0
+                    ? titleView.getText()
+                    : titleView.getText() + ", " + value);
         } else {
             setContentDescription(titleView.getText() + ", " + valueView.getText());
         }

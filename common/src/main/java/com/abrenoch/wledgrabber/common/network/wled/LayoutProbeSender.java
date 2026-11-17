@@ -6,84 +6,170 @@ import com.abrenoch.wledgrabber.common.led.CompiledLayout;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
 import com.abrenoch.wledgrabber.common.led.LayoutProbe;
 import com.abrenoch.wledgrabber.common.led.RgbwMode;
+import com.abrenoch.wledgrabber.common.led.Side;
 import com.abrenoch.wledgrabber.common.led.WhiteMode;
 
 /**
- * One-shot layout probe: pulses the selected physical LEDs in white for about
- * two seconds so the user can check an edge or the input position on the strip.
+ * Latching layout probe: keeps the selected edge or input marker white until the
+ * same action is pressed again. WLED realtime frames expire, so the worker keeps
+ * resending while the probe is latched.
  *
  * <p>Takes the shared TEST output lease, so it never fights a running capture;
- * the caller reports that the output is busy instead.</p>
+ * the caller reports that the output is busy instead. Only one probe is active
+ * at a time, and switching edges reuses the same lease and worker.</p>
  */
 public final class LayoutProbeSender {
+    public static final String KEY_INPUT = "probe:input";
+
+    public enum Result {
+        STARTED,
+        STOPPED,
+        BUSY,
+        INVALID
+    }
+
     private static final String OWNER_ID = "layout-probe";
-    private static final int REPEATS = 8;
     private static final long INTERVAL_MS = 250L;
+    private static final LayoutProbeSender INSTANCE = new LayoutProbeSender();
+
+    private final OutputSessionCoordinator coordinator = OutputSessionCoordinator.get();
+    private final ProbeLatch latch = new ProbeLatch();
+    private final Object lock = new Object();
+
+    private Thread worker;
+    private Endpoint currentEndpoint;
+    private volatile boolean running;
+    private volatile byte[] frame;
 
     private LayoutProbeSender() {
     }
 
-    /** @return true when the pulse started; false when another session owns output. */
-    public static boolean pulse(ConfigSnapshot snapshot, CompiledLayout compiled, int[] logical) {
-        if (snapshot == null || compiled == null || logical == null || logical.length == 0) {
-            return false;
+    /** Stable latch key for one edge; {@code null} is the input marker. */
+    public static String keyFor(Side side) {
+        return side == null ? KEY_INPUT : "probe:" + side.name();
+    }
+
+    /** Toggles the probe for {@code key}; only one key can be active. */
+    public static Result toggle(ConfigSnapshot snapshot, CompiledLayout compiled,
+                                String key, int[] logical) {
+        return INSTANCE.toggleInternal(snapshot, compiled, key, logical);
+    }
+
+    /** Releases the probe and returns the output lease; safe to call repeatedly. */
+    public static void stop() {
+        INSTANCE.stopInternal();
+    }
+
+    /** Whether {@code key} is the currently latched probe. */
+    public static boolean isActive(String key) {
+        return INSTANCE.isActiveInternal(key);
+    }
+
+    private Result toggleInternal(ConfigSnapshot snapshot, CompiledLayout compiled,
+                                  String key, int[] logical) {
+        if (snapshot == null || compiled == null || key == null || key.isEmpty()
+                || logical == null || logical.length == 0) {
+            return Result.INVALID;
         }
-        String host = snapshot.device().host();
-        if (host == null || host.trim().isEmpty()) {
-            // Do not report a started pulse when there is no endpoint to send to.
-            return false;
+        Endpoint endpoint = Endpoint.from(snapshot, compiled);
+        if (endpoint == null) {
+            return Result.INVALID;
         }
-        Transport transport = transportFor(snapshot);
-        if (transport == null) {
-            return false;
-        }
-        RgbwMode rgbwMode = snapshot.device().rgbwMode();
-        int channels = rgbwMode == RgbwMode.RGBW ? 4 : 3;
-        WhiteMode whiteMode = snapshot.device().whiteMode();
-        if (channels == 4 && whiteMode == null) {
-            return false;
-        }
-        OutputSessionCoordinator coordinator = OutputSessionCoordinator.get();
-        if (!coordinator.acquire(OutputOwner.TEST, OWNER_ID)) {
-            return false;
-        }
-        long epoch = coordinator.epoch();
-        final byte[] frame = LayoutProbe.buildFrame(compiled, logical, channels, whiteMode,
-                255, 255, 255);
-        final byte[] black = new byte[compiled.mapping().physicalLedCount() * channels];
-        final int ledCount = compiled.mapping().physicalLedCount();
-        final int httpPort = snapshot.device().httpPort();
-        final int port = transport == Transport.DDP
-                ? snapshot.device().ddpPort() : snapshot.device().udpPort();
-        Thread worker = new Thread(() -> {
-            try (UdpDatagramSink sink = new UdpDatagramSink(host, port);
-                 WledHttpClient control = new WledHttpClient()) {
-                WledUdpTransport udp = new WledUdpTransport(sink);
-                try {
-                    // Realtime UDP alone does not turn the master power on.
-                    control.turnOn(host, httpPort);
-                } catch (RuntimeException ignored) {
-                    // The pulse remains visible only if the strip is already on.
+        byte[] next = LayoutProbe.buildFrame(compiled, logical, endpoint.channels,
+                endpoint.whiteMode, 255, 255, 255);
+
+        synchronized (lock) {
+            if (worker != null && running) {
+                if (latch.isActive(key)) {
+                    latch.clear();
+                    running = false;
+                    worker.interrupt();
+                    return Result.STOPPED;
                 }
-                for (int i = 0; i < REPEATS; i++) {
-                    send(udp, transport, channels, frame, ledCount);
-                    try {
-                        Thread.sleep(INTERVAL_MS);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
+                if (!endpoint.sameTarget(currentEndpoint) || next.length != frame.length) {
+                    // The draft changed under a latched probe. Stop it rather than
+                    // sending a frame with a different shape; the next press
+                    // starts a fresh session.
+                    latch.clear();
+                    running = false;
+                    worker.interrupt();
+                    return Result.STOPPED;
+                }
+                frame = next;
+                latch.toggle(key);
+                return Result.STARTED;
+            }
+            if (worker != null) {
+                return Result.BUSY;
+            }
+            if (coordinator.owner() != OutputOwner.NONE
+                    || !coordinator.acquire(OutputOwner.TEST, OWNER_ID)) {
+                return Result.BUSY;
+            }
+            long epoch = coordinator.epoch();
+            byte[] black = new byte[endpoint.ledCount * endpoint.channels];
+            currentEndpoint = endpoint;
+            frame = next;
+            running = true;
+            latch.toggle(key);
+            worker = new Thread(() -> run(endpoint, black, epoch), "layout-probe");
+            worker.setDaemon(true);
+            worker.start();
+            return Result.STARTED;
+        }
+    }
+
+    private void stopInternal() {
+        synchronized (lock) {
+            latch.clear();
+            if (worker != null && running) {
+                running = false;
+                worker.interrupt();
+            }
+        }
+    }
+
+    private boolean isActiveInternal(String key) {
+        synchronized (lock) {
+            return latch.isActive(key);
+        }
+    }
+
+    private void run(Endpoint endpoint, byte[] black, long epoch) {
+        try (UdpDatagramSink sink = new UdpDatagramSink(endpoint.host, endpoint.port);
+             WledHttpClient control = new WledHttpClient()) {
+            WledUdpTransport udp = new WledUdpTransport(sink);
+            try {
+                // Realtime UDP alone does not turn the master power on.
+                control.turnOn(endpoint.host, endpoint.httpPort);
+            } catch (RuntimeException ignored) {
+                // The probe remains visible only if the strip is already on.
+            }
+            while (running) {
+                byte[] current = frame;
+                if (current != null) {
+                    send(udp, endpoint.transport, endpoint.channels, current, endpoint.ledCount);
+                }
+                try {
+                    Thread.sleep(INTERVAL_MS);
+                } catch (InterruptedException interrupted) {
+                    if (!running) {
                         break;
                     }
                 }
-                send(udp, transport, channels, black, ledCount);
-            } catch (Exception ignored) {
-                // Best effort: the UI only reports that the pulse started.
-            } finally {
-                coordinator.release(OutputOwner.TEST, OWNER_ID, epoch);
             }
-        }, "layout-probe");
-        worker.setDaemon(true);
-        worker.start();
-        return true;
+            send(udp, endpoint.transport, endpoint.channels, black, endpoint.ledCount);
+        } catch (Exception ignored) {
+            // Best effort: the UI only reports the latch state.
+        } finally {
+            coordinator.release(OutputOwner.TEST, OWNER_ID, epoch);
+            synchronized (lock) {
+                worker = null;
+                currentEndpoint = null;
+                frame = null;
+                latch.clear();
+            }
+        }
     }
 
     /** Shared transport resolution; RGBW must never fall back to DNRGB/type5. */
@@ -103,5 +189,62 @@ public final class LayoutProbeSender {
         return transport == Transport.DDP
                 ? udp.sendRgbDdp(frame, ledCount)
                 : udp.sendRgb(frame, ledCount);
+    }
+
+    private static final class Endpoint {
+        final String host;
+        final int httpPort;
+        final int port;
+        final Transport transport;
+        final int channels;
+        final int ledCount;
+        final WhiteMode whiteMode;
+
+        Endpoint(String host, int httpPort, int port, Transport transport,
+                 int channels, int ledCount, WhiteMode whiteMode) {
+            this.host = host;
+            this.httpPort = httpPort;
+            this.port = port;
+            this.transport = transport;
+            this.channels = channels;
+            this.ledCount = ledCount;
+            this.whiteMode = whiteMode;
+        }
+
+        boolean sameTarget(Endpoint other) {
+            return other != null
+                    && host.equals(other.host)
+                    && httpPort == other.httpPort
+                    && port == other.port
+                    && transport == other.transport
+                    && channels == other.channels
+                    && ledCount == other.ledCount;
+        }
+
+        static Endpoint from(ConfigSnapshot snapshot, CompiledLayout compiled) {
+            if (snapshot == null || snapshot.device() == null || compiled == null
+                    || compiled.mapping() == null) {
+                return null;
+            }
+            String host = snapshot.device().host();
+            if (host == null || host.trim().isEmpty()) {
+                // Do not report a started probe when there is no endpoint.
+                return null;
+            }
+            Transport transport = transportFor(snapshot);
+            if (transport == null) {
+                return null;
+            }
+            int channels = snapshot.device().rgbwMode() == RgbwMode.RGBW ? 4 : 3;
+            WhiteMode whiteMode = snapshot.device().whiteMode();
+            int ledCount = compiled.mapping().physicalLedCount();
+            if (ledCount <= 0) {
+                return null;
+            }
+            int port = transport == Transport.DDP
+                    ? snapshot.device().ddpPort() : snapshot.device().udpPort();
+            return new Endpoint(host.trim(), snapshot.device().httpPort(), port,
+                    transport, channels, ledCount, whiteMode);
+        }
     }
 }

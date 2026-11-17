@@ -42,13 +42,27 @@ public class LayoutProbeTest {
     }
 
     @Test
-    public void inputPositionIsNormalizedIntoTheEffectiveRing() {
-        LedLayoutConfig layout = new LedLayoutConfig(86, 90, 49, 49, 0, 0, 161, false,
+    public void inputProbeLightsOnlyTheFirstPhysicalLed() {
+        // First unit: T86/B90/L49/R49, Input 161, Reverse on. Physical 0 maps to
+        // logical 160; the raw input index 161 maps to physical 273.
+        LedLayoutConfig layout = new LedLayoutConfig(86, 90, 49, 49, 0, 0, 161, true,
                 GapMode.SKIP, 8, 5, 0, 0, 0, 0, 100, 0, 100, 100, 0, 100);
-        assertEquals(161, LayoutProbe.inputLogical(layout));
-        LedLayoutConfig negative = new LedLayoutConfig(86, 90, 49, 49, 0, 0, -1, false,
-                GapMode.SKIP, 8, 5, 0, 0, 0, 0, 100, 0, 100, 100, 0, 100);
-        assertEquals(273, LayoutProbe.inputLogical(negative));
+        CompiledLayout compiled = compile(layout);
+
+        assertEquals(273, compiled.mapping().logicalToPhysical(161));
+        int firstPhysicalLogical = LayoutProbe.firstPhysicalLogical(compiled);
+        assertEquals(160, firstPhysicalLogical);
+
+        byte[] frame = LayoutProbe.buildFrame(compiled,
+                new int[]{firstPhysicalLogical}, 255, 255, 255);
+        int lit = -1;
+        for (int physical = 0; physical < compiled.mapping().physicalLedCount(); physical++) {
+            if ((frame[physical * 3] & 0xff) != 0) {
+                assertTrue("only one LED may be lit", lit < 0);
+                lit = physical;
+            }
+        }
+        assertEquals(0, lit);
     }
 
     @Test

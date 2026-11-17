@@ -529,7 +529,7 @@ NSD 浏览 `_wled._tcp.`，解析的 port 是 HTTP 端口，不是 UDP；缓存 
 
 复用 `SettingsStepBaseFragment` 的 `unSignedNumberAction`、`radioListAction` 和现有 Preference listener 适配职责，`assertIntValue` 等校验统一委托 ConfigValidator，不复制规则；TV 实时布局编辑器通过共享 `ConfigValidator.validateLayout`/`SettingsDraftController` 完成草稿校验与原子保存。扫描 `saveResult()` 保存确认的 WLED 端点。RGB 模式隐藏 White Mode；unconfirmed 模式提示确认硬件而不自动假定 RGB。修改草稿即时刷新预览，**不热更新正在发送的快照**；运行中保存显式提示“下次启动生效”。错误、单位、默认值和资源均共享，TV 大字体/D-pad 焦点完整可达。
 
-布局页提供**逐边与输入位置点亮校验**：按当前草稿编译布局，经 `LayoutProbe` 取逻辑环区间并映射到物理索引，借助共享 `TEST` 输出租约向 WLED 发送约 2 秒白色脉冲，其余灯珠为黑；采集运行中不抢占输出，提示先停止。该动作只用于确认接线/顺序/Input/Reverse，不替代正式预览与 10 秒图案测试。
+布局页提供**逐边与输入位置点亮校验**：按当前草稿编译布局，经 `LayoutProbe` 取逻辑环区间并映射到物理索引，借助共享 `TEST` 输出租约保持白色常亮，其余灯珠为黑。再次点击同一项熄灭；点击其他方向时替换当前探针（同一时间只亮一个方向）。**输入位置只点亮物理 0 的第一颗灯珠**：`LayoutProbe.firstPhysicalLogical` 从映射取物理 0 对应的逻辑槽位再构建报文，Reverse 开启时不能直接用原始 Input 索引（那会指向灯带末端）。草稿变化、页面退后台/退出、打开预览或测试图案时释放租约；采集运行中不抢占输出，提示先停止。该动作只用于确认接线/顺序/Input/Reverse，不替代正式预览与 10 秒图案测试。
 
 ### 9.2 预览与图案
 

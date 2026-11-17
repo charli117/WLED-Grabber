@@ -128,6 +128,8 @@
   <string name="wled_probe_bottom">点亮底部灯带</string>
   <string name="wled_probe_left">点亮左侧灯带</string>
   <string name="wled_probe_input">点亮输入位置</string>
-  <string name="wled_probe_sent">已点亮 %1$d 颗灯珠（约 2 秒），请检查灯带。</string>
+  <string name="wled_probe_sent">已点亮 %1$d 颗灯珠，再次点击可熄灭。</string>
+  <string name="wled_probe_input_on">已点亮第一颗灯珠，再次点击可熄灭。</string>
+  <string name="wled_probe_off">校验灯已熄灭。</string>
   <string name="wled_probe_busy">请先停止采集再点亮校验。</string>
 </resources>

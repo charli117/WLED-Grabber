@@ -71,6 +71,16 @@ public class LayoutEditorActivity extends LeanbackActivity {
             ConfigFields.LED_CORNER_BL_H, ConfigFields.LED_CORNER_BL_V
     };
 
+    private static final Map<String, Side> PROBES = new LinkedHashMap<>();
+
+    static {
+        PROBES.put(ACTION_PROBE_TOP, Side.TOP);
+        PROBES.put(ACTION_PROBE_RIGHT, Side.RIGHT);
+        PROBES.put(ACTION_PROBE_BOTTOM, Side.BOTTOM);
+        PROBES.put(ACTION_PROBE_LEFT, Side.LEFT);
+        PROBES.put(ACTION_PROBE_INPUT, null);
+    }
+
     private final Map<String, LayoutValueRow> rows = new LinkedHashMap<>();
     private SettingsDraftController controller;
     private LedLayoutPreviewView preview;
@@ -133,6 +143,14 @@ public class LayoutEditorActivity extends LeanbackActivity {
         }
         save.setNextFocusLeftId(R.id.layout_editor_cancel);
         cancel.setNextFocusRightId(R.id.layout_editor_save);
+    }
+
+    @Override
+    protected void onStop() {
+        // A latched probe owns the shared TEST lease; leaving the editor must
+        // release it so capture, preview or a test pattern can start.
+        stopProbe();
+        super.onStop();
     }
 
     @Override
@@ -308,27 +326,16 @@ public class LayoutEditorActivity extends LeanbackActivity {
 
     private void select(LayoutValueRow row) {
         String key = row.fieldKey();
+        if (PROBES.containsKey(key)) {
+            probe(PROBES.get(key));
+            return;
+        }
         switch (key) {
             case ACTION_AUTO:
                 autoDistribute();
                 break;
             case ACTION_PRESET_274:
                 apply274Preset();
-                break;
-            case ACTION_PROBE_TOP:
-                probe(Side.TOP);
-                break;
-            case ACTION_PROBE_RIGHT:
-                probe(Side.RIGHT);
-                break;
-            case ACTION_PROBE_BOTTOM:
-                probe(Side.BOTTOM);
-                break;
-            case ACTION_PROBE_LEFT:
-                probe(Side.LEFT);
-                break;
-            case ACTION_PROBE_INPUT:
-                probe(null);
                 break;
             case ACTION_PREVIEW:
                 openPreview();
@@ -433,28 +440,54 @@ public class LayoutEditorActivity extends LeanbackActivity {
             toast(R.string.layout_editor_configure_device);
             return;
         }
-        int[] logical = side == null
-                ? new int[]{LayoutProbe.inputLogical(layout.layout())}
-                : LayoutProbe.logicalForSide(layout.layout(), side);
+        int[] logical;
+        if (side == null) {
+            int firstPhysical = LayoutProbe.firstPhysicalLogical(compiled.value());
+            if (firstPhysical < 0) {
+                toast(R.string.layout_editor_no_side_leds);
+                return;
+            }
+            // Input marks the strip's first physical LED; the raw input index
+            // can point at the far end when Reverse is on.
+            logical = new int[]{firstPhysical};
+        } else {
+            logical = LayoutProbe.logicalForSide(layout.layout(), side);
+        }
         if (logical.length == 0) {
             toast(R.string.layout_editor_no_side_leds);
             return;
         }
-        if (LayoutProbeSender.pulse(snapshot.value(), compiled.value(), logical)) {
-            toast(getString(com.abrenoch.wledgrabber.common.R.string.wled_probe_sent,
-                    logical.length));
-        } else {
-            toast(com.abrenoch.wledgrabber.common.R.string.wled_probe_busy);
+        LayoutProbeSender.Result result = LayoutProbeSender.toggle(
+                snapshot.value(), compiled.value(), LayoutProbeSender.keyFor(side), logical);
+        switch (result) {
+            case STARTED:
+                toast(getString(side == null
+                                ? com.abrenoch.wledgrabber.common.R.string.wled_probe_input_on
+                                : com.abrenoch.wledgrabber.common.R.string.wled_probe_sent,
+                        logical.length));
+                break;
+            case STOPPED:
+                toast(com.abrenoch.wledgrabber.common.R.string.wled_probe_off);
+                break;
+            case BUSY:
+                toast(com.abrenoch.wledgrabber.common.R.string.wled_probe_busy);
+                break;
+            default:
+                toast(R.string.layout_editor_configure_device);
+                break;
         }
+        refreshProbeRows();
     }
 
     private void openPreview() {
+        stopProbe();
         if (save()) {
             startActivity(new Intent(this, LayoutPreviewActivity.class));
         }
     }
 
     private void openTestPattern() {
+        stopProbe();
         if (save()) {
             startActivity(new Intent(this, TestPatternActivity.class));
         }
@@ -502,6 +535,8 @@ public class LayoutEditorActivity extends LeanbackActivity {
     }
 
     private void refreshAll() {
+        // A draft change makes the latched probe frame stale; release it first.
+        stopProbe();
         for (LayoutValueRow row : rows.values()) {
             refreshRow(row);
         }
@@ -540,6 +575,22 @@ public class LayoutEditorActivity extends LeanbackActivity {
         } else {
             row.setDisplayValue(formatNumber(field, raw));
         }
+    }
+
+    private void refreshProbeRows() {
+        for (Map.Entry<String, Side> probe : PROBES.entrySet()) {
+            LayoutValueRow row = rows.get(probe.getKey());
+            if (row != null) {
+                row.setDisplayValue(getString(LayoutProbeSender.isActive(
+                                LayoutProbeSender.keyFor(probe.getValue()))
+                        ? R.string.layout_editor_on : R.string.layout_editor_off));
+            }
+        }
+    }
+
+    private void stopProbe() {
+        LayoutProbeSender.stop();
+        refreshProbeRows();
     }
 
     private CharSequence statusText(LayoutDraft layout, CompiledLayout compiled) {

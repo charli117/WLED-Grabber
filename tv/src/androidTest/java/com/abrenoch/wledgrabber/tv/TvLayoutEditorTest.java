@@ -11,6 +11,9 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.LayoutAutoDistribute;
+import com.abrenoch.wledgrabber.common.capture.OutputOwner;
+import com.abrenoch.wledgrabber.common.capture.OutputSessionCoordinator;
+import com.abrenoch.wledgrabber.common.network.wled.LayoutProbeSender;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
 import com.abrenoch.wledgrabber.common.util.Preferences;
@@ -46,6 +49,17 @@ public class TvLayoutEditorTest {
 
     @After
     public void tearDown() {
+        LayoutProbeSender.stop();
+        long deadline = System.currentTimeMillis() + 5000;
+        while (OutputSessionCoordinator.get().owner() != OutputOwner.NONE
+                && System.currentTimeMillis() < deadline) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
         WledTestSupport.clearConfig(InstrumentationRegistry.getInstrumentation()
                 .getTargetContext());
     }
@@ -312,6 +326,50 @@ public class TvLayoutEditorTest {
         }
         assertEquals("invalid geometry must not write a new revision",
                 revision, repository().load().value().revision());
+    }
+
+    @Test
+    public void probeRowsToggleAndSwitchWithoutLeavingAStaleLatch()
+            throws InterruptedException {
+        // Loopback keeps the UI test off the physical lab strip; the probe only
+        // needs a valid endpoint, not a reachable WLED for this assertion.
+        assertTrue(repository().save(WledTestSupport.validDraft()
+                .set(ConfigFields.WLED_HOST, "127.0.0.1")).isValid());
+        try (ActivityScenario<LayoutEditorActivity> scenario =
+                     ActivityScenario.launch(LayoutEditorActivity.class)) {
+            scenario.onActivity(activity -> {
+                String on = activity.getString(
+                        com.abrenoch.wledgrabber.tv.R.string.layout_editor_on);
+                String off = activity.getString(
+                        com.abrenoch.wledgrabber.tv.R.string.layout_editor_off);
+                LayoutValueRow top = findRow(activity, LayoutEditorActivity.ACTION_PROBE_TOP);
+                LayoutValueRow right = findRow(activity, LayoutEditorActivity.ACTION_PROBE_RIGHT);
+                assertNotNull("top probe missing", top);
+                assertNotNull("right probe missing", right);
+                assertEquals(off, String.valueOf(top.displayValue()));
+
+                top.performClick();
+                assertEquals(on, String.valueOf(top.displayValue()));
+                assertTrue("probe state must reach accessibility",
+                        String.valueOf(top.getContentDescription()).contains(on));
+                assertEquals(off, String.valueOf(right.displayValue()));
+
+                right.performClick();
+                assertEquals("switching must turn the previous edge off",
+                        off, String.valueOf(top.displayValue()));
+                assertEquals(on, String.valueOf(right.displayValue()));
+
+                right.performClick();
+                assertEquals(off, String.valueOf(right.displayValue()));
+            });
+        }
+        long deadline = System.currentTimeMillis() + 5000;
+        while (OutputSessionCoordinator.get().owner() != OutputOwner.NONE
+                && System.currentTimeMillis() < deadline) {
+            Thread.sleep(50);
+        }
+        assertEquals("closing the editor must release the TEST lease",
+                OutputOwner.NONE, OutputSessionCoordinator.get().owner());
     }
 
     @Test

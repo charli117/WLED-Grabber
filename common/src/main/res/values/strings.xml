@@ -182,6 +182,8 @@
   <string name="wled_probe_bottom">Light bottom edge</string>
   <string name="wled_probe_left">Light left edge</string>
   <string name="wled_probe_input">Light input position</string>
-  <string name="wled_probe_sent">Lighting %1$d LEDs for 2 s. Check the strip.</string>
+  <string name="wled_probe_sent">Lighting %1$d LED(s). Press again to turn off.</string>
+  <string name="wled_probe_input_on">First LED lit. Press again to turn off.</string>
+  <string name="wled_probe_off">Probe off.</string>
   <string name="wled_probe_busy">Stop capture before probing the strip.</string>
 </resources>

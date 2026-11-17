@@ -46,13 +46,19 @@ public final class LayoutProbe {
         return out;
     }
 
-    /** The input marker's logical index, normalised into the effective ring. */
-    public static int inputLogical(LedLayoutConfig layout) {
-        int effective = layout.effectiveLedCount();
-        if (effective <= 0) {
-            return 0;
+    /**
+     * Logical index of the strip's first physical LED (physical 0). The input
+     * position is the logical slot at that LED; with Reverse on, the raw input
+     * index maps to the last physical LED instead, so the probe must map back.
+     *
+     * @return -1 when the layout has no physical LEDs.
+     */
+    public static int firstPhysicalLogical(CompiledLayout compiled) {
+        if (compiled == null || compiled.mapping() == null
+                || compiled.mapping().physicalLedCount() <= 0) {
+            return -1;
         }
-        return Math.floorMod(layout.inputPosition(), effective);
+        return compiled.mapping().physicalToLogical(0);
     }
 
     /**
