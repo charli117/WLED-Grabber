@@ -1,0 +1,31 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/WledScreenService.java
+  1182dd19bb87e862 134-137,526-532,679-724
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "0b3263d8f7399ce0aecf955668aa9fcc868f6630",
+  "prompts": {
+    "1182dd19bb87e862": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12341c9c-73e2-402d-a675-1731cda52ba7",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 276,
+      "total_deletions": 0,
+      "accepted_lines": 276,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/175511067d7555417ddd5205ba0b1a5fdf976c5fa3c3671b54ec49e7c4b12d5a",
+      "token_usage": {
+        "input_tokens": 174923,
+        "output_tokens": 70142,
+        "cache_read_tokens": 11135232,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
