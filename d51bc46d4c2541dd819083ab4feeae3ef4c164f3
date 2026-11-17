@@ -1,0 +1,65 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledPowerOn.java
+  986df162cfe35a5c 1-28
+common/src/main/res/values-zh-rCN/strings.xml
+  986df162cfe35a5c 30-33
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/LayoutProbeSenderTest.java
+  986df162cfe35a5c 23-33
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/LayoutProbeSender.java
+  986df162cfe35a5c 8-9,36-45,51-53,55-56,59-67,69,77,88-105
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/MainActivity.java
+  986df162cfe35a5c 58-61,64,66-69,71,108-116,148-150,165-171,249-252,266,269
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvMainActivityTest.java
+  986df162cfe35a5c 10,19,60-121
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/LayoutEditorActivity.java
+  986df162cfe35a5c 432-435
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/WledPowerOnTest.java
+  986df162cfe35a5c 1-60
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LayoutProbe.java
+  986df162cfe35a5c 64-77,80,90-97
+common/src/main/java/com/abrenoch/wledgrabber/common/views/TestPatternActivity.java
+  986df162cfe35a5c 26,93,153-154
+mobile/src/androidTest/java/com/abrenoch/wledgrabber/mobile/MobileEntryTest.java
+  986df162cfe35a5c 22,27,44-59
+common/src/test/java/com/abrenoch/wledgrabber/common/led/LayoutProbeTest.java
+  986df162cfe35a5c 96-112
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/WledTileService.java
+  986df162cfe35a5c 70,143
+common/src/main/java/com/abrenoch/wledgrabber/common/WledScreenService.java
+  986df162cfe35a5c 47,61-62,108-109,188-189,217,283-285,472-476,584-585
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/MainActivity.java
+  986df162cfe35a5c 30-32,35-37,65-73,106-109,120-126
+mobile/src/main/java/com/abrenoch/wledgrabber/mobile/SettingsActivity.java
+  986df162cfe35a5c 221-223
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/WledTestSupport.java
+  986df162cfe35a5c 104-107,110
+common/src/main/res/values/strings.xml
+  986df162cfe35a5c 84-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "d51bc46d4c2541dd819083ab4feeae3ef4c164f3",
+  "prompts": {
+    "986df162cfe35a5c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ce6dc9be-bcc9-45da-890e-3374d2e0c5a9",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 2255,
+      "total_deletions": 460,
+      "accepted_lines": 1888,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/17591f688210dcb06e2962ad167f445e73204d157ca8bec3d6e6e528cd111a2e",
+      "token_usage": {
+        "input_tokens": 2292318,
+        "output_tokens": 503044,
+        "cache_read_tokens": 216991360,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
