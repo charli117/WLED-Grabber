@@ -1,0 +1,64 @@
+docs/design/architecture.md
+  a253b721f722567f 528
+tv/src/main/res/values-zh-rCN/strings.xml
+  a253b721f722567f 56-58
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvSetupUiTest.java
+  1182dd19bb87e862 214
+  a253b721f722567f 8,11-12,16,30-32,34,39,74-82,88,99-122,125,127,145,159-160,175-192,195-197,200-213,215-229
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledConnectionStepFragment.java
+  1182dd19bb87e862 343-344
+  a253b721f722567f 15,24,46,50-51,60-61,71-73,79-80,92-114,119-128,138-143,169-175,194-198,201-205,280-301,312-333,339-342
+tv/src/main/res/values/strings.xml
+  a253b721f722567f 58-60
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/MainActivity.java
+  a253b721f722567f 83-91,98-111,198-201
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "d0b1f98b63ab6a0e097ae2326a41e9d5e56ab68b",
+  "prompts": {
+    "1182dd19bb87e862": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12341c9c-73e2-402d-a675-1731cda52ba7",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 128,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/101a77a3296e29a65421da75ea77b31fe51964f5f5b8bec1d6e8d1cb76429971",
+      "token_usage": {
+        "input_tokens": 93819,
+        "output_tokens": 14152,
+        "cache_read_tokens": 1237376,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "a253b721f722567f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "07b68284-4431-433f-a12b-db8d66eb1963",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 272,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/4eacbdd9dfe9ecfb001823da312af85675d55858071e4620526a46b5dfbf2db5",
+      "token_usage": {
+        "input_tokens": 2333194,
+        "output_tokens": 944706,
+        "cache_read_tokens": 319324928,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
