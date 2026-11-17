@@ -1,0 +1,36 @@
+
+  GitNexus Detect Changes (1.6.12)
+Changes: 109 files, 317 symbols
+Affected processes: 42
+Risk level: critical
+
+Changed symbols:
+  Section GitNexus — Code Intelligence → AGENTS.md
+  Section Resources → AGENTS.md
+  Section GitNexus — Code Intelligence → CLAUDE.md
+  Section Resources → CLAUDE.md
+  Section WLED Grabber → README.md
+  Section English → README.md
+  Section Features → README.md
+  Section Compatibility and acceptance status → README.md
+  Section Build → README.md
+  Section Documentation → README.md
+  Section Privacy and security → README.md
+  Section Origin and license → README.md
+  Section 简体中文 → README.md
+  Section 功能 → README.md
+  Section 兼容性与验收状态 → README.md
+... and 302 more
+
+Affected execution flows:
+  • InvalidFrameRateDoesNotHideDefaultBootChoiceOrPersistDefaults → Device (5 steps) — changed: invalidFrameRateDoesNotHideDefaultBootChoiceOrPersistDefaults
+  • InvalidFrameRateDoesNotHideDefaultBootChoiceOrPersistDefaults → SchemaVersion (5 steps) — changed: invalidFrameRateDoesNotHideDefaultBootChoiceOrPersistDefaults
+  • InvalidFrameRateDoesNotHideDefaultBootChoiceOrPersistDefaults → Host (5 steps) — changed: invalidFrameRateDoesNotHideDefaultBootChoiceOrPersistDefaults
+  • InvalidFrameRateDoesNotHideDefaultBootChoiceOrPersistDefaults → Errors (4 steps) — changed: invalidFrameRateDoesNotHideDefaultBootChoiceOrPersistDefaults
+  • UnfinishedFirstOpenFallsBackToUserActionInsteadOfCapture → BootEnabled (3 steps) — changed: bootEnabled
+  • OnActivityResult → PostReminder (3 steps) — changed: observeStart, onActivityResult
+  • OnCreate → BackgroundLaunchAllowed (3 steps) — changed: refreshStatus, onCreate
+  • OnCreate → PersistentProjection (3 steps) — changed: refreshStatus, onCreate
+  • OnCreate → PlatformSupported (3 steps) — changed: refreshStatus, onCreate
+  • MalformedBootStringsFailClosedWithoutBeingRewritten → Device (5 steps) — changed: malformedBootStringsFailClosedWithoutBeingRewritten
+... and 32 more

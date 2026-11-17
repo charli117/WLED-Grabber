@@ -1,0 +1,8 @@
+$ adb -P 5037 -s 10.245.0.109:5555 reconnect
+reconnecting 10.245.0.109:5555 [offline]
+exit=0
+$ adb -P 5037 connect 10.245.0.109:5555
+timeout after 8 seconds
+$ adb -P 5037 -s 10.245.0.109:5555 get-state
+error: device offline
+exit=1

@@ -52,7 +52,7 @@ import com.abrenoch.wledgrabber.common.util.PreferencesConfigStorage;
 import com.abrenoch.wledgrabber.common.util.ValidationResult;
 
 /**
- * WLED direct capture service; the legacy Hyperion backend has been removed.
+ * WLED direct capture service: captures the screen, samples the four-side layout, and streams colors to a single WLED controller.
  */
 public class WledScreenService extends Service {
     public static final String BROADCAST_ERROR = "SERVICE_ERROR";

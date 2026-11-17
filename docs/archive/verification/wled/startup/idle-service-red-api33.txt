@@ -1,0 +1,44 @@
+INSTRUMENTATION_STATUS: class=com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest:
+INSTRUMENTATION_STATUS: test=idleServiceDoesNotCountAsSuccessfulAutomaticCapture
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: An idle service must leave the fallback reminder visible expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest.idleServiceDoesNotCountAsSuccessfulAutomaticCapture(BootActivityStatusInstrumentedTest.java:69)
+
+INSTRUMENTATION_STATUS: stream=
+Error in idleServiceDoesNotCountAsSuccessfulAutomaticCapture(com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest):
+java.lang.AssertionError: An idle service must leave the fallback reminder visible expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest.idleServiceDoesNotCountAsSuccessfulAutomaticCapture(BootActivityStatusInstrumentedTest.java:69)
+
+INSTRUMENTATION_STATUS: test=idleServiceDoesNotCountAsSuccessfulAutomaticCapture
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 6.19
+There was 1 failure:
+1) idleServiceDoesNotCountAsSuccessfulAutomaticCapture(com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest)
+java.lang.AssertionError: An idle service must leave the fallback reminder visible expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest.idleServiceDoesNotCountAsSuccessfulAutomaticCapture(BootActivityStatusInstrumentedTest.java:69)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

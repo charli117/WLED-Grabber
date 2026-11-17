@@ -1,0 +1,44 @@
+INSTRUMENTATION_STATUS: class=com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest:
+INSTRUMENTATION_STATUS: test=manualConsentWaitSurvivesRecreationWithoutASecondRequest
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Recreation while awaiting consent must not request it again expected:<1> but was:<2>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest.manualConsentWaitSurvivesRecreationWithoutASecondRequest(BootActivityStatusInstrumentedTest.java:138)
+
+INSTRUMENTATION_STATUS: stream=
+Error in manualConsentWaitSurvivesRecreationWithoutASecondRequest(com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest):
+java.lang.AssertionError: Recreation while awaiting consent must not request it again expected:<1> but was:<2>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest.manualConsentWaitSurvivesRecreationWithoutASecondRequest(BootActivityStatusInstrumentedTest.java:138)
+
+INSTRUMENTATION_STATUS: test=manualConsentWaitSurvivesRecreationWithoutASecondRequest
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 2.256
+There was 1 failure:
+1) manualConsentWaitSurvivesRecreationWithoutASecondRequest(com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest)
+java.lang.AssertionError: Recreation while awaiting consent must not request it again expected:<1> but was:<2>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.BootActivityStatusInstrumentedTest.manualConsentWaitSurvivesRecreationWithoutASecondRequest(BootActivityStatusInstrumentedTest.java:138)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

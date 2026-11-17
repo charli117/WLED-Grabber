@@ -1,0 +1,47 @@
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest:
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=enabledBootWithInvalidFrameRateRetainsReminderWithoutStartingCapture
+INSTRUMENTATION_STATUS: class=com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+Error in enabledBootWithInvalidFrameRateRetainsReminderWithoutStartingCapture(com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest):
+java.lang.AssertionError: Notifications belonging to the isolated test app expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.awaitNotificationCount(StartupBootReceiverInstrumentedTest.java:126)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.enabledBootWithInvalidFrameRateRetainsReminderWithoutStartingCapture(StartupBootReceiverInstrumentedTest.java:94)
+
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=enabledBootWithInvalidFrameRateRetainsReminderWithoutStartingCapture
+INSTRUMENTATION_STATUS: class=com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Notifications belonging to the isolated test app expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.awaitNotificationCount(StartupBootReceiverInstrumentedTest.java:126)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.enabledBootWithInvalidFrameRateRetainsReminderWithoutStartingCapture(StartupBootReceiverInstrumentedTest.java:94)
+
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 2.038
+There was 1 failure:
+1) enabledBootWithInvalidFrameRateRetainsReminderWithoutStartingCapture(com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest)
+java.lang.AssertionError: Notifications belonging to the isolated test app expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.awaitNotificationCount(StartupBootReceiverInstrumentedTest.java:126)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.enabledBootWithInvalidFrameRateRetainsReminderWithoutStartingCapture(StartupBootReceiverInstrumentedTest.java:94)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

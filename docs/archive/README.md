@@ -1,12 +1,26 @@
 # 文档归档索引
 
-归档只接收已彻底解决或确认过期/失效、且依据充分的文档；未闭环或证据不足的文档留在原位继续维护。归档文件保留归档时点内容，不在归档内继续修改业务结论；移动导致的相对链接按归档位置调整。
+归档只接收已彻底解决、确认过期/失效，或已被现状态文档取代的历史材料；归档文件保留归档时点内容，不在归档内继续修改业务结论。移动导致的相对链接按归档位置调整，跨文件引用统一指向归档内的历史快照。
 
-> 注意：`design/wled-direct-ambilight-architecture-review-premerge-2026-11-16.md` 保留合并前原文，其中“冲突时以本文为准”是历史表述；当前唯一有效规范是[技术方案](../design/wled-direct-ambilight-feasibility.md)。
+> 归档基准：除特别注明外，归档副本为移动时的工作区内容，包含移动前尚未提交的文档更新，不保证与某个提交逐字一致；移动过程只调整相对链接，不改写业务结论。
+
+本轮启动审查的最终证据：[2026-11-17 启动设置与修复验证快照](verification/wled/startup/final-verification-2026-11-17.md)。该快照补齐归档过程中仍在执行的测试，不修改此前中间记录。
+
+当前有效文档：
+
+- 技术规范：[docs/design/architecture.md](../design/architecture.md)
+- 配置与排障：[docs/guides/configuration-and-troubleshooting.md](../guides/configuration-and-troubleshooting.md)
+- 品牌与图标：[docs/design/app-icon/brand-guide.md](../design/app-icon/brand-guide.md)
 
 | 归档文件 | 原路径 | 归档日期 | 原因 | 依据 |
 |---|---|---|---|---|
-| [wled-direct-ambilight-architecture-review-premerge-2026-11-16.md](design/wled-direct-ambilight-architecture-review-premerge-2026-11-16.md) | `docs/design/wled-direct-ambilight-architecture-review.md`（合并前全文，291行） | 2026-11-16 | 架构复核结论已实质合入最终技术方案，其“冲突时以本文为准”的独立规范身份失效；保留合并前全文作历史证据 | 技术方案头注；总纲§6.1；合并前文件291行（复核时点）；原文件SHA256=`6e4674737bd99608f8b72f286dd0a7ef87666050b6f4014809f61f966899cf22`；归档副本当前SHA256=`5c73c1d18caca46dea0269fb2cb02f5b32435b684d403cb8b8018b19adc2c2b1`（仅2处跨文件相对链接调整，正文未改） |
-| [wled-direct-ambilight-architecture-review.md](design/wled-direct-ambilight-architecture-review.md) | `docs/design/wled-direct-ambilight-architecture-review.md`（合并说明，9行） | 2026-11-16 | 合并说明已由原路径重定向替代；归档保留合并时点的入口说明 | 复核文首合并说明；原文件SHA256=`463c53643de6a444ee321e283eadfe618d27e1c1a97bc71ceb8e02bc1cf144fc`；归档副本当前SHA256=`45de3792a4895b163f5c3024f24e75ae54e1b3aaaf3344b975548c9c63b74333`（仅5处相对链接按归档位置调整，正文未改） |
+| [wled-direct-ambilight-feasibility-2026-11-16.md](design/wled-direct-ambilight-feasibility-2026-11-16.md) | `docs/design/wled-direct-ambilight-feasibility.md`（784 行） | 2026-11-17 | 技术方案已重写为现状态架构规范并更名 `docs/design/architecture.md`；本快照保留重写前的定稿版本（HEAD 提交内容），供归档文档中的 E/A/S 锚点与历史引用追溯 | 技术方案定稿时点内容；重写后的现状态规范见 `docs/design/architecture.md` |
+| [wled-direct-ambilight-architecture-review-premerge-2026-11-16.md](design/wled-direct-ambilight-architecture-review-premerge-2026-11-16.md) | `docs/design/wled-direct-ambilight-architecture-review.md`（合并前全文，291 行） | 2026-11-16 | 架构复核结论已实质合入技术方案，其“冲突时以本文为准”的独立规范身份失效；保留合并前全文作历史证据 | 技术方案头注；合并前文件 291 行；归档副本仅调整跨文件相对链接 |
+| [wled-direct-ambilight-architecture-review.md](design/wled-direct-ambilight-architecture-review.md) | `docs/design/wled-direct-ambilight-architecture-review.md`（合并说明，9 行） | 2026-11-16 | 合并说明由归档索引取代；归档保留合并时点的入口说明 | 复核文首合并说明；正文未改，仅调整相对链接 |
+| [legacy-hyperion-changelog.md](legacy-hyperion-changelog.md) | `CHANGELOG.md`（仓库根目录，64 行） | 2026-11-17 | 仅记录上游旧应用的发布历史，与当前 WLED Grabber 身份及发布状态无关 | 当前应用已不包含该后端；原文件内容未改 |
+| [task/00-overview.md](task/00-overview.md) 等 12 个任务册文件 | `docs/task/` | 2026-11-17 | 开发任务分解、DAG、状态矩阵与 RED→GREEN 执行说明属于开发过程材料；产品文档只描述最终实现 | 现状态规范见 `docs/design/architecture.md`；设备与回归证据见同目录 `verification/` |
+| [migration/legacy-to-wled-layout.md](migration/legacy-to-wled-layout.md) | `docs/migration/legacy-to-wled-layout.md` | 2026-11-17 | 旧配置逐字段映射、侧载与回退属于上一版本的迁移说明；当前产品不读取旧配置，也不提供旧应用回退路径 | 排障与当前参数已重写进 `docs/guides/configuration-and-troubleshooting.md` |
+| [fixes/2026-11-17-completion-audit.md](fixes/2026-11-17-completion-audit.md) | `docs/fixes/2026-11-17-completion-audit.md` | 2026-11-17 | 缺陷初审、RED/GREEN 与修复提交记录属于一次性过程材料；修复结论已进入当前实现 | 修复后行为由现有测试与 `docs/design/architecture.md` 描述 |
+| [verification/wled/](verification/wled/) | `docs/verification/wled/` | 2026-11-17 | 构建日志、仪器测试记录、设备授权记录与真机测量属于验收过程证据；产品文档只保留结论与支持矩阵 | 当前状态与阈值见 `docs/design/architecture.md` §11 与 `docs/guides/configuration-and-troubleshooting.md` §7 |
 
-归档副本保留了归档时点内容；合入前的详细复核全文见上表第一行，最终有效规范仍是技术方案，恢复独立复核稿须先提供未合并证据并从归档中显式恢复。
+归档副本保留归档时点内容；需要恢复某份历史材料为活动文档时，先提供仍适用的依据，再显式移出归档并更新索引。

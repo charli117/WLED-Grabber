@@ -1,0 +1,5 @@
+2026-11-17
+RED before repair: task IDs=25 (expected26), completion-audit-2026-11-16 anchors=2 (expected1).
+Origin: commit20d4adb replaced REL-1 row with a duplicate anchor.
+GREEN after restoring only the lost row: task IDs=26, unique IDs=26, anchor count=1.
+Preserved last known REL-1 status pending verification; no status promotion.

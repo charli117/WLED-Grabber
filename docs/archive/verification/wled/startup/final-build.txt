@@ -1,0 +1,263 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.9/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :common
+Unable to initialize metrics, ensure /Users/luowei/.android is writable, details: /Users/luowei/.android/analytics.settings (Operation not permitted)
+
+> Task :common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :common:preBuild UP-TO-DATE
+> Task :common:preDebugBuild UP-TO-DATE
+> Task :common:generateDebugResValues
+> Task :common:generateDebugResources
+> Task :common:packageDebugResources
+> Task :common:javaPreCompileDebug
+> Task :common:preDebugUnitTestBuild UP-TO-DATE
+> Task :common:javaPreCompileDebugUnitTest
+> Task :mobile:preBuild UP-TO-DATE
+> Task :mobile:preDebugBuild UP-TO-DATE
+> Task :common:parseDebugLocalResources
+> Task :mobile:dataBindingMergeDependencyArtifactsDebug
+> Task :mobile:generateDebugResValues
+> Task :mobile:generateDebugResources
+> Task :common:generateDebugRFile
+> Task :mobile:mergeDebugResources
+> Task :common:generateDebugUnitTestStubRFile
+> Task :mobile:packageDebugResources
+> Task :mobile:parseDebugLocalResources
+> Task :mobile:dataBindingGenBaseClassesDebug
+> Task :mobile:javaPreCompileDebug
+> Task :common:compileDebugLibraryResources
+> Task :common:writeDebugAarMetadata
+> Task :mobile:checkDebugAarMetadata
+> Task :mobile:mapDebugSourceSetPaths
+> Task :mobile:createDebugCompatibleScreenManifests
+> Task :common:extractDeepLinksDebug
+> Task :common:processDebugManifest
+> Task :mobile:extractDeepLinksDebug
+> Task :mobile:processDebugMainManifest
+> Task :mobile:processDebugManifest
+> Task :mobile:processDebugManifestForPackage
+> Task :mobile:processDebugResources
+> Task :mobile:preDebugUnitTestBuild UP-TO-DATE
+> Task :mobile:javaPreCompileDebugUnitTest
+> Task :mobile:processDebugJavaRes NO-SOURCE
+> Task :mobile:processDebugUnitTestJavaRes NO-SOURCE
+> Task :tv:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :tv:preBuild UP-TO-DATE
+> Task :tv:preDebugBuild UP-TO-DATE
+> Task :tv:dataBindingMergeDependencyArtifactsDebug
+> Task :tv:generateDebugResValues
+> Task :tv:generateDebugResources
+> Task :tv:mergeDebugResources
+> Task :tv:packageDebugResources
+> Task :tv:parseDebugLocalResources
+
+> Task :common:compileDebugKotlin
+w: file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/main/java/com/abrenoch/wledgrabber/common/util/Preferences.kt:5:8 'class PreferenceManager : Any' is deprecated. Deprecated in Java.
+w: file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/main/java/com/abrenoch/wledgrabber/common/util/Preferences.kt:13:31 'class PreferenceManager : Any' is deprecated. Deprecated in Java.
+w: file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/main/java/com/abrenoch/wledgrabber/common/util/Preferences.kt:13:49 'static fun getDefaultSharedPreferences(p0: Context!): SharedPreferences!' is deprecated. Deprecated in Java.
+
+> Task :tv:dataBindingGenBaseClassesDebug
+
+> Task :common:compileDebugJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :common:bundleLibRuntimeToJarDebug
+> Task :common:bundleLibCompileToJarDebug
+> Task :common:compileDebugUnitTestKotlin NO-SOURCE
+> Task :common:compileDebugUnitTestJavaWithJavac
+> Task :common:processDebugJavaRes
+> Task :common:processDebugUnitTestJavaRes
+> Task :common:testDebugUnitTest
+
+> Task :mobile:compileDebugJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :mobile:bundleDebugClassesToRuntimeJar
+> Task :mobile:bundleDebugClassesToCompileJar
+> Task :mobile:compileDebugUnitTestJavaWithJavac
+> Task :mobile:testDebugUnitTest
+> Task :tv:checkDebugAarMetadata
+> Task :tv:mapDebugSourceSetPaths
+> Task :tv:createDebugCompatibleScreenManifests
+> Task :tv:extractDeepLinksDebug
+> Task :tv:processDebugMainManifest
+> Task :tv:processDebugManifest
+> Task :tv:javaPreCompileDebug
+> Task :tv:processDebugManifestForPackage
+> Task :tv:preDebugUnitTestBuild UP-TO-DATE
+> Task :tv:javaPreCompileDebugUnitTest
+> Task :common:mergeDebugJniLibFolders
+> Task :common:mergeDebugNativeLibs NO-SOURCE
+> Task :common:stripDebugDebugSymbols NO-SOURCE
+> Task :common:copyDebugJniLibsProjectAndLocalJars
+> Task :common:extractDebugAnnotations
+> Task :common:extractDeepLinksForAarDebug
+> Task :common:mergeDebugGeneratedProguardFiles
+> Task :common:mergeDebugConsumerProguardFiles
+> Task :common:mergeDebugShaders
+> Task :common:compileDebugShaders NO-SOURCE
+> Task :common:generateDebugAssets UP-TO-DATE
+> Task :common:packageDebugAssets
+> Task :common:prepareDebugArtProfile
+> Task :common:prepareLintJarForPublish
+> Task :common:mergeDebugJavaResource
+> Task :common:syncDebugLibJars
+> Task :common:bundleDebugLocalLintAar
+> Task :tv:processDebugResources
+> Task :common:createFullJarDebug
+> Task :common:preDebugAndroidTestBuild UP-TO-DATE
+> Task :common:generateDebugAndroidTestResValues
+> Task :common:writeDebugLintModelMetadata
+> Task :common:generateDebugAndroidTestLintModel
+> Task :common:extractProguardFiles
+> Task :common:generateDebugLintReportModel
+> Task :common:generateDebugUnitTestLintModel
+
+> Task :tv:compileDebugKotlin
+w: file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/SettingsStepBaseFragment.kt:143:39 Unchecked cast of 'Any?' to 'T (of fun <T : Any> assertSubActionValue)'.
+w: file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/SettingsStepBaseFragment.kt:150:46 Unchecked cast of 'String' to 'T (of fun <T : Any> assertSubActionValue)'.
+
+> Task :tv:compileDebugJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/luowei/Documents/Pycharm/hyperion-android-grabber/tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/MainActivity.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :tv:bundleDebugClassesToRuntimeJar
+> Task :tv:bundleDebugClassesToCompileJar
+> Task :tv:compileDebugUnitTestKotlin NO-SOURCE
+> Task :tv:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :tv:processDebugJavaRes
+> Task :tv:processDebugUnitTestJavaRes NO-SOURCE
+> Task :tv:testDebugUnitTest NO-SOURCE
+
+> Task :common:lintAnalyzeDebugAndroidTest
+Warning: Unable to initialize metrics, ensure /Users/luowei/.android is writable, details: /Users/luowei/.android/analytics.settings (Operation not permitted)
+
+> Task :common:lintAnalyzeDebugUnitTest
+> Task :common:generateDebugLintModel
+> Task :mobile:preDebugAndroidTestBuild SKIPPED
+> Task :mobile:generateDebugAndroidTestResValues
+> Task :mobile:generateDebugAndroidTestLintModel
+> Task :mobile:extractProguardFiles
+> Task :mobile:generateDebugLintReportModel
+> Task :mobile:generateDebugUnitTestLintModel
+> Task :common:lintAnalyzeDebug
+
+> Task :common:lintReportDebug
+Wrote HTML report to file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/build/reports/lint-results-debug.html
+
+> Task :common:lintDebug
+
+> Task :mobile:lintAnalyzeDebugAndroidTest
+Warning: Unable to initialize metrics, ensure /Users/luowei/.android is writable, details: /Users/luowei/.android/analytics.settings (Operation not permitted)
+
+> Task :mobile:lintAnalyzeDebugUnitTest
+> Task :tv:preDebugAndroidTestBuild SKIPPED
+> Task :tv:generateDebugAndroidTestResValues
+> Task :tv:generateDebugAndroidTestLintModel
+> Task :tv:extractProguardFiles
+> Task :tv:generateDebugLintReportModel
+> Task :tv:generateDebugUnitTestLintModel
+> Task :mobile:lintAnalyzeDebug
+
+> Task :mobile:lintReportDebug
+Wrote HTML report to file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/mobile/build/reports/lint-results-debug.html
+
+> Task :mobile:lintDebug
+> Task :tv:lintAnalyzeDebugAndroidTest
+> Task :tv:lintAnalyzeDebugUnitTest
+> Task :common:checkDebugAndroidTestAarMetadata
+> Task :common:mapDebugAndroidTestSourceSetPaths
+> Task :common:generateDebugAndroidTestResources
+> Task :tv:lintAnalyzeDebug
+
+> Task :tv:lintReportDebug
+Wrote HTML report to file:///Users/luowei/Documents/Pycharm/hyperion-android-grabber/tv/build/reports/lint-results-debug.html
+
+> Task :tv:lintDebug
+> Task :common:mergeDebugAndroidTestResources
+> Task :common:processDebugAndroidTestManifest
+> Task :common:javaPreCompileDebugAndroidTest
+> Task :common:mergeDebugAndroidTestShaders
+> Task :common:compileDebugAndroidTestShaders NO-SOURCE
+> Task :common:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :common:mergeDebugAndroidTestAssets
+> Task :common:compressDebugAndroidTestAssets
+> Task :common:desugarDebugAndroidTestFileDependencies
+> Task :common:processDebugAndroidTestResources
+> Task :common:compileDebugAndroidTestKotlin NO-SOURCE
+> Task :common:checkDebugAndroidTestDuplicateClasses
+
+> Task :common:compileDebugAndroidTestJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :common:dexBuilderDebugAndroidTest
+> Task :common:processDebugAndroidTestJavaRes NO-SOURCE
+> Task :common:mergeDebugAndroidTestGlobalSynthetics
+> Task :common:mergeDebugAndroidTestJavaResource
+> Task :common:mergeExtDexDebugAndroidTest
+> Task :common:mergeLibDexDebugAndroidTest
+> Task :common:copyDebugJniLibsProjectOnly
+> Task :common:mergeDebugAndroidTestJniLibFolders
+> Task :common:mergeProjectDexDebugAndroidTest
+> Task :common:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :common:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :common:validateSigningDebugAndroidTest
+> Task :common:writeDebugAndroidTestSigningConfigVersions
+> Task :mobile:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :mobile:mergeDebugShaders
+> Task :mobile:compileDebugShaders NO-SOURCE
+> Task :mobile:generateDebugAssets UP-TO-DATE
+> Task :mobile:mergeDebugAssets
+> Task :mobile:compressDebugAssets
+> Task :mobile:desugarDebugFileDependencies
+> Task :mobile:dexBuilderDebug
+> Task :mobile:mergeDebugGlobalSynthetics
+> Task :common:packageDebugAndroidTest
+> Task :common:createDebugAndroidTestApkListingFileRedirect
+> Task :common:assembleDebugAndroidTest
+> Task :mobile:checkDebugDuplicateClasses
+> Task :mobile:mergeDebugJavaResource
+> Task :mobile:mergeExtDexDebug
+> Task :mobile:mergeLibDexDebug
+> Task :mobile:mergeDebugJniLibFolders
+> Task :mobile:mergeDebugNativeLibs NO-SOURCE
+> Task :mobile:stripDebugDebugSymbols NO-SOURCE
+> Task :mobile:validateSigningDebug
+> Task :mobile:writeDebugAppMetadata
+> Task :mobile:writeDebugSigningConfigVersions
+> Task :tv:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :tv:mergeDebugShaders
+> Task :tv:compileDebugShaders NO-SOURCE
+> Task :tv:generateDebugAssets UP-TO-DATE
+> Task :mobile:mergeProjectDexDebug
+> Task :tv:mergeDebugAssets
+> Task :tv:compressDebugAssets
+> Task :tv:desugarDebugFileDependencies
+> Task :tv:dexBuilderDebug
+> Task :tv:mergeDebugGlobalSynthetics
+> Task :mobile:packageDebug
+> Task :mobile:createDebugApkListingFileRedirect
+> Task :mobile:assembleDebug
+> Task :tv:checkDebugDuplicateClasses
+> Task :tv:mergeDebugJavaResource
+> Task :tv:mergeExtDexDebug
+> Task :tv:mergeLibDexDebug
+> Task :tv:mergeDebugJniLibFolders
+> Task :tv:mergeProjectDexDebug
+> Task :tv:mergeDebugNativeLibs NO-SOURCE
+> Task :tv:stripDebugDebugSymbols NO-SOURCE
+> Task :tv:validateSigningDebug
+> Task :tv:writeDebugAppMetadata
+> Task :tv:writeDebugSigningConfigVersions
+> Task :tv:packageDebug
+> Task :tv:createDebugApkListingFileRedirect
+> Task :tv:assembleDebug
+
+BUILD SUCCESSFUL in 2m 10s
+169 actionable tasks: 169 executed

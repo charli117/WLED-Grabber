@@ -1,31 +1,17 @@
 # WLED Grabber 品牌与图标规范
 
-> 版本 1.0 · 2026-11-17 · 状态：资源已落地，三模块 Debug 构建通过；真机 launcher / themed icon / TV banner 显示待验收。
-> 关联技术规范：[WLED 直连流光溢彩技术方案](../wled-direct-ambilight-feasibility.md)。本文是图标、色板、字标与 Android 资源映射的唯一设计规范。
+> 版本 1.0 · 状态：资源已落地，三模块 Debug 构建通过；真机 launcher / themed icon / TV banner 显示待验收。
+> 关联技术规范：[WLED Grabber 技术架构](../architecture.md)。本文是图标、色板、字标与 Android 资源映射的唯一设计规范。
 
 ## 1. 设计决策
 
-### 1.1 旧图标诊断
+### 1.1 标志构成原则
 
-旧图标是 **Hyperion 的白色 H + 彩虹径向渐变**，与 REL-1 的 `WLED Grabber` 身份迁移直接冲突：
+标志由四段独立灯带围成屏幕方框，转角留接缝，四色顺时针排列。它直接对应四边布局与四段可寻址灯带：颜色顺序即物理槽位顺序。
 
-- 白色 H 与径向中心的高亮区对比不足，横杠在深色/浅色过渡中消失；16px 下彩虹与字母一起糊成噪点。
-- adaptive icon 前景只有一个 746 字节的 H，背景是 11.6KB、上千锚点的渐变；小尺寸细节全部失效，也没有 monochrome/themed 层。
-- 旧 TV banner 仍是 “android + Hyperion Grabber” 的 Android 机器人画面，与当前 TV-first 产品不一致。
+四条边、逐边采样与单设备是产品的核心结构；颜色不是装饰，而是技术规范 §4.1 的 `Top L→R / Right T→B / Bottom R→L / Left B→T` 顺时针索引顺序。深色屏加渐变字母的形态不足以表达四边与逐边，且字母标记容易与 WLED 官方身份混淆，不采用。
 
-保留的资产只有 **方形 tile 的容器格式** 与 **彩色/光** 这一品类线索；H、彩虹径向、细白线全部放弃。
-
-### 1.2 三个方向与取舍
-
-| 方向 | 形态 | 结论 |
-|---|---|---|
-| A · Edge Loop | 一条灯带绕屏一周，底部接缝 | 最克制，但小尺寸像一个带缺口的方框，产品语义最弱 |
-| B · Four Strips | 四段灯带各守一边，转角留接缝，四色顺时针 | **采用**：直接对应四边布局与四段可寻址灯带；颜色顺序即物理槽位顺序 |
-| C · W Screen | 深色屏 + 渐变 W | 16px 最稳，但只说明品牌名；W 也容易与 WLED 官方身份混淆 |
-
-**选择 B 的核心理由**：它是三个方案里唯一把“四边、逐边、单设备”直接画出来的；颜色不是装饰，而是技术规范 §4.1 的 `Top L→R / Right T→B / Bottom R→L / Left B→T` 顺时针索引顺序。C 保留为品牌备选，不作为本轮 app 图标。
-
-决策证据：[三案概念板](concepts.png)、[彩色方向](color-sheet.png)、[新旧对比](before-after.png)。
+设计资产：[三案概念板](concepts.png)、[彩色方向](color-sheet.png)、[方案对比](before-after.png)。
 
 ## 2. 标志构造
 
@@ -127,7 +113,7 @@ adaptive 几何：108 viewport 中 `symbol × 0.225 + 25.2`；标志最远点距
 
 ### 5.3 主题与后续 UI
 
-本轮只落地图标、通知、TV banner 与本文规范。app 的 `colors.xml`（`colorPrimary #3F51B5`、`colorAccent #FF4081`）仍是旧 Material 色，**没有**随本轮修改；后续 UI 主题迁移时以 §3 的 token 为源，并重新检查浅色背景上的对比度（尤其 Cyan/Violet）。
+图标、通知、TV banner 与本文规范已落地。app 的 `colors.xml`（`colorPrimary #3F51B5`、`colorAccent #FF4081`）使用独立的 Material 色板，不随图标配色修改；如调整 UI 主题，以 §3 的 token 为源，并重新检查浅色背景上的对比度（尤其 Cyan/Violet）。
 
 ## 6. 使用规则
 
@@ -143,8 +129,8 @@ adaptive 几何：108 viewport 中 `symbol × 0.225 + 25.2`；标志最远点距
 
 - 不重排四色、不旋转/镜像单独一边、不闭合接缝（会改变“四段独立灯带”的含义）。
 - 不在白底上直接放彩色四段（Cyan/Amber 对比不足）；不加阴影、外发光、描边或 3D 效果。
-- 不用旧 H、彩虹径向、Hyperion 文案或旧 banner。
-- 不用 C 的 W tile 替代本 app 图标（C 只是品牌备选）；不把标志拉伸成非正方形。
+- 不使用与本标志冲突的元素：彩虹径向渐变、其他应用的字母标或与本标志无关的 banner 画面。
+- 不用字母 W tile 替代本 app 图标；不把标志拉伸成非正方形。
 - 不在图标内加入小字、LED 点阵或额外装饰。
 
 ## 7. 迭代与验收
@@ -154,27 +140,21 @@ adaptive 几何：108 viewport 中 `symbol × 0.225 + 25.2`；标志最远点距
 1. 以 `source/` 下的 SVG 为唯一母版；256 网格、灯带 124×26、r13、约 4 单位接缝、固定色序，不要用位图重画。
 2. 改色只改 §2.2 的渐变端点，并保证相邻边端点同色；改形状需同步更新本文 §2.1 与所有派生资源。
 3. 字标如需改字/改重，必须用 Inter 重新转轮廓，并复核基线与词距；masters 内不允许 live text。
-4. 更新后同步替换 Android 资源，并按 §7.2 复验；在 §8 记录变更。
+4. 更新后同步替换 Android 资源，并按 §7.2 复验。
 
 ### 7.2 重新生成与验证
 
 - 传统 PNG：从 `wled-grabber-icon-512.svg` / `wled-grabber-icon-round-512.svg` 渲染 192px，再降采样到 144/96/72/48；输出到 `mipmap-*`。
 - adaptive：前景按 `×0.225 + 25.2`、通知按 `×0.10417 − 1.333` 重算 VectorDrawable 路径与渐变坐标。
 - TV banner：`wled-grabber-banner.svg` 渲染 320×180 与 640×360，分别写入 `drawable/` 与 `drawable-xhdpi/`。
-- 构建验证（2026-11-17 通过，exit 0）：
+- 构建验证（exit 0）：
   `JAVA_HOME=.toolchains/jdk-17.0.21+9/Contents/Home ./gradlew :common:assembleDebug :mobile:assembleDebug :tv:assembleDebug`
-- lint 验证（2026-11-17 通过，exit 0）：`:common:lintDebug`；APK 内已确认包含 adaptive foreground/background、monochrome、24dp 通知图标与 320/640 TV banner 资源。
+- lint 验证（exit 0）：`:common:lintDebug`；APK 内已确认包含 adaptive foreground/background、monochrome、24dp 通知图标与 320/640 TV banner 资源。
 - 视觉验收：API 26 adaptive、API 33 themed icon、圆形 mask、API 21 legacy PNG、通知栏 24dp、TV banner 320/640；检查圆形 mask 无裁切、低亮度屏幕上 Cyan 仍可辨。
 - 商标：WLED 是第三方开源项目，本 app 仅作为 WLED 生态的采集端；官方 Akemi 为像素灯泡字标，与本标志形态不同。公开发布前仍应做一次商标检索，不声称官方关联。
 
-## 8. 变更记录
+## 8. 参考
 
-| 日期 | 版本 | 变更 |
-|---|---|---|
-| 2026-11-17 | 1.0 | 从 Hyperion H + 彩虹径向迁移到 Four Strips；落地 adaptive/monochrome/通知/TV banner；三模块 Debug 构建通过 |
-
-## 9. 参考
-
-- [技术方案 §4 四边布局与物理映射](../wled-direct-ambilight-feasibility.md#layout)
-- [完整套件预览](kit-sheet.png) · [三案概念板](concepts.png) · [彩色方向](color-sheet.png) · [新旧对比](before-after.png)
+- [技术架构 §4 四边布局与物理映射](../architecture.md#layout)
+- [完整套件预览](kit-sheet.png) · [三案概念板](concepts.png) · [彩色方向](color-sheet.png) · [方案对比](before-after.png)
 - WLED 官方品牌资料（仅作差异参考）：<https://github.com/wled/WLED/tree/main/images>

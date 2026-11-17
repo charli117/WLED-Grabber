@@ -1,0 +1,68 @@
+{
+  "build_head": "c46a87796992c72d71d4d5779e73a8dfe87d3a52",
+  "input_count": 285,
+  "input_manifest_sha256": "c0d935ccad389eda932ab9b0e963f015a154b0a9f8f3561055d20266ddde8d1c",
+  "changed_inputs": [],
+  "jvm": {
+    "common": {
+      "tests": 218,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "mobile": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "tv": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "lint": {
+    "common": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 99
+    },
+    "mobile": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 8
+    },
+    "tv": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 55
+    }
+  },
+  "artifacts": {
+    "common/build/outputs/apk/androidTest/debug/common-debug-androidTest.apk": "c7eec80e1df856e0172907589184126453b8ae6f436a5251a81177509f7c0541",
+    "mobile/build/outputs/apk/debug/mobile-debug.apk": "71bba32ad519a212568f0769d1a27da191db4cf494cf3d32d201c9f1591f0ac9",
+    "tv/build/outputs/apk/debug/tv-debug.apk": "124929613bb7d58f62d022b8763a364144aa520c6196abb5ceb80ff402854878"
+  },
+  "post_instrumentation_changes": [
+    {
+      "file": "common/src/main/java/com/abrenoch/wledgrabber/common/WledScreenService.java",
+      "kind": "Javadoc only; restoring the one comment line matches the recorded full-file SHA-256"
+    }
+  ],
+  "instrumentation": {
+    "api26": {
+      "tests": 42,
+      "failures": 0,
+      "skipped": 0,
+      "targetSdk": 35
+    },
+    "api33": {
+      "tests": 42,
+      "failures": 0,
+      "skipped": 0,
+      "targetSdk": 35
+    }
+  }
+}

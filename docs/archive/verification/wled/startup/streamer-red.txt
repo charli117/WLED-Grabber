@@ -1,0 +1,16 @@
++ javac --release 17 -Xlint:all -Werror -cp /Users/luowei/.gradle/caches/modules-2/files-2.1/junit/junit/4.13.2/8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12/junit-4.13.2.jar:/Users/luowei/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar -d /private/tmp/wled-aud02-jvm.8hW21f/classes /Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/main/java/com/abrenoch/wledgrabber/common/capture/FrameLease.java /Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/main/java/com/abrenoch/wledgrabber/common/capture/FramePool.java /Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/main/java/com/abrenoch/wledgrabber/common/capture/OutputOwner.java /Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/main/java/com/abrenoch/wledgrabber/common/capture/LedStreamer.java /Users/luowei/Documents/Pycharm/hyperion-android-grabber/common/src/test/java/com/abrenoch/wledgrabber/common/capture/LedStreamerTest.java
++ java -cp /private/tmp/wled-aud02-jvm.8hW21f/classes:/Users/luowei/.gradle/caches/modules-2/files-2.1/junit/junit/4.13.2/8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12/junit-4.13.2.jar:/Users/luowei/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar org.junit.runner.JUnitCore com.abrenoch.wledgrabber.common.capture.LedStreamerTest
+JUnit version 4.13.2
+..E......
+Time: 2.221
+There was 1 failure:
+1) sparseOffersEventuallyDrainWithoutAnotherOfferOrStopStress(com.abrenoch.wledgrabber.common.capture.LedStreamerTest)
+java.lang.AssertionError: accepted frame must drain without another offer or stop; pending=true, inFlight=false, poolInUse=1 expected:<1726> but was:<1725>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.capture.LedStreamerTest.sparseOffersEventuallyDrainWithoutAnotherOfferOrStopStress(LedStreamerTest.java:159)
+
+FAILURES!!!
+Tests run: 8,  Failures: 1
+

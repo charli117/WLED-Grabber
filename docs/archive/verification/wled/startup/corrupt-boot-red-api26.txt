@@ -1,0 +1,83 @@
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest:
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=booleanTypedBootChoiceRetainsReminderWithoutStartingCapture
+INSTRUMENTATION_STATUS: class=com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+Error in booleanTypedBootChoiceRetainsReminderWithoutStartingCapture(com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest):
+java.lang.AssertionError: Notifications belonging to the isolated test app expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.awaitNotificationCount(StartupBootReceiverInstrumentedTest.java:166)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.booleanTypedBootChoiceRetainsReminderWithoutStartingCapture(StartupBootReceiverInstrumentedTest.java:135)
+
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=booleanTypedBootChoiceRetainsReminderWithoutStartingCapture
+INSTRUMENTATION_STATUS: class=com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Notifications belonging to the isolated test app expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.awaitNotificationCount(StartupBootReceiverInstrumentedTest.java:166)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.booleanTypedBootChoiceRetainsReminderWithoutStartingCapture(StartupBootReceiverInstrumentedTest.java:135)
+
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=malformedBootChoiceRetainsReminderWithoutStartingCapture
+INSTRUMENTATION_STATUS: class=com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+Error in malformedBootChoiceRetainsReminderWithoutStartingCapture(com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest):
+java.lang.AssertionError: Notifications belonging to the isolated test app expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.awaitNotificationCount(StartupBootReceiverInstrumentedTest.java:166)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.malformedBootChoiceRetainsReminderWithoutStartingCapture(StartupBootReceiverInstrumentedTest.java:122)
+
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=malformedBootChoiceRetainsReminderWithoutStartingCapture
+INSTRUMENTATION_STATUS: class=com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Notifications belonging to the isolated test app expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.awaitNotificationCount(StartupBootReceiverInstrumentedTest.java:166)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.malformedBootChoiceRetainsReminderWithoutStartingCapture(StartupBootReceiverInstrumentedTest.java:122)
+
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 4.074
+There were 2 failures:
+1) booleanTypedBootChoiceRetainsReminderWithoutStartingCapture(com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest)
+java.lang.AssertionError: Notifications belonging to the isolated test app expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.awaitNotificationCount(StartupBootReceiverInstrumentedTest.java:166)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.booleanTypedBootChoiceRetainsReminderWithoutStartingCapture(StartupBootReceiverInstrumentedTest.java:135)
+2) malformedBootChoiceRetainsReminderWithoutStartingCapture(com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest)
+java.lang.AssertionError: Notifications belonging to the isolated test app expected:<1> but was:<0>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.awaitNotificationCount(StartupBootReceiverInstrumentedTest.java:166)
+	at com.abrenoch.wledgrabber.common.startup.StartupBootReceiverInstrumentedTest.malformedBootChoiceRetainsReminderWithoutStartingCapture(StartupBootReceiverInstrumentedTest.java:122)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1
