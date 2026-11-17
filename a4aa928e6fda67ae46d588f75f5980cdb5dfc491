@@ -1,0 +1,74 @@
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvSetupUiTest.java
+  51396205a9b60a22 7,11,19,102-132
+tv/src/main/res/values/strings.xml
+  51396205a9b60a22 39-40
+docs/task/08-tv.md
+  51396205a9b60a22 94-95,97
+common/src/main/java/com/abrenoch/wledgrabber/common/led/LayoutDraftCompiler.java
+  51396205a9b60a22 5,22-31
+tv/src/main/java/com/abrenoch/wledgrabber/tv/views/LayoutValueRow.java
+  51396205a9b60a22 149-153
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledConnectionStepFragment.java
+  51396205a9b60a22 24,26,44-46,138-139,143-144,154-225
+common/src/main/java/com/abrenoch/wledgrabber/common/util/ConfigValidator.java
+  51396205a9b60a22 22,282-285
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledLayoutStepFragment.java
+  51396205a9b60a22 144
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/LayoutEditorActivity.java
+  51396205a9b60a22 122-125,128-129,362-365,398-402,416-417,435-438,476-483,512-513
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvLayoutEditorTest.java
+  51396205a9b60a22 27,121,169,172,179,183,189,219-220,232-292,294-314,321,335-336,348-364
+docs/design/wled-direct-ambilight-feasibility.md
+  51396205a9b60a22 517-521,523,525
+tv/src/main/res/values-zh-rCN/strings.xml
+  51396205a9b60a22 37-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "a4aa928e6fda67ae46d588f75f5980cdb5dfc491",
+  "prompts": {
+    "51396205a9b60a22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ff5acb-12c7-4dbe-bae9-040be916a7c2",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 331,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/cf2b65b9348fbab8b84a8464808f8de74121b2d79a9a6654ca7e703aae614644",
+      "token_usage": {
+        "input_tokens": 1086532,
+        "output_tokens": 1025521,
+        "cache_read_tokens": 286419712,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "a5a4a2ccb1214986": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2943c44b-a2ea-4f70-bdf9-ead41d45dd47",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 2,
+      "accepted_lines": 254,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/0cb0da37b167f419d3ddbc8e357fa2d30dd29b3ab639a4885ba916b37fb9bc3f",
+      "token_usage": {
+        "input_tokens": 218479,
+        "output_tokens": 30824,
+        "cache_read_tokens": 2236800,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
