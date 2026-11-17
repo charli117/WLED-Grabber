@@ -1,0 +1,35 @@
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/WledColorDiagnosticsTest.java
+  1182dd19bb87e862 1-62
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/WledDnrgbProbeTest.java
+  1182dd19bb87e862 1-79
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/WledOutputProbeTest.java
+  1182dd19bb87e862 1-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "31b2030a7e5d72804c9c183ba8d957964462c4fe",
+  "prompts": {
+    "1182dd19bb87e862": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12341c9c-73e2-402d-a675-1731cda52ba7",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 219,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/0b01a7b52cfca4bc30ae26ddd7b543d2a9beabc40be6bf574df2cdc01469c525",
+      "token_usage": {
+        "input_tokens": 175283,
+        "output_tokens": 70876,
+        "cache_read_tokens": 11355392,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    }
+  }
+}
