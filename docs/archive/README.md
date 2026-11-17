@@ -8,6 +8,8 @@
 
 > 2026-11-17 交付复核：任务册 [00-overview.md](task/00-overview.md) 继续作为任务状态台账，逐卡复核结论与新增证据见其 §5.2。复核后 **CAP-2 为待验证**（resize/旋转已实现，活动投屏证据未取得，不满足归档条件）；CFG-2、NET-3、TV-1 已完成接线并验收，REL-1 升级为已验收。**本轮不新增归档**：未闭环的卡、证据与仍有效的产品文档均不满足“已彻底解决或确认过期/失效”的条件。本轮原始日志新增于 [verification/wled/qa-1/2026-11-17-delivery-audit/](verification/wled/qa-1/2026-11-17-delivery-audit/)。任务册是“归档但继续更新状态”的具名例外；其余归档文件仍保持归档时点内容。
 
+> 2026-11-17 第二轮复核：任务册 [§5.3](task/00-overview.md#second-audit-2026-11-17) 记录 JVM/lint/构建/API21/26/33/34 仪器与 local-regression 复跑；更正 §5.2.2 #1 的类级接线声明并补充 `BootActivity` 授权前实时探测。**仍不新增业务归档**：CAP-2（活动投屏证据）、主线程 DNS 残留、QA-2/QA-3 均未闭环。本轮原始日志新增于 [verification/wled/qa-1/2026-11-17-second-audit/](verification/wled/qa-1/2026-11-17-second-audit/)。
+
 当前有效文档：
 
 - 技术规范：[docs/design/architecture.md](../design/architecture.md)

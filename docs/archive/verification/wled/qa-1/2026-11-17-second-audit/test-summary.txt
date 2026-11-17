@@ -1,0 +1,64 @@
+2026-11-17 WLED Grabber second delivery audit — evidence summary
+Baseline: HEAD a3b88eb, clean working tree; local JDK17 (.toolchains/jdk-17.0.21+9)
+
+JVM and build gate
+  ./gradlew :common:testDebugUnitTest :mobile:testDebugUnitTest :tv:testDebugUnitTest \
+            :common:lintDebug :mobile:lintDebug :tv:lintDebug \
+            :mobile:assembleDebug :tv:assembleDebug \
+            :mobile:assembleRelease :tv:assembleRelease
+  common tests=227 failures=0 errors=0 skipped=0
+  mobile tests=1   failures=0 errors=0 skipped=0
+  tv     NO-SOURCE
+  lint: common 0 errors / 101 warnings; mobile 0 / 8; tv 0 / 55
+  Debug APKs and unsigned Release APKs: BUILD SUCCESSFUL (Release unsigned, no signing/release claim)
+
+Instrumented matrix (ANDROID_SERIAL per AVD)
+  API21 api21-phone:     common 35/35
+  API26 api26-phone:     common 49/49, mobile 10/10
+  API33 wled-tv-api33:   tv 35 passed + 3 real-device assumption skips (38 total)
+  API34 wled-tv-api34:   common 49/49, mobile 10/10, tv 35 passed + 3 skips (38 total)
+
+New wiring regressions included in the counts
+  CFG-2: StartCaptureActivityTest (3), StartConfirmationStoreTest (4),
+         TvServiceReadinessContractTest (2, API33/34)
+  NET-3: ObservationMonitorTest (3) + existing WledSessionTest (9)
+  TV-1:  TvMainActivityTest.staleObservationBroadcastIsShownWhileRunning
+  CAP-2: CaptureResizePlannerTest (3, JVM) — implementation; live-projection resize still unverified
+  MOB-1: MobileSettingsCorruptPreferenceTest (1, API26/34)
+
+Repository gate
+  scripts/qa/local-regression.sh (JDK17): passed, exit 0
+  docs: 30 files / 321 links / 0 errors
+  legacy/protobuf APK entries: 0
+
+Audit findings
+  1. §5.2.2 row 1 over-claimed ImageLifecycle, GenerationGate and WledSetupController
+     as production-wired. They remain test/helper-only; WledScreenService implements
+     the equivalent close/generation logic inline. Documentation corrected.
+  2. BootActivity now performs one fresh HTTP probe and a DeviceReadiness evaluation
+     against the stored StartConfirmation before requesting system consent. A failed
+     or missing verification keeps the boot reminder and closes without consent.
+     The reminder/manual entry opens StartCaptureActivity. Instrumentation covers the
+     rejection paths only: a successful probe -> system consent path needs a real
+     WLED or a loopback-allowed endpoint (WledHttpClient rejects loopback by default).
+  3. CAP-2 remains 待验证: implementation exists, but no active-projection API34
+     resize/single-app-window or 100-cycle rotation evidence.
+  4. Residual CAP gap: UdpDatagramSink's constructor calls InetAddress.getByName on
+     the service main thread. IP literals avoid DNS; a hostname configuration can
+     still resolve on the main thread, so CAP-1's "main-thread network calls = 0"
+     criterion is not fully satisfied. Not changed in this audit (CRITICAL graph
+     impact; needs a dedicated pre-resolution design).
+  5. CAP-3 remains 已验收 on its own ownership/race evidence, while its prerequisite
+     CAP-2 is 待验证. This is recorded as a status-consistency note; no transitive
+     downgrade is applied because the cards use evidence-level acceptance.
+  6. Stop-budget residual: WledSession.release runs turnOff + readState sequentially
+     (each up to the 3 s app deadline) while LedStreamer.stop waits 3 s. Under a slow
+     network the writer thread can exceed 3 s; the main thread returns within 3 s and
+     reports UNCONFIRMED truthfully, but the "3 s total stop budget" is a wait bound,
+     not a hard deadline. Not changed in this audit.
+
+Evidence layers
+  Local implementation: JVM/lint/build/instrumented matrix above.
+  Pending release: no signing, no target-device install in this audit.
+  Production acceptance: QA-2/QA-3 remain BLOCKED (physical FPS/end-to-end latency,
+  RGBW sample, 500/1000/2000 LEDs, Sony remote/large-font matrix).

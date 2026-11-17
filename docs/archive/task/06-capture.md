@@ -55,6 +55,8 @@ common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer
 
 **证据（2026-11-17，自启动实现，`bfff381`）**：`StartupPolicy`/`StartupAccess`/`StartupSetupActivity` 与新 `BootActivity` 自动路径落地——仅 API 29、`PROJECT_MEDIA`、后台启动、后台执行、电池豁免与配置全部就绪时才判定 `START_CAPTURE`，否则保留提醒；`claimBootAttempt` 以 `boot_count` 把自动尝试限制为每次真实开机一次；先发提醒兜底，服务经 `BROADCAST_FILTER` 报告开始采集后才撤销（不等于物理灯带确认）。`StartupPolicyTest` 4 项通过；startup 仪器用例已进入本轮验证，精确平台/数量及缺口见[启动验证记录](../verification/wled/startup/verification.md)；`:common:testDebugUnitTest`、`:mobile:testDebugUnitTest` 与 `:tv:assembleDebug` 通过。真实冷启动、重启保持、息屏与厂商限制未实测。
 
+**2026-11-17 第二轮复核（残留项）**：`UdpDatagramSink` 构造在服务主线程执行 `InetAddress.getByName`；IP 直连不触发 DNS，域名 host 仍可能占用主线程。CAP-1 的量化项“主线程网络调用=0”因此未完全满足；本轮不改代码（GitNexus impact=CRITICAL，需单独的启动前预解析设计），在任务册 §5.3 记录为未闭环项。`BootActivity` 自动入口现已在请求授权前增加实时探测与确认匹配，但本次未在真机冷启动上复验。
+
 <a id="cap-2"></a>
 
 ## CAP-2 — Image关闭、resize与generation隔离
@@ -134,3 +136,5 @@ common服务/Encoder(Base)/Boot入口/通知，以及共享LedStreamer
 **证据（2026-11-17，设备端所有权）**：新增`OutputOwnershipInstrumentedTest`，在真实 Android runtime 验证：CAPTURE 与 TEST 互斥（TEST 持有期间 CAPTURE 启动被拒）、release 必须匹配 owner id 与 epoch（错误 id/错误 owner/过期 epoch 均不释放）、Activity 退出释放后重新进入可再次取得且 epoch 递增、TEST 释放后 CAPTURE 可接管。API **21 / 33 / 34** 均 9/9 通过（含既有 2 个配置/夹具用例）。另新增`WledHttpFailureInstrumentedTest`：本地 socket 接受连接但不应答时，`probe`/`readState` 均返回 `TIMEOUT` 且 probe 在 5s 内返回，`turnOff` 不误报成功；端口关闭返回 `CONNECT_FAILURE`。另有真机验证（2026-11-17）：测试图案持有 TEST 租约后 `am force-stop` 杀进程，重启服务无“output already owned”、无崩溃，证明 ownership 随进程复位。仍未覆盖：真实断网/路由变更、授权撤销。
 
 **2026-11-17 实现完成（保持待验证）**：新增纯决策 `CaptureResizePlanner`（3项 JVM 测试：相同尺寸不重编译、旋转重建布局并递增 generation、长边预算）。服务在 API 34 `MediaProjection.Callback.onCapturedContentResize` 与所有版本的 `DisplayManager` 默认屏变化回调中，把 resize 投递到 capture 线程：重新 fit/compile 布局，在**同一** VirtualDisplay 上 `resize` + `setSurface`，递增 generation 并摘除旧 reader 回调；旧 generation 的帧被丢弃。仍缺：活动投屏下的 API34 单应用窗口 resize、连续 100 次旋转/锁屏/撤销仪器证据（需用户授权投屏），因此卡片保持待验证。
+
+**2026-11-17 第二轮复核**：`ImageLifecycle`/`GenerationGate` 仍仅被 `ScreenEncoderLifecycleTest` 引用；生产服务使用 `onImageAvailable` 的 try/finally 关闭与 `captureGeneration` 比较，行为目标（每个 Image 恰好关闭一次、旧 generation 拒绝）由该内联实现承担。本轮 API21/26/34 common 仪器（含 `ImageReaderLifecycleInstrumentedTest`）通过，但活动投屏 resize/100 次循环证据仍缺，不因复跑升级 CAP-2。

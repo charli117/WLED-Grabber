@@ -1,0 +1,75 @@
+> Task :common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :common:preBuild UP-TO-DATE
+> Task :common:preDebugBuild UP-TO-DATE
+> Task :common:generateDebugResValues UP-TO-DATE
+> Task :common:generateDebugResources UP-TO-DATE
+> Task :common:packageDebugResources UP-TO-DATE
+> Task :common:parseDebugLocalResources UP-TO-DATE
+> Task :common:generateDebugRFile UP-TO-DATE
+> Task :common:javaPreCompileDebug UP-TO-DATE
+> Task :common:preDebugAndroidTestBuild UP-TO-DATE
+> Task :common:writeDebugAarMetadata UP-TO-DATE
+> Task :common:checkDebugAndroidTestAarMetadata UP-TO-DATE
+> Task :common:compileDebugLibraryResources UP-TO-DATE
+> Task :common:generateDebugAndroidTestResValues UP-TO-DATE
+> Task :common:mapDebugAndroidTestSourceSetPaths UP-TO-DATE
+> Task :common:generateDebugAndroidTestResources UP-TO-DATE
+> Task :common:mergeDebugAndroidTestResources UP-TO-DATE
+> Task :common:extractDeepLinksDebug UP-TO-DATE
+> Task :common:processDebugManifest UP-TO-DATE
+> Task :common:processDebugAndroidTestManifest UP-TO-DATE
+> Task :common:processDebugAndroidTestResources UP-TO-DATE
+> Task :common:javaPreCompileDebugAndroidTest UP-TO-DATE
+> Task :common:mergeDebugAndroidTestShaders UP-TO-DATE
+> Task :common:compileDebugAndroidTestShaders NO-SOURCE
+> Task :common:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :common:mergeDebugShaders UP-TO-DATE
+> Task :common:compileDebugShaders NO-SOURCE
+> Task :common:generateDebugAssets UP-TO-DATE
+> Task :common:packageDebugAssets UP-TO-DATE
+> Task :common:mergeDebugAndroidTestAssets UP-TO-DATE
+> Task :common:compressDebugAndroidTestAssets UP-TO-DATE
+> Task :common:desugarDebugAndroidTestFileDependencies UP-TO-DATE
+
+> Task :common:compileDebugKotlin
+w: file:///Users/luowei/Documents/Pycharm/WLED-Grabber/common/src/main/java/com/abrenoch/wledgrabber/common/util/Preferences.kt:5:8 'class PreferenceManager : Any' is deprecated. Deprecated in Java.
+w: file:///Users/luowei/Documents/Pycharm/WLED-Grabber/common/src/main/java/com/abrenoch/wledgrabber/common/util/Preferences.kt:13:31 'class PreferenceManager : Any' is deprecated. Deprecated in Java.
+w: file:///Users/luowei/Documents/Pycharm/WLED-Grabber/common/src/main/java/com/abrenoch/wledgrabber/common/util/Preferences.kt:13:49 'static fun getDefaultSharedPreferences(p0: Context!): SharedPreferences!' is deprecated. Deprecated in Java.
+
+> Task :common:checkDebugAndroidTestDuplicateClasses UP-TO-DATE
+
+> Task :common:compileDebugJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :common:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :common:compileDebugAndroidTestKotlin NO-SOURCE
+> Task :common:compileDebugAndroidTestJavaWithJavac UP-TO-DATE
+> Task :common:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :common:dexBuilderDebugAndroidTest UP-TO-DATE
+> Task :common:mergeDebugAndroidTestGlobalSynthetics UP-TO-DATE
+> Task :common:processDebugAndroidTestJavaRes NO-SOURCE
+> Task :common:processDebugJavaRes UP-TO-DATE
+> Task :common:mergeDebugAndroidTestJavaResource UP-TO-DATE
+> Task :common:mergeExtDexDebugAndroidTest UP-TO-DATE
+> Task :common:mergeLibDexDebugAndroidTest UP-TO-DATE
+> Task :common:mergeProjectDexDebugAndroidTest UP-TO-DATE
+> Task :common:mergeDebugJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugNativeLibs NO-SOURCE
+> Task :common:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :common:mergeDebugAndroidTestJniLibFolders UP-TO-DATE
+> Task :common:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :common:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :common:validateSigningDebugAndroidTest UP-TO-DATE
+> Task :common:writeDebugAndroidTestSigningConfigVersions UP-TO-DATE
+> Task :common:packageDebugAndroidTest UP-TO-DATE
+> Task :common:createDebugAndroidTestApkListingFileRedirect UP-TO-DATE
+
+> Task :common:connectedDebugAndroidTest
+additionalTestOutput is not supported on this device running API level 21 because the additional test output directory could not be found
+Starting 35 tests on api21-phone(AVD) - 5.0.2
+
+Finished 35 tests on api21-phone(AVD) - 5.0.2
+
+BUILD SUCCESSFUL in 18s
+45 actionable tasks: 3 executed, 42 up-to-date

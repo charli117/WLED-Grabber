@@ -2,7 +2,7 @@
 
 > 本文是架构、参数、协议、生命周期与兼容要求的唯一技术规范。关联文档：[品牌与图标规范](app-icon/brand-guide.md)、[配置与排障手册](../guides/configuration-and-troubleshooting.md)。
 >
-> 实现状态与未闭环项见[任务册 §5.2 交付证据复核](../archive/task/00-overview.md#delivery-audit-2026-11-17)（2026-11-17）。本文描述目标契约，不等于全部已实现、待发布或生产验收。
+> 实现状态与未闭环项见[任务册 §5.2 交付证据复核](../archive/task/00-overview.md#delivery-audit-2026-11-17)与[§5.3 第二轮复核](../archive/task/00-overview.md#second-audit-2026-11-17)（2026-11-17）。本文描述目标契约，不等于全部已实现、待发布或生产验收。
 
 ## 阅读导航
 
@@ -392,9 +392,9 @@ Android 10 AOSP 分支允许系统在已有投射权限时返回**新的**授权
 
 在目标 Sony Android 10 设备上为应用显式设置 `RUN_IN_BACKGROUND=allow`、`RUN_ANY_IN_BACKGROUND=allow` 并加入 deviceidle user 白名单。这是本机设置，不是 APK 自动获得系统权限，也不改变停止/息屏/撤销后的释放契约。
 
-开机自启动按受控路径执行：boot 源码默认值为 true（只影响新装/缺省值，已保存偏好不被改写）。`WledBootReceiver` 在偏好开启、首次设置已完成、录屏服务未运行且配置就绪时调用 `StartupPolicy.onBoot`；只有平台为 API 29、`PROJECT_MEDIA` 已 allow、具备后台启动条件（悬浮窗或 device owner）、两个后台 AppOps 均 allow、已加入电池优化白名单时，才判定 `START_CAPTURE`：先发提醒兜底，再启动 `BootActivity` 申请授权，服务经 `BROADCAST_FILTER` 报告已开始采集后撤销提醒（不等于 WLED 或物理灯带已确认输出），出错或 10 秒超时保留提醒。其他版本与其他情况一律降级为用户可见提醒。`claimBootAttempt` 以 `Settings.Global.boot_count` 保证每次真实开机只尝试一次；不缓存旧 token、不绕过平台许可。
+开机自启动按受控路径执行：boot 源码默认值为 true（只影响新装/缺省值，已保存偏好不被改写）。`WledBootReceiver` 在偏好开启、首次设置已完成、录屏服务未运行且配置就绪时调用 `StartupPolicy.onBoot`；只有平台为 API 29、`PROJECT_MEDIA` 已 allow、具备后台启动条件（悬浮窗或 device owner）、两个后台 AppOps 均 allow、已加入电池优化白名单时，才判定 `START_CAPTURE`：先发提醒兜底，再启动 `BootActivity` 申请授权；`BootActivity` 在显示系统授权前先做一次实时 HTTP 探测，并要求探测身份/数量/通道与已保存的启动确认匹配，未通过则保留提醒并结束，不请求授权。服务经 `BROADCAST_FILTER` 报告已开始采集后撤销提醒（不等于 WLED 或物理灯带已确认输出），出错或 10 秒超时保留提醒。其他版本与其他情况一律降级为用户可见提醒。`claimBootAttempt` 以 `Settings.Global.boot_count` 保证每次真实开机只尝试一次；不缓存旧 token、不绕过平台许可。
 
-`BootActivity` 不把“服务实例存在”当作成功：先注册进程内状态监听，再发送 `GET_STATUS`，仅收到 `running=true` 才撤销提醒。idle/失败在自动入口保留提醒，手动入口可重新申请授权。Activity 重建只恢复等待阶段与 `elapsedRealtime` 的原 10 秒截止时间，不能重置预算；等待系统 consent 时先恢复等待、不再查询 idle 服务或重复发起 consent。Bundle 不保存授权 Intent/token。
+`BootActivity` 不把“服务实例存在”当作成功：先注册进程内状态监听，再发送 `GET_STATUS`，仅收到 `running=true` 才撤销提醒。idle/失败在自动入口保留提醒；面向用户的 TV/mobile/Tile/通知提醒统一进入 `StartCaptureActivity`（逐项确认 + 即时探测 + READY），`BootActivity` 仅承担受控自动入口。提醒的 PendingIntent 也指向 `StartCaptureActivity`，不重放旧授权。Activity 重建只恢复等待阶段与 `elapsedRealtime` 的原 10 秒截止时间，不能重置预算；等待系统 consent 时先恢复等待、不再查询 idle 服务或重复发起 consent。Bundle 不保存授权 Intent/token。
 
 TV/mobile 首次主界面调用共享 `StartupSetupActivity.showIfNeeded`，后续可从“启动设置”重入。页面展示实时授权状态；仅缺电池豁免/后台启动许可时提供系统设置入口，管理员 ADB 命令只复制、不执行，非 API 29 不提供不适用的授权命令。完成时再次校验全部访问状态，通过 `ConfigRepository` 仅保存 boot 字段，再持久化 `completed_v1`；选择手动使用保存 false，Back 不保存草稿也不标记完成。配置仓库值按字符串落盘；boot 选择独立使用现有 Preferences 的字符串/缺省值读取，不能用 `SharedPreferences.getBoolean`。只有有效 false 才静默关闭；其他字段或 boot 值损坏不伪装成用户 opt-out，仍保留提醒，配置全量校验则继续阻断自动采集，不自动修正损坏字段。系统 AppOps/电池状态不缓存，清数据/重装/权限重置不在“永久保存”的承诺范围内。
 
@@ -494,7 +494,7 @@ NSD 浏览 `_wled._tcp.`，解析的 port 是 HTTP 端口，不是 UDP；缓存 
 
 这是 `GET /json/info` 的**根形状示例**，不是完整设备响应、不是探测结果 fixture，也不把示例 MAC 当有效身份。聚合 `/json` 才含 `info` 子对象；两种 endpoint 不能共用错误的根包装假设。状态读取单独使用 `/json/state`。解析对缺字段、错误类型、溢出、超长与未知能力 fail-closed，具体错误保留到 UI。
 
-开始前确认：LAN 网络/目标身份/固件、全部可寻址数量 M、同构 RGB 或 RGBW、分离端口、§7 寻址前提及有限实时超时。RGBW 另外确认 Manual/全局 override。配置草稿可以保存以便修正，但不满足前提时不能启动采集或 TEST。HTTP 可达不等于 LED 颜色、帧率或关灯已验证；实时请求也可能恢复设备先前亮度，`on:false` 不是持续锁灯机制。
+开始前确认：LAN 网络/目标身份/固件、全部可寻址数量 M、同构 RGB 或 RGBW、分离端口、§7 寻址前提及有限实时超时。RGBW 另外确认 Manual/全局 override。共享 `StartCaptureActivity` 把上述确认做成逐项勾选，并在请求系统授权前做一次即时探测；服务启动时用 `DeviceReadiness` 再次校验观察与已保存确认，缺失/不匹配即拒绝，不提供“强制继续”。配置草稿可以保存以便修正，但不满足前提时不能启动采集或 TEST。HTTP 可达不等于 LED 颜色、帧率或关灯已验证；实时请求也可能恢复设备先前亮度，`on:false` 不是持续锁灯机制。
 
 ### 8.3 统一状态与错误呈现
 
@@ -525,7 +525,7 @@ NSD 浏览 `_wled._tcp.`，解析的 port 是 HTTP 端口，不是 UDP；缓存 
 | Preview | 共用预览、274 预设、288 参考向量、三种图案、逐边/输入位置点亮校验 | 两端各有独立 LayoutPreviewActivity；TV 编辑器内联实时预览 |
 | Capturing / General | 帧率、自启动设置、权限/状态 | 录屏授权/通知/Tile/系统 insets 按平台适配 |
 
-手机：空配置点击电源先进入 WLED 设置/扫描，完成确认后返回主界面再授权。TV：`NetworkScanActivity → ScanResultActivity` 导航，再进入 Connection → Layout（实时编辑器，含预览/测试）→ Advanced（可选）→ Capturing。保留主界面与非后端相关交互；设置保存失败不启动、不假显示已保存。同一字段只在上述唯一页面出现：物理数量只在布局编辑器，RGBW white mode/平均色/采集长边/画质只在高级选项，连接步骤不再重复。
+手机：空配置点击电源先进入 WLED 设置/扫描；配置就绪后与 TV/Tile/通知入口一样进入共享 `StartCaptureActivity`，逐项确认并即时探测通过后才请求系统授权。TV：`NetworkScanActivity → ScanResultActivity` 导航，再进入 Connection → Layout（实时编辑器，含预览/测试）→ Advanced（可选）→ Capturing。保留主界面与非后端相关交互；设置保存失败不启动、不假显示已保存。同一字段只在上述唯一页面出现：物理数量只在布局编辑器，RGBW white mode/平均色/采集长边/画质只在高级选项，连接步骤不再重复。
 
 复用 `SettingsStepBaseFragment` 的 `unSignedNumberAction`、`radioListAction` 和现有 Preference listener 适配职责，`assertIntValue` 等校验统一委托 ConfigValidator，不复制规则；TV 实时布局编辑器通过共享 `ConfigValidator.validateLayout`/`SettingsDraftController` 完成草稿校验与原子保存。扫描 `saveResult()` 保存确认的 WLED 端点。RGB 模式隐藏 White Mode；unconfirmed 模式提示确认硬件而不自动假定 RGB。修改草稿即时刷新预览，**不热更新正在发送的快照**；运行中保存显式提示“下次启动生效”。错误、单位、默认值和资源均共享，TV 大字体/D-pad 焦点完整可达。
 

@@ -10,7 +10,9 @@
 
 > 2026-11-17 后台/自启动增补：[本机后台权限已配置，开机自启动已按受控路径实现（`bfff381`），真机冷启动与重启保持未实测](../verification/wled/cap-1/android10-background-autostart.md)。涉及 CAP-1 / MOB-2 / QA-1；系统白名单不等于开机自动采集，技术边界见方案 §6.2.2。
 
-> 2026-11-17 交付复核（本次）：以 HEAD `48250d1` + 工作区修复为基线，重新运行 JVM/lint/Debug/Release/仪器测试，并逐卡核对生产调用方。初审发现 CFG-2/NET-3/CAP-2 属类级/单测级交付、生产接线缺失，已下调；随后完成非真机范围内的接线与回归：**CFG-2/NET-3/TV-1 已重新验收，CAP-2 实现完成但活动投屏 resize/旋转证据仍待补（待验证）；QA-2/QA-3 保持阻塞**。复核证据与修复见[§5.2](#delivery-audit-2026-11-17)。
+> 2026-11-17 首轮交付复核：以 HEAD `48250d1` + 工作区修复为基线，重新运行 JVM/lint/Debug/Release/仪器测试，并逐卡核对生产调用方。初审发现 CFG-2/NET-3/CAP-2 属类级/单测级交付、生产接线缺失，已下调；随后完成非真机范围内的接线与回归：**CFG-2/NET-3/TV-1 已重新验收，CAP-2 实现完成但活动投屏 resize/旋转证据仍待补（待验证）；QA-2/QA-3 保持阻塞**。复核证据与修复见[§5.2](#delivery-audit-2026-11-17)。
+
+> 2026-11-17 第二轮复核：以 HEAD `a3b88eb` 为基线复跑 JVM/lint/构建/API21/26/33/34 仪器与 local-regression，全部通过；更正 §5.2.2 #1 的类级接线声明，补充 `BootActivity` 授权前实时探测，记录 `UdpDatagramSink` 主线程 DNS 残留。CAP-2 仍待验证，QA-2/QA-3 仍阻塞，无状态升级。见[§5.3](#second-audit-2026-11-17)。
 
 ## 1. 四要素与需求复述
 
@@ -141,7 +143,7 @@ flowchart TD
 | [NET-1 一次解析的HTTP探测与有界发现](05-wled.md#net-1) | 每次probe只发1次GET且只解析一次；所有错误返回明确类型，不误标发现成功。 | CFG-2 | P0 | 已验收 | `WledHttpClient`/`ProbeResult`/`ProbeError`/`WledDiscovery`/候选缓存落地；11个测试覆盖根info、错误类型、redirect/64KiB/超时、LAN/loopback策略、256/4/15s上界与取消不发布迟到结果 |
 | [NET-2 固定固件的RGB/RGBW报文与分片](05-wled.md#net-2) | 274RGB DNRGB826B；274RGBW DDP1106B；全部golden逐字节一致。 | CFG-2 | P0 | 已验收 | `WledPacketizer`/`WledUdpTransport`/`DatagramSink`落地；8个测试覆盖DRGB/DNRGB/DDP计数、分片、flags/offset/length、尾1重分、无type5、失败不重试；274RGB826B/274RGBW1106B |
 | [NET-3 健康观察、统一release与恢复策略](05-wled.md#net-3) | 只有读回on=false/live=false才CONFIRMED；其他路径100%为UNCONFIRMED/错误。 | NET-1, NET-2 | P0 | 已验收 | `WledSession`/`WledControlClient`/`StateReadResult`/`FrameSender`落地；9个FakeClock测试覆盖成功/超时/live仍true/身份变化/stale/旧epoch不覆盖新session/≤3秒预算；无读回不CONFIRMED；**2026-11-17真机(10.245.0.99/274RGB)：新增turnOn与1秒心跳，启动自动开灯、静态画面live保持10秒；WLED 16.x `/json/state`无`live`时回退`/json/info`，修复读回恒MISSING_FIELD，新增`liveFallsBackToInfoWhenStateOmitsIt`回归，真机测试图案release CONFIRMED**；**2026-11-17复核：`WledSession`/`WledControlClient`仅测试引用，服务直接用`WledHttpClient`+`LedStreamer`；5秒健康观察/10秒stale/身份变化废弃/统一session release未接入生产路径**；**2026-11-17 接线完成：服务以`WledSession`持有观察与统一release，5秒后台观察、10秒stale广播、身份变化停止采集；`ObservationMonitorTest`与既有`WledSessionTest`通过，API21/26/33/34仪器回归通过；真实设备长时观察与断网恢复仍归QA-2** |
-| [CAP-1 现代Android授权与前台服务入口](06-capture.md#cap-1) | 每个成功session创建display=1；失败/拒绝创建=0；旧token重用=0。 | FND-2, CFG-1 | P0 | 已验收 | 纯`CaptureSession`状态机7个测试通过；Android入口按前台化→单次getMediaProjection→Callback→单次display接线；FGS类型/权限、POST_NOTIFICATIONS、service exported=false、boot受控自启动（仅API29授权齐全时启动，否则提醒）已落地；**2026-11-17 Sony KD-55XD8005（API 29）真机：修复FGS早退崩溃与令牌extra传递、状态机接入服务后，display=1/projection=1/前台服务=1，端到端WLED live=UDP且源IP为电视，停止后资源归零**；**2026-11-17 `TvServiceForegroundContractTest` 在 API 33/34 通过：拒绝授权的 startForegroundService 不崩溃且不残留输出租约；API 21/26/33/34 仪器矩阵已跑**；真实撤销/锁屏/旋转与开机冷启动待补 |
+| [CAP-1 现代Android授权与前台服务入口](06-capture.md#cap-1) | 每个成功session创建display=1；失败/拒绝创建=0；旧token重用=0。 | FND-2, CFG-1 | P0 | 已验收（残留：主线程 DNS，见 §5.3） | 纯`CaptureSession`状态机7个测试通过；Android入口按前台化→单次getMediaProjection→Callback→单次display接线；FGS类型/权限、POST_NOTIFICATIONS、service exported=false、boot受控自启动（仅API29授权齐全时启动，否则提醒）已落地；**2026-11-17 Sony KD-55XD8005（API 29）真机：修复FGS早退崩溃与令牌extra传递、状态机接入服务后，display=1/projection=1/前台服务=1，端到端WLED live=UDP且源IP为电视，停止后资源归零**；**2026-11-17 `TvServiceForegroundContractTest` 在 API 33/34 通过：拒绝授权的 startForegroundService 不崩溃且不残留输出租约；API 21/26/33/34 仪器矩阵已跑**；真实撤销/锁屏/旋转与开机冷启动待补；第二轮复核发现 `UdpDatagramSink` 构造在服务主线程执行 `InetAddress.getByName`，域名 host 的“主线程网络调用=0”未完全满足 |
 | [CAP-2 Image关闭、resize与generation隔离](06-capture.md#cap-2) | Image泄漏/双关/使用已关闭buffer均0；100次循环结束reader/display/projection/线程归零。 | CAP-1, SMP-1 | P0 | 待验证 | `GenerationGate`/`ImageLifecycle` 5个JVM测试通过；`ImagePlaneView`接入SMP PlaneView；**2026-11-17 `ImageReaderLifecycleInstrumentedTest` 在 API 21/33/34 通过：真实Surface生产者20帧 acquired==closed、maxImages=3 第四次获取被拒**；旋转/锁屏/撤销与API34 resize 仪器项待设备 ；**2026-11-17 API26 模拟器旋转/锁屏后 Activity 存活无崩溃**；API34 resize 与100次组合待补；**2026-11-17复核：服务无`onCapturedContentResize`/旋转/resize处理； 卡片要求的同display换surface/generation隔离未实现**；**2026-11-17 实现完成：服务新增API34 `onCapturedContentResize`与`DisplayManager`默认屏变化监听，经`CaptureResizePlanner`（JVM测试3项）在同一VirtualDisplay上`resize`+`setSurface`，generation递增拒绝旧回调；API34单应用窗口/100次旋转/锁屏撤销的实际仪器证据仍待补充，故保持待验证** |
 | [CAP-3 唯一输出所有者、三帧池与停止屏障](06-capture.md#cap-3) | 队列pending≤1、池占用≤3、UDP写者始终≤1；10万帧无内容撕裂或泄漏。 | CAP-2, SMP-2, NET-3 | P0 | 已验收 | `FrameLease`/`FramePool`/`OutputOwner`/`LedStreamer`落地；7个LedStreamerTest通过（10万帧无撕裂/泄漏、latest-wins、慢sink停止屏障、超时不误报、CAPTURE/TEST互斥、失败归还）；**2026-11-17 `OutputOwnershipInstrumentedTest` 在 API 21/33/34 通过：CAPTURE/TEST 互斥、release 需匹配 id+epoch、Activity 退出再进入可重取**；另有设备端静默服务器TIMEOUT与端口关闭CONNECT_FAILURE用例；真实断网/撤销/进程被杀待设备 ；**2026-11-17 真机杀进程后重启无陈旧所有权/无崩溃**；真实断网/撤销待补 |
 | [PRE-1 共享预览View与索引可读性](07-preview.md#pre-1) | 所有绘制矩形与CompiledLayout误差≤1显示像素；索引golden匹配率100%。 | LAY-2, CFG-2 | P1 | 已验收 | `PreviewModel`/`LedLayoutPreviewView`落地；8个LedLayoutPreviewTest通过（274/288/SKIP/BLACK/Reverse/竖屏/梯形/错误/选中/尾黑）；**2026-11-17 `LedLayoutPreviewInstrumentedTest` 在 API 21/33/34 通过：D-pad 走位到 273/0 并钳位、resize 保持选中、错误态阻断选择**；触摸选中已由同类仪器测试覆盖；像素级 golden 与 TV 大字体/insets 待补 ；**2026-11-17 Sony 真机 font_scale=1.5 下14/14通过**；mobile小屏insets待补 |
@@ -206,7 +208,7 @@ flowchart TD
 
 | # | 发现 | 证据 | 影响 |
 |---|---|---|---|
-| 1 | （已接线）`WledSession`、`WledControlClient`、`DeviceReadiness`、`StartConfirmation`、`ReadyDevice`、`ImageLifecycle`、`GenerationGate`、`WledSetupController` 无生产调用方 | 全仓文本检索仅测试/自身文件引用；`WledScreenService` 直接使用 `WledHttpClient` + `LedStreamer`，未实例化 session/readiness；TV 连接步骤在 Fragment 内自行 probe/保存，未复用 `WledSetupController` | CFG-2、NET-3 的“READY/健康观察/身份变化”仅类级与单测级，不是运行行为；DRY 的共享连接控制器未落地 |
+| 1 | （已接线，2026-11-17 第二轮更正）`WledSession`、`WledControlClient`、`DeviceReadiness`、`StartConfirmation`、`ReadyDevice` 已接入生产；`ImageLifecycle`、`GenerationGate`、`WledSetupController` 仍无生产调用方，属测试/类级辅助 | 第二轮检索：服务持有 `WledSession`；`StartCaptureActivity`、`BootActivity`、`WledScreenService` 调用 `DeviceReadiness`；`ImageLifecycle`/`GenerationGate` 仅 `ScreenEncoderLifecycleTest` 引用，服务在 `onImageAvailable` 的 finally 内联关闭 Image 并用 generation 校验；`WledSetupController` 仅测试引用 | CFG-2、NET-3 已闭环；CAP-2 的类级辅助（Image close/generation）不等于生产接线，卡片保持待验证，不能据类级测试升级 |
 | 2 | （已接线）启动路径只做本地字段校验 | `WledScreenService`/`BootActivity`/`WledTileService`/`TestPatternActivity` 仅调用 `ConfigValidator.validateForStart`，无开始前 HTTP 探测 | 设备 count/通道/身份不匹配时仍可启动，存在尾灯残留/错帧风险 |
 | 3 | （已实现，证据待补）无 resize/rotation 处理 | 初审全仓无 `onCapturedContentResize`、`VirtualDisplay.Callback`、`virtualDisplay.resize/setSurface`；服务只在启动时 `createVirtualDisplay` 一次 | 初审 CAP-2 “同 display 换 surface/generation 隔离”未实现；现实现完成，活动投屏证据未取得 |
 | 4 | TEST/布局探针未开灯，RGBW 探针格式错误 | `TestPatternActivity` 未调用 `turnOn`；`LayoutProbeSender` 固定 3 字节帧、仅按 `protocol==DDP` 选择传输 | 停止后 TEST/探针不可见；RGBW + AUTO 会走 DNRGB 3 字节，RGBW+DDP 走 0x0B RGB 而非 0x1B |
@@ -231,7 +233,7 @@ flowchart TD
 | 独立复核修正：TV 小灯带可进主界面 | `MainActivity.initIfConfigured` 恢复设备级判定；主界面状态显示 `tv_status_layout_required`；电源启动前用 `isStartConfigured`，失败时提示并进入 `LayoutEditorActivity` | `TvMainActivityTest.smallStripScanResultStillOpensMainSurface`、`invalidLayoutPowerOpensEditorInsteadOfConsent` |
 | 独立复核修正：TV 停止状态可见 | `setImageViews(..., showMessage)` 在释放结果存在时保持状态文案可见；测试补 `isDisplayed()` | `TvMainActivityTest.releaseBroadcastShowsConfirmedOrUnconfirmedStatus` |
 | 独立复核修正：release 结果语义 | `releaseKnown = releaseCalled || timedOut`；CONFIRMED 仍要求 `releaseCalled && releaseOk` | `LedStreamerTest` 既有超时/屏障用例；编译/lint 通过 |
-| 接线：启动前 READY | `StartConfirmationStore`、`StartCaptureActivity`；服务用 `DeviceReadiness` 复验观察 | `StartCaptureActivityTest`、`StartConfirmationStoreTest`、`TvServiceReadinessContractTest`（API21/26/33/34） |
+| 接线：启动前 READY | `StartConfirmationStore`、`StartCaptureActivity`；服务用 `DeviceReadiness` 复验观察 | `StartCaptureActivityTest`、`StartConfirmationStoreTest`（common API21/26/34）、`TvServiceReadinessContractTest`（TV API33/34） |
 | 接线：观察与统一 release | 服务持有 `WledSession`，5 秒观察线程、10 秒 stale 广播、身份变化停止 | `ObservationMonitorTest` + `WledSessionTest`；API21/26/33/34 回归 |
 | 接线：TV 观察过期状态 | `BROADCAST_OBSERVATION_STALE` → `tv_status_observation_stale` | `TvMainActivityTest.staleObservationBroadcastIsShownWhileRunning`（API33/34） |
 | 实现：CAP-2 resize | `CaptureResizePlanner`；API34 `onCapturedContentResize` + `DisplayManager` 监听 + 同 VD `resize/setSurface` + generation | `CaptureResizePlannerTest`（3）；活动投屏证据待补 |
@@ -264,6 +266,48 @@ flowchart TD
 | 本地实现 | 代码、JVM 227、lint 0、Debug/Release 构建、API21/26/33/34 模拟器仪器通过 |
 | 待发布 | 未签名、未生成正式发布产物、未安装到目标 Sony、未做 launcher/banner 真机确认 |
 | 生产验收 | QA-2/QA-3 仍 BLOCKED；物理 60fps/端到端时延、RGBW 样机、大灯数、Sony 遥控器/大字体均无证据 |
+
+<a id="second-audit-2026-11-17"></a>
+
+### 5.3 2026-11-17 第二轮复核（启动门禁与证据一致性）
+
+复核基线：HEAD `a3b88eb`（含 `64b4f17` 的启动 READY/观察/resize 接线），审计开始时工作树干净；使用仓库 JDK17 与 API21/26/33/34 在线 AVD 复跑。结论以命令输出、生产调用方与仪器结果为准。
+
+#### 5.3.1 本轮复跑门禁
+
+| 门禁 | 命令/对象 | 结果 |
+|---|---|---|
+| JVM 单测 | `:common:testDebugUnitTest :mobile:testDebugUnitTest :tv:testDebugUnitTest` | common **227/0**、mobile **1/0**、tv NO-SOURCE |
+| lint | 三模块 `lintDebug` | error **0**；warning 101/8/55 |
+| 构建 | mobile/tv Debug + unsigned Release；androidTest APK 编译 | 全部 exit 0；Release 未签名 |
+| 手机/通用仪器 | API21/26/34 | API21 common **35/35**；API26 common **49/49**、mobile **10/10**；API34 common **49/49**、mobile **10/10** |
+| TV 仪器 | API33/34 | 各 **35 通过 + 3 真机假设跳过**（38） |
+| 仓库回归 | `scripts/qa/local-regression.sh`（JDK17） | **passed**，exit 0；docs 30 文件/321 链接/0 错误；APK 旧身份/protobuf 条目 0 |
+| 新增接线用例 | 本轮矩阵内 | `StartCaptureActivityTest` 3、`StartConfirmationStoreTest` 4、`TvServiceReadinessContractTest` 2、`ObservationMonitorTest` 3、`CaptureResizePlannerTest` 3、`MobileSettingsCorruptPreferenceTest` 1 均通过 |
+
+原始日志归档：[`2026-11-17-second-audit/`](../verification/wled/qa-1/2026-11-17-second-audit/)（JVM/lint/build、local regression、API21/26/33/34 仪器与 `test-summary.txt`）。`.omc/artifacts/` 同名文件为工作区运行产物，可删除。文档编辑完成后再次运行 `check-doc-links.py`：30 文件 / 329 链接 / 0 错误。
+
+#### 5.3.2 复核结论
+
+| 项 | 结论 |
+|---|---|
+| 启动门禁（CFG-2） | `StartCaptureActivity` 为 TV/mobile/Tile/通知提醒的统一入口：逐项确认 + 即时探测 + `DeviceReadiness` 后才请求系统授权；服务启动再复验观察。`BootActivity` 自动路径在请求授权前执行一次实时探测，并要求与已保存的 `StartConfirmation` 匹配；失败保留提醒并结束。 |
+| 启动门禁测试边界 | `StartCaptureActivityTest` 覆盖空配置、未勾选、确认项可见；`BootActivityStatusInstrumentedTest` 覆盖未验证/无确认时**不请求授权**。成功探测→系统授权路径需要真实 WLED 或受控 loopback 端点（`WledHttpClient` 默认拒绝回环），本轮仪器未覆盖；仅有 Sony 真机历史证据，未复跑。`StartCaptureActivity` 的 TV D-pad 走查也未纳入本轮仪器，需 QA-2 确认。 |
+| 周期观察（NET-3） | 服务持有 `WledSession`，5 秒观察、10 秒 stale 广播、身份变化停止采集；TV stale 文案与仪器回归通过。 |
+| CAP-2 | `onCapturedContentResize` + `DisplayManager` 监听 + 同 VD `resize/setSurface` + generation 已实现；活动投屏下的 resize/单应用窗口/100 次旋转/锁屏/撤销证据仍未取得，**保持待验证**。 |
+| 类级辅助更正 | `ImageLifecycle`/`GenerationGate` 仅测试引用，服务内联等价逻辑；`WledSetupController` 仅测试引用。§5.2.2 #1 已更正，不据此升级 CAP-2/TV-1。 |
+| 主线程 DNS 残留 | `UdpDatagramSink` 构造在服务主线程执行 `InetAddress.getByName`；IP 直连不触发 DNS，域名配置可能触发。CAP-1 的“主线程网络调用=0”量化项**未完全满足**；本轮不改代码（GitNexus impact 为 CRITICAL，需单独预解析设计），列为 CAP 未闭环项。 |
+| 停止预算残留 | `LedStreamer.stop` 等待 3 秒，但 `WledSession.release` 顺序执行 `turnOff` 与 `readState`（各自 3 秒应用截止），慢网下 writer 线程可能超过 3 秒；主线程最多等待 3 秒并如实显示 UNCONFIRMED，但“总停止控制面预算 3 秒”目前是等待上界而非强制截止。未改代码，列入 NET-3/CAP-3 残留项。 |
+| 状态一致性 | CAP-3 标“已验收”而其前置 CAP-2 为“待验证”，与 §7.2 第 7 条“前置不通过不得标后置已验收”存在口径冲突；本轮不作传递性降级，CAP-3 的“已验收”仅指其自身所有权/竞态证据。PRE-2/TV-2/MOB-2/REL-1/QA-1 同样按各自证据层级验收，不传递 CAP-2 的投屏项；均不构成发布准入。 |
+| QA-2/QA-3 | 物理 60fps/端到端时延、RGBW 样机、500/1000/2000 灯、Sony 遥控器/大字体无新证据，**保持 BLOCKED**；不把本轮测试通过等同于生产验收。 |
+
+#### 5.3.3 状态调整
+
+无任务从“待验证/阻塞”升级为“已验收”；矩阵状态保持 §5 表格。CAP-1 的“已验收”附主线程 DNS 残留说明；CAP-2 待验证；QA-2/QA-3 BLOCKED。所有本轮证据仅属**本地实现**层级；未签名、未安装到目标 Sony，也未做物理光输出测量。
+
+#### 5.3.4 归档判定
+
+本轮**不新增业务文档归档**：CAP-2、QA-2、QA-3 与主线程 DNS 项未闭环，不满足“已彻底解决或确认过期/失效”的归档条件。仅新增上述原始证据日志目录，并在归档索引注明；`docs/design/architecture.md` 继续作为唯一技术规范。
 
 ### 最终技术方案到任务的覆盖检查
 
@@ -384,22 +428,22 @@ Release此处是未签名/无发布副作用构建；不得为了通过命令写
 以下是**功能发布**checklist。2026-11-17 已逐项复核：只对本地代码/测试/构建可核验项打勾；QA 与 ADMISSION 保持未勾选，不能用文档评审通过将其打勾。
 
 - [x] FND：精确工具链/JDK17/min21；三模块构建测试通过，最终lint error=0；无JCenter/Support/未登记动态依赖。
-- [x] CFG：单一默认/校验/原子快照；非法配置拒绝激活；HTTP/UDP/DDP端口、观察与配置分离。**已接线**：共享启动页逐项确认+即时探测，服务端 `DeviceReadiness` 复验；缺失/不匹配观察拒绝启动（JVM+API21/26/33/34 仪器）。
+- [x] CFG：单一默认/校验/原子快照；非法配置拒绝激活；HTTP/UDP/DDP端口、观察与配置分离。**已接线**：共享启动页逐项确认+即时探测，服务端 `DeviceReadiness` 复验；缺失/不匹配观察拒绝启动（JVM+API21/26/33/34 仪器）。`BootActivity` 自动路径在请求授权前也执行实时探测并匹配已保存确认。
 - [x] LAY：274/288全部索引、SKIP/BLACK、负Input/Reverse、四角/Overlap/Edge Gap性质测试通过。
 - [x] SMP：oracle逐通道一致，stride/crop/limit安全，平均模式gap/尾黑不亮；RGBW单方合成（实机两模式仍归QA-2）。
-- [x] NET：固定v0.15.1范围、type5禁用、单灯/尾包/DDP完整golden、LAN/超时/响应体/扫描边界通过（健康观察/身份废弃未接线，归NET-3）。
-- [ ] CAP：每会话授权一次/display一次，主线程无网络，Image finally close，旋转/撤销/锁屏和TEST模式正确。**部分**：授权/display/Image close/TEST互斥已核验；旋转与resize已实现（API34回调+显示变化+同display换surface），但活动投屏/100次循环证据未取得，见CAP-2。
+- [x] NET：固定v0.15.1范围、type5禁用、单灯/尾包/DDP完整golden、LAN/超时/响应体/扫描边界通过（健康观察/身份废弃已由 NET-3 接入服务；真实设备故障矩阵仍归 QA-2）。
+- [ ] CAP：每会话授权一次/display一次，主线程无网络，Image finally close，旋转/撤销/锁屏和TEST模式正确。**部分**：授权/display/Image close/TEST互斥已核验；旋转与resize已实现（API34回调+显示变化+同display换surface），但活动投屏/100次循环证据未取得，见CAP-2；第二轮复核另发现 `UdpDatagramSink` 构造在服务主线程执行 `InetAddress.getByName`（域名 host 可能触发 DNS），主线程网络调用=0 未完全满足，见 §5.3。
 - [x] STREAM：池≤3、pending≤1、writer≤1；慢sink与停止竞态无撕裂/越界/旧帧复活。
-- [ ] STOP：统一release读回；远端未确认如实展示；进程kill/迟到UDP/其他控制器风险明确。**部分**：统一 release 与读回已核验；前台 TV/mobile 已展示 CONFIRMED/UNCONFIRMED；从通知/Tile 后台停止时没有可见结果承载，仍未做到所有停止路径如实展示。
-- [ ] PRE/TV/MOB：两端完整设置、共用预览/测试、D-pad可达、通知/磁贴/权限拒绝和insets通过。**部分**：设置/预览/测试/D-pad/通知/磁贴已核验；TV“设备观察过期”依赖NET-3，Sony物理矩阵归QA-2。
+- [ ] STOP：统一release读回；远端未确认如实展示；进程kill/迟到UDP/其他控制器风险明确。**部分**：统一 release 与读回已核验；前台 TV/mobile 已展示 CONFIRMED/UNCONFIRMED；从通知/Tile 后台停止时没有可见结果承载，仍未做到所有停止路径如实展示；慢网下 3 秒是主线程等待上界而非强制截止，见 §5.3。
+- [ ] PRE/TV/MOB：两端完整设置、共用预览/测试、D-pad可达、通知/磁贴/权限拒绝和insets通过。**部分**：设置/预览/测试/D-pad/通知/磁贴已核验；TV“设备观察过期”已接线（NET-3）；Sony物理矩阵归QA-2。
 - [x] REL：唯一WLED后端、无protobuf/旧协议产物、正确新身份/两种替代APK；合法来源/版权保留。
 - [ ] QA：Sony274/60fps满足技术方案§11量化门禁；RGBW两模式有样机证据，API与硬件矩阵缺项为0。**阻塞**：软件侧四项达标；物理FPS/端到端、RGBW样机、大灯数、遥控器/大字体缺证据。
-- [ ] DOC：字段映射、安装/回退、隐私/明文LAN/停止限制与代码一致；矩阵每个首版卡均附真实证据。**部分**：本轮已将状态下调并补证据；未闭环卡不满足“均附真实证据”。
-- [ ] ADMISSION：QA-3独立证据审查通过；签名/发布仍需单独授权，不自动执行。**阻塞**：CFG-2/NET-3/CAP-2/TV-1未闭环，QA-2/3未通过。
+- [ ] DOC：字段映射、安装/回退、隐私/明文LAN/停止限制与代码一致；矩阵每个首版卡均附真实证据。**部分**：第二轮复核已更正 §5.2.2 #1 的类级接线声明并补充启动门禁；未闭环卡（CAP-2、主线程 DNS 残留、QA-2/3）仍不满足“均附真实证据”。
+- [ ] ADMISSION：QA-3独立证据审查通过；签名/发布仍需单独授权，不自动执行。**阻塞**：CAP-2、主线程 DNS 残留与 QA-2/QA-3 未通过。
 
 ## 9. 评审交付状态与剩余风险
 
-本册建立了来源→修订决策→模块ID→前置→独立测试→量化验收的追溯关系。代码开发/构建升级已开始：**截至 2026-11-17 复核，26 张卡中 23 张已验收（FND-1/2、CFG-1/2、LAY-1/2、SMP-1/2/3、NET-1/2/3、CAP-1/3、PRE-1/2、TV-1/2、MOB-1/2、REL-1/2、QA-1）；CAP-2 实现完成但活动投屏 resize/旋转证据未取得，保持待验证；QA-2 阻塞、QA-3 阻塞。** CFG-2 的启动前 READY/确认项与 NET-3 的健康观察/身份废弃已接入生产路径；CAP-2 的 resize/rotation 已实现，尚缺真实投屏下的仪器证据。真实硬件验收仍未开始。当前构建使用项目本地Temurin 17.0.21 + Gradle 8.9 + AGP 8.7.2；目标SDK/设备与RGBW样机仍需实施期检查。证据与本轮修复见[§5.2](#delivery-audit-2026-11-17)。
+本册建立了来源→修订决策→模块ID→前置→独立测试→量化验收的追溯关系。代码开发/构建升级已开始：**截至 2026-11-17 复核，26 张卡中 23 张已验收（FND-1/2、CFG-1/2、LAY-1/2、SMP-1/2/3、NET-1/2/3、CAP-1/3、PRE-1/2、TV-1/2、MOB-1/2、REL-1/2、QA-1）；CAP-2 实现完成但活动投屏 resize/旋转证据未取得，保持待验证；QA-2 阻塞、QA-3 阻塞。** CFG-2 的启动前 READY/确认项与 NET-3 的健康观察/身份废弃已接入生产路径；CAP-2 的 resize/rotation 已实现，尚缺真实投屏下的仪器证据。第二轮复核（[§5.3](#second-audit-2026-11-17)）复跑门禁全部通过，未改变上述状态，并新增 `UdpDatagramSink` 主线程 DNS 残留项（CAP-1 的“主线程网络调用=0”未完全满足）。真实硬件验收仍未开始。当前构建使用项目本地Temurin 17.0.21 + Gradle 8.9 + AGP 8.7.2；目标SDK/设备与RGBW样机仍需实施期检查。证据与本轮修复见[§5.2](#delivery-audit-2026-11-17)与[§5.3](#second-audit-2026-11-17)。
 
 技术方案是唯一规范；复核稿已归档，原位仅保留重定向。任意新证据推翻契约，先更新技术方案对应章节及附录决策记录，再更新关联卡与矩阵，不复制维护多套约束。
 

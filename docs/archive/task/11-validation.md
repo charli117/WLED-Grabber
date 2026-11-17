@@ -51,6 +51,8 @@
 
 **证据（2026-11-17 交付复核，本轮）**：JVM **227通过/0失败**（common 227、mobile 1、tv NO-SOURCE）；三模块 lint **error 0**（common 101 / mobile 8 / tv 55 warnings）；Debug 与 unsigned Release 构建 exit 0。仪器复跑：**API21 common 35/35、mobile 10通过+2平台跳过；API26 common 49/49、mobile 10/10；API33 TV 35通过+3真机跳过；API34 common 49/49、mobile 10/10、tv 35通过+3跳过**。新增接线回归：`StartCaptureActivityTest`、`StartConfirmationStoreTest`、`TvServiceReadinessContractTest`（CFG-2）、`ObservationMonitorTest`（NET-3）、`TvMainActivityTest.staleObservationBroadcastIsShownWhileRunning`（TV-1）、`CaptureResizePlannerTest`（CAP-2 实现）、`MobileSettingsCorruptPreferenceTest`（MOB-1）。API 23/29/35 与真机矩阵本轮未复跑，保持待验证。新增证据归档：`docs/archive/verification/wled/qa-1/2026-11-17-delivery-audit/`（JVM/构建、lint/Release、API21/26/33/34 原始日志）；`.omc/artifacts/` 同名文件为可删除的工作区运行产物。QA-1 维持**已验收**是就“本地可复跑门禁”而言，不表示发布或物理验收。
 
+**2026-11-17 第二轮复核**：以 HEAD `a3b88eb` 复跑，common JVM **227/0**、mobile **1/0**、tv NO-SOURCE；lint error 0；API21 common 35/35、API26 common 49/49 + mobile 10/10、API34 common 49/49 + mobile 10/10、TV 33/34 各 35通过+3跳过；`scripts/qa/local-regression.sh`（JDK17）passed，docs 30 文件/321 链接/0 错误；APK 旧身份/protobuf 条目 0。原始日志见[`2026-11-17-second-audit/`](../verification/wled/qa-1/2026-11-17-second-audit/)。测试通过与发布/物理验收的边界不变。
+
 <a id="qa-2"></a>
 
 ## QA-2 — 274/60fps、RGBW与故障实机验收
