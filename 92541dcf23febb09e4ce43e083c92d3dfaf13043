@@ -1,0 +1,130 @@
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/startup/StartupSettingsInstrumentedTest.java
+  575c369da7ebd45a 7-8,61-106
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/startup/StartupSetupActivityTest.java
+  575c369da7ebd45a 104-105
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/startup/StartupBootReceiverInstrumentedTest.java
+  575c369da7ebd45a 1-169
+common/src/main/res/layout/activity_startup_setup.xml
+  e2fcb4b975340679 3,18,45,105,112
+common/src/main/java/com/abrenoch/wledgrabber/common/startup/StartupAccess.java
+  575c369da7ebd45a 38-41
+common/src/main/res/values-zh-rCN/startup_strings.xml
+  e2fcb4b975340679 20
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/startup/BootStatusHarnessActivity.java
+  e2fcb4b975340679 1-31
+common/src/main/res/values/startup_strings.xml
+  e2fcb4b975340679 2-3,21
+common/src/androidTest/AndroidManifest.xml
+  e2fcb4b975340679 1-7
+common/src/main/java/com/abrenoch/wledgrabber/common/startup/StartupSetupActivity.java
+  e2fcb4b975340679 22,43-47,65-71,100-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.3",
+  "base_commit_sha": "92541dcf23febb09e4ce43e083c92d3dfaf13043",
+  "prompts": {
+    "414555a7555bc3b5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d36eb0ba-82b6-4d53-abe3-0601ff1f1f0b",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 3916,
+      "total_deletions": 509,
+      "accepted_lines": 3477,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/e5219c770a56b136776c0e0314b5a69216e4726b179544ab7b63916d57065418",
+      "token_usage": {
+        "input_tokens": 499647,
+        "output_tokens": 211250,
+        "cache_read_tokens": 57180800,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "575c369da7ebd45a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e53d-7484-73c2-bd35-c4075ea327c7",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 1403,
+      "total_deletions": 2,
+      "accepted_lines": 1682,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/2f48f83c79357c01fe311a9b1ab82024e464e176faf37dcfaf85cf1625f6a254",
+      "token_usage": {
+        "input_tokens": 304820,
+        "output_tokens": 122430,
+        "cache_read_tokens": 28608907,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    },
+    "8db5ee29e5a81335": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "195669d5-c420-4d87-9a7a-36de08c494ae",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 524,
+      "total_deletions": 108,
+      "accepted_lines": 54,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/a2806c6ec2956500431272b526f7340e2bbd1021b8b77597061aa91d98d7945c",
+      "token_usage": {
+        "input_tokens": 690897,
+        "output_tokens": 379789,
+        "cache_read_tokens": 58020864,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "e2fcb4b975340679": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22956e37-d42b-491d-abf5-5b98c1ecd247",
+        "model": "deepseek/deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 86,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/2dfc22544f2cb6815cb9489200b8222383887f88a015e10003ce0ec6f4dbc812",
+      "token_usage": {
+        "input_tokens": 9401541,
+        "output_tokens": 1997338,
+        "cache_read_tokens": 1297062144,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "fbd0a7434a0e56c7": {
+      "agent_id": {
+        "tool": "known_human",
+        "id": "known_human_session",
+        "model": "unknown"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 0,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    }
+  },
+  "humans": {
+    "h_3b1b2e873ac26d": {
+      "author": "罗威"
+    }
+  }
+}
