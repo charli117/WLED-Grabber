@@ -1,0 +1,45 @@
+docs/guides/configuration-and-troubleshooting.md
+  8ca27aebf464ed84 142-143
+tv/src/main/res/values/strings.xml
+  8ca27aebf464ed84 58-61
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/AboutDialogFragment.java
+  8ca27aebf464ed84 1-26
+docs/design/architecture.md
+  8ca27aebf464ed84 34
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvAboutSettingsTest.java
+  8ca27aebf464ed84 1-75
+tv/build.gradle
+  8ca27aebf464ed84 14-15,40
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledConnectionStepFragment.java
+  8ca27aebf464ed84 47,93-98,176-177
+tv/src/main/res/values-zh-rCN/strings.xml
+  8ca27aebf464ed84 56-58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.4",
+  "base_commit_sha": "ea5a7f8f6b1852b9b656069a9c6b14d38f94cadf",
+  "prompts": {
+    "8ca27aebf464ed84": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ef57-a515-71c3-91b4-e1071734cd6a",
+        "model": "gpt-6.2-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 125,
+      "total_deletions": 4,
+      "accepted_lines": 125,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/fdc6aa357a659491958c7e287eaa3bfed5f49f67683c7dd8ac6c61657ba551a0",
+      "token_usage": {
+        "input_tokens": 320133,
+        "output_tokens": 63335,
+        "cache_read_tokens": 26778697,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
