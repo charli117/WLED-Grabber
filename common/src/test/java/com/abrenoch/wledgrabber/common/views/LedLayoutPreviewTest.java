@@ -14,6 +14,7 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class LedLayoutPreviewTest {
@@ -163,5 +164,42 @@ public class LedLayoutPreviewTest {
         assertEquals("bad layout", error.error());
         assertTrue(error.rects().isEmpty());
         assertNotNull(error.corners());
+    }
+
+    @Test
+    public void selectionReusesRectsWithoutChangingEarlierSnapshots() {
+        CompiledLayout layout = layout(86, 90, 49, 49, 0, 0, 161, true,
+                GapMode.SKIP, 274, 640, 360);
+        PreviewModel first = PreviewModel.build(layout, 0);
+        PreviewModel second = first.select(1);
+
+        assertEquals(0, first.selectedPhysical());
+        assertEquals(160, first.selectedLogical());
+        assertTrue(first.rects().get(160).selected());
+        assertFalse(first.rects().get(159).selected());
+        assertEquals(1, second.selectedPhysical());
+        assertEquals(159, second.selectedLogical());
+        assertFalse(second.rects().get(160).selected());
+        assertTrue(second.rects().get(159).selected());
+        assertSame(first.rects().get(0), second.rects().get(0));
+        assertSame(first.rects().get(160), second.select(0).rects().get(160));
+        assertSame(second, second.select(1));
+
+        PreviewModel current = second;
+        Set<PreviewModel.PreviewRect> seen = new HashSet<>(first.rects());
+        for (int selection = 0; selection < 274 * 3; selection++) {
+            current = current.select(selection % 274);
+            int selectedRects = 0;
+            for (PreviewModel.PreviewRect rect : current.rects()) {
+                seen.add(rect);
+                if (rect.selected()) {
+                    selectedRects++;
+                    assertEquals(current.selectedPhysical(), rect.physicalIndex());
+                }
+            }
+            assertEquals(1, selectedRects);
+        }
+        assertEquals("only the selected and unselected variants exist per rectangle",
+                274 * 2, seen.size());
     }
 }

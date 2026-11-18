@@ -200,7 +200,7 @@ public final class LedLayoutPreviewView extends View {
         if (layout == null) {
             return;
         }
-        model = PreviewModel.build(layout, physicalIndex);
+        model = model.select(physicalIndex);
         if (listener != null) {
             listener.onIndexSelected(model.selectedPhysical());
         }
