@@ -140,7 +140,7 @@ adb shell cmd appops get --user 0 com.abrenoch.wledgrabber PROJECT_MEDIA
 - applicationId 为 `com.abrenoch.wledgrabber`，仅侧载安装。
 - mobile/tv 同 ID，输出的是**替代 APK**，彼此不能共装。
 - 当前版本（versionName / versionCode）：TV 为 `2.0 / 2026`，mobile 为 `1.0 / 1012`。Debug 包用于测试侧载；Release 包默认未签名，不能直接安装。
-- 电视端：在设置根页选择 **关于**，可查看项目简介、作者和当前安装包的版本名与版本号。按遥控器返回键即可回到设置，不会保存或丢弃尚未提交的修改。
+- 电视端：在设置根页选择菜单最后一项 **关于**，可查看项目简介、作者和当前安装包的版本名与版本号。按遥控器返回键即可回到设置，不会保存或丢弃尚未提交的修改。
 - 安装步骤：构建对应变体 → 侧载安装 → 完成首次设置 → 预览/测试图案确认接线。
 - 同一时间只能有一个发送者控制灯带。
 

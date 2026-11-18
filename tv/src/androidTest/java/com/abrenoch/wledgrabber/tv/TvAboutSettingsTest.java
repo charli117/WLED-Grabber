@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.view.KeyEvent;
 
 import androidx.core.content.pm.PackageInfoCompat;
+import androidx.leanback.widget.GuidedAction;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -16,9 +17,11 @@ import com.abrenoch.wledgrabber.tv.fragments.settings.WledConnectionStepFragment
 import org.junit.After;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.pressKey;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -28,6 +31,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anyOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class TvAboutSettingsTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -40,6 +45,16 @@ public class TvAboutSettingsTest {
         activity = instrumentation.startActivitySync(intent);
     }
 
+    private List<String> menuTitles() {
+        List<String> titles = new ArrayList<>();
+        instrumentation.runOnMainSync(() -> {
+            WledConnectionStepFragment step = (WledConnectionStepFragment) ((ManualSetupActivity) activity)
+                    .getSupportFragmentManager().findFragmentById(android.R.id.content);
+            for (GuidedAction action : step.getActions()) titles.add(action.getTitle().toString());
+        });
+        return titles;
+    }
+
     @After public void closeSettings() {
         if (activity != null) instrumentation.runOnMainSync(activity::finish);
         instrumentation.waitForIdleSync();
@@ -49,8 +64,10 @@ public class TvAboutSettingsTest {
         openSettings(false);
         String title = activity.getString(R.string.tv_about_title);
         var focusedRow = allOf(isFocused(), anyOf(withText(title), hasDescendant(withText(title))));
+        List<String> titles = menuTitles();
+        assertEquals(title, titles.get(titles.size() - 1));
         // Follow actual focus rather than activating a Fragment action by ID.
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < titles.size(); i++) {
             try {
                 onView(focusedRow).check(matches(isDisplayed()));
                 break;
@@ -70,6 +87,6 @@ public class TvAboutSettingsTest {
 
     @Test public void connectionEditorDoesNotRepeatTheRootAboutEntry() {
         openSettings(true);
-        onView(withText(activity.getString(R.string.tv_about_title))).check(doesNotExist());
+        assertFalse(menuTitles().contains(activity.getString(R.string.tv_about_title)));
     }
 }

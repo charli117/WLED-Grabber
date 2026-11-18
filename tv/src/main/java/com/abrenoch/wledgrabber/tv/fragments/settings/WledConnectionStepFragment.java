@@ -90,12 +90,6 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                 .description(getString(
                         com.abrenoch.wledgrabber.tv.R.string.layout_editor_advanced_entry_desc))
                 .build());
-        if (!editMode) {
-            actions.add(new GuidedAction.Builder(requireContext())
-                    .id(ACTION_ABOUT)
-                    .title(com.abrenoch.wledgrabber.tv.R.string.tv_about_title)
-                    .build());
-        }
         if (!addressingVisible) {
             actions.add(new GuidedAction.Builder(requireContext())
                     .id(ACTION_EDIT_CONNECTION)
@@ -146,6 +140,12 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
             actions.add(new GuidedAction.Builder(requireContext())
                     .id(ACTION_TEST)
                     .title(getString(R.string.wled_setup_test))
+                    .build());
+        }
+        if (!editMode) {
+            actions.add(new GuidedAction.Builder(requireContext())
+                    .id(ACTION_ABOUT)
+                    .title(com.abrenoch.wledgrabber.tv.R.string.tv_about_title)
                     .build());
         }
     }
