@@ -1,0 +1,139 @@
+common/src/test/java/com/abrenoch/wledgrabber/common/capture/LedStreamerTest.java
+  e3723cc385f8b84e 97-161
+  8ca27aebf464ed84 296
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/CaptureSession.java
+  e3723cc385f8b84e 21,35,122-127
+docs/archive/README.md
+  e3723cc385f8b84e 17-18
+docs/guides/configuration-and-troubleshooting.md
+  e3723cc385f8b84e 76,79,83
+docs/fixes/evidence/2026-11-18-tv-standby.txt
+  e3723cc385f8b84e 1-37
+docs/fixes/2026-11-18-tv-standby.md
+  e3723cc385f8b84e 1-16,19-35
+  8ca27aebf464ed84 17-18
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/WledHttpClientTest.java
+  63248d63345993ab 102
+common/src/sharedTest/java/com/abrenoch/wledgrabber/common/fixtures/ControlledHttpEndpoint.java
+  8ca27aebf464ed84 45,75-78,138,165-167
+docs/archive/task/00-overview.md
+  e3723cc385f8b84e 330
+common/src/main/res/values/strings.xml
+  e3723cc385f8b84e 190-191
+common/src/main/res/values-zh-rCN/strings.xml
+  e3723cc385f8b84e 136-137
+common/src/main/java/com/abrenoch/wledgrabber/common/WledScreenService.java
+  8ca27aebf464ed84 384
+  e3723cc385f8b84e 34,55,109,148-149,177,182-184,193-201,212-221,333-335,343-345,371,374,383,385,387-394,435-437,668-676,678,736,742,747-755,778-779,781-782,851,870-878,895
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/ScreenOffReceiver.java
+  e3723cc385f8b84e 1-42
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/WledPowerOnTest.java
+  e3723cc385f8b84e 3-8,56-69
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/OutputSessionCoordinator.java
+  e3723cc385f8b84e 39-50
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/WledSessionTest.java
+  8ca27aebf464ed84 85
+  e3723cc385f8b84e 3-6,81-84,86-95
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvLayoutEditorTest.java
+  8ca27aebf464ed84 52
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledSession.java
+  8ca27aebf464ed84 127-131,236
+docs/archive/fixes/2026-11-17-completion-audit.md
+  e3723cc385f8b84e 6-7
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/LayoutProbeSenderTest.java
+  8ca27aebf464ed84 14-19,31-57,84,102
+common/src/test/java/com/abrenoch/wledgrabber/common/qa/EndToEndWledPipelineTest.java
+  8ca27aebf464ed84 183
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledFrameSink.java
+  e3723cc385f8b84e 3-31,34-36,38
+common/src/test/java/com/abrenoch/wledgrabber/common/capture/CaptureSessionTest.java
+  e3723cc385f8b84e 24-46
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/LayoutProbeSender.java
+  8ca27aebf464ed84 33-34,45-50,58-59,76,85,112,117,122,130
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/LayoutEditorActivity.java
+  8ca27aebf464ed84 473,597,605
+  e3723cc385f8b84e 14,52,150-155,160,414-417
+README.md
+  e3723cc385f8b84e 49,66,124,139
+common/src/main/java/com/abrenoch/wledgrabber/common/capture/LedStreamer.java
+  8ca27aebf464ed84 325
+  e3723cc385f8b84e 15-17,134,176,226-237
+common/src/main/java/com/abrenoch/wledgrabber/common/views/TestPatternActivity.java
+  8ca27aebf464ed84 102,107-108,110,113,120,136-138,151
+  e3723cc385f8b84e 17,27,43,62,75-79,117-119,124-125,144-148,154-157,161-164,169
+docs/design/architecture.md
+  e3723cc385f8b84e 5,70,76-77,380,503,544-545
+  8ca27aebf464ed84 381,418
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/WledHttpClient.java
+  8ca27aebf464ed84 170-172,174-182
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.4",
+  "base_commit_sha": "56626716281ad271c7d59b0c148b7a101d7a9556",
+  "prompts": {
+    "63248d63345993ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b04cdf31-fd55-42a7-9f4f-8c5a096a21b5",
+        "model": "deepseek-v4-1-flash-261017"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 28,
+      "accepted_lines": 234,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/f14dfcea5acaacd336fcdeeb35f6ee26ba0df912abc1e82979defabf2f0e23fb",
+      "token_usage": {
+        "input_tokens": 681416,
+        "output_tokens": 77957,
+        "cache_read_tokens": 6948352,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "8ca27aebf464ed84": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ef57-a515-71c3-91b4-e1071734cd6a",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 109,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/87c7c499507890b679bd8b94bd484963efb3182d2eba8d87a9ada4508a3411c6",
+      "token_usage": {
+        "input_tokens": 7932,
+        "output_tokens": 6492,
+        "cache_read_tokens": 614552,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    },
+    "e3723cc385f8b84e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ef36-1570-7a40-9886-4783d59c0561",
+        "model": "gpt-6.2-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 461,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/5aaf77d776f7abd04e6d03ff46bcf312109b8053da8c6dfff2bb018530ff2a3a",
+      "token_usage": {
+        "input_tokens": 257230,
+        "output_tokens": 57288,
+        "cache_read_tokens": 28664982,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
