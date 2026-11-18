@@ -19,6 +19,8 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
@@ -57,6 +59,26 @@ public class TvMainActivityTest {
                 withText(com.abrenoch.wledgrabber.common.R.string.tv_status_ready)));
         onView(withId(R.id.power_toggle)).check(matches(isDisplayed()));
         onView(withId(R.id.settingsButton)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void homeButtonsDescribeTheNextActionAfterServiceUpdates() {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity = InstrumentationRegistry.getInstrumentation().startActivitySync(intent);
+        onView(withId(R.id.settingsButton)).check(matches(withContentDescription(
+                com.abrenoch.wledgrabber.common.R.string.pref_title)));
+        onView(withId(R.id.power_toggle)).check(matches(isAssignableFrom(android.widget.ImageButton.class)));
+        onView(withId(R.id.power_toggle)).check(matches(withContentDescription(
+                com.abrenoch.wledgrabber.common.R.string.capture_action_start)));
+        Intent running = new Intent(WledScreenService.BROADCAST_FILTER)
+                .putExtra(WledScreenService.BROADCAST_TAG, true);
+        androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(context).sendBroadcast(running);
+        onView(withId(R.id.power_toggle)).check(matches(withContentDescription(
+                com.abrenoch.wledgrabber.common.R.string.capture_action_stop)));
+        sendReleaseBroadcast(false);
+        onView(withId(R.id.power_toggle)).check(matches(withContentDescription(
+                com.abrenoch.wledgrabber.common.R.string.capture_action_start)));
     }
 
     @Test

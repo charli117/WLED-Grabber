@@ -278,6 +278,9 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
     }
 
     private void setImageViews(boolean running, boolean animated, boolean showMessage) {
+        findViewById(R.id.power_toggle).setContentDescription(getString(running
+                ? com.abrenoch.wledgrabber.common.R.string.capture_action_stop
+                : com.abrenoch.wledgrabber.common.R.string.capture_action_start));
         View rainbow = findViewById(R.id.sweepGradientView);
         View message = findViewById(R.id.grabberStartedText);
         if (running) {

@@ -46,8 +46,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_toggle_image_middle" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/power_toggle"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/capture_action_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -68,6 +71,7 @@
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/settingsButton"
+        android:contentDescription="@string/pref_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/image_button_background"
