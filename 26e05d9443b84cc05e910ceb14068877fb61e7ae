@@ -1,0 +1,56 @@
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvMainActivityTest.java
+  8ca27aebf464ed84 22-23,64-81
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/MainActivity.java
+  8ca27aebf464ed84 281-283
+tv/src/main/res/layout/activity_main.xml
+  8ca27aebf464ed84 49,51-53,74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.4",
+  "base_commit_sha": "26e05d9443b84cc05e910ceb14068877fb61e7ae",
+  "prompts": {
+    "8adff578568baeab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "950ff886-dd45-4251-95c2-e4f99807c1c0",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 50,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/da71c76637c3912dfeca8a2cfc6501b3c5c6d9d7cbaeaed68eb694ee45a9b8bc",
+      "token_usage": {
+        "input_tokens": 196524,
+        "output_tokens": 45063,
+        "cache_read_tokens": 2664704,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "8ca27aebf464ed84": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ef57-a515-71c3-91b4-e1071734cd6a",
+        "model": "gpt-6.2-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 132,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/5047f603f315234160dfda2ee787879cfd8d5468a0377e14f832e00a84c6a869",
+      "token_usage": {
+        "input_tokens": 189078,
+        "output_tokens": 41650,
+        "cache_read_tokens": 19837368,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
