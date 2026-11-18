@@ -9,6 +9,8 @@
   </string-array>
   <string name="app_name">WLED Grabber</string>
   <string name="pref_title">Settings</string>
+  <string name="capture_action_start">Start capture</string>
+  <string name="capture_action_stop">Stop capture</string>
   <string name="enabled">Enabled</string>
   <string name="disabled">Disabled</string>
   <!-- notification button -->

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/settings"
-        android:title="@string/settings" />
+        android:title="@string/pref_title" />
     <item android:id="@+id/preview"
-        android:title="Layout preview" />
+        android:title="@string/wled_layout_preview" />
     <item android:id="@+id/test_patterns"
-        android:title="Test patterns" />
+        android:title="@string/wled_layout_test_pattern" />
 </menu>

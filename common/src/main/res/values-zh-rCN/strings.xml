@@ -2,6 +2,8 @@
 <resources>
   <string name="app_name">WLED Grabber</string>
   <string name="pref_title">设置</string>
+  <string name="capture_action_start">开始采集</string>
+  <string name="capture_action_stop">停止采集</string>
   <string name="enabled">已启用</string>
   <string name="disabled">已禁用</string>
   <string name="notification_exit_button">退出</string>

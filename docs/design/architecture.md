@@ -519,19 +519,21 @@ NSD 浏览 `_wled._tcp.`，解析的 port 是 HTTP 端口，不是 UDP；缓存 
 ## 9. 手机、TV 与共享预览交互
 
 
+组件清单、交互回归与实机验收边界见[原生界面审查](../fixes/2026-11-19-native-ui.md)。
+
 ### 9.1 两端完整设置
 
 | 分组 | 共同字段与动作 | 宿主差异 |
 |---|---|---|
-| WLED Connection | host、HTTP 端口、UDP realtime 端口、只读 DDP 端口、协议、明确通道格式、扫描/测试 | 手机 Preference；TV GuidedStep 首步，缺设备保留手动入口 |
+| WLED Connection | host、HTTP 端口、UDP realtime 端口、只读 DDP 端口、协议、明确通道格式、扫描/测试 | 手机 `SettingsActivity` 原生表单手动输入；TV 另有扫描结果页与 GuidedStep 手动入口 |
 | LED Layout | T/B/L/R、物理数量、Gap length/position、Input、Reverse | TV 实时布局编辑器（D-pad 步进、精确输入、实时预览、逐边/Input 校验） |
 | Advanced Layout | H/V Depth、Overlap、Edge Gap、四角、SKIP/BLACK、RGBW 白模式、平均色、采集长边、画质 | 两端均提供；TV 高级选项步骤，不能只给手机配置提示 |
 | Preview | 共用预览、274 预设、288 参考向量、三种图案、逐边/输入位置点亮校验 | 两端各有独立 LayoutPreviewActivity；TV 编辑器内联实时预览 |
 | Capturing / General | 帧率、自启动设置、权限/状态 | 录屏授权/通知/Tile/系统 insets 按平台适配 |
 
-手机：空配置点击电源先进入 WLED 设置/扫描；配置就绪后与 TV/Tile/通知入口一样进入共享 `StartCaptureActivity`，逐项确认并即时探测通过后才请求系统授权。TV：首次/未完成配置时进入 Connection（LED 寻址）→ 保存后若布局未就绪进入 Layout（实时编辑器）→ Layout 保存返回 Connection → Connection 保存进入共享 `StartCaptureActivity`；已配置后 Connection 作为设置 hub，隐藏寻址字段，只保留 Layout、Advanced 与“编辑 WLED 连接”入口，保存直接进入 `StartCaptureActivity`。**WLED 寻址只在首次配置出现**：`StartConfirmationStore` 已有该设备确认时，采集入口传 `EXTRA_AUTO_START`，`StartCaptureActivity` 使用透明、无 starting-window 预览的主题并隐藏确认项，自动完成一次探测后直接请求录屏授权，避免电源按下到授权之间的白色闪屏；没有存储确认的首次启动仍显示一次深色确认项。已保存 host 与物理灯数但布局/通道未完成时，打开 App 只进入主界面并提示补全布局，不再次进入寻址向导。编辑连接页保存后返回 hub，不再次自动进入 Layout。保留主界面与非后端相关交互；设置保存失败不启动、不假显示已保存。同一字段只在上述唯一页面出现：物理数量只在布局编辑器，RGBW white mode/平均色/采集长边/画质只在高级选项，连接步骤不再重复。
+手机：空配置点击电源先进入 WLED 设置表单；配置就绪后与 TV/Tile/通知入口一样进入共享 `StartCaptureActivity`，逐项确认并即时探测通过后才请求系统授权。TV：首次/未完成配置时进入 Connection（LED 寻址）→ 保存后若布局未就绪进入 Layout（实时编辑器）→ Layout 保存返回 Connection → Connection 保存进入共享 `StartCaptureActivity`；已配置后 Connection 作为设置 hub，隐藏寻址字段，只保留 Layout、Advanced 与“编辑 WLED 连接”入口，保存直接进入 `StartCaptureActivity`。**WLED 寻址只在首次配置出现**：`StartConfirmationStore` 已有该设备确认时，采集入口传 `EXTRA_AUTO_START`，`StartCaptureActivity` 使用透明、无 starting-window 预览的主题并隐藏确认项，自动完成一次探测后直接请求录屏授权，避免电源按下到授权之间的白色闪屏；没有存储确认的首次启动仍显示一次深色确认项。已保存 host 与物理灯数但布局/通道未完成时，打开 App 只进入主界面并提示补全布局，不再次进入寻址向导。编辑连接页保存后返回 hub，不再次自动进入 Layout。保留主界面与非后端相关交互；设置保存失败不启动、不假显示已保存。同一字段只在上述唯一页面出现：物理数量只在布局编辑器，RGBW white mode/平均色/采集长边/画质只在高级选项，连接步骤不再重复。
 
-复用 `SettingsStepBaseFragment` 的 `unSignedNumberAction`、`radioListAction` 和现有 Preference listener 适配职责，`assertIntValue` 等校验统一委托 ConfigValidator，不复制规则；TV 实时布局编辑器通过共享 `ConfigValidator.validateLayout`/`SettingsDraftController` 完成草稿校验与原子保存。扫描 `saveResult()` 保存确认的 WLED 端点。RGB 模式隐藏 White Mode；unconfirmed 模式提示确认硬件而不自动假定 RGB。修改草稿即时刷新预览，**不热更新正在发送的快照**；运行中保存显式提示“下次启动生效”。错误、单位、默认值和资源均共享，TV 大字体/D-pad 焦点完整可达。
+复用 `SettingsStepBaseFragment` 的 `unSignedNumberAction`、`radioListAction` 与两端各自的输入控件，`assertIntValue` 等校验统一委托 ConfigValidator，不复制规则；TV 实时布局编辑器通过共享 `ConfigValidator.validateLayout`/`SettingsDraftController` 完成草稿校验与原子保存。扫描 `saveResult()` 保存确认的 WLED 端点。RGB 模式隐藏 White Mode；unconfirmed 模式提示确认硬件而不自动假定 RGB。修改草稿即时刷新预览，**不热更新正在发送的快照**；运行中保存显式提示“下次启动生效”。错误、单位、默认值和资源均共享，TV 大字体/D-pad 焦点完整可达。
 
 布局页提供**逐边与输入位置点亮校验**：按当前草稿编译布局，经 `LayoutProbe` 取逻辑环区间并映射到物理索引，借助共享 `TEST` 输出租约保持白色常亮，其余灯珠为黑。再次点击同一项熄灭；点击其他方向时替换当前探针（同一时间只亮一个方向）。**输入位置只点亮物理 0 的第一颗灯珠**：`LayoutProbe.firstPhysicalLogical` 从映射取物理 0 对应的逻辑槽位再构建报文，Reverse 开启时不能直接用原始 Input 索引（那会指向灯带末端）。草稿变化、页面退后台/退出、打开预览或测试图案时释放租约；采集运行中不抢占输出，提示先停止。该动作只用于确认接线/顺序/Input/Reverse，不替代正式预览与 10 秒图案测试。
 
@@ -544,6 +546,8 @@ NSD 浏览 `_wled._tcp.`，解析的 port 是 HTTP 端口，不是 UDP；缓存 
 | 四边色 | Top 红、Right 绿、Bottom 蓝、Left 白 | 侧别、Input/Reverse、Gap |
 | 行走像素 | 按物理索引递增标识，显示当前索引；BLACK 和尾黑保持不点亮 | 接线顺序；不为了测试绕过黑灯掩码 |
 | 整带纯色 | 有效灯红/绿/蓝/白循环，Gap/尾灯仍黑 | RGB/RGBW 通道与实际颜色 |
+
+当前共享测试页固定启动四边色（`SIDES`）；表中的行走像素和整带纯色是图案能力，不代表当前页面已提供选择入口。
 
 统一测试默认 10 秒，可取消并显示倒计时；大型行走测试 10 秒内不保证覆盖全部灯，可从索引继续选择验证，不能虚报全带通过。TEST 必须先确认 CAPTURE 已停止；测试使用同一 epoch/帧池/writer/停止屏障，不增加 HTTP 逐灯发送备用路径。退后台/退出即 release，不自动恢复已终止的采集。测试显示发送与观察状态，颜色是否正确仍需用户/硬件证据。
 
