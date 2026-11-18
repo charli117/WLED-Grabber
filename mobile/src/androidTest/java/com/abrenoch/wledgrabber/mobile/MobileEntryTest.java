@@ -1,6 +1,11 @@
 package com.abrenoch.wledgrabber.mobile;
 
 import android.content.Context;
+import android.content.Intent;
+import android.widget.ImageButton;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import com.abrenoch.wledgrabber.common.WledScreenService;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -21,6 +26,8 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -38,6 +45,47 @@ public class MobileEntryTest {
         try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
             onView(withId(R.id.power_toggle)).check(matches(isDisplayed()));
             onView(withId(R.id.power_toggle)).check(matches(isClickable()));
+        }
+    }
+
+    @Test
+    public void powerButtonLabelTracksServiceBroadcasts() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        seed(context);
+        try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
+            onView(withId(R.id.power_toggle)).check(matches(isAssignableFrom(ImageButton.class)));
+            for (boolean running : new boolean[] {false, true, false}) {
+                LocalBroadcastManager.getInstance(context).sendBroadcast(
+                        new Intent(WledScreenService.BROADCAST_FILTER).putExtra(WledScreenService.BROADCAST_TAG, running));
+                onView(withId(R.id.power_toggle)).check(matches(withContentDescription(running
+                        ? com.abrenoch.wledgrabber.common.R.string.capture_action_stop
+                        : com.abrenoch.wledgrabber.common.R.string.capture_action_start)));
+            }
+        }
+    }
+
+    @Test
+    public void stopDuringStartFadeKeepsTheRunningIndicatorsHidden() throws Exception {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        seed(context);
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            java.util.concurrent.CountDownLatch afterFade = new java.util.concurrent.CountDownLatch(1);
+            scenario.onActivity(activity -> {
+                android.view.View message = activity.findViewById(R.id.grabberStartedText);
+                message.animate().setDuration(60);
+                activity.findViewById(R.id.sweepGradientView).animate().setDuration(60);
+                LocalBroadcastManager bus = LocalBroadcastManager.getInstance(context);
+                Intent status = new Intent(WledScreenService.BROADCAST_FILTER);
+                bus.sendBroadcastSync(status.putExtra(WledScreenService.BROADCAST_TAG, true));
+                bus.sendBroadcastSync(status.putExtra(WledScreenService.BROADCAST_TAG, false));
+                message.postDelayed(afterFade::countDown, 300);
+            });
+            assertTrue(afterFade.await(3, java.util.concurrent.TimeUnit.SECONDS));
+            scenario.onActivity(activity -> {
+                for (int id : new int[] {R.id.sweepGradientView, R.id.grabberStartedText}) {
+                    org.junit.Assert.assertEquals(android.view.View.INVISIBLE, activity.findViewById(id).getVisibility());
+                }
+            });
         }
     }
 

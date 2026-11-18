@@ -193,25 +193,12 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
         View rainbow = findViewById(R.id.sweepGradientView);
         View message = findViewById(R.id.grabberStartedText);
         View buttonImage = findViewById(R.id.power_toggle);
-        if (running) {
-            if (animated){
-                fadeView(rainbow, true);
-                fadeView(message, true);
-            } else {
-                rainbow.setVisibility(View.VISIBLE);
-                message.setVisibility(View.VISIBLE);
-            }
-            buttonImage.setAlpha((float) 1);
-        } else {
-            if (animated){
-                fadeView(rainbow, false);
-                fadeView(message, false);
-            } else {
-                rainbow.setVisibility(View.INVISIBLE);
-                message.setVisibility(View.INVISIBLE);
-            }
-            buttonImage.setAlpha((float) 0.25);
-        }
+        buttonImage.setContentDescription(getString(running
+                ? com.abrenoch.wledgrabber.common.R.string.capture_action_stop
+                : com.abrenoch.wledgrabber.common.R.string.capture_action_start));
+        fadeView(rainbow, running, animated);
+        fadeView(message, running, animated);
+        buttonImage.setAlpha(running ? 1f : 0.25f);
     }
 
     private boolean isServiceRunning() {
@@ -225,9 +212,16 @@ public class MainActivity extends AppCompatActivity implements ImageView.OnClick
         return false;
     }
 
-    private void fadeView(View view, boolean visible){
+    private void fadeView(View view, boolean visible, boolean animated) {
         float alpha = visible ? 1f : 0f;
         int endVisibility = visible ? View.VISIBLE : View.INVISIBLE;
+        // A stale start animation must not make a stopped indicator visible again.
+        view.animate().setListener(null).cancel();
+        if (!animated || (view.getVisibility() == endVisibility && view.getAlpha() == alpha)) {
+            view.setAlpha(alpha);
+            view.setVisibility(endVisibility);
+            return;
+        }
         view.setVisibility(View.VISIBLE);
         view.animate()
                 .alpha(alpha)
