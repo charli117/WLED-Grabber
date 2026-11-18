@@ -1,0 +1,77 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/views/PreviewModel.java
+  63248d63345993ab 76-78,90-92,96-98,112-113,126-131,135-136,138-140,149-172
+common/src/main/java/com/abrenoch/wledgrabber/common/views/LedLayoutPreviewView.java
+  63248d63345993ab 203
+common/src/test/java/com/abrenoch/wledgrabber/common/views/LedLayoutPreviewTest.java
+  8ca27aebf464ed84 17,168-203
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.4",
+  "base_commit_sha": "fc7e42b937bd0167b1e932827af83b7029c65dae",
+  "prompts": {
+    "63248d63345993ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b04cdf31-fd55-42a7-9f4f-8c5a096a21b5",
+        "model": "deepseek-v4-1-flash-261017"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 50,
+      "total_deletions": 9,
+      "accepted_lines": 50,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/9e0ab382fbb8916364368ce0f5bb0756df81cc7092f3c3999a31becb3a53b256",
+      "token_usage": {
+        "input_tokens": 661698,
+        "output_tokens": 69702,
+        "cache_read_tokens": 5154432,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "8ca27aebf464ed84": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ef57-a515-71c3-91b4-e1071734cd6a",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 164,
+      "total_deletions": 106,
+      "accepted_lines": 163,
+      "overriden_lines": 1,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/7c60911e78c86d4ac4e8ec6bf9f67a5097ee51d9c3031bd2c1d63cff8b24a8e2",
+      "token_usage": {
+        "input_tokens": 7932,
+        "output_tokens": 6492,
+        "cache_read_tokens": 614552,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    },
+    "e3723cc385f8b84e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ef36-1570-7a40-9886-4783d59c0561",
+        "model": "gpt-6.2-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 512,
+      "total_deletions": 206,
+      "accepted_lines": 459,
+      "overriden_lines": 2,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/cf6e635181198c0d5e32180bb905f9e21646c53a8054130b19d34e6d5debba4b",
+      "token_usage": {
+        "input_tokens": 257230,
+        "output_tokens": 57288,
+        "cache_read_tokens": 28664982,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
