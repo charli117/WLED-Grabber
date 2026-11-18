@@ -1,0 +1,54 @@
+docs/design/architecture.md
+  8ca27aebf464ed84 540
+docs/fixes/2026-11-19-native-ui.md
+  8ca27aebf464ed84 14-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.4",
+  "base_commit_sha": "fb644d0aa5029046f144b19dbab28bf4436a7fc8",
+  "prompts": {
+    "8adff578568baeab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "950ff886-dd45-4251-95c2-e4f99807c1c0",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 0,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/c5cd32cd8efd6f3ec911398b3635dd87f90495b31a9359bb3f9a96771a8c165c",
+      "token_usage": {
+        "input_tokens": 197648,
+        "output_tokens": 46839,
+        "cache_read_tokens": 3065856,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "8ca27aebf464ed84": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ef57-a515-71c3-91b4-e1071734cd6a",
+        "model": "gpt-6.2-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 36,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/babf505d768fe796b2acf325dfb487608b1a5c2d9bbfeb8b2f269e396c01483b",
+      "token_usage": {
+        "input_tokens": 189078,
+        "output_tokens": 41650,
+        "cache_read_tokens": 19837368,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
