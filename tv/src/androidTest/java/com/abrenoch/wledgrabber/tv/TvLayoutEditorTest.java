@@ -265,6 +265,27 @@ public class TvLayoutEditorTest {
     }
 
     @Test
+    public void holdingConfirmTogglesOnlyOncePerPress() {
+        try (ActivityScenario<LayoutEditorActivity> scenario = ActivityScenario.launch(LayoutEditorActivity.class)) {
+            scenario.onActivity(activity -> {
+                LayoutValueRow reverse = findRow(activity, ConfigFields.LED_REVERSE);
+                assertTrue(reverse.requestFocus());
+                String initial = reverse.displayValue().toString();
+                int key = KeyEvent.KEYCODE_DPAD_CENTER;
+                long down = android.os.SystemClock.uptimeMillis();
+                assertTrue(reverse.dispatchKeyEvent(new KeyEvent(down, down, KeyEvent.ACTION_DOWN, key, 0)));
+                String toggled = reverse.displayValue().toString();
+                assertFalse(initial.equals(toggled));
+                assertTrue(reverse.dispatchKeyEvent(new KeyEvent(down, down + 250, KeyEvent.ACTION_DOWN, key, 1)));
+                assertEquals(toggled, reverse.displayValue().toString());
+                assertTrue(reverse.dispatchKeyEvent(new KeyEvent(down, down + 260, KeyEvent.ACTION_UP, key, 0)));
+                assertTrue(reverse.dispatchKeyEvent(keyDown(key)));
+                assertEquals(initial, reverse.displayValue().toString());
+            });
+        }
+    }
+
+    @Test
     public void holdingAToggleDoesNotFlipOnKeyRepeat() {
         try (ActivityScenario<LayoutEditorActivity> scenario =
                      ActivityScenario.launch(LayoutEditorActivity.class)) {

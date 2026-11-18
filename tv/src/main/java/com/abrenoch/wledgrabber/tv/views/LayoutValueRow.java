@@ -163,7 +163,7 @@ public final class LayoutValueRow extends LinearLayout {
             return true;
         }
         if (isConfirmKey(keyCode)) {
-            performClick();
+            if (event.getRepeatCount() == 0) performClick();
             return true;
         }
         if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN && nextDownView != null) {
