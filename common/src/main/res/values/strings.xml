@@ -187,6 +187,7 @@
   <string name="wled_probe_input">Light input position</string>
   <string name="wled_probe_sent">Lighting %1$d LED(s). Press again to turn off.</string>
   <string name="wled_probe_input_on">First LED lit. Press again to turn off.</string>
-  <string name="wled_probe_off">Probe off.</string>
+  <string name="wled_probe_off">Probe stopped; device power-off is not confirmed.</string>
+  <string name="wled_test_reopen">Test stopped. Reopen to start a new test.</string>
   <string name="wled_probe_busy">Stop capture before probing the strip.</string>
 </resources>

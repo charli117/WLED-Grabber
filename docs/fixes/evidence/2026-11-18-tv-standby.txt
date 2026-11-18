@@ -1,0 +1,37 @@
+WLED standby review | 2026-11-18 to 2026-11-19 (Asia/Shanghai)
+Selected original runner output, not a device trace. Each RED was captured before its corresponding implementation change.
+
+CaptureSession admission
+1) asleepDisplayRejectsNewStartsUntilAnExplicitAwakeStart(com.abrenoch.wledgrabber.common.capture.CaptureSessionTest)
+java.lang.AssertionError: standby must not admit a new start
+Tests run: 10,  Failures: 1
+OK (10 tests)
+
+LedStreamer stop during first power-on
+1) stopWhilePowerOnIsPendingDropsColorBeforeBlackAndOff(com.abrenoch.wledgrabber.common.capture.LedStreamerTest)
+java.lang.AssertionError: first frame must order power-on on the writer
+Tests run: 9,  Failures: 1
+OK (9 tests)
+
+Output lease lifetime (compilation RED, not a failed runtime assertion)
+common/src/test/java/com/abrenoch/wledgrabber/common/capture/LedStreamerTest.java:142: error: cannot find symbol
+  symbol:   method releaseWhenDone(OutputOwner,String,long,(reason)->[...]; } })
+OK (10 tests)
+
+HTTP state vs info disagreement
+WledHttpClientTest > stateReadbackAndOffUseTheRestrictedClient FAILED
+java.lang.AssertionError at WledHttpClientTest.java:108
+
+com.abrenoch.wledgrabber.common.network.wled.LayoutProbeSenderTest.stoppingVisibleProbePowersOffBeforeReturningLease
+org.junit.ComparisonFailure: expected:<{"on":[false,"live":false,"tt":0]}> but was:<{"on":[true]}>
+
+com.abrenoch.wledgrabber.common.network.wled.WledSessionTest.captureWriterStopSendsOnlyOneBlackBeforeOff
+java.lang.AssertionError: one terminal black frame, not one per layer expected:<1> but was:<2>
+
+Final offline Gradle --rerun-tasks verification
+> Task :tv:testDebugUnitTest NO-SOURCE
+BUILD SUCCESSFUL in 32s
+343 actionable tasks: 343 executed
+common: JVM tests/failures/errors/skipped = 241/0/0/0; lint: 0 errors, 71 warnings
+mobile: JVM tests/failures/errors/skipped = 1/0/0/0; lint: 0 errors, 6 warnings
+tv: JVM tests/failures/errors/skipped = 0/0/0/0; lint: 0 errors, 55 warnings

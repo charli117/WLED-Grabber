@@ -327,7 +327,7 @@ flowchart TD
 | 端到端采集 | 启动后 WLED `on=true, live=true, lm=UDP, lip=10.245.0.109`；停止后 `on=false, live=false` 读回 CONFIRMED；服务/投影/虚拟显示归零 |
 | CAP-2 真实投屏 resize | 同一 VirtualDisplay（uniqueId 不变）`640×360→640×512→640×360`；采集线程与 qa2 指标持续，无应用崩溃 |
 | CAP-2 真实投屏旋转 | 同一 VirtualDisplay `640×360→360×640→640×360`；采集持续 |
-| CAP-1 息屏/亮屏 | 息屏与亮屏期间前台服务=1、projection=1，qa2 持续；无应用崩溃 |
+| CAP-1 息屏/亮屏 | 息屏与亮屏期间前台服务=1、projection=1，qa2 持续；无应用崩溃。**这是修复前观察，不满足息屏释放契约**；当前结论见[待机修复报告](../../fixes/2026-11-18-tv-standby.md)。 |
 | CAP-1 拒绝授权 | 系统确认页选“取消”后返回“已取消录屏授权，未开始任何采集。”；服务/投影/显示=0 |
 | CAP-3 停止释放 | 服务/投影/显示=0，WLED 读回 `on=false/live=false` |
 | CAP-3 进程被杀 | `am force-stop` 后资源=0，WLED live 超时退出；重启应用可重新采集，无陈旧所有权/崩溃 |

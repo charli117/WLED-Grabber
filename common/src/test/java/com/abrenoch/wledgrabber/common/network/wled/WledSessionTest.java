@@ -1,5 +1,9 @@
 package com.abrenoch.wledgrabber.common.network.wled;
 
+import com.abrenoch.wledgrabber.common.capture.FrameLease;
+import com.abrenoch.wledgrabber.common.capture.FramePool;
+import com.abrenoch.wledgrabber.common.capture.LedStreamer;
+import com.abrenoch.wledgrabber.common.capture.OutputOwner;
 import com.abrenoch.wledgrabber.common.fixtures.FakeClock;
 import com.abrenoch.wledgrabber.common.led.Protocol;
 import com.abrenoch.wledgrabber.common.led.RgbwMode;
@@ -72,6 +76,23 @@ public class WledSessionTest {
             blacks++;
             return success;
         }
+    }
+
+    @Test
+    public void captureWriterStopSendsOnlyOneBlackBeforeOff() {
+        FakeControl control = new FakeControl();
+        FakeSender datagrams = new FakeSender();
+        WledSession session = WledSession.forCaptureWriter(control, () -> 0);
+        session.start(ready());
+        LedStreamer writer = new LedStreamer(new FramePool(274 * 3), new LedStreamer.FrameSink() {
+            public boolean send(FrameLease lease) { throw new AssertionError("unexpected color"); }
+            public boolean sendBlack(int leds, int channels) { return datagrams.sendBlack(leds, false); }
+        }, reason -> session.release(reason).status() == WledSession.ReleaseStatus.CONFIRMED, 1000);
+        writer.start(1, OutputOwner.CAPTURE, 274, 3);
+        assertTrue(writer.stop("sleep").releaseOk());
+        assertEquals("one terminal black frame, not one per layer", 1, datagrams.blacks);
+        assertEquals(1, control.offs);
+        assertEquals(1, control.stateReads);
     }
 
     @Test

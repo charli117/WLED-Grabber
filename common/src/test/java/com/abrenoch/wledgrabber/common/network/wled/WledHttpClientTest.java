@@ -99,7 +99,7 @@ public class WledHttpClientTest {
             assertFalse(state.on());
             assertFalse(state.live());
             assertTrue(loopbackClient.turnOff("127.0.0.1", endpoint.port()));
-            assertEquals(2, endpoint.requestCount());
+            assertEquals(3, endpoint.requestCount());
         }
         try (ControlledHttpEndpoint endpoint = new ControlledHttpEndpoint(
                 ControlledHttpEndpoint.Mode.STATE_LIVE)) {

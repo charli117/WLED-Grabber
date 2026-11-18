@@ -36,6 +36,18 @@ public final class OutputSessionCoordinator {
         return true;
     }
 
+    /** A stop deadline limits the caller's wait, not the lifetime of the old writer's lease. */
+    public LedStreamer.ReleaseAction releaseWhenDone(OutputOwner expected, String id, long expectedEpoch,
+                                                       LedStreamer.ReleaseAction finalIo) {
+        return reason -> {
+            try {
+                return finalIo.release(reason);
+            } finally {
+                release(expected, id, expectedEpoch);
+            }
+        };
+    }
+
     public synchronized OutputOwner owner() {
         return owner;
     }

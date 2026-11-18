@@ -14,6 +14,7 @@ import com.abrenoch.wledgrabber.common.capture.LedTestPattern;
 import com.abrenoch.wledgrabber.common.capture.OutputOwner;
 import com.abrenoch.wledgrabber.common.capture.OutputSessionCoordinator;
 import com.abrenoch.wledgrabber.common.capture.TestPatternRunner;
+import com.abrenoch.wledgrabber.common.capture.ScreenOffReceiver;
 import com.abrenoch.wledgrabber.common.capture.TestPatternSession;
 import com.abrenoch.wledgrabber.common.led.ClassicLedLayout;
 import com.abrenoch.wledgrabber.common.led.CompiledLayout;
@@ -23,8 +24,7 @@ import com.abrenoch.wledgrabber.common.led.RgbwMode;
 import com.abrenoch.wledgrabber.common.network.wled.StateReadResult;
 import com.abrenoch.wledgrabber.common.network.wled.UdpDatagramSink;
 import com.abrenoch.wledgrabber.common.network.wled.WledHttpClient;
-import com.abrenoch.wledgrabber.common.network.wled.WledPowerOn;
-import com.abrenoch.wledgrabber.common.network.wled.WledUdpTransport;
+import com.abrenoch.wledgrabber.common.network.wled.WledFrameSink;
 import com.abrenoch.wledgrabber.common.util.ConfigRepository;
 import com.abrenoch.wledgrabber.common.util.ConfigValidator;
 import com.abrenoch.wledgrabber.common.util.Preferences;
@@ -40,16 +40,11 @@ public class TestPatternActivity extends AppCompatActivity {
                 com.abrenoch.wledgrabber.common.util.LocaleHelper.wrap(newBase));
     }
     private final Handler handler = new Handler(Looper.getMainLooper());
+    private final ScreenOffReceiver powerReceiver = new ScreenOffReceiver(this::cancelIfRunning);
     private TextView status;
     private TestPatternRunner runner;
-    private UdpDatagramSink sink;
-    private WledHttpClient httpClient;
-    private String host;
-    private int httpPort;
     private boolean started;
     private static final String OUTPUT_OWNER_ID = "test-pattern";
-    private OutputSessionCoordinator outputCoordinator;
-    private long outputEpoch;
 
     private final Runnable ticker = new Runnable() {
         @Override
@@ -64,14 +59,7 @@ public class TestPatternActivity extends AppCompatActivity {
             if (state == TestPatternSession.State.RUNNING) {
                 handler.postDelayed(this, 33);
             } else {
-                started = false;
-                LedStreamer.StopResult stop = runner.lastStop();
-                boolean confirmed = stop != null && stop.releaseOk();
-                status.setText("TEST " + state.name().toLowerCase() + ": release "
-                        + (confirmed ? "CONFIRMED" : "UNCONFIRMED"));
-                closeSink();
-                closeHttp();
-                releaseOutput();
+                finishOutput();
             }
         }
     };
@@ -84,6 +72,11 @@ public class TestPatternActivity extends AppCompatActivity {
         status = new TextView(this);
         root.addView(status);
         setContentView(root);
+        powerReceiver.register(this);
+        if (savedInstanceState != null || !ScreenOffReceiver.isAwake(this)) {
+            status.setText(com.abrenoch.wledgrabber.common.R.string.wled_test_reopen);
+            return;
+        }
 
         ConfigRepository repository = new ConfigRepository(
                 new PreferencesConfigStorage(new Preferences(this)), new ConfigValidator());
@@ -106,57 +99,33 @@ public class TestPatternActivity extends AppCompatActivity {
         int channels = snapshot.device().rgbwMode() == RgbwMode.RGBW ? 4 : 3;
         int port = channels == 4 || snapshot.device().protocol() == Protocol.DDP
                 ? snapshot.device().ddpPort() : snapshot.device().udpPort();
-        outputCoordinator = OutputSessionCoordinator.get();
+        OutputSessionCoordinator outputCoordinator = OutputSessionCoordinator.get();
         if (!outputCoordinator.acquire(OutputOwner.TEST, OUTPUT_OWNER_ID)) {
             status.setText("Another capture/test session owns the output.");
             return;
         }
-        outputEpoch = outputCoordinator.epoch();
+        long outputEpoch = outputCoordinator.epoch();
+        final UdpDatagramSink udp;
         try {
-            sink = new UdpDatagramSink(snapshot.device().host(), port);
+            udp = new UdpDatagramSink(snapshot.device().host(), port);
         } catch (Exception e) {
             status.setText("UDP endpoint failed: " + e.getMessage());
-            releaseOutput();
+            outputCoordinator.release(OutputOwner.TEST, OUTPUT_OWNER_ID, outputEpoch);
             return;
         }
-        final WledUdpTransport transport = new WledUdpTransport(sink);
-        final int finalChannels = channels;
-        LedStreamer.FrameSink frameSink = new LedStreamer.FrameSink() {
-            @Override
-            public boolean send(com.abrenoch.wledgrabber.common.capture.FrameLease lease) {
-                if (finalChannels == 4) {
-                    return transport.sendRgbw(lease.data(), lease.ledCount());
-                }
-                if (snapshot.device().protocol() == Protocol.DDP) {
-                    return transport.sendRgbDdp(lease.data(), lease.ledCount());
-                }
-                return transport.sendRgb(lease.data(), lease.ledCount());
-            }
-
-            @Override
-            public boolean sendBlack(int ledCount, int ledChannels) {
-                byte[] black = new byte[ledCount * ledChannels];
-                if (ledChannels == 4) {
-                    return transport.sendRgbw(black, ledCount);
-                }
-                if (snapshot.device().protocol() == Protocol.DDP) {
-                    return transport.sendRgbDdp(black, ledCount);
-                }
-                return transport.sendRgb(black, ledCount);
-            }
-        };
-
         FramePool pool = new FramePool(physical * channels);
-        host = snapshot.device().host();
-        httpPort = snapshot.device().httpPort();
-        httpClient = new WledHttpClient();
-        // UDP realtime frames do not turn the master power on.
-        WledPowerOn.async(httpClient, host, httpPort, "wled-test-power-on");
-        LedStreamer streamer = new LedStreamer(pool, frameSink, reason -> {
-            boolean off = httpClient.turnOff(host, httpPort);
-            StateReadResult stateRead = httpClient.readState(host, httpPort);
-            return off && stateRead.isSuccess() && !stateRead.on() && !stateRead.live();
-        }, 3000);
+        final String host = snapshot.device().host();
+        final int httpPort = snapshot.device().httpPort();
+        final WledHttpClient control = new WledHttpClient();
+        WledFrameSink frameSink = new WledFrameSink(snapshot.device(), control, udp);
+        LedStreamer streamer = new LedStreamer(pool, frameSink, outputCoordinator.releaseWhenDone(
+                OutputOwner.TEST, OUTPUT_OWNER_ID, outputEpoch, reason -> {
+                    try (control; udp) {
+                        boolean off = control.turnOff(host, httpPort);
+                        StateReadResult stateRead = control.readState(host, httpPort);
+                        return off && stateRead.isSuccess() && !stateRead.on() && !stateRead.live();
+                    }
+                }), com.abrenoch.wledgrabber.common.network.wled.WledSession.RELEASE_BUDGET_MS);
         runner = new TestPatternRunner(compiled.value(), channels,
                 snapshot.device().whiteMode(), streamer, pool,
                 System.currentTimeMillis(), TestPatternSession.DEFAULT_DURATION_MS);
@@ -164,44 +133,40 @@ public class TestPatternActivity extends AppCompatActivity {
                 System.currentTimeMillis());
         if (!started) {
             status.setText("TEST could not start.");
-            closeSink();
-            closeHttp();
-            releaseOutput();
+            udp.close();
+            control.close();
+            outputCoordinator.release(OutputOwner.TEST, OUTPUT_OWNER_ID, outputEpoch);
             return;
         }
         handler.post(ticker);
     }
 
-    private void releaseOutput() {
-        if (outputCoordinator != null) {
-            outputCoordinator.release(OutputOwner.TEST, OUTPUT_OWNER_ID, outputEpoch);
-        }
-    }
-
-    private void closeSink() {
+    private void finishOutput() {
+        started = false;
+        LedStreamer.StopResult stop = runner.lastStop();
+        status.setText("TEST " + runner.state().name().toLowerCase(java.util.Locale.ROOT)
+                + ": release " + (stop != null && stop.releaseOk() ? "CONFIRMED" : "UNCONFIRMED"));
         handler.removeCallbacks(ticker);
-        if (sink != null) {
-            sink.close();
-            sink = null;
-        }
+        // The writer owns its captured connections and lease even if stop timed out.
+        runner = null;
     }
 
-    private void closeHttp() {
-        if (httpClient != null) {
-            httpClient.close();
-            httpClient = null;
+    private void cancelIfRunning() {
+        if (started) {
+            runner.cancel();
+            finishOutput();
         }
     }
 
     @Override
+    protected void onStop() {
+        cancelIfRunning();
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
-        if (runner != null) {
-            runner.cancel();
-            runner = null;
-        }
-        closeSink();
-        closeHttp();
-        releaseOutput();
+        unregisterReceiver(powerReceiver);
         super.onDestroy();
     }
 }

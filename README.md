@@ -46,7 +46,7 @@ WLED Grabber is an Android screen grabber that sends the colors of the screen di
 
 Software-side evidence covers the layout, sampling, protocol, lifecycle, and the target TV's capture and release paths. Release admission is still blocked by missing physical FPS/end-to-end measurements, RGBW hardware, larger LED configurations, and the remaining device/API matrix. A successful build does not imply signing, installation, or release.
 
-**Software wiring status (2026-11-17)**: the start-time READY gate (explicit WLED addressing confirmations, a fresh probe and observed count/channel/identity), periodic observation with stale/identity invalidation, and resize/rotation handling are now wired into the running service. The capture service re-validates the observation before acquiring any capture resource. The remaining unverified path is resize/rotation against a live projection (API 34 captured-content resize and repeated rotation/lock cycles); it is implemented and planner-tested but has no live-projection evidence yet.
+**Software wiring status (2026-11-17)**: the start-time READY gate (explicit WLED addressing confirmations, a fresh probe and observed count/channel/identity), periodic observation with stale/identity invalidation, and resize/rotation handling are now wired into the running service. The capture service re-validates the observation before acquiring any capture resource. The Sony API 29 run recorded live resize/rotation; API 34 captured-content resize, repeated rotation/lock cycles and physical standby lighting on the new build remain unverified.
 
 ### Build
 
@@ -63,6 +63,7 @@ Debug APKs (debug key) and unsigned release APKs are written to `dist/`. Signing
 The design and configuration documents are currently in Chinese.
 
 - [Native UI component audit and verification](docs/fixes/2026-11-19-native-ui.md)
+- [TV standby: findings, fixes and verification](docs/fixes/2026-11-18-tv-standby.md)
 - [Technical architecture](docs/design/architecture.md)
 - [Configuration and troubleshooting](docs/guides/configuration-and-troubleshooting.md)
 - [Brand and icon specification](docs/design/app-icon/brand-guide.md)
@@ -120,7 +121,7 @@ WLED Grabber 是一个 Android 屏幕采集应用，将画面颜色直接发送�
 
 软件侧证据覆盖布局、采样、协议、生命周期，以及目标电视的采集与释放路径。发布准入仍因缺少物理刷新率/端到端时延测量、RGBW 硬件、更大灯数配置及剩余设备/API 矩阵而阻塞。构建成功不代表已完成签名、安装或发布。
 
-**软件接线状态（2026-11-17）**：启动前 READY 门禁（WLED 寻址确认项 + 实时探测 + 观察 count/通道/身份；开机自动路径在请求授权前也执行实时探测并匹配已保存确认）、周期性设备观察与 stale/身份变化废弃、resize/旋转处理均已接入运行服务；服务在取得任何采集资源前复验观察结果。仍未取得实机证据的是活动投屏下的 resize/旋转（API 34 captured-content resize 与连续旋转/锁屏循环）：实现与规划器单测已完成，但尚无真实投屏证据。
+**软件接线状态（2026-11-17）**：启动前 READY 门禁（WLED 寻址确认项 + 实时探测 + 观察 count/通道/身份；开机自动路径在请求授权前也执行实时探测并匹配已保存确认）、周期性设备观察与 stale/身份变化废弃、resize/旋转处理均已接入运行服务；服务在取得任何采集资源前复验观察结果。Sony API 29 已有活动投屏 resize/旋转记录；API 34 captured-content resize、连续旋转/锁屏循环与本次修复后的实际待机灯光仍待验证。
 
 ### 构建
 
@@ -135,6 +136,7 @@ Debug APK（debug 签名）与未签名 Release APK 输出到 `dist/`。签名�
 ### 文档
 
 - [原生界面组件审查与验证](docs/fixes/2026-11-19-native-ui.md)
+- [电视待机闪亮：缺陷、修复与验证](docs/fixes/2026-11-18-tv-standby.md)
 - [技术架构](docs/design/architecture.md)
 - [配置与排障手册](docs/guides/configuration-and-troubleshooting.md)
 - [品牌与图标规范](docs/design/app-icon/brand-guide.md)

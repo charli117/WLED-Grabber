@@ -133,6 +133,7 @@
   <string name="wled_probe_input">点亮输入位置</string>
   <string name="wled_probe_sent">已点亮 %1$d 颗灯珠，再次点击可熄灭。</string>
   <string name="wled_probe_input_on">已点亮第一颗灯珠，再次点击可熄灭。</string>
-  <string name="wled_probe_off">校验灯已熄灭。</string>
+  <string name="wled_probe_off">已停止校验，未确认设备关灯。</string>
+  <string name="wled_test_reopen">测试已停止。请重新打开页面开始新测试。</string>
   <string name="wled_probe_busy">请先停止采集再点亮校验。</string>
 </resources>

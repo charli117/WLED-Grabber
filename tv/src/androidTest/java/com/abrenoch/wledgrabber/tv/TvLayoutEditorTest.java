@@ -49,7 +49,7 @@ public class TvLayoutEditorTest {
 
     @After
     public void tearDown() {
-        LayoutProbeSender.stop();
+        LayoutProbeSender.get().stop();
         long deadline = System.currentTimeMillis() + 5000;
         while (OutputSessionCoordinator.get().owner() != OutputOwner.NONE
                 && System.currentTimeMillis() < deadline) {

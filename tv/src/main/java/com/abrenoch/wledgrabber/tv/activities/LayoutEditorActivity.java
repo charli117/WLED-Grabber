@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.abrenoch.wledgrabber.common.capture.ScreenOffReceiver;
 import com.abrenoch.wledgrabber.common.led.CompiledLayout;
 import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
@@ -48,6 +49,7 @@ import java.util.Map;
  * common; this host only owns presentation and focus.</p>
  */
 public class LayoutEditorActivity extends LeanbackActivity {
+    private final ScreenOffReceiver powerReceiver = new ScreenOffReceiver(this::stopProbe);
     public static final String ACTION_AUTO = "action:auto";
     public static final String ACTION_PRESET_274 = "action:preset274";
     public static final String ACTION_PROBE_TOP = "action:probe:top";
@@ -146,9 +148,16 @@ public class LayoutEditorActivity extends LeanbackActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        powerReceiver.register(this);
+    }
+
+    @Override
     protected void onStop() {
         // A latched probe owns the shared TEST lease; leaving the editor must
         // release it so capture, preview or a test pattern can start.
+        unregisterReceiver(powerReceiver);
         stopProbe();
         super.onStop();
     }
@@ -402,6 +411,10 @@ public class LayoutEditorActivity extends LeanbackActivity {
     }
 
     private void probe(Side side) {
+        if (!ScreenOffReceiver.isAwake(this)) {
+            stopProbe();
+            return;
+        }
         String host = controller.draft().get(ConfigFields.WLED_HOST);
         if (host == null || host.trim().isEmpty()) {
             toast(R.string.layout_editor_configure_device);
@@ -457,7 +470,7 @@ public class LayoutEditorActivity extends LeanbackActivity {
             toast(R.string.layout_editor_no_side_leds);
             return;
         }
-        LayoutProbeSender.Result result = LayoutProbeSender.toggle(
+        LayoutProbeSender.Result result = LayoutProbeSender.get().toggle(
                 snapshot.value(), compiled.value(), LayoutProbeSender.keyFor(side), logical);
         switch (result) {
             case STARTED:
@@ -581,7 +594,7 @@ public class LayoutEditorActivity extends LeanbackActivity {
         for (Map.Entry<String, Side> probe : PROBES.entrySet()) {
             LayoutValueRow row = rows.get(probe.getKey());
             if (row != null) {
-                row.setDisplayValue(getString(LayoutProbeSender.isActive(
+                row.setDisplayValue(getString(LayoutProbeSender.get().isActive(
                                 LayoutProbeSender.keyFor(probe.getValue()))
                         ? R.string.layout_editor_on : R.string.layout_editor_off));
             }
@@ -589,7 +602,7 @@ public class LayoutEditorActivity extends LeanbackActivity {
     }
 
     private void stopProbe() {
-        LayoutProbeSender.stop();
+        LayoutProbeSender.get().stop();
         refreshProbeRows();
     }
 

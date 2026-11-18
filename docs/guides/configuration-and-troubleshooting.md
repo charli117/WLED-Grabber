@@ -73,12 +73,14 @@
 4. 确认 WLED realtime offset=0、DMX 起始地址=1、main-segment-only 关闭，且没有额外 LED map 或总线反向；否则逐灯寻址会错位。
 5. 设备身份（MAC/版本/count）变化后需重新确认，不沿用先前 IP 的缓存能力。
 
-### 5.2 关灯未确认
+### 5.2 电视待机后灯带闪亮，或显示关灯未确认
 
 - 停止流程：停止新帧 → 清 pending → 等 inFlight → 同一 writer 发黑 → HTTP `on:false/live:false/tt:0` → 读回。
-- 只有读回 `on=false` 且 `live=false` 才显示 `CONFIRMED`；超时/断网/身份变化显示 `UNCONFIRMED`。
+- 只有 `/json/state` 读回 `on=false` 且 `/json/info` 读回 `live=false` 才显示 `CONFIRMED`；超时/断网/身份变化显示 `UNCONFIRMED`。
 - 进程被杀时不保证释放；设备有限 realtime timeout 可能恢复原效果。迟到 UDP、其他控制器或 WLED Sync 仍可能重新点亮。
 - 不要在未确认时自动把 off 请求重放到下一个会话。
+
+先区分两种情况：**亮屏但画面不动**时应保持最后一次采样颜色；**按遥控器进入系统待机**时应结束本次采集，回到桌面后需重新开始。黑色视频、HDMI 无信号画面与 Android 已进入待机不是同一个信号。排查时记录按键时刻、Android 是否进入睡眠、服务是否记录 `capture stopping: display asleep`（或投屏撤销），再对照同一时间的 WLED `on` / `live` 和肉眼灯光。若电视是直接断电，应用可能根本没有机会发关灯请求；如果已确认关闭后又亮，检查 WLED 预设、其他发送端、Sync 以及控制器是否重启。参见[缺陷与硬件验收步骤](../fixes/2026-11-18-tv-standby.md)。
 
 ### 5.3 RGBW 变黑
 

@@ -18,6 +18,7 @@ public final class CaptureSession {
 
     private State state = State.IDLE;
     private long epoch;
+    private boolean displayAwake = true;
     private boolean consentConsumed;
     private boolean foregrounded;
     private boolean projectionRequested;
@@ -31,7 +32,7 @@ public final class CaptureSession {
     private int stopRequests;
 
     public synchronized boolean beginStart() {
-        if (state == State.VALIDATING || state == State.AWAITING_CONSENT
+        if (!displayAwake || state == State.VALIDATING || state == State.AWAITING_CONSENT
                 || state == State.STARTING || state == State.CAPTURING
                 || state == State.STOPPING) {
             return false;
@@ -116,6 +117,12 @@ public final class CaptureSession {
         epoch++;
         resetRuntimeFlags();
         return true;
+    }
+
+    /** Only loss of display power requests release; waking never starts a projection. */
+    public synchronized boolean onDisplayPowerChanged(boolean displayAwake) {
+        this.displayAwake = displayAwake;
+        return !displayAwake && beginStop();
     }
 
     public synchronized boolean beginStop() {

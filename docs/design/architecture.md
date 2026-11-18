@@ -2,7 +2,7 @@
 
 > 本文是架构、参数、协议、生命周期与兼容要求的唯一技术规范。关联文档：[品牌与图标规范](app-icon/brand-guide.md)、[配置与排障手册](../guides/configuration-and-troubleshooting.md)。
 >
-> 实现状态与未闭环项见[任务册 §5.2 交付证据复核](../archive/task/00-overview.md#delivery-audit-2026-11-17)与[§5.3 第二轮复核](../archive/task/00-overview.md#second-audit-2026-11-17)（2026-11-17）。本文描述目标契约，不等于全部已实现、待发布或生产验收。
+> 实现状态与未闭环项见[任务册 §5.2 交付证据复核](../archive/task/00-overview.md#delivery-audit-2026-11-17)与[§5.3 第二轮复核](../archive/task/00-overview.md#second-audit-2026-11-17)（2026-11-17）；采集、测试输出与息屏释放的后续复验见[待机修复报告](../fixes/2026-11-18-tv-standby.md)。本文描述目标契约，不等于全部已实现、待发布或生产验收。
 
 ## 阅读导航
 
@@ -67,11 +67,14 @@ flowchart LR
   CONFIG --> SNAP[ValidatedConfig snapshot]
   SNAP --> PLAN[ClassicLedLayout / CompiledLayout]
   CONSENT[共享授权入口] --> SVC[WledScreenService]
+  POWER[系统息屏 / 关机 / 默认显示器状态] --> SVC
   SVC --> ENC[ImageLifecycle / ImageReader]
   ENC --> SAMPLE[LedColorSampler]
   PLAN --> SAMPLE
   SAMPLE --> STREAM[LedStreamer 单输出所有者]
   PATTERN[共享测试图案控制器] --> STREAM
+  STREAM --> FIRST[首个真实颜色帧前请求开灯]
+  FIRST --> DEVICE
   STREAM --> UDP[WledUdpTransport 编码与写出]
   UDP --> DEVICE[单个 WLED]
   SVC --> CTRL[WledSession / HTTP 控制面]
@@ -374,7 +377,8 @@ VALIDATING 在用户前台操作后异步完成设备与配置验证，再显示
 - 新会话不缓存授权 Intent，不经 boot/进程重建自动重用；服务采用不自动重放采集的重启策略（如 START_NOT_STICKY）。
 - `MediaProjection.Callback.onStop` 统一清理 reader/display/projection/thread/队列；VirtualDisplay.Callback 不能替代它。
 - API34+ 用 captured-content resize 回调处理单应用窗口和旋转；低版本用 display/configuration 变化。在原 VirtualDisplay 上 resize/setSurface，先停止旧 reader 回调，生成新计划，再接受新 generation；不能重复 createVirtualDisplay。
-- 息屏统一停止发送并 release；如系统已撤销投屏，亮屏只显示“需重新授权”，不承诺无感续采。仍有效会话的恢复与已终止会话严格区分。
+- 采集服务动态接收 `ACTION_SCREEN_OFF` / `ACTION_SHUTDOWN`，并在显式启动、启用 writer 前及默认显示变化时检查 `PowerManager.isInteractive()` 与默认显示状态。睡眠、Doze 或无法确认显示已开启时不开始输出；活跃会话只进入一次 §6.3 停止流程。亮屏本身不是启动请求，也不复用旧投屏授权。
+- CAPTURE 和十秒 TEST 的 `LedStreamer` 在首个有效颜色帧前，通过 `WledFrameSink` 在同一 writer 对本次配置的 `host:httpPort` 发一次开灯请求；不会在申请投屏时提前点灯。CAPTURE 的 1 秒心跳只重发已成功采样的帧，不发送初始化缓冲区。十秒 TEST 和 TV 布局校验也监听同一息屏/关机信号；页面不可见即取消，唤醒或返回不重启旧测试。
 - target35 开机接收器默认只提供用户可见提醒入口，不从 BOOT_COMPLETED 直接启动 mediaProjection FGS；仅当用户已显式开启自启动且平台与授权满足 §6.2.2 的受控条件时，才经 `BootActivity` 申请授权，其余情况不后台强拉 Activity；通知权限被拒则下次前台显示提示。
 - service 和内部 Activity 默认不导出；launcher/tile/boot 入口按平台需求声明 exported 及系统权限。控制广播保持进程内或显式受限，不把 capture intent 暴露给外部。
 
@@ -411,7 +415,7 @@ TV/mobile 首次主界面调用共享 `StartupSetupActivity.showIfNeeded`，后�
 1. 进入 STOPPING 并封闭该 epoch 新 offer；停止生产、丢 pending，等待/取消本地 inFlight 后禁止后续颜色发送。
 2. 在同一 writer 上尽力发送一帧全黑；随后通过同一控制客户端 POST `/json/state`，载荷 `{"on":false,"live":false,"tt":0}`。
 3. 读回 `/json/state.on==false` 且 `/json/info.live==false` 才记录 `CONFIRMED`；它表示该时点设备观察值，不能保证其他控制器或迟到 UDP 不会再次点亮。
-4. 总停止控制面预算 3 秒；超时/断网/身份变化记 `UNCONFIRMED`，释放本地资源并明确显示“设备关灯未确认”。不把 UDP 黑帧或超时当关灯证据。
+4. 调用方最多等待 3 秒；超时/断网/身份变化记 `UNCONFIRMED`。停止本地采集资源，但已启动的 writer 继续持有它的 HTTP/UDP 连接和本次 `ownerId + epoch` 租约，直至最后的本地 I/O 完成并关闭连接，才允许下一位所有者接管。明确显示“设备关灯未确认”。不把 UDP 黑帧或超时当关灯证据。
 5. STOPPING 中禁止新 start；陈旧控制请求结果不能改变新 epoch。请求结果未知时不自动重放 off 到后续会话；再次开始需用户确认并做新探测。epoch 只隔离本地，不能撤销已到达设备的 HTTP/UDP。
 
 DNRGB 设 timeout=2 秒；DDP 依赖设备有限 realtime timeout，基线源码默认 2500ms 但可配置。要求用户核对有限超时、关闭强制实时最大亮度、其他发送者和 Sync；不发送无限占用的 `live:true`/timeout255，不擅自修改固件配置。进程被杀时不保证 finally/HTTP 执行；设备超时可能恢复原效果，不保证关灯，属于显式风险。
@@ -496,7 +500,7 @@ NSD 浏览 `_wled._tcp.`，解析的 port 是 HTTP 端口，不是 UDP；缓存 
 {"ver":"0.15.1","mac":"example-device-id","udpport":21324,"live":false,"leds":{"count":274,"rgbw":false}}
 ```
 
-这是 `GET /json/info` 的**根形状示例**，不是完整设备响应、不是探测结果 fixture，也不把示例 MAC 当有效身份。聚合 `/json` 才含 `info` 子对象；两种 endpoint 不能共用错误的根包装假设。状态读取单独使用 `/json/state`。解析对缺字段、错误类型、溢出、超长与未知能力 fail-closed，具体错误保留到 UI。
+这是 `GET /json/info` 的**根形状示例**，不是完整设备响应、不是探测结果 fixture，也不把示例 MAC 当有效身份。聚合 `/json` 才含 `info` 子对象；两种 endpoint 不能共用错误的根包装假设。释放读回分别取 `/json/state.on` 和 `/json/info.live`；即使 state 同时包含 `live`，也不能覆盖 info 的实时观察。解析对缺字段、错误类型、溢出、超长与未知能力 fail-closed，具体错误保留到 UI。
 
 开始前确认：LAN 网络/目标身份/固件、全部可寻址数量 M、同构 RGB 或 RGBW、分离端口、§7 寻址前提及有限实时超时。RGBW 另外确认 Manual/全局 override。共享 `StartCaptureActivity` 把上述确认做成逐项勾选，并在请求系统授权前做一次即时探测；服务启动时用 `DeviceReadiness` 再次校验观察与已保存确认，缺失/不匹配即拒绝，不提供“强制继续”。配置草稿可以保存以便修正，但不满足前提时不能启动采集或 TEST。HTTP 可达不等于 LED 颜色、帧率或关灯已验证；实时请求也可能恢复设备先前亮度，`on:false` 不是持续锁灯机制。
 
@@ -536,6 +540,8 @@ NSD 浏览 `_wled._tcp.`，解析的 port 是 HTTP 端口，不是 UDP；缓存 
 复用 `SettingsStepBaseFragment` 的 `unSignedNumberAction`、`radioListAction` 与两端各自的输入控件，`assertIntValue` 等校验统一委托 ConfigValidator，不复制规则；TV 实时布局编辑器通过共享 `ConfigValidator.validateLayout`/`SettingsDraftController` 完成草稿校验与原子保存。扫描 `saveResult()` 保存确认的 WLED 端点。RGB 模式隐藏 White Mode；unconfirmed 模式提示确认硬件而不自动假定 RGB。修改草稿即时刷新预览，**不热更新正在发送的快照**；运行中保存显式提示“下次启动生效”。错误、单位、默认值和资源均共享，TV 大字体/D-pad 焦点完整可达。
 
 布局页提供**逐边与输入位置点亮校验**：按当前草稿编译布局，经 `LayoutProbe` 取逻辑环区间并映射到物理索引，借助共享 `TEST` 输出租约保持白色常亮，其余灯珠为黑。再次点击同一项熄灭；点击其他方向时替换当前探针（同一时间只亮一个方向）。**输入位置只点亮物理 0 的第一颗灯珠**：`LayoutProbe.firstPhysicalLogical` 从映射取物理 0 对应的逻辑槽位再构建报文，Reverse 开启时不能直接用原始 Input 索引（那会指向灯带末端）。草稿变化、页面退后台/退出、打开预览或测试图案时释放租约；采集运行中不抢占输出，提示先停止。该动作只用于确认接线/顺序/Input/Reverse，不替代正式预览与 10 秒图案测试。
+
+布局校验停止时，由持有原目标与输出 epoch 的探针线程依次发黑、请求 `on:false/live:false`，若请求成功再读状态，最后释放 `TEST`。页面只知道探针是否仍在运行，不以按钮复位作为设备关灯确认。
 
 ### 9.2 预览与图案
 

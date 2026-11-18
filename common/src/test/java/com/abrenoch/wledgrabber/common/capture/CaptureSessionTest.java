@@ -21,6 +21,30 @@ public class CaptureSessionTest {
     }
 
     @Test
+    public void displaySleepStopsOnceAndWakeDoesNotReviveConsent() {
+        CaptureSession session = flowToCapturing();
+        assertFalse(session.onDisplayPowerChanged(true)); // a lit, static screen is not a stop
+        assertTrue(session.onDisplayPowerChanged(false));
+        assertEquals(CaptureSession.State.STOPPING, session.state());
+        assertFalse(session.onDisplayPowerChanged(false));
+        assertTrue(session.stopCompleted());
+        assertFalse(session.onDisplayPowerChanged(true));
+        assertEquals(CaptureSession.State.RELEASED, session.state());
+        assertFalse(session.requestProjection());
+    }
+
+    @Test
+    public void asleepDisplayRejectsNewStartsUntilAnExplicitAwakeStart() {
+        CaptureSession session = new CaptureSession();
+        assertFalse(session.onDisplayPowerChanged(false)); // nothing to release yet
+        assertFalse("standby must not admit a new start", session.beginStart());
+        assertEquals(0, session.startRequests());
+        assertFalse(session.onDisplayPowerChanged(true));
+        assertEquals(CaptureSession.State.IDLE, session.state());
+        assertTrue(session.beginStart());
+    }
+
+    @Test
     public void refusalCreatesNoCaptureResources() {
         CaptureSession session = new CaptureSession();
         assertTrue(session.beginStart());

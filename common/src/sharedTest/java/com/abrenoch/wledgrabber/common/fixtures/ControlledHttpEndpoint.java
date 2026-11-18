@@ -42,6 +42,7 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
     private volatile boolean running = true;
     private volatile String lastMethod = "";
     private volatile String lastPath = "";
+    private volatile String lastPostBody;
     private volatile String lastBody = "";
 
     public ControlledHttpEndpoint(Mode mode) throws IOException {
@@ -69,6 +70,10 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
 
     public String lastPath() {
         return lastPath;
+    }
+
+    public String lastPostBody() {
+        return lastPostBody;
     }
 
     public String lastBody() {
@@ -130,6 +135,7 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
             remaining -= read;
         }
         lastBody = body.toString();
+        if ("POST".equals(lastMethod)) lastPostBody = lastBody;
     }
 
     private static Response responseFor(Mode mode, String path) {
@@ -156,7 +162,9 @@ public final class ControlledHttpEndpoint implements AutoCloseable {
             case STATE_OFF:
                 return new Response(200, "OK", "{\"on\":false,\"live\":false}", null);
             case STATE_LIVE:
-                return new Response(200, "OK", "{\"on\":false,\"live\":true}", null);
+                return "/json/info".equals(path)
+                        ? new Response(200, "OK", "{\"live\":true}", null)
+                        : new Response(200, "OK", "{\"on\":false,\"live\":false}", null);
             case STATE_WITHOUT_LIVE:
                 // WLED 16.x omits "live" from /json/state; only /json/info has it.
                 return path != null && path.startsWith("/json/info")

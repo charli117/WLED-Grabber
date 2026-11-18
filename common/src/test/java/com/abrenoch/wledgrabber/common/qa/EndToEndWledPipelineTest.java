@@ -180,7 +180,7 @@ public class EndToEndWledPipelineTest {
             assertTrue(String.valueOf(state.error()), state.isSuccess());
             assertEquals(false, state.on());
             assertEquals(false, state.live());
-            assertEquals(2, endpoint.requestCount());
+            assertEquals(3, endpoint.requestCount());
         }
     }
 }

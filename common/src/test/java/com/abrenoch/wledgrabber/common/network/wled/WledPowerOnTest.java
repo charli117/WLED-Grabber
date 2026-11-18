@@ -1,5 +1,11 @@
 package com.abrenoch.wledgrabber.common.network.wled;
 
+import com.abrenoch.wledgrabber.common.capture.FramePool;
+import com.abrenoch.wledgrabber.common.capture.LedStreamer;
+import com.abrenoch.wledgrabber.common.capture.OutputOwner;
+import com.abrenoch.wledgrabber.common.led.Protocol;
+import com.abrenoch.wledgrabber.common.led.RgbwMode;
+
 import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
@@ -47,14 +53,19 @@ public class WledPowerOnTest {
         FakeControl control = new FakeControl();
         Thread caller = Thread.currentThread();
 
-        long startedAt = System.nanoTime();
-        WledPowerOn.async(control, "192.168.1.50", 80, "test-power-on");
-        long elapsedMillis = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startedAt);
-
-        assertTrue("power-on waited on the caller thread", elapsedMillis < 500);
-        assertTrue("power-on was not dispatched", control.called.await(2, TimeUnit.SECONDS));
-        assertTrue(control.on.get());
-        assertNotEquals("power-on must not run on the caller", caller, control.executing.get());
-        assertTrue(control.executing.get().getName().contains("test-power-on"));
+        FramePool pool = new FramePool(6);
+        DeviceEndpoint device = new DeviceEndpoint("192.168.1.50", 80, 21324, 4048,
+                Protocol.DDP, RgbwMode.RGB, 2);
+        LedStreamer streamer = new LedStreamer(pool,
+                new WledFrameSink(device, control, (bytes, offset, length) -> {}), reason -> true, 1000);
+        streamer.start(1, OutputOwner.CAPTURE, 2, 3);
+        try {
+            assertTrue(streamer.offer(pool.acquire(1, 1, 0, 3, 2)));
+            assertTrue("power-on was not dispatched", control.called.await(2, TimeUnit.SECONDS));
+            assertTrue(control.on.get());
+            assertNotEquals("power-on must not run on the caller", caller, control.executing.get());
+        } finally {
+            streamer.stop("test complete");
+        }
     }
 }

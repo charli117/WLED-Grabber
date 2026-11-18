@@ -14,6 +14,8 @@
 
 当前有效文档：
 
+- 当前缺陷修复与待验项：[电视待机闪亮](../fixes/2026-11-18-tv-standby.md)；本目录保留当时的原始观察，不作为新构建的验收。
+
 - 技术规范：[docs/design/architecture.md](../design/architecture.md)
 - 配置与排障：[docs/guides/configuration-and-troubleshooting.md](../guides/configuration-and-troubleshooting.md)
 - 品牌与图标：[docs/design/app-icon/brand-guide.md](../design/app-icon/brand-guide.md)

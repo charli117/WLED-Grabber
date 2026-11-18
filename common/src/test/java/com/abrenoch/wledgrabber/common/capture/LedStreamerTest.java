@@ -94,6 +94,72 @@ public class LedStreamerTest {
     }
 
     @Test
+    public void stopWhilePowerOnIsPendingDropsColorBeforeBlackAndOff() throws Exception {
+        CountDownLatch poweringOn = new CountDownLatch(1);
+        CountDownLatch allowOn = new CountDownLatch(1);
+        CountDownLatch off = new CountDownLatch(1);
+        StringBuffer events = new StringBuffer();
+        FramePool pool = new FramePool(FRAME_BYTES);
+        LedStreamer.FrameSink sink = new LedStreamer.FrameSink() {
+            @Override
+            public void beforeFirstColor() {
+                events.append("on;");
+                poweringOn.countDown();
+                try {
+                    if (!allowOn.await(4, TimeUnit.SECONDS)) throw new AssertionError("power-on stalled");
+                } catch (InterruptedException e) {
+                    throw new AssertionError(e);
+                }
+            }
+            @Override
+            public boolean send(FrameLease lease) { events.append("color;"); return true; }
+            @Override
+            public boolean sendBlack(int leds, int channels) { events.append("black;"); return true; }
+        };
+        LedStreamer streamer = new LedStreamer(pool, sink, reason -> {
+            events.append("off;"); off.countDown(); return true;
+        }, 50);
+        streamer.start(1, OutputOwner.CAPTURE, LEDS, CHANNELS);
+        try {
+            assertEquals("", events.toString());
+            assertTrue(streamer.offer(pool.acquire(1, 1, 0, CHANNELS, LEDS)));
+            assertTrue("first frame must order power-on on the writer", poweringOn.await(1, TimeUnit.SECONDS));
+            assertTrue("stop must not hang behind HTTP", streamer.stop("sleep").timedOut());
+        } finally {
+            allowOn.countDown();
+        }
+        assertTrue(off.await(1, TimeUnit.SECONDS));
+        assertEquals("on;black;off;", events.toString());
+        assertEquals(0, pool.inUse());
+    }
+
+    @Test
+    public void timedOutReleaseRetainsLeaseUntilTheWriterFinishes() throws Exception {
+        OutputSessionCoordinator gate = new OutputSessionCoordinator();
+        assertTrue(gate.acquire(OutputOwner.CAPTURE, "capture"));
+        CountDownLatch finish = new CountDownLatch(1);
+        LedStreamer streamer = new LedStreamer(new FramePool(FRAME_BYTES), new RecordingSink(),
+                gate.releaseWhenDone(OutputOwner.CAPTURE, "capture", gate.epoch(), reason -> {
+                    try {
+                        return finish.await(5, TimeUnit.SECONDS);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return false;
+                    }
+                }), 50);
+        streamer.start(1, OutputOwner.CAPTURE, LEDS, CHANNELS);
+        try {
+            assertTrue(streamer.stop("sleep").timedOut());
+            assertFalse(gate.acquire(OutputOwner.TEST, "new owner"));
+        } finally {
+            finish.countDown();
+        }
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(2);
+        while (gate.owner() != OutputOwner.NONE && System.nanoTime() < deadline) Thread.yield();
+        assertTrue(gate.acquire(OutputOwner.TEST, "new owner"));
+    }
+
+    @Test
     public void hundredThousandFramesHaveNoTearingOrLeaks() {
         FramePool pool = new FramePool(FRAME_BYTES);
         RecordingSink sink = new RecordingSink();
@@ -227,6 +293,7 @@ public class LedStreamerTest {
 
         LedStreamer.StopResult result = streamer.stop("timeout");
         assertTrue(result.timedOut());
+        assertFalse(result.releaseOk());
         assertFalse(result.releaseCalled());
 
         sink.unblock();

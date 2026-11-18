@@ -167,26 +167,19 @@ public final class WledHttpClient implements WledControlClient, AutoCloseable {
                 return StateReadResult.failure(ProbeError.MISSING_FIELD);
             }
             boolean on = state.getBoolean("on");
-            boolean live;
-            if (state.has("live")) {
-                live = state.getBoolean("live");
-            } else {
-                // WLED 16.x omits "live" from /json/state; /json/info is authoritative.
-                HttpResult info = request(host, port, "/json/info", "GET", null);
-                if (info.error != null) {
-                    return StateReadResult.failure(info.error);
-                }
-                if (info.status != 200) {
-                    return StateReadResult.failure(ProbeError.HTTP_ERROR);
-                }
-                JSONObject infoJson = new JSONObject(
-                        new String(info.body, StandardCharsets.UTF_8));
-                if (!infoJson.has("live")) {
-                    return StateReadResult.failure(ProbeError.MISSING_FIELD);
-                }
-                live = infoJson.getBoolean("live");
+            HttpResult info = request(host, port, "/json/info", "GET", null);
+            if (info.error != null) {
+                return StateReadResult.failure(info.error);
             }
-            return StateReadResult.success(on, live);
+            if (info.status != 200) {
+                return StateReadResult.failure(ProbeError.HTTP_ERROR);
+            }
+            JSONObject infoJson = new JSONObject(
+                    new String(info.body, StandardCharsets.UTF_8));
+            if (!infoJson.has("live")) {
+                return StateReadResult.failure(ProbeError.MISSING_FIELD);
+            }
+            return StateReadResult.success(on, infoJson.getBoolean("live"));
         } catch (JSONException e) {
             return StateReadResult.failure(ProbeError.MALFORMED_JSON);
         }

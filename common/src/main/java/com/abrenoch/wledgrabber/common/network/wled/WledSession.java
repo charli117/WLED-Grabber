@@ -124,6 +124,11 @@ public final class WledSession {
         this.clock = clock;
     }
 
+    /** The streamer's stop barrier owns and records the black frame; this session owns HTTP only. */
+    public static WledSession forCaptureWriter(WledControlClient control, Clock clock) {
+        return new WledSession(control, null, clock);
+    }
+
     public long start(ReadyDevice readyDevice) {
         if (readyDevice == null) {
             throw new IllegalArgumentException("ready device is required");
@@ -228,7 +233,7 @@ public final class WledSession {
         long startedAt = clock.now();
         boolean blackSent = false;
         try {
-            blackSent = sender.sendBlack(active.sendLedCount(),
+            blackSent = sender != null && sender.sendBlack(active.sendLedCount(),
                     active.endpoint().rgbwMode() == RgbwMode.RGBW);
         } catch (RuntimeException ignored) {
             blackSent = false;

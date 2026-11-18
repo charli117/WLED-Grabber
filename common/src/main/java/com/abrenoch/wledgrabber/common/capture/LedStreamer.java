@@ -12,6 +12,9 @@ import java.util.concurrent.TimeUnit;
  */
 public final class LedStreamer {
     public interface FrameSink {
+        /** Optional session setup, ordered with colors and release on the writer. */
+        default void beforeFirstColor() {}
+
         boolean send(FrameLease lease);
 
         boolean sendBlack(int ledCount, int channels);
@@ -128,6 +131,7 @@ public final class LedStreamer {
     private long epoch;
     private OutputOwner owner = OutputOwner.NONE;
     private boolean started;
+    private boolean firstColor;
     private boolean stopping;
     private boolean writerRunning;
     private FrameLease pending;
@@ -169,6 +173,7 @@ public final class LedStreamer {
             this.blackLedCount = ledCount;
             this.blackChannels = channels;
             this.started = true;
+            this.firstColor = true;
             this.blackSent = false;
             this.releaseCalled = false;
             this.releaseOk = false;
@@ -218,6 +223,18 @@ public final class LedStreamer {
             if (lease != null) {
                 boolean ok;
                 try {
+                    if (firstColor) {
+                        firstColor = false;
+                        sink.beforeFirstColor();
+                        synchronized (lock) {
+                            if (stopping) {
+                                inFlight = null;
+                                pool.release(lease);
+                                dropped++;
+                                continue;
+                            }
+                        }
+                    }
                     ok = sink.send(lease);
                 } catch (RuntimeException e) {
                     ok = false;
@@ -305,7 +322,7 @@ public final class LedStreamer {
             completed = false;
         }
         synchronized (lock) {
-            return new StopResult(!completed, blackSent, releaseCalled, releaseOk, dropped);
+            return new StopResult(!completed, blackSent, releaseCalled, completed && releaseOk, dropped);
         }
     }
 

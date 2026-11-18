@@ -30,7 +30,8 @@ public final class LayoutProbeSender {
 
     private static final String OWNER_ID = "layout-probe";
     private static final long INTERVAL_MS = 250L;
-    private static final LayoutProbeSender INSTANCE = new LayoutProbeSender();
+    private static final LayoutProbeSender INSTANCE = new LayoutProbeSender(WledHttpClient::new);
+    private final java.util.concurrent.Callable<WledHttpClient> openClient;
 
     private final OutputSessionCoordinator coordinator = OutputSessionCoordinator.get();
     private final ProbeLatch latch = new ProbeLatch();
@@ -41,7 +42,12 @@ public final class LayoutProbeSender {
     private volatile boolean running;
     private volatile byte[] frame;
 
-    private LayoutProbeSender() {
+    LayoutProbeSender(java.util.concurrent.Callable<WledHttpClient> openClient) {
+        this.openClient = openClient;
+    }
+
+    public static LayoutProbeSender get() {
+        return INSTANCE;
     }
 
     /** Stable latch key for one edge; {@code null} is the input marker. */
@@ -49,24 +55,8 @@ public final class LayoutProbeSender {
         return side == null ? KEY_INPUT : "probe:" + side.name();
     }
 
-    /** Toggles the probe for {@code key}; only one key can be active. */
-    public static Result toggle(ConfigSnapshot snapshot, CompiledLayout compiled,
-                                String key, int[] logical) {
-        return INSTANCE.toggleInternal(snapshot, compiled, key, logical);
-    }
-
-    /** Releases the probe and returns the output lease; safe to call repeatedly. */
-    public static void stop() {
-        INSTANCE.stopInternal();
-    }
-
-    /** Whether {@code key} is the currently latched probe. */
-    public static boolean isActive(String key) {
-        return INSTANCE.isActiveInternal(key);
-    }
-
-    private Result toggleInternal(ConfigSnapshot snapshot, CompiledLayout compiled,
-                                  String key, int[] logical) {
+    /** Toggles one probe; every production caller shares the process-wide instance. */
+    public Result toggle(ConfigSnapshot snapshot, CompiledLayout compiled, String key, int[] logical) {
         if (snapshot == null || compiled == null || key == null || key.isEmpty()
                 || logical == null || logical.length == 0) {
             return Result.INVALID;
@@ -83,7 +73,7 @@ public final class LayoutProbeSender {
                 if (latch.isActive(key)) {
                     latch.clear();
                     running = false;
-                    worker.interrupt();
+                    lock.notifyAll();
                     return Result.STOPPED;
                 }
                 if (!endpoint.sameTarget(currentEndpoint) || next.length != frame.length) {
@@ -92,7 +82,7 @@ public final class LayoutProbeSender {
                     // starts a fresh session.
                     latch.clear();
                     running = false;
-                    worker.interrupt();
+                    lock.notifyAll();
                     return Result.STOPPED;
                 }
                 frame = next;
@@ -119,17 +109,17 @@ public final class LayoutProbeSender {
         }
     }
 
-    private void stopInternal() {
+    public void stop() {
         synchronized (lock) {
             latch.clear();
             if (worker != null && running) {
                 running = false;
-                worker.interrupt();
+                lock.notifyAll();
             }
         }
     }
 
-    private boolean isActiveInternal(String key) {
+    public boolean isActive(String key) {
         synchronized (lock) {
             return latch.isActive(key);
         }
@@ -137,28 +127,28 @@ public final class LayoutProbeSender {
 
     private void run(Endpoint endpoint, byte[] black, long epoch) {
         try (UdpDatagramSink sink = new UdpDatagramSink(endpoint.host, endpoint.port);
-             WledHttpClient control = new WledHttpClient()) {
+             WledHttpClient control = openClient.call()) {
             WledUdpTransport udp = new WledUdpTransport(sink);
-            try {
-                // Realtime UDP alone does not turn the master power on.
-                control.turnOn(endpoint.host, endpoint.httpPort);
-            } catch (RuntimeException ignored) {
-                // The probe remains visible only if the strip is already on.
+            if (!running) {
+                return;
             }
-            while (running) {
-                byte[] current = frame;
-                if (current != null) {
-                    send(udp, endpoint.transport, endpoint.channels, current, endpoint.ledCount);
+            try {
+                control.turnOn(endpoint.host, endpoint.httpPort);
+                while (running) {
+                    send(udp, endpoint.transport, endpoint.channels, frame, endpoint.ledCount);
+                    synchronized (lock) {
+                        if (running) lock.wait(INTERVAL_MS);
+                    }
                 }
+            } finally {
                 try {
-                    Thread.sleep(INTERVAL_MS);
-                } catch (InterruptedException interrupted) {
-                    if (!running) {
-                        break;
+                    send(udp, endpoint.transport, endpoint.channels, black, endpoint.ledCount);
+                } finally {
+                    if (control.turnOff(endpoint.host, endpoint.httpPort)) {
+                        control.readState(endpoint.host, endpoint.httpPort);
                     }
                 }
             }
-            send(udp, endpoint.transport, endpoint.channels, black, endpoint.ledCount);
         } catch (Exception ignored) {
             // Best effort: the UI only reports the latch state.
         } finally {
