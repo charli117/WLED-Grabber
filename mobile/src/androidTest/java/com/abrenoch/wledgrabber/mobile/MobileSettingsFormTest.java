@@ -114,6 +114,34 @@ public class MobileSettingsFormTest {
     }
 
     @Test
+    public void visibleLabelsIdentifyTheirInputControls() {
+        seed();
+        try (ActivityScenario<SettingsActivity> scenario = ActivityScenario.launch(SettingsActivity.class)) {
+            scenario.onActivity(activity -> {
+                for (String field : ConfigFields.ALL) {
+                    if (!ConfigFields.SCHEMA_VERSION.equals(field)) {
+                        assertLabelsInput(activity, ConfigFieldLabels.label(activity, field));
+                    }
+                }
+                assertLabelsInput(activity, activity.getString(com.abrenoch.wledgrabber.common.R.string.settings_language));
+            });
+        }
+    }
+
+    private static void assertLabelsInput(SettingsActivity activity, String text) {
+        java.util.ArrayList<android.view.View> views = new java.util.ArrayList<>();
+        activity.findViewById(android.R.id.content).findViewsWithText(views, text, android.view.View.FIND_VIEWS_WITH_TEXT);
+        for (android.view.View view : views) {
+            if (view instanceof android.widget.TextView && text.contentEquals(((android.widget.TextView) view).getText())
+                    && view.getLabelFor() != android.view.View.NO_ID) {
+                android.view.View input = activity.findViewById(view.getLabelFor());
+                if (input instanceof EditText || input instanceof android.widget.CheckBox || input instanceof android.widget.Spinner) return;
+            }
+        }
+        org.junit.Assert.fail("No labelled input: " + text);
+    }
+
+    @Test
     public void recreationKeepsTheFormValues() {
         seed();
         final String[] before = new String[1];

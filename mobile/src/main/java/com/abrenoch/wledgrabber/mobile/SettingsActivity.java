@@ -109,6 +109,7 @@ public class SettingsActivity extends AppCompatActivity {
                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
                 input = editText;
             }
+            labelInput(label, input);
             root.addView(input, new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             inputs.put(field, input);
@@ -189,6 +190,7 @@ public class SettingsActivity extends AppCompatActivity {
                 getString(com.abrenoch.wledgrabber.common.R.string.language_chinese),
                 getString(com.abrenoch.wledgrabber.common.R.string.language_english)};
         Spinner spinner = new Spinner(this);
+        labelInput(label, spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, labels);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -213,6 +215,13 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
         root.addView(spinner);
+    }
+
+    private static void labelInput(TextView label, View input) {
+        input.setId(View.generateViewId());
+        // The controller, not generated view IDs, owns the persisted form values.
+        input.setSaveEnabled(false);
+        label.setLabelFor(input.getId());
     }
 
     private static boolean isBoolean(String field) {
