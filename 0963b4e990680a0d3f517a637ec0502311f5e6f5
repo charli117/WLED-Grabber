@@ -1,0 +1,35 @@
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvAboutSettingsTest.java
+  8ca27aebf464ed84 10,20-22,34-35,48-57,67-68,70,90
+docs/guides/configuration-and-troubleshooting.md
+  8ca27aebf464ed84 143
+tv/src/main/java/com/abrenoch/wledgrabber/tv/fragments/settings/WledConnectionStepFragment.java
+  8ca27aebf464ed84 145-148
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.4",
+  "base_commit_sha": "0963b4e990680a0d3f517a637ec0502311f5e6f5",
+  "prompts": {
+    "8ca27aebf464ed84": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ef57-a515-71c3-91b4-e1071734cd6a",
+        "model": "gpt-6.2-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 27,
+      "total_deletions": 10,
+      "accepted_lines": 27,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/18ea2ba761ce69a13f1b16d20c29d3d19d28bb13f59be76ebc44a8e67c3a93ef",
+      "token_usage": {
+        "input_tokens": 332672,
+        "output_tokens": 68215,
+        "cache_read_tokens": 28868060,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
