@@ -1,13 +1,9 @@
 package com.abrenoch.wledgrabber.tv.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 
 import com.abrenoch.wledgrabber.common.led.ConfigFields;
 import com.abrenoch.wledgrabber.common.led.ConfigSnapshot;
@@ -81,22 +77,11 @@ public class ScanResultActivity extends LeanbackActivity {
                             + "\n" + version + " · LEDs=" + observedCount + " · channel=" + hint);
         }
 
-        Animator fadeInAnimator = ObjectAnimator.ofFloat(binding.scanResultHostName, "alpha", 0f, 1f);
-        Animator scaleXAnimator = ObjectAnimator
-                .ofFloat(binding.scanResultHostName, "scaleX", .8f, 1f);
-        Animator scaleYAnimator = ObjectAnimator
-                .ofFloat(binding.scanResultHostName, "scaleY", .8f, 1f);
-        AnimatorSet hostNameSet = new AnimatorSet();
-        hostNameSet.playTogether(fadeInAnimator, scaleXAnimator, scaleYAnimator);
-        hostNameSet.setInterpolator(new DecelerateInterpolator());
-        hostNameSet.setDuration(6000L);
-        hostNameSet.start();
-
         binding.konfetti.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom,
                                        int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                startKonfetti();
+                if (hostName != null) startKonfetti();
                 binding.konfetti.removeOnLayoutChangeListener(this);
             }
         });
@@ -156,7 +141,7 @@ public class ScanResultActivity extends LeanbackActivity {
                 .addShapes(Shape.RECT, Shape.CIRCLE)
                 .addSizes(new Size(12, 5))
                 .setPosition(-50f, binding.konfetti.getWidth() + 50f, -50f, -50f)
-                .streamFor(300, Long.MAX_VALUE);
+                .streamFor(60, 1000L);
     }
 
     private void burstKonfetti(int color) {
