@@ -31,7 +31,7 @@ Android 在本地完成屏幕采集、四边布局与逐灯平均，直接驱动
 | 设备 | 单设备 LAN；RGB、RGBW 均支持；DDP 因 RGBW 为必做项，不延期 |
 | 产品 | TV 优先且 mobile 完整配置；共用预览、三种测试图案；共享的主界面动效与导航体验 |
 | 平台 | minSdk 21、compileSdk 35、targetSdk 35；授权、通知、磁贴、开机自启动/提醒及横竖屏按平台规则适配 |
-| 身份 | WLED Grabber，`com.abrenoch.wledgrabber`，versionName 1.0；仅侧载；图标、色板、字标与资源映射见[品牌与图标规范](app-icon/brand-guide.md) |
+| 身份 | WLED Grabber，`com.abrenoch.wledgrabber`，版本见[APK 与安装](../guides/configuration-and-troubleshooting.md#8-apk-与安装)；仅侧载；图标、色板、字标与资源映射见[品牌与图标规范](app-icon/brand-guide.md) |
 | 性能 | 首套 274 灯目标 60 fps；达不到即为发布门禁未通过，不静默改为 30 fps |
 | 增强 | 黑边检测、线性平均、饱和度、时间平滑等画质增强默认关闭 |
 

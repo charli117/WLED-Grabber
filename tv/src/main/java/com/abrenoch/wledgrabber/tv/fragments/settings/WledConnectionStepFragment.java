@@ -44,6 +44,7 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
     private static final long ACTION_LAYOUT = 1008L;
     private static final long ACTION_ADVANCED = 1011L;
     private static final long ACTION_EDIT_CONNECTION = 1012L;
+    private static final long ACTION_ABOUT = 1013L;
     /** Public for the merge regression test in the TV test module. */
     public static final int REQUEST_LAYOUT = 4201;
     public static final int REQUEST_ADVANCED = 4202;
@@ -89,6 +90,12 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
                 .description(getString(
                         com.abrenoch.wledgrabber.tv.R.string.layout_editor_advanced_entry_desc))
                 .build());
+        if (!editMode) {
+            actions.add(new GuidedAction.Builder(requireContext())
+                    .id(ACTION_ABOUT)
+                    .title(com.abrenoch.wledgrabber.tv.R.string.tv_about_title)
+                    .build());
+        }
         if (!addressingVisible) {
             actions.add(new GuidedAction.Builder(requireContext())
                     .id(ACTION_EDIT_CONNECTION)
@@ -164,6 +171,10 @@ public class WledConnectionStepFragment extends SettingsStepBaseFragment {
         if (action.getId() == ACTION_ADVANCED) {
             startActivityForResult(new android.content.Intent(
                     requireContext(), LayoutSettingsActivity.class), REQUEST_ADVANCED);
+            return;
+        }
+        if (action.getId() == ACTION_ABOUT) {
+            new AboutDialogFragment().show(getChildFragmentManager(), "about");
             return;
         }
         if (action.getId() == ACTION_EDIT_CONNECTION) {

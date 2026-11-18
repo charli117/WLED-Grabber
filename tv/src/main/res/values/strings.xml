@@ -55,6 +55,10 @@
   <string name="layout_editor_advanced_guidance">RGBW white mode, average color, capture size and quality. Changes apply on next start.</string>
   <string name="layout_editor_advanced_entry">Advanced options</string>
   <string name="layout_editor_advanced_entry_desc">RGBW white mode, average color, capture size, quality</string>
+  <string name="tv_about_title">About</string>
+  <string name="tv_about_summary">WLED Grabber samples colors along the edges of your TV screen and sends them directly to a WLED controller on your network, so your LED strip follows the picture.</string>
+  <string name="tv_about_details">%1$s\n\nAuthor: %2$s\nVersion: %3$s (%4$d)</string>
+  <string name="tv_about_author" translatable="false">Charli117</string>
   <string name="wled_setup_edit_connection">Edit WLED connection</string>
   <string name="wled_setup_edit_connection_desc">Change host, ports, protocol or channel mode</string>
   <string name="wled_setup_complete_layout">Complete the LED layout before starting capture.</string>

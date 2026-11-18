@@ -11,8 +11,8 @@ android {
         applicationId "com.abrenoch.wledgrabber"
         minSdk 21
         targetSdk 35
-        versionCode 2012
-        versionName "1.0"
+        versionCode 2026
+        versionName "2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,6 +37,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig true
         viewBinding true
     }
 }
