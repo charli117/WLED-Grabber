@@ -6,6 +6,7 @@ import com.abrenoch.wledgrabber.common.led.LedMapping;
 import com.abrenoch.wledgrabber.common.led.LedSampleRect;
 import com.abrenoch.wledgrabber.common.led.Side;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,50 +14,40 @@ import java.util.List;
 /** Pure drawing model for the shared layout preview; never recomputes geometry. */
 public final class PreviewModel {
     public static final class PreviewRect {
-        private final double hmin;
-        private final double hmax;
-        private final double vmin;
-        private final double vmax;
-        private final Side side;
-        private final int logicalIndex;
+        private final LedSampleRect geometry;
         private final int physicalIndex;
         private final boolean black;
         private final boolean selected;
 
         private PreviewRect(LedSampleRect rect, int physicalIndex, boolean black, boolean selected) {
-            this.hmin = rect.hmin();
-            this.hmax = rect.hmax();
-            this.vmin = rect.vmin();
-            this.vmax = rect.vmax();
-            this.side = rect.side();
-            this.logicalIndex = rect.logicalIndex();
+            this.geometry = rect;
             this.physicalIndex = physicalIndex;
             this.black = black;
             this.selected = selected;
         }
 
         public double hmin() {
-            return hmin;
+            return geometry.hmin();
         }
 
         public double hmax() {
-            return hmax;
+            return geometry.hmax();
         }
 
         public double vmin() {
-            return vmin;
+            return geometry.vmin();
         }
 
         public double vmax() {
-            return vmax;
+            return geometry.vmax();
         }
 
         public Side side() {
-            return side;
+            return geometry.side();
         }
 
         public int logicalIndex() {
-            return logicalIndex;
+            return geometry.logicalIndex();
         }
 
         public int physicalIndex() {
@@ -75,7 +66,7 @@ public final class PreviewModel {
     private final List<PreviewRect> rects;
     private final List<PreviewRect> plainRects;
     private final List<PreviewRect> markedRects;
-    private final int[] logicalByPhysical;
+    private final LedMapping mapping;
     private final double[] corners;
     private final int physicalCount;
     private final int effectiveCount;
@@ -88,15 +79,17 @@ public final class PreviewModel {
     private final String error;
 
     private PreviewModel(List<PreviewRect> rects, List<PreviewRect> plainRects,
-                         List<PreviewRect> markedRects, int[] logicalByPhysical,
+                         List<PreviewRect> markedRects, LedMapping mapping,
                          double[] corners, int physicalCount,
                          int effectiveCount, int tailCount, int gapStart, int gapLength,
                          GapMode gapMode, int selectedPhysical, int selectedLogical, String error) {
-        this.rects = Collections.unmodifiableList(rects);
-        this.plainRects = Collections.unmodifiableList(plainRects);
-        this.markedRects = Collections.unmodifiableList(markedRects);
-        this.logicalByPhysical = logicalByPhysical.clone();
-        this.corners = corners.clone();
+        // Both factories own their inputs; only the read-only selection view escapes.
+        // corners() still returns a defensive copy to callers.
+        this.rects = rects;
+        this.plainRects = plainRects;
+        this.markedRects = markedRects;
+        this.mapping = mapping;
+        this.corners = corners;
         this.physicalCount = physicalCount;
         this.effectiveCount = effectiveCount;
         this.tailCount = tailCount;
@@ -110,7 +103,7 @@ public final class PreviewModel {
 
     public static PreviewModel error(String message) {
         List<PreviewRect> none = Collections.emptyList();
-        return new PreviewModel(none, none, none, new int[0],
+        return new PreviewModel(none, none, none, null,
                 new double[]{0, 0, 1, 0, 1, 1, 0, 1}, 0, 0, 0, 0, 0,
                 GapMode.SKIP, -1, -1, message == null ? "layout unavailable" : message);
     }
@@ -123,10 +116,6 @@ public final class PreviewModel {
         int physicalCount = mapping.physicalLedCount();
         int selected = physicalCount == 0 ? -1
                 : Math.max(0, Math.min(selectedPhysical, physicalCount - 1));
-        int[] logicalByPhysical = new int[physicalCount];
-        for (int physical = 0; physical < physicalCount; physical++) {
-            logicalByPhysical[physical] = mapping.physicalToLogical(physical);
-        }
         List<PreviewRect> plainRects = new ArrayList<>(layout.count());
         List<PreviewRect> markedRects = new ArrayList<>(layout.count());
         for (LedSampleRect rect : layout.rects()) {
@@ -135,9 +124,9 @@ public final class PreviewModel {
             plainRects.add(new PreviewRect(rect, physical, black, false));
             markedRects.add(new PreviewRect(rect, physical, black, true));
         }
-        int selectedLogical = selected >= 0 ? logicalByPhysical[selected] : -1;
+        int selectedLogical = selected >= 0 ? mapping.physicalToLogical(selected) : -1;
         return new PreviewModel(view(plainRects, markedRects, selected),
-                plainRects, markedRects, logicalByPhysical,
+                plainRects, markedRects, mapping,
                 new double[]{layout.tlH(), layout.tlV(), layout.trH(), layout.trV(),
                         layout.brH(), layout.brV(), layout.blH(), layout.blV()},
                 physicalCount, mapping.effectiveLedCount(),
@@ -156,20 +145,23 @@ public final class PreviewModel {
             return this;
         }
         return new PreviewModel(view(plainRects, markedRects, next),
-                plainRects, markedRects, logicalByPhysical, corners,
+                plainRects, markedRects, mapping, corners,
                 physicalCount, effectiveCount, tailCount, gapStart, gapLength, gapMode,
-                next, logicalByPhysical[next], null);
+                next, mapping.physicalToLogical(next), null);
     }
 
     private static List<PreviewRect> view(List<PreviewRect> plainRects,
                                           List<PreviewRect> markedRects, int selected) {
-        List<PreviewRect> view = new ArrayList<>(plainRects.size());
-        for (int i = 0; i < plainRects.size(); i++) {
-            PreviewRect rect = plainRects.get(i);
-            view.add(selected >= 0 && rect.physicalIndex() == selected
-                    ? markedRects.get(i) : rect);
-        }
-        return view;
+        return new AbstractList<PreviewRect>() {
+            @Override public PreviewRect get(int index) {
+                PreviewRect rect = plainRects.get(index);
+                return selected >= 0 && rect.physicalIndex() == selected ? markedRects.get(index) : rect;
+            }
+
+            @Override public int size() {
+                return plainRects.size();
+            }
+        };
     }
 
     public List<PreviewRect> rects() {
