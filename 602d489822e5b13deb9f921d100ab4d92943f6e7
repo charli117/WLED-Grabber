@@ -1,0 +1,54 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/views/PreviewModel.java
+  8ca27aebf464ed84 9,17,23,30,34,38,42,46,50,69,82,86-92,106,127,129,148,150,155-164
+scripts/qa/PreviewAllocationCheck.java
+  8ca27aebf464ed84 1-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.4",
+  "base_commit_sha": "602d489822e5b13deb9f921d100ab4d92943f6e7",
+  "prompts": {
+    "8adff578568baeab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "950ff886-dd45-4251-95c2-e4f99807c1c0",
+        "model": "deepseek-flash"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 138,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/ae3c184d6d9148fd1e43b34cdb0aa66ee21fad26d09423ed7c4c7793096d1a08",
+      "token_usage": {
+        "input_tokens": 195200,
+        "output_tokens": 43245,
+        "cache_read_tokens": 2269696,
+        "cache_creation_tokens": 0,
+        "total_cost": null
+      }
+    },
+    "8ca27aebf464ed84": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ef57-a515-71c3-91b4-e1071734cd6a",
+        "model": "gpt-6.2-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 309,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/e8a8cdd1e96ae76e15d1943606cb8b3c0f7006afffb22192ecc8a22922f12fe4",
+      "token_usage": {
+        "input_tokens": 189078,
+        "output_tokens": 41650,
+        "cache_read_tokens": 19837368,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
