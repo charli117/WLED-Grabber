@@ -11,23 +11,16 @@ import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * Created by nino on 26-5-18.
- */
+/** Animated background shared by the phone and TV capture screens. */
+public class SweepGradientView extends View {
 
-public class SweepGradientView extends View{
-
-    Paint paint;
-    final int[] colors = {Color.RED, Color.MAGENTA, Color.BLUE, Color.CYAN, Color.GREEN, Color.YELLOW, Color.RED};
-    final float[] positions = {0f, 1/6f, 2/6f, 3/6f, 4/6f, 5/6f, 6/6f};
-
-    SweepGradient gradient;
-
-    Rect viewBounds = new Rect();
-
-    Matrix gradientMatrix = new Matrix();
-
-    float rotate = 0f;
+    private final Paint paint = new Paint();
+    private final int[] colors = {Color.RED, Color.MAGENTA, Color.BLUE, Color.CYAN,
+            Color.GREEN, Color.YELLOW, Color.RED};
+    private final Rect viewBounds = new Rect();
+    private final Matrix gradientMatrix = new Matrix();
+    private SweepGradient gradient;
+    private int rotationDegrees;
 
     public SweepGradientView(Context context) {
         this(context, null);
@@ -39,31 +32,23 @@ public class SweepGradientView extends View{
 
     public SweepGradientView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
-        paint = new Paint();
-        paint.setShader(gradient);
     }
 
-
+    @Override
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        viewBounds.set(0, 0, width, height);
+        gradient = new SweepGradient(viewBounds.exactCenterX(), viewBounds.exactCenterY(), colors, null);
+        paint.setShader(gradient);
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
-
-        gradientMatrix.postRotate(rotate++, viewBounds.width()/2, viewBounds.height()/2);
+        if (gradient == null) return;
+        gradientMatrix.setRotate(rotationDegrees, viewBounds.exactCenterX(), viewBounds.exactCenterY());
         gradient.setLocalMatrix(gradientMatrix);
-
-        paint.setShader(gradient);
         canvas.drawRect(viewBounds, paint);
-        gradientMatrix.reset();
-        invalidate();
-
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        viewBounds.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
-
-        gradient = new SweepGradient(viewBounds.centerX(), viewBounds.centerY(), colors, positions);
+        rotationDegrees = (rotationDegrees + 1) % 360;
+        postInvalidateOnAnimation();
     }
 }
