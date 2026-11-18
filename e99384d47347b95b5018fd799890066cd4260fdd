@@ -1,0 +1,33 @@
+common/src/androidTest/java/com/abrenoch/wledgrabber/common/views/SweepGradientViewTest.java
+  8ca27aebf464ed84 1-50
+common/src/main/java/com/abrenoch/wledgrabber/common/views/SweepGradientView.java
+  8ca27aebf464ed84 14-15,17-23,35,37-41,47-48,51-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.4",
+  "base_commit_sha": "e99384d47347b95b5018fd799890066cd4260fdd",
+  "prompts": {
+    "8ca27aebf464ed84": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ef57-a515-71c3-91b4-e1071734cd6a",
+        "model": "gpt-6.2-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 383,
+      "total_deletions": 121,
+      "accepted_lines": 379,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/4505de5ffc241e701f58620314190e4f13f24d56c387e5f600386562c4f5f452",
+      "token_usage": {
+        "input_tokens": 189078,
+        "output_tokens": 41650,
+        "cache_read_tokens": 19837368,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
