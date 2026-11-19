@@ -87,6 +87,26 @@ public class LedColorSamplerTest {
     }
 
     @Test
+    public void pausedWhiteFrameSwitchesToNightAndBackWithoutCompoundingOrNewImage() {
+        PlaneData white = plane(8, 8, 0, 4, 0, 0, 0, 8, 8, (x, y) -> new int[]{255, 255, 255});
+        CompiledLayout layout = physicalFrame(8, 8);
+        byte[] out = new byte[4];
+        for (boolean average : new boolean[]{false, true}) for (WhiteMode mode : WhiteMode.values()) {
+            sampler.resetQualityState();
+            assertFalse(sampler.renderCached(layout, RgbwMode.RGBW, mode, out, QualitySettings.OFF, ViewingScene.NIGHT));
+            assertTrue(sampler.samplePhysical(white.view, layout, average, RgbwMode.RGBW, mode, out, QualitySettings.OFF, ViewingScene.GAME));
+            byte[] original = out.clone();
+            for (int repeat = 0; repeat < 100; repeat++) {
+                assertTrue(sampler.renderCached(layout, RgbwMode.RGBW, mode, out, QualitySettings.OFF, ViewingScene.NIGHT));
+                byte rgb = (byte)(mode == WhiteMode.PRESERVE ? 64 : 0);
+                assertArrayEquals(new byte[]{rgb, rgb, rgb, 64}, out);
+            }
+            assertTrue(sampler.renderCached(layout, RgbwMode.RGBW, mode, out, QualitySettings.OFF, ViewingScene.CUSTOM));
+            assertArrayEquals(original, out);
+        }
+    }
+
+    @Test
     public void hdrCompensationRaisesSampledChroma() {
         int width = 2;
         int height = 2;

@@ -12,6 +12,13 @@ import com.abrenoch.wledgrabber.tv.activities.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;
+import com.abrenoch.wledgrabber.common.scene.SceneSelectionStore;
+import com.abrenoch.wledgrabber.common.led.ViewingScene;
+import com.abrenoch.wledgrabber.common.capture.OutputOwner;
+import com.abrenoch.wledgrabber.common.capture.OutputSessionCoordinator;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -45,6 +52,62 @@ public class TvMainActivityTest {
             activity = null;
         }
         WledTestSupport.clearConfig(context);
+    }
+
+    @Test public void scenePickerOpensWithoutStartingCaptureAndBackReturnsToHome() {
+        activity = InstrumentationRegistry.getInstrumentation().startActivitySync(
+                new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        onView(withId(R.id.viewing_scene)).perform(click());
+        onView(withText(R.string.scene_night)).check(matches(isDisplayed()));
+        androidx.test.espresso.Espresso.pressBack();
+        onView(withId(R.id.viewing_scene)).check(matches(isDisplayed()));
+        onView(withId(R.id.power_toggle)).check(matches(withContentDescription(
+                com.abrenoch.wledgrabber.common.R.string.capture_action_start)));
+    }
+
+    @Test public void offlineChoicePersistsWithoutStartingOutputAndOldReceiptCannotReviveIt() throws Exception {
+        activity = InstrumentationRegistry.getInstrumentation().startActivitySync(
+                new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        SceneSelectionStore store =
+                SceneSelectionStore.get(context);
+        ViewingScene previous = store.current().scene;
+        boolean useGame = previous == ViewingScene.NIGHT;
+        int label = useGame ? R.string.scene_game : R.string.scene_night;
+        CountDownLatch changed = new CountDownLatch(1);
+        SceneSelectionStore.Listener listen = value -> {
+            if (value.scene != previous) changed.countDown();
+        };
+        store.observe(listen);
+        try {
+            onView(withId(R.id.viewing_scene)).perform(click());
+            onView(withText(label)).perform(click());
+            assertTrue(changed.await(2, TimeUnit.SECONDS));
+            onView(withId(R.id.viewing_scene)).check(matches(withText(sceneText(label, R.string.scene_next_start))));
+            assertEquals(OutputOwner.NONE,
+                    OutputSessionCoordinator.get().owner());
+            sceneStatus(901, 12, true, store.current().revision);
+            onView(withId(R.id.viewing_scene)).check(matches(withText(sceneText(label, R.string.scene_applied))));
+            sceneStatus(902, 12, false, -1);
+            sceneStatus(901, 12, true, store.current().revision);
+            onView(withId(R.id.viewing_scene)).check(matches(withText(sceneText(label, R.string.scene_next_start))));
+        } finally {
+            store.remove(listen);
+            CountDownLatch restored = new CountDownLatch(1);
+            store.select(previous, ok -> restored.countDown());
+            assertTrue(restored.await(2, TimeUnit.SECONDS));
+        }
+    }
+
+    private String sceneText(int label, int state) {
+        return activity.getString(R.string.scene_button, activity.getString(label), activity.getString(state));
+    }
+
+    private void sceneStatus(long sequence, long epoch, boolean running, long applied) {
+        androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(context).sendBroadcast(
+                new Intent(WledScreenService.BROADCAST_FILTER).putExtra(WledScreenService.BROADCAST_TAG, running)
+                        .putExtra(WledScreenService.BROADCAST_SCENE_SEQUENCE, sequence)
+                        .putExtra(WledScreenService.BROADCAST_SCENE_EPOCH, epoch)
+                        .putExtra(WledScreenService.BROADCAST_SCENE_APPLIED, applied));
     }
 
     @Test

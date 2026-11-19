@@ -1,0 +1,4 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Overrides common: the capture service is shared, but only TV consumes scene preferences. -->
+    <bool name="viewing_scenes_enabled" tools:ignore="UnusedResources">true</bool>
+</resources>

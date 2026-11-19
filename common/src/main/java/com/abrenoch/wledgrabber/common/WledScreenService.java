@@ -25,6 +25,9 @@ import android.view.WindowManager;
 import androidx.core.app.ServiceCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.abrenoch.wledgrabber.common.scene.SceneSelectionStore;
+import com.abrenoch.wledgrabber.common.led.ViewingScene;
+import com.abrenoch.wledgrabber.common.led.QualitySettings;
 import com.abrenoch.wledgrabber.common.capture.CaptureSession;
 import com.abrenoch.wledgrabber.common.capture.FrameLease;
 import com.abrenoch.wledgrabber.common.capture.FramePool;
@@ -76,6 +79,13 @@ public class WledScreenService extends Service {
     public static final String BROADCAST_OBSERVATION_STALE = "SERVICE_OBSERVATION_STALE";
     public static final String BROADCAST_OBSERVED_AT = "SERVICE_OBSERVED_AT";
     public static final String BROADCAST_FILTER = "SERVICE_FILTER";
+    public static final String BROADCAST_SCENE_EPOCH = "scene_epoch";
+    public static final String BROADCAST_SCENE_APPLIED = "scene_applied_revision";
+    public static final String BROADCAST_SCENE_SEQUENCE = "scene_status_sequence";
+    private static final java.util.concurrent.atomic.AtomicLong STATUS_SEQUENCE = new java.util.concurrent.atomic.AtomicLong();
+    private final SceneFrameState sceneFrames = new SceneFrameState();
+    private SceneSelectionStore sceneStore;
+    private SceneSelectionStore.Listener sceneListener;
     private static final String BASE = "com.abrenoch.wledgrabber.service.";
     public static final String ACTION_START = BASE + "ACTION_START";
     public static final String ACTION_STOP = BASE + "ACTION_STOP";
@@ -90,7 +100,7 @@ public class WledScreenService extends Service {
 
     private final OutputSessionCoordinator outputCoordinator = OutputSessionCoordinator.get();
     private final CaptureSession captureSession = new CaptureSession();
-    private final LedColorSampler sampler = new LedColorSampler();
+    private LedColorSampler sampler;
     private final Object lock = new Object();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -126,10 +136,8 @@ public class WledScreenService extends Service {
     private int channels;
     private int frameRate;
     private boolean averageColor;
-    private volatile com.abrenoch.wledgrabber.common.led.QualitySettings quality =
-            com.abrenoch.wledgrabber.common.led.QualitySettings.OFF;
-    private com.abrenoch.wledgrabber.common.led.QualitySettings baseQuality =
-            com.abrenoch.wledgrabber.common.led.QualitySettings.OFF;
+    private volatile QualitySettings quality = QualitySettings.OFF;
+    private QualitySettings baseQuality = QualitySettings.OFF;
     private volatile boolean hdrCompensation;
     private boolean running;
     private boolean stopping;
@@ -176,7 +184,7 @@ public class WledScreenService extends Service {
                 }
                 if (hasSample && now - lastFrameAt >= KEEP_ALIVE_MS) {
                     lastFrameAt = now;
-                    offerPayload(lastFrame, now);
+                    offerCurrentFrame(now);
                 }
             }
             Handler handler = captureHandler;
@@ -365,7 +373,7 @@ public class WledScreenService extends Service {
             baseQuality = capture.quality();
             hdrCompensation = false;
             quality = baseQuality;
-            sampler.resetQualityState();
+            sampler = new LedColorSampler();
             scratch = new byte[physicalCount * channels];
             lastFrame = new byte[physicalCount * channels];
             hasSample = false;
@@ -438,10 +446,11 @@ public class WledScreenService extends Service {
             if (displayManager != null) {
                 displayManager.registerDisplayListener(displayListener, mainHandler);
             }
-            epoch = System.currentTimeMillis();
+            epoch = outputEpoch;
             streamer.start(epoch, OutputOwner.CAPTURE, physicalCount, channels);
             running = true;
             stopping = false;
+            attachSceneSelection();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && displayManager != null) {
                 Display defaultDisplay = displayManager.getDisplay(Display.DEFAULT_DISPLAY);
                 if (defaultDisplay != null) {
@@ -482,11 +491,72 @@ public class WledScreenService extends Service {
         }
         boolean changed = hdr != hdrCompensation;
         hdrCompensation = hdr;
-        quality = baseQuality.withHdrCompensation(hdr);
         if (changed) {
+            Handler handler = captureHandler;
+            if (handler != null) handler.post(() -> {
+                synchronized (lock) {
+                    if (!running || stopping || handler != captureHandler) return;
+                    quality = baseQuality.withHdrCompensation(hdr);
+                    if (sceneListener == null) return;
+                }
+                renderFrame(null, null, captureGeneration, System.currentTimeMillis());
+            });
             Log.i(TAG, "hdr active=" + hdr + " dolbyVisionSupported=" + dolbyVision
                     + " compensation=" + hdr);
         }
+    }
+
+    private void attachSceneSelection() {
+        long sessionId = epoch;
+        sceneFrames.start(sessionId);
+        if (!getResources().getBoolean(R.bool.viewing_scenes_enabled)) return;
+        Handler handler = captureHandler;
+        sceneStore = SceneSelectionStore.get(this);
+        SceneSelectionStore.Selection initial = sceneStore.current();
+        sceneFrames.choose(sessionId, initial.revision, initial.scene);
+        sceneListener = selected -> handler.post(() -> {
+            synchronized (lock) {
+                if (!running || stopping || !sceneFrames.choose(sessionId, selected.revision, selected.scene)) return;
+            }
+            renderFrame(null, null, captureGeneration, System.currentTimeMillis());
+        });
+        sceneStore.observe(sceneListener);
+    }
+
+    /** Capture handler only. Stop can close admission during either kind of render, without waiting for sampling. */
+    private boolean renderFrame(PlaneView plane, ImageReader source, int generation, long now) {
+        final long sessionId, revision;
+        final CompiledLayout activeLayout;
+        final LedColorSampler activeSampler;
+        final byte[] output;
+        final RgbwMode mode;
+        final WhiteMode white;
+        final QualitySettings settings;
+        final ViewingScene scene;
+        final boolean average;
+        synchronized (lock) {
+            if (!running || stopping || generation != captureGeneration
+                    || (plane == null ? !hasSample : source != reader)) return false;
+            sessionId = epoch; revision = sceneFrames.revision(); scene = sceneFrames.scene();
+            activeLayout = layout; activeSampler = sampler; output = scratch;
+            mode = rgbwMode; white = whiteMode; settings = quality; average = averageColor;
+        }
+        boolean rendered = plane == null
+                ? activeSampler.renderCached(activeLayout, mode, white, output, settings, scene)
+                : activeSampler.samplePhysical(plane, activeLayout, average, mode, white, output, settings, scene);
+        synchronized (lock) {
+            if (!rendered || !running || stopping || !sceneFrames.canPublish(sessionId, generation, revision)) return false;
+            scratch = lastFrame;
+            lastFrame = output;
+            hasSample = true;
+            return offerCurrentFrame(now);
+        }
+    }
+
+    private boolean offerCurrentFrame(long now) {
+        boolean offered = offerPayload(lastFrame, now);
+        if (sceneFrames.accept(epoch, sceneFrames.revision(), offered)) notifyActivity();
+        return offered;
     }
 
     private void startHealthLoop() {
@@ -597,16 +667,24 @@ public class WledScreenService extends Service {
             replacement.close();
             return;
         }
-        ImageReader previous = reader;
-        reader = replacement;
-        layout = nextLayout;
-        captureWidth = width;
-        captureHeight = height;
-        captureDensityDpi = densityDpi;
-        captureGeneration = generation;
-        if (previous != null) {
-            previous.setOnImageAvailableListener(null, null);
-            previous.close();
+        synchronized (lock) {
+            if (!running || stopping || display != virtualDisplay) { replacement.close(); return; }
+            ImageReader previous = reader;
+            reader = replacement;
+            layout = nextLayout;
+            captureWidth = width;
+            captureHeight = height;
+            captureDensityDpi = densityDpi;
+            captureGeneration = generation;
+            if (previous != null) {
+                previous.setOnImageAvailableListener(null, null);
+                previous.close();
+            }
+            hasSample = false;
+            lastFrameAt = 0;
+            sampler.resetQualityState();
+            sceneFrames.resize(generation);
+            if (sceneListener != null) notifyActivity();
         }
     }
 
@@ -624,7 +702,7 @@ public class WledScreenService extends Service {
 
     private void onImageAvailable(ImageReader source, int generation) {
         synchronized (lock) {
-            if (!running || stopping || generation != captureGeneration) {
+            if (!running || stopping || source != reader || generation != captureGeneration) {
                 return;
             }
         }
@@ -660,21 +738,8 @@ public class WledScreenService extends Service {
             if (!plane.isValid()) {
                 return;
             }
-            if (!sampler.samplePhysical(plane.value(), layout, averageColor,
-                    rgbwMode, whiteMode, scratch, quality)) {
-                return;
-            }
+            boolean offered = renderFrame(plane.value(), source, generation, now);
             samplingMicros.recordMicros((System.nanoTime() - sampleStartNanos) / 1000);
-            boolean offered;
-            synchronized (lock) {
-                // Sleep may have closed this epoch while sampling was in progress.
-                if (!running || stopping || generation != captureGeneration) {
-                    return;
-                }
-                System.arraycopy(scratch, 0, lastFrame, 0, lastFrame.length);
-                hasSample = true;
-                offered = offerPayload(lastFrame, now);
-            }
             if (offered) {
                 long nowMicros = System.nanoTime() / 1000;
                 if (lastSentAtMicros != 0) {
@@ -742,6 +807,12 @@ public class WledScreenService extends Service {
             writerOwned = running;
             stopping = true;
             running = false;
+            sceneFrames.stop();
+            if (sceneListener != null) {
+                sceneStore.remove(sceneListener);
+                sceneListener = null;
+                sceneStore = null;
+            }
         }
         captureSession.beginStop();
         stopHealthLoop();
@@ -780,8 +851,8 @@ public class WledScreenService extends Service {
         }
         sink = null;
         httpClient = null;
-        sampler.resetQualityState();
-        quality = com.abrenoch.wledgrabber.common.led.QualitySettings.OFF;
+        sampler = null;
+        quality = QualitySettings.OFF;
         framePool = null;
         layout = null;
         scratch = null;
@@ -880,14 +951,19 @@ public class WledScreenService extends Service {
     }
 
     private void notifyActivity() {
-        Intent intent = new Intent(BROADCAST_FILTER);
-        intent.putExtra(BROADCAST_TAG, running);
-        intent.putExtra(BROADCAST_ERROR, startError);
-        intent.putExtra(BROADCAST_RELEASE_KNOWN, releaseKnown);
-        intent.putExtra(BROADCAST_RELEASE_CONFIRMED, releaseConfirmed);
-        intent.putExtra(BROADCAST_OBSERVATION_STALE, observationStale);
-        intent.putExtra(BROADCAST_OBSERVED_AT, lastObservedAt);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        synchronized (lock) {
+            Intent intent = new Intent(BROADCAST_FILTER);
+            intent.putExtra(BROADCAST_SCENE_SEQUENCE, STATUS_SEQUENCE.incrementAndGet());
+            intent.putExtra(BROADCAST_SCENE_EPOCH, epoch);
+            intent.putExtra(BROADCAST_SCENE_APPLIED, running ? sceneFrames.applied() : -1L);
+            intent.putExtra(BROADCAST_TAG, running);
+            intent.putExtra(BROADCAST_ERROR, startError);
+            intent.putExtra(BROADCAST_RELEASE_KNOWN, releaseKnown);
+            intent.putExtra(BROADCAST_RELEASE_CONFIRMED, releaseConfirmed);
+            intent.putExtra(BROADCAST_OBSERVATION_STALE, observationStale);
+            intent.putExtra(BROADCAST_OBSERVED_AT, lastObservedAt);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        }
     }
 
     @Override

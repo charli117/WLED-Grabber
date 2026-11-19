@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="scene_title">观影场景</string>
+    <string name="scene_button">观影场景：%1$s · %2$s</string>
+    <string name="scene_custom">自定义</string>
+    <string name="scene_cinema">影院</string>
+    <string name="scene_game">游戏</string>
+    <string name="scene_night">夜间</string>
+    <string name="scene_next_start">下次采集使用</string>
+    <string name="scene_applied">本机会话已应用</string>
+    <string name="scene_waiting">等待画面</string>
+    <string name="scene_failed">场景保存失败</string>
+</resources>

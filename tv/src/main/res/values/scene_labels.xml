@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="scene_title">Viewing scene</string>
+    <string name="scene_button">Viewing scene: %1$s · %2$s</string>
+    <string name="scene_custom">Custom</string>
+    <string name="scene_cinema">Cinema</string>
+    <string name="scene_game">Game</string>
+    <string name="scene_night">Night</string>
+    <string name="scene_next_start">Next capture</string>
+    <string name="scene_applied">Applied locally</string>
+    <string name="scene_waiting">Waiting for frame</string>
+    <string name="scene_failed">Could not save scene</string>
+</resources>

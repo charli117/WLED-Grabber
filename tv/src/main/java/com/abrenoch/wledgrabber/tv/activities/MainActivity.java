@@ -33,6 +33,8 @@ import com.abrenoch.wledgrabber.common.util.ConfigValidator;
 import com.abrenoch.wledgrabber.common.util.Preferences;
 import com.abrenoch.wledgrabber.common.util.PreferencesConfigStorage;
 import com.abrenoch.wledgrabber.common.util.ValidationResult;
+import com.abrenoch.wledgrabber.common.scene.SceneSelectionStore;
+import com.abrenoch.wledgrabber.common.led.ViewingScene;
 import com.abrenoch.wledgrabber.tv.R;
 
 public class MainActivity extends LeanbackActivity implements ImageView.OnClickListener,
@@ -44,13 +46,23 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
     public static final String BROADCAST_FILTER = "SERVICE_FILTER";
     private static final String TAG = "DEBUG";
     private boolean mRecorderRunning = false;
+    private SceneSelectionStore scenes;
+    private long lastStatusSequence = -1, latestEpoch = -1, sceneApplied = -1;
+    private final SceneSelectionStore.Listener selected = value -> runOnUiThread(this::updateSceneButton);
     private static MediaProjectionManager mMediaProjectionManager;
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            long sequence = intent.getLongExtra(WledScreenService.BROADCAST_SCENE_SEQUENCE, -1);
+            long epoch = intent.getLongExtra(WledScreenService.BROADCAST_SCENE_EPOCH, -1);
+            if (sequence >= 0 && (sequence <= lastStatusSequence || epoch > 0 && epoch < latestEpoch)) return;
+            if (epoch > latestEpoch) latestEpoch = epoch;
+            if (sequence >= 0) lastStatusSequence = sequence;
+            sceneApplied = intent.getLongExtra(WledScreenService.BROADCAST_SCENE_APPLIED, -1);
             boolean checked = intent.getBooleanExtra(BROADCAST_TAG, false);
             mRecorderRunning = checked;
+            updateSceneButton();
             String error = intent.getStringExtra(BROADCAST_ERROR);
             if (error != null) {
                 Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
@@ -151,6 +163,9 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
         mRecorderRunning = false;
 
         setContentView(R.layout.activity_main);
+        scenes = SceneSelectionStore.get(this);
+        findViewById(R.id.viewing_scene).setOnClickListener(view -> openScenePicker());
+        scenes.observe(selected);
         findViewById(R.id.startup_settings).setOnClickListener(view -> StartupSetupActivity.open(this));
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         mMediaProjectionManager = (MediaProjectionManager)
@@ -256,8 +271,46 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
         }
     }
 
+    private static int sceneLabel(ViewingScene scene) {
+        switch (scene) {
+            case CINEMA: return R.string.scene_cinema;
+            case GAME: return R.string.scene_game;
+            case NIGHT: return R.string.scene_night;
+            default: return R.string.scene_custom;
+        }
+    }
+
+    private void updateSceneButton() {
+        TextView button = findViewById(R.id.viewing_scene);
+        if (button == null || scenes == null) return;
+        SceneSelectionStore.Selection choice = scenes.current();
+        int status = !mRecorderRunning ? R.string.scene_next_start : sceneApplied == choice.revision
+                ? R.string.scene_applied : R.string.scene_waiting;
+        button.setText(getString(R.string.scene_button, getString(sceneLabel(choice.scene)), getString(status)));
+    }
+
+    private void openScenePicker() {
+        ViewingScene[] choices = ViewingScene.values();
+        String[] names = new String[choices.length];
+        for (int i = 0; i < choices.length; i++) names[i] = getString(sceneLabel(choices[i]));
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this).setTitle(R.string.scene_title)
+                .setSingleChoiceItems(names, scenes.current().scene.ordinal(), (d, i) -> {
+                    scenes.select(choices[i], ok -> {
+                        if (!ok && !isDestroyed()) Toast.makeText(this, R.string.scene_failed, Toast.LENGTH_SHORT).show();
+                    });
+                    d.dismiss();
+                }).setNegativeButton(android.R.string.cancel, null).create();
+        dialog.setOnDismissListener(d -> findViewById(R.id.viewing_scene).requestFocus());
+        dialog.show();
+    }
+
+    @Override protected void onDestroy() {
+        if (scenes != null) scenes.remove(selected);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
+    }
+
     private void startSettings() {
-        stopScreenRecorder();
         Intent intent = new Intent(this, ManualSetupActivity.class);
         Bundle bundle =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(this)
