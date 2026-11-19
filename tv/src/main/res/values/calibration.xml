@@ -1,0 +1,31 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="cal_title">Remote calibration</string>
+    <string name="cal_setup">Controller: %1$s\nTop %2$d · Right %3$d · Bottom %4$d · Left %5$d · Unused tail %6$d\nCheck the edge counts first. All directions are as you face the TV.</string>
+    <string name="cal_start">Verify device</string>
+    <string name="cal_checking">Checking the controller and saved addressing confirmation…</string>
+    <string name="cal_not_ready">Cannot verify this output. Check the network, device identity, saved addressing confirmations and layout; then reopen calibration.</string>
+    <string name="cal_unsupported">Guided calibration needs four nonempty edges and no gaps. Use the manual edge probes for this layout.</string>
+    <string name="cal_seek">LED %1$d of 0–%2$d. Move left or right, hold to move faster. Stop on the first LED after any corner, then inspect it and its predecessor. If nothing lights, press Back to exit.</string>
+    <string name="cal_pair">Inspect pair</string>
+    <string name="cal_observe">Which edge is LED %1$d on?</string>
+    <string name="cal_relocate">Locate again</string>
+    <string name="cal_pair_invalid">These LEDs must be on different, adjacent edges. Locate the corner again.</string>
+    <string name="cal_review">%1$d/4 · %2$s. Is the entire edge lit, including both ends, with no extra LEDs?</string>
+    <string name="cal_matches">Entire edge matches</string>
+    <string name="cal_summary">Input and direction: %1$d (%2$s) → %3$d (%4$s). All four edges confirmed. Save this mapping?</string>
+    <string name="cal_save">Save calibration</string>
+    <string name="cal_save_failed">Not saved. Retry, or reopen the editor to load the latest configuration.</string>
+    <string name="cal_reverse">reverse</string>
+    <string name="cal_forward">forward</string>
+    <string name="cal_busy">Output is busy. Stop capture or the current test yourself, then try again.</string>
+    <string name="cal_off">Probe released. Controller reported off.</string>
+    <string name="cal_off_unknown">Probe released. Controller power-off was not confirmed.</string>
+    <string name="cal_dirty">The layout has unsaved changes. Save or discard them before calibrating.</string>
+    <string name="cal_discard">Discard edits</string>
+    <string-array name="cal_sides">
+        <item>Top</item>
+        <item>Right</item>
+        <item>Bottom</item>
+        <item>Left</item>
+    </string-array>
+</resources>

@@ -37,6 +37,14 @@ public final class LayoutProbeSender {
     private final ProbeLatch latch = new ProbeLatch();
     private final Object lock = new Object();
 
+    public static final class GuidedToken { private boolean closed; }
+    public interface GuidedListener {
+        void onSent(long seq, boolean success);
+        void onReleased(boolean confirmedOff);
+    }
+    private GuidedToken owner;
+    private GuidedListener receipt;
+    private long sequence, stoppedAt;
     private Thread worker;
     private Endpoint currentEndpoint;
     private volatile boolean running;
@@ -57,6 +65,17 @@ public final class LayoutProbeSender {
 
     /** Toggles one probe; every production caller shares the process-wide instance. */
     public Result toggle(ConfigSnapshot snapshot, CompiledLayout compiled, String key, int[] logical) {
+        return submit(null, 0, null, snapshot, compiled, key, logical);
+    }
+
+    public Result show(GuidedToken token, long seq, ConfigSnapshot snapshot, CompiledLayout compiled,
+                       int[] logical, GuidedListener listener) {
+        if (token == null || listener == null || seq <= 0) return Result.INVALID;
+        return submit(token, seq, listener, snapshot, compiled, "guided", logical);
+    }
+
+    private Result submit(GuidedToken token, long seq, GuidedListener listener, ConfigSnapshot snapshot,
+                          CompiledLayout compiled, String key, int[] logical) {
         if (snapshot == null || compiled == null || key == null || key.isEmpty()
                 || logical == null || logical.length == 0) {
             return Result.INVALID;
@@ -69,7 +88,17 @@ public final class LayoutProbeSender {
                 endpoint.whiteMode, 255, 255, 255);
 
         synchronized (lock) {
+            if (token != null && token.closed) return Result.INVALID;
+            if (worker != null && token != owner) return Result.BUSY;
             if (worker != null && running) {
+                if (token != null) {
+                    if (seq <= sequence || !endpoint.sameTarget(currentEndpoint)) return Result.INVALID;
+                    frame = next;
+                    sequence = seq;
+                    receipt = listener;
+                    // The worker coalesces repeated cursor moves into its next refresh.
+                    return Result.STARTED;
+                }
                 if (latch.isActive(key)) {
                     latch.clear();
                     running = false;
@@ -98,10 +127,14 @@ public final class LayoutProbeSender {
             }
             long epoch = coordinator.epoch();
             byte[] black = new byte[endpoint.ledCount * endpoint.channels];
+            owner = token;
+            receipt = listener;
+            sequence = seq;
+            stoppedAt = 0;
             currentEndpoint = endpoint;
             frame = next;
             running = true;
-            latch.toggle(key);
+            if (token == null) latch.toggle(key);
             worker = new Thread(() -> run(endpoint, black, epoch), "layout-probe");
             worker.setDaemon(true);
             worker.start();
@@ -109,10 +142,15 @@ public final class LayoutProbeSender {
         }
     }
 
-    public void stop() {
+    public void stop() { stop(null); }
+
+    public void stop(GuidedToken token) {
         synchronized (lock) {
+            if (token != null) token.closed = true;
+            if (token != owner) return;
             latch.clear();
             if (worker != null && running) {
+                stoppedAt = System.nanoTime();
                 running = false;
                 lock.notifyAll();
             }
@@ -126,39 +164,53 @@ public final class LayoutProbeSender {
     }
 
     private void run(Endpoint endpoint, byte[] black, long epoch) {
+        boolean off = false;
+        long notified = -1;
         try (UdpDatagramSink sink = new UdpDatagramSink(endpoint.host, endpoint.port);
              WledHttpClient control = openClient.call()) {
             WledUdpTransport udp = new WledUdpTransport(sink);
-            if (!running) {
-                return;
-            }
+            if (!running) return;
             try {
-                control.turnOn(endpoint.host, endpoint.httpPort);
+                boolean on = control.turnOn(endpoint.host, endpoint.httpPort);
                 while (running) {
-                    send(udp, endpoint.transport, endpoint.channels, frame, endpoint.ledCount);
+                    final byte[] selected;
+                    final long seq;
+                    synchronized (lock) { selected = frame; seq = sequence; }
+                    boolean sent = (on || owner == null) && send(udp, endpoint.transport,
+                            endpoint.channels, selected, endpoint.ledCount);
+                    GuidedListener listener;
                     synchronized (lock) {
-                        if (running) lock.wait(INTERVAL_MS);
+                        listener = running && sequence == seq && (seq != notified || !sent) ? receipt : null;
                     }
+                    if (listener != null) { listener.onSent(seq, sent); notified = seq; }
+                    if (!sent && owner != null) break;
+                    synchronized (lock) { if (running) lock.wait(INTERVAL_MS); }
                 }
             } finally {
+                boolean blackSent = false;
                 try {
-                    send(udp, endpoint.transport, endpoint.channels, black, endpoint.ledCount);
+                    blackSent = send(udp, endpoint.transport, endpoint.channels, black, endpoint.ledCount);
                 } finally {
                     if (control.turnOff(endpoint.host, endpoint.httpPort)) {
-                        control.readState(endpoint.host, endpoint.httpPort);
+                        StateReadResult state = control.readState(endpoint.host, endpoint.httpPort);
+                        off = blackSent && state.isSuccess() && !state.on() && !state.live();
                     }
                 }
             }
         } catch (Exception ignored) {
-            // Best effort: the UI only reports the latch state.
+            // Fail closed: do not promote a local I/O failure to an off receipt.
         } finally {
-            coordinator.release(OutputOwner.TEST, OWNER_ID, epoch);
+            GuidedListener listener;
             synchronized (lock) {
-                worker = null;
-                currentEndpoint = null;
-                frame = null;
+                if (owner != null) owner.closed = true;
+                off &= stoppedAt != 0 && System.nanoTime() - stoppedAt <= java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(WledSession.RELEASE_BUDGET_MS);
+                listener = receipt;
+                running = false;
+                coordinator.release(OutputOwner.TEST, OWNER_ID, epoch);
+                owner = null; receipt = null; worker = null; currentEndpoint = null; frame = null;
                 latch.clear();
             }
+            if (listener != null) listener.onReleased(off);
         }
     }
 
@@ -228,7 +280,7 @@ public final class LayoutProbeSender {
             int channels = snapshot.device().rgbwMode() == RgbwMode.RGBW ? 4 : 3;
             WhiteMode whiteMode = snapshot.device().whiteMode();
             int ledCount = compiled.mapping().physicalLedCount();
-            if (ledCount <= 0) {
+            if (ledCount <= 0 || ledCount != snapshot.device().physicalLedCount()) {
                 return null;
             }
             int port = transport == Transport.DDP

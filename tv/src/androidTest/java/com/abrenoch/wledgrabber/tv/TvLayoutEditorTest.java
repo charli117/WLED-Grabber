@@ -64,6 +64,17 @@ public class TvLayoutEditorTest {
                 .getTargetContext());
     }
 
+    @Test public void openingCalibrationAndBackingOutNeverTakesALeaseOrEditsTheLayout() throws Exception {
+        try (ActivityScenario<LayoutEditorActivity> scenario = ActivityScenario.launch(LayoutEditorActivity.class)) {
+            awaitWindowFocus(scenario);
+            focusRow(scenario, LayoutEditorActivity.ACTION_CALIBRATION);
+            InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_CENTER);
+            androidx.test.espresso.Espresso.pressBack();
+            scenario.onActivity(activity -> assertTrue(findRow(activity, LayoutEditorActivity.ACTION_CALIBRATION).hasFocus()));
+            assertEquals(OutputOwner.NONE, OutputSessionCoordinator.get().owner());
+        }
+    }
+
     @Test
     public void dpadStepsTheFocusedFieldWithoutTouchingTheCommittedConfig() {
         try (ActivityScenario<LayoutEditorActivity> scenario =
@@ -122,7 +133,7 @@ public class TvLayoutEditorTest {
     @Test
     public void presetActionRestoresTheFirstUnitLayout() throws Exception {
         ConfigRepository repository = repository();
-        assertTrue(repository.save(WledTestSupport.validDraft()
+        assertTrue(repository.save(repository.newDraft()
                 .set(ConfigFields.LED_TOP, "60")
                 .set(ConfigFields.LED_BOTTOM, "60")
                 .set(ConfigFields.LED_LEFT, "34")
@@ -210,7 +221,7 @@ public class TvLayoutEditorTest {
     @Test
     public void physicalCountStartsFromTheEffectiveRingWhenUnconfirmed() {
         ConfigRepository repository = repository();
-        assertTrue(repository.save(WledTestSupport.validDraft()
+        assertTrue(repository.save(repository.newDraft()
                 .set(ConfigFields.WLED_PHYSICAL_LEDS, "0")).isValid());
 
         try (ActivityScenario<LayoutEditorActivity> scenario =
@@ -314,7 +325,7 @@ public class TvLayoutEditorTest {
     @Test
     public void saveBlocksPhysicalCountBelowTheLayout() {
         ConfigRepository repository = repository();
-        assertTrue(repository.save(WledTestSupport.validDraft()
+        assertTrue(repository.save(repository.newDraft()
                 .set(ConfigFields.WLED_PHYSICAL_LEDS, "100")).isValid());
 
         try (ActivityScenario<LayoutEditorActivity> scenario =
@@ -332,7 +343,7 @@ public class TvLayoutEditorTest {
     @Test
     public void saveRejectsACompileInvalidLayout() {
         ConfigRepository repository = repository();
-        assertTrue(repository.save(WledTestSupport.validDraft()
+        assertTrue(repository.save(repository.newDraft()
                 .set(ConfigFields.LED_CORNER_TR_H, "0")).isValid());
         long revision = repository.committedSnapshot().revision();
 
@@ -354,7 +365,8 @@ public class TvLayoutEditorTest {
             throws InterruptedException {
         // Loopback keeps the UI test off the physical lab strip; the probe only
         // needs a valid endpoint, not a reachable WLED for this assertion.
-        assertTrue(repository().save(WledTestSupport.validDraft()
+        ConfigRepository repo = repository();
+        assertTrue(repo.save(repo.newDraft()
                 .set(ConfigFields.WLED_HOST, "127.0.0.1")).isValid());
         try (ActivityScenario<LayoutEditorActivity> scenario =
                      ActivityScenario.launch(LayoutEditorActivity.class)) {

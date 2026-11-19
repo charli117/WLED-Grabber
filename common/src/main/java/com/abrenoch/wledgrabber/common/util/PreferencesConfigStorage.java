@@ -60,7 +60,13 @@ public final class PreferencesConfigStorage implements ConfigStorage {
         KEY_TYPES = Collections.unmodifiableMap(types);
     }
 
+    // Preferences wraps the single default configuration file for this app/process.
+    private static final PreferenceCommitGuard COMMITS = new PreferenceCommitGuard();
     private final Preferences preferences;
+    private final PreferenceCommitGuard.File file = new PreferenceCommitGuard.File() {
+        public StoredConfig readMemory() { return readPreferences(); }
+        public boolean commitDelta(Map<String,String> changes, long revision) { return writePreferences(changes, revision); }
+    };
 
     public PreferencesConfigStorage(Preferences preferences) {
         if (preferences == null) {
@@ -70,7 +76,12 @@ public final class PreferencesConfigStorage implements ConfigStorage {
     }
 
     @Override
-    public StoredConfig load() {
+    public StoredConfig load() { return COMMITS.read(file); }
+
+    @Override
+    public boolean writeAll(Map<String,String> values, long revision) { return COMMITS.write(file, values, revision); }
+
+    private StoredConfig readPreferences() {
         Map<String, String> values = new LinkedHashMap<>();
         for (String key : ConfigFields.ALL) {
             String value = preferences.rawStringWithDefault(KEY_RESOURCES.get(key), KEY_TYPES.get(key));
@@ -88,8 +99,7 @@ public final class PreferencesConfigStorage implements ConfigStorage {
         return new StoredConfig(values, revision);
     }
 
-    @Override
-    public boolean writeAll(Map<String, String> values, long revision) {
+    private boolean writePreferences(Map<String, String> values, long revision) {
         Map<String, String> actual = new LinkedHashMap<>();
         for (String key : ConfigFields.ALL) {
             Integer resource = KEY_RESOURCES.get(key);

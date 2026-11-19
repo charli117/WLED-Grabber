@@ -32,6 +32,51 @@ public class LayoutProbeSenderTest {
     }
 
     @Test
+    public void guidedTokenRepeatsWithoutTogglingAndOnlyItsOwnerCanRelease() throws Exception {
+        verifyGuidedRelease(ControlledHttpEndpoint.Mode.STATE_OFF, true);
+    }
+
+    @Test public void localReleaseDoesNotClaimOffIfInfoStillReportsLive() throws Exception {
+        verifyGuidedRelease(ControlledHttpEndpoint.Mode.STATE_LIVE, false);
+    }
+
+    private void verifyGuidedRelease(ControlledHttpEndpoint.Mode mode, boolean expectedOff) throws Exception {
+        LayoutProbeSender probe = new LayoutProbeSender(() -> new WledHttpClient(true));
+        LayoutProbeSender.GuidedToken token = new LayoutProbeSender.GuidedToken();
+        java.util.concurrent.CountDownLatch second = new java.util.concurrent.CountDownLatch(1);
+        java.util.concurrent.CountDownLatch released = new java.util.concurrent.CountDownLatch(1);
+        java.util.concurrent.atomic.AtomicReference<Boolean> confirmed = new java.util.concurrent.atomic.AtomicReference<>();
+        LayoutProbeSender.GuidedListener listener = new LayoutProbeSender.GuidedListener() {
+            public void onSent(long seq, boolean ok) { if (seq == 2 && ok) second.countDown(); }
+            public void onReleased(boolean off) { confirmed.set(off); released.countDown(); }
+        };
+        try (ControlledHttpEndpoint http = new ControlledHttpEndpoint(mode);
+             DatagramSocket udp = new DatagramSocket(0, InetAddress.getLoopbackAddress())) {
+            ConfigSnapshot config = new ConfigValidator().validateForSave(ConfigTestData.validDraft()
+                    .set(ConfigFields.WLED_HOST, "127.0.0.1")
+                    .set(ConfigFields.WLED_HTTP_PORT, String.valueOf(http.port()))
+                    .set(ConfigFields.WLED_UDP_PORT, String.valueOf(udp.getLocalPort()))).value();
+            CompiledLayout layout = new ClassicLedLayout().compile(config.layout(), config.device().physicalLedCount(), 640, 360).value();
+            try {
+                assertEquals(LayoutProbeSender.Result.STARTED, probe.show(token, 1, config, layout, new int[]{0}, listener));
+                probe.stop();
+                probe.stop(new LayoutProbeSender.GuidedToken());
+                assertEquals(LayoutProbeSender.Result.BUSY, probe.toggle(config, layout, "top", new int[]{0}));
+                assertEquals(LayoutProbeSender.Result.STARTED, probe.show(token, 2, config, layout, new int[]{0}, listener));
+                assertEquals(LayoutProbeSender.Result.INVALID, probe.show(token, 1, config, layout, new int[]{1}, listener));
+                assertTrue(second.await(3, TimeUnit.SECONDS));
+                DatagramPacket packet = new DatagramPacket(new byte[1500], 1500);
+                udp.setSoTimeout(1000); udp.receive(packet);
+                assertTrue(packet.getLength() > 4);
+            } finally { probe.stop(token); }
+            assertTrue(released.await(4, TimeUnit.SECONDS));
+            assertEquals(expectedOff, confirmed.get());
+            assertEquals(OutputOwner.NONE, OutputSessionCoordinator.get().owner());
+            assertEquals(LayoutProbeSender.Result.INVALID, probe.show(token, 3, config, layout, new int[]{0}, listener));
+        }
+    }
+
+    @Test
     public void stoppingVisibleProbePowersOffBeforeReturningLease() throws Exception {
         LayoutProbeSender probe = new LayoutProbeSender(() -> new WledHttpClient(true));
         try (ControlledHttpEndpoint http = new ControlledHttpEndpoint(ControlledHttpEndpoint.Mode.STATE_OFF);

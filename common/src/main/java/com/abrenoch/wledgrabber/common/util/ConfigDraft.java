@@ -14,14 +14,24 @@ import java.util.Map;
 public final class ConfigDraft {
     private final Map<String, String> values = new LinkedHashMap<>();
 
+    private final long baseRevision;
+
     public ConfigDraft() {
+        this(null, -1);
     }
 
     public ConfigDraft(Map<String, String> source) {
+        this(source, -1);
+    }
+
+    ConfigDraft(Map<String, String> source, long revision) {
+        this.baseRevision = revision;
         if (source != null) {
             values.putAll(source);
         }
     }
+
+    long baseRevision() { return baseRevision; }
 
     public String get(String key) {
         return values.get(key);
@@ -33,7 +43,7 @@ public final class ConfigDraft {
     }
 
     public ConfigDraft copy() {
-        return new ConfigDraft(values);
+        return new ConfigDraft(values, baseRevision);
     }
 
     public Map<String, String> asMap() {
@@ -41,7 +51,7 @@ public final class ConfigDraft {
     }
 
     public static ConfigDraft from(ConfigSnapshot snapshot) {
-        ConfigDraft draft = new ConfigDraft();
+        ConfigDraft draft = new ConfigDraft(null, snapshot.revision());
         DeviceEndpoint device = snapshot.device();
         LedLayoutConfig layout = snapshot.layout();
         CaptureConfig capture = snapshot.capture();

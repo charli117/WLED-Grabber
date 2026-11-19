@@ -11,6 +11,8 @@ import com.abrenoch.wledgrabber.common.led.ValidatedConfig;
  * the snapshot it captured at start; saving never mutates an already borrowed snapshot.</p>
  */
 public final class ConfigRepository {
+    // Activities create separate repository and adapter instances for the same preferences.
+    private static final Object WRITE_LOCK = new Object();
     private final ConfigStorage storage;
     private final ConfigValidator validator;
     private volatile ConfigSnapshot committed;
@@ -51,7 +53,8 @@ public final class ConfigRepository {
             return ConfigDraft.from(committed);
         }
         try {
-            return new ConfigDraft(storage.load().values());
+            StoredConfig raw = storage.load();
+            return new ConfigDraft(raw.values(), raw.revision());
         } catch (RuntimeException e) {
             return new ConfigDraft();
         }
@@ -67,30 +70,53 @@ public final class ConfigRepository {
             return validation;
         }
 
-        long currentRevision = committed != null ? committed.revision() : 0;
-        if (committed == null) {
+        synchronized (WRITE_LOCK) {
             try {
-                currentRevision = storage.load().revision();
-            } catch (RuntimeException ignored) {
-                currentRevision = 0;
+                long current = storage.load().revision();
+                // A new unversioned draft may initialize storage, never overwrite an existing revision.
+                long expected = Math.max(0, draft.baseRevision());
+                if (current != expected) return conflict();
+                return writeValidated(draft, validation.value(), current + 1);
+            } catch (RuntimeException e) {
+                return storageError(e.getMessage());
             }
         }
-        long newRevision = currentRevision + 1;
+    }
 
-        boolean written;
-        try {
-            written = storage.writeAll(draft.asMap(), newRevision);
-        } catch (RuntimeException e) {
-            written = false;
+    /** Merge only the observed wiring fields, never the editor's normalized full draft. */
+    ValidationResult<ConfigSnapshot> saveCalibration(long expected, int input, boolean reverse) {
+        synchronized (WRITE_LOCK) {
+            try {
+                StoredConfig actual = storage.load();
+                if (expected != actual.revision() || committed == null) return conflict();
+                if (committed.layout().inputPosition() == input && committed.layout().reverse() == reverse) {
+                    return ValidationResult.ok(committed);
+                }
+                ConfigDraft candidate = new ConfigDraft(actual.values(), expected)
+                        .set(ConfigFields.LED_INPUT_POSITION, Integer.toString(input))
+                        .set(ConfigFields.LED_REVERSE, Boolean.toString(reverse));
+                ValidationResult<ConfigSnapshot> valid = validator.validateForSave(candidate);
+                return valid.isValid() ? writeValidated(candidate, valid.value(), expected + 1) : valid;
+            } catch (RuntimeException e) {
+                return storageError(e.getMessage());
+            }
         }
-        if (!written) {
-            return ValidationResult.fail(new FieldError(ConfigFields.STORAGE,
-                    FieldError.Code.STORAGE, "commit failed"));
-        }
+    }
 
-        ConfigSnapshot snapshot = validation.value().withRevision(newRevision);
-        committed = snapshot;
-        return ValidationResult.ok(snapshot);
+    private ValidationResult<ConfigSnapshot> writeValidated(ConfigDraft draft, ConfigSnapshot valid,
+                                                              long revision) {
+        if (!storage.writeAll(draft.asMap(), revision)) return storageError("commit failed");
+        committed = valid.withRevision(revision);
+        return ValidationResult.ok(committed);
+    }
+
+    private static ValidationResult<ConfigSnapshot> conflict() {
+        return ValidationResult.fail(new FieldError(ConfigFields.STORAGE,
+                FieldError.Code.STALE_OBSERVATION, "Configuration changed. Reload before saving."));
+    }
+
+    private static ValidationResult<ConfigSnapshot> storageError(String detail) {
+        return ValidationResult.fail(new FieldError(ConfigFields.STORAGE, FieldError.Code.STORAGE, detail));
     }
 
     /** Start validation only; there is deliberately no force/override argument. */

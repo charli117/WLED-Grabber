@@ -91,7 +91,7 @@ public class TvLayoutFlowTest {
     public void advancedStepKeepsCaptureAndQualityButNotGeometry() {
         ConfigRepository repository = new ConfigRepository(
                 new PreferencesConfigStorage(new Preferences(context)), new ConfigValidator());
-        assertTrue(repository.save(WledTestSupport.validDraft()
+        assertTrue(repository.save(repository.newDraft()
                 .set(ConfigFields.WLED_RGBW_MODE, "rgbw")).isValid());
 
         try (ActivityScenario<LayoutSettingsActivity> scenario =

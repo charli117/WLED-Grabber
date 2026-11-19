@@ -6,6 +6,8 @@
 
 ## 阅读导航
 
+- TV 扩展（已接线；硬件验收待补）：[Android TV 遥控器引导校准与观影场景技术方案](tv-guided-calibration-and-scenes.md)。
+
 - [1. 目标与范围](#scope) · [2. 模块边界与数据流](#architecture) · [3. 配置契约](#config)
 - [4. 布局与映射](#layout) · [5. 采样与颜色](#sampling) · [6. 并发与生命周期](#lifecycle)
 - [7. WLED 协议](#protocol) · [8. 网络控制面](#network) · [9. 双端交互](#ui)
@@ -116,6 +118,8 @@ flowchart LR
 `ValidatedConfig` 含 schemaVersion、revision、DeviceEndpoint、明确的 RGB/RGBW 模式、布局、采集参数及停止策略。数值解析失败返回字段错误，不抛异常到 UI；范围/交叉校验集中在 `ConfigValidator`。`Preferences` 增加一次 edit 的多字段保存，后台提交成功才发布新 revision；不逐字段更新正在发送的配置。SharedPreferences 的 commit 失败不保证其内部内存视图回滚，因此两端只从 Repository 读取“最后成功提交”的缓存快照，禁止直接旁路读取 Preferences；失败保留旧活动 revision 并提示重试。进程重建时重新读取、校验磁盘快照，不能自动恢复采集。
 
 保存配置后标记“下次启动生效”；运行中的 epoch 使用不可变快照。更换设备、数量、通道、协议、分辨率、布局均先 stop，再由用户重新启动/授权。旋转是同一会话的 display generation 更新，不等于重用已终止授权。
+
+TV 场景是独立偏好，不是主配置热写。`SceneSelectionStore` 只在提交成功后通知活动捕获会话；`captureHandler` 复用补偿前的逻辑 RGB 均值重渲染，按 CAPTURE epoch、布局代次与场景 revision 核对后才向原 `LedStreamer` 入队。末次入队回执不能证明设备已显示。手机包不读取这个选择。
 
 - `GET /json/info` 根字段为 `leds.count/ver/udpport/...`，不是 `info.leds`。聚合 `/json` 才用 `info` 子对象。
 - 探测 `count` 是设备观察值；手动值是配置值，分别存储，禁止覆盖观察记录。数量不足阻断启动，不提供“强制继续”绕过；多余物理灯每帧黑色。定义发送长度 M 为已确认的全设备可寻址数量；有效探测 count 与手动物理数量必须一致，否则仅保存待修正草稿、不启动。不能把手动较小值截断报文而让设备尾灯遗留旧色；观察值缺失时先恢复探测，不借“手动覆盖”伪造确认。
@@ -541,7 +545,7 @@ NSD 浏览 `_wled._tcp.`，解析的 port 是 HTTP 端口，不是 UDP；缓存 
 
 布局页提供**逐边与输入位置点亮校验**：按当前草稿编译布局，经 `LayoutProbe` 取逻辑环区间并映射到物理索引，借助共享 `TEST` 输出租约保持白色常亮，其余灯珠为黑。再次点击同一项熄灭；点击其他方向时替换当前探针（同一时间只亮一个方向）。**输入位置只点亮物理 0 的第一颗灯珠**：`LayoutProbe.firstPhysicalLogical` 从映射取物理 0 对应的逻辑槽位再构建报文，Reverse 开启时不能直接用原始 Input 索引（那会指向灯带末端）。草稿变化、页面退后台/退出、打开预览或测试图案时释放租约；采集运行中不抢占输出，提示先停止。该动作只用于确认接线/顺序/Input/Reverse，不替代正式预览与 10 秒图案测试。
 
-布局校验停止时，由持有原目标与输出 epoch 的探针线程依次发黑、请求 `on:false/live:false`，若请求成功再读状态，最后释放 `TEST`。页面只知道探针是否仍在运行，不以按钮复位作为设备关灯确认。
+布局校验停止时，由持有原目标与输出 epoch 的探针线程依次发黑、请求 `on:false/live:false`，若请求成功再读状态，最后释放 `TEST`。手动校验页不以按钮复位作为设备关灯确认。遥控校准的 token 独占本轮引导；仅有效期限内发黑成功、HTTP off 成功且状态读回关闭，才显示“控制器已确认关闭”。向导只在四边核对后合并起点、方向两个字段，常规编辑器与向导共享 revision 比较，陈旧草稿不得覆盖新值。
 
 ### 9.2 预览与图案
 

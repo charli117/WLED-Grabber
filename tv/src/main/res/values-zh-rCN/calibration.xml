@@ -1,0 +1,31 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="cal_title">遥控校准</string>
+    <string name="cal_setup">控制器：%1$s\n上 %2$d · 右 %3$d · 下 %4$d · 左 %5$d · 尾灯 %6$d\n请先核对四边灯数。所有方向均以面对电视为准。</string>
+    <string name="cal_start">验证设备</string>
+    <string name="cal_checking">正在核对控制器及已保存的寻址确认…</string>
+    <string name="cal_not_ready">无法确认输出。请检查网络、设备身份、已保存的寻址确认及布局，再重新进入校准。</string>
+    <string name="cal_unsupported">遥控校准要求四边均有灯且无缺口。此布局请使用手动逐边验证。</string>
+    <string name="cal_seek">物理灯 %1$d（范围 0–%2$d）。左右移动，长按快进。停在刚越过任一转角的第一颗灯，再辨认它和前一颗。若没看到灯，请按返回退出。</string>
+    <string name="cal_pair">辨认相邻两颗</string>
+    <string name="cal_observe">物理灯 %1$d 在哪条边？</string>
+    <string name="cal_relocate">重新定位</string>
+    <string name="cal_pair_invalid">这两颗灯须分别位于相邻的两条边，请重新定位转角。</string>
+    <string name="cal_review">%1$d/4 · %2$s。整条边及两端都亮起，且没有多亮任何灯吗？</string>
+    <string name="cal_matches">整边正确</string>
+    <string name="cal_summary">起点与方向：%1$d（%2$s）→ %3$d（%4$s）。四边均已核对，是否保存？</string>
+    <string name="cal_save">保存校准</string>
+    <string name="cal_save_failed">未保存。请重试；若配置已变更，请重新打开编辑器载入最新配置。</string>
+    <string name="cal_reverse">反向</string>
+    <string name="cal_forward">正向</string>
+    <string name="cal_busy">输出正被占用。请先自行停止采集或当前测试，再重试。</string>
+    <string name="cal_off">探针已释放，控制器已确认关闭。</string>
+    <string name="cal_off_unknown">探针已释放，未确认控制器已关闭。</string>
+    <string name="cal_dirty">布局有未保存的改动。请先保存或放弃，再校准。</string>
+    <string name="cal_discard">放弃修改</string>
+    <string-array name="cal_sides">
+        <item>上边</item>
+        <item>右边</item>
+        <item>下边</item>
+        <item>左边</item>
+    </string-array>
+</resources>

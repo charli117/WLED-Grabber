@@ -12,6 +12,7 @@ public final class SettingsDraftController {
     private final ConfigRepository repository;
     private final ConfigValidator validator = new ConfigValidator();
     private ConfigDraft draft = new ConfigDraft();
+    private Map<String, String> savedValues = draft.asMap();
     private ValidationResult<ConfigSnapshot> lastResult;
 
     public SettingsDraftController(ConfigRepository repository) {
@@ -23,7 +24,26 @@ public final class SettingsDraftController {
 
     public ValidationResult<ConfigSnapshot> load() {
         lastResult = repository.load();
+        resetDraft();
+        return lastResult;
+    }
+
+    private void resetDraft() {
         draft = repository.newDraft();
+        savedValues = draft.asMap();
+    }
+
+    public boolean hasUnsavedChanges() {
+        return !savedValues.equals(draft.asMap());
+    }
+
+    public ValidationResult<ConfigSnapshot> saveCalibration(int input, boolean reverse) {
+        if (hasUnsavedChanges()) {
+            return ValidationResult.fail(new FieldError(ConfigFields.STORAGE, FieldError.Code.CROSS_FIELD,
+                    "Save or discard current edits before calibrating"));
+        }
+        lastResult = repository.saveCalibration(draft.baseRevision(), input, reverse);
+        if (lastResult.isValid()) resetDraft();
         return lastResult;
     }
 
@@ -120,13 +140,13 @@ public final class SettingsDraftController {
     public ValidationResult<ConfigSnapshot> save() {
         lastResult = repository.save(draft);
         if (lastResult.isValid()) {
-            draft = repository.newDraft();
+            resetDraft();
         }
         return lastResult;
     }
 
     public void cancel() {
-        draft = repository.newDraft();
+        resetDraft();
         lastResult = null;
     }
 

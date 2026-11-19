@@ -65,6 +65,7 @@ The design and configuration documents are currently in Chinese.
 - [Native UI component audit and verification](docs/fixes/2026-11-19-native-ui.md)
 - [TV standby: findings, fixes and verification](docs/fixes/2026-11-18-tv-standby.md)
 - [Technical architecture](docs/design/architecture.md)
+- [Android TV guided calibration and viewing scenes (design and verification)](docs/design/tv-guided-calibration-and-scenes.md)
 - [Configuration and troubleshooting](docs/guides/configuration-and-troubleshooting.md)
 - [Brand and icon specification](docs/design/app-icon/brand-guide.md)
 
@@ -138,6 +139,7 @@ Debug APK（debug 签名）与未签名 Release APK 输出到 `dist/`。签名�
 - [原生界面组件审查与验证](docs/fixes/2026-11-19-native-ui.md)
 - [电视待机闪亮：缺陷、修复与验证](docs/fixes/2026-11-18-tv-standby.md)
 - [技术架构](docs/design/architecture.md)
+- [Android TV 遥控校准与观影场景：设计及验证](docs/design/tv-guided-calibration-and-scenes.md)
 - [配置与排障手册](docs/guides/configuration-and-troubleshooting.md)
 - [品牌与图标规范](docs/design/app-icon/brand-guide.md)
 

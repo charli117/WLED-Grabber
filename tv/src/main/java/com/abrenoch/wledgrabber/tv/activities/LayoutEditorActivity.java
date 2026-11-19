@@ -50,6 +50,9 @@ import java.util.Map;
  */
 public class LayoutEditorActivity extends LeanbackActivity {
     private final ScreenOffReceiver powerReceiver = new ScreenOffReceiver(this::stopProbe);
+    public static final String ACTION_CALIBRATION = "action:calibration";
+    private GuidedCalibration guided;
+    private boolean ownsManualProbe;
     public static final String ACTION_AUTO = "action:auto";
     public static final String ACTION_PRESET_274 = "action:preset274";
     public static final String ACTION_PROBE_TOP = "action:probe:top";
@@ -203,6 +206,7 @@ public class LayoutEditorActivity extends LeanbackActivity {
         // Verification is used more often than the eight corner percentages, so
         // keep it above the corner section.
         addSection(R.string.layout_editor_section_verify);
+        addAction(ACTION_CALIBRATION, getString(R.string.cal_title));
         addAction(ACTION_PROBE_TOP, getString(com.abrenoch.wledgrabber.common.R.string.wled_probe_top));
         addAction(ACTION_PROBE_RIGHT, getString(com.abrenoch.wledgrabber.common.R.string.wled_probe_right));
         addAction(ACTION_PROBE_BOTTOM, getString(com.abrenoch.wledgrabber.common.R.string.wled_probe_bottom));
@@ -340,6 +344,9 @@ public class LayoutEditorActivity extends LeanbackActivity {
             return;
         }
         switch (key) {
+            case ACTION_CALIBRATION:
+                openCalibration();
+                break;
             case ACTION_AUTO:
                 autoDistribute();
                 break;
@@ -362,6 +369,22 @@ public class LayoutEditorActivity extends LeanbackActivity {
                 showExactDialog(key);
                 break;
         }
+    }
+
+    private void openCalibration() {
+        if (controller.hasUnsavedChanges()) {
+            new AlertDialog.Builder(this).setTitle(R.string.cal_title).setMessage(R.string.cal_dirty)
+                    .setPositiveButton(R.string.layout_editor_save, (d, w) -> { if (save()) openCalibration(); })
+                    .setNeutralButton(R.string.cal_discard, (d, w) -> { controller.load(); refreshAll(); openCalibration(); })
+                    .setNegativeButton(android.R.string.cancel, null).show();
+            return;
+        }
+        guided = new GuidedCalibration(this, controller, captureWidth, captureHeight, () -> {
+            guided = null;
+            redraw();
+            rows.get(ACTION_CALIBRATION).requestFocus();
+        });
+        guided.open();
     }
 
     private void autoDistribute() {
@@ -474,12 +497,14 @@ public class LayoutEditorActivity extends LeanbackActivity {
                 snapshot.value(), compiled.value(), LayoutProbeSender.keyFor(side), logical);
         switch (result) {
             case STARTED:
+                ownsManualProbe = true;
                 toast(getString(side == null
                                 ? com.abrenoch.wledgrabber.common.R.string.wled_probe_input_on
                                 : com.abrenoch.wledgrabber.common.R.string.wled_probe_sent,
                         logical.length));
                 break;
             case STOPPED:
+                ownsManualProbe = false;
                 toast(com.abrenoch.wledgrabber.common.R.string.wled_probe_off);
                 break;
             case BUSY:
@@ -536,6 +561,7 @@ public class LayoutEditorActivity extends LeanbackActivity {
             showError(saved.errors().get(0));
             return false;
         }
+        setResult(RESULT_OK);
         toast(R.string.layout_editor_saved);
         return true;
     }
@@ -550,6 +576,10 @@ public class LayoutEditorActivity extends LeanbackActivity {
     private void refreshAll() {
         // A draft change makes the latched probe frame stale; release it first.
         stopProbe();
+        redraw();
+    }
+
+    private void redraw() {
         for (LayoutValueRow row : rows.values()) {
             refreshRow(row);
         }
@@ -602,7 +632,11 @@ public class LayoutEditorActivity extends LeanbackActivity {
     }
 
     private void stopProbe() {
-        LayoutProbeSender.get().stop();
+        if (guided != null) guided.close();
+        if (ownsManualProbe) {
+            ownsManualProbe = false;
+            LayoutProbeSender.get().stop();
+        }
         refreshProbeRows();
     }
 

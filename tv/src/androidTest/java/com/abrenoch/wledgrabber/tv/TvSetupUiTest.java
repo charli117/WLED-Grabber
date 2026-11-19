@@ -150,7 +150,7 @@ public class TvSetupUiTest {
 
         // Simulate the editor page saving a different layout while this step stays open.
         ConfigRepository childSave = repository();
-        assertTrue(childSave.save(WledTestSupport.validDraft()
+        assertTrue(childSave.save(childSave.newDraft()
                 .set(ConfigFields.LED_TOP, "90")).isValid());
         InstrumentationRegistry.getInstrumentation().runOnMainSync(() ->
                 step.onActivityResult(WledConnectionStepFragment.REQUEST_LAYOUT,
