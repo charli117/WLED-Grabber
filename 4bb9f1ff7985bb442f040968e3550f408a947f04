@@ -1,0 +1,77 @@
+common/src/main/java/com/abrenoch/wledgrabber/common/network/wled/LayoutProbeSender.java
+  19043dfb916abae2 40-47,68-78,91-92,94-101,130-133,137,145-147,149-150,153,167-168,172,174,176-181,183,185-187,190,192,195-196,201,203,205-210,213,283
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvSetupUiTest.java
+  19043dfb916abae2 153
+common/src/main/java/com/abrenoch/wledgrabber/common/util/ConfigDraft.java
+  19043dfb916abae2 17-18,20,24-28,34-35,46,54
+README.md
+  19043dfb916abae2 68,142
+common/src/test/java/com/abrenoch/wledgrabber/common/util/PreferenceCommitGuardTest.java
+  19043dfb916abae2 1-30
+tv/src/test/java/com/abrenoch/wledgrabber/tv/activities/CalibrationReviewTest.java
+  19043dfb916abae2 1-30
+common/src/test/java/com/abrenoch/wledgrabber/common/led/CalibrationSolverTest.java
+  19043dfb916abae2 1-61
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/GuidedCalibration.java
+  19043dfb916abae2 1-227
+common/src/test/java/com/abrenoch/wledgrabber/common/network/wled/LayoutProbeSenderTest.java
+  19043dfb916abae2 35-78
+common/src/main/java/com/abrenoch/wledgrabber/common/util/PreferenceCommitGuard.java
+  19043dfb916abae2 1-31
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvLayoutEditorTest.java
+  19043dfb916abae2 67-77,136,224,328,346,368-369
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/LayoutEditorActivity.java
+  19043dfb916abae2 53-55,209,347-349,374-389,500,507,564,579-582,635-639
+tv/src/main/res/values/calibration.xml
+  19043dfb916abae2 1-31
+common/src/main/java/com/abrenoch/wledgrabber/common/util/PreferencesConfigStorage.java
+  19043dfb916abae2 63-64,66-69,79-84,102
+docs/design/tv-guided-calibration-and-scenes.md
+  19043dfb916abae2 1-2,4,12-33,35-52,55-78,80-87,89-91,93-112,114-117
+docs/guides/configuration-and-troubleshooting.md
+  19043dfb916abae2 45-46,48-54
+common/src/main/java/com/abrenoch/wledgrabber/common/led/CalibrationSolver.java
+  19043dfb916abae2 1-53
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/CalibrationReview.java
+  19043dfb916abae2 1-28
+docs/design/architecture.md
+  19043dfb916abae2 10
+tv/src/androidTest/java/com/abrenoch/wledgrabber/tv/TvLayoutFlowTest.java
+  19043dfb916abae2 94
+tv/src/main/res/values-zh-rCN/calibration.xml
+  19043dfb916abae2 1-31
+common/src/main/java/com/abrenoch/wledgrabber/common/util/SettingsDraftController.java
+  19043dfb916abae2 15,27-31,33-46,143,149
+common/src/test/java/com/abrenoch/wledgrabber/common/config/ConfigRepositoryTest.java
+  19043dfb916abae2 12,56-94,108,122
+common/src/main/java/com/abrenoch/wledgrabber/common/util/ConfigRepository.java
+  19043dfb916abae2 14-15,56-57,73,75-81,84,86-102,104-116,118-119
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.4",
+  "base_commit_sha": "4bb9f1ff7985bb442f040968e3550f408a947f04",
+  "prompts": {
+    "19043dfb916abae2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1f35a-ac12-7b00-a41c-4c926df78460",
+        "model": "gpt-6.2-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 1553,
+      "total_deletions": 250,
+      "accepted_lines": 1453,
+      "overriden_lines": 11,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/713cdcc12fb446e7dc7f17d079b85c9123d463852324eb7dc0db33b59eb99caf",
+      "token_usage": {
+        "input_tokens": 623293,
+        "output_tokens": 102409,
+        "cache_read_tokens": 35519795,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
