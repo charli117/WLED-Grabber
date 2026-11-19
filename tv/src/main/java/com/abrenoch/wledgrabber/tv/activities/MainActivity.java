@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AppCompatDelegate;
 import android.util.Log;
@@ -227,10 +228,7 @@ public class MainActivity extends LeanbackActivity implements ImageView.OnClickL
 
     @Override
     public void onFocusChange(View view, boolean focused) {
-        int clr = Color.argb(255, 0, 0, 150);
-        if (!focused) {
-            clr = Color.argb(255, 0, 0, 0);
-        }
+        int clr = focused ? ContextCompat.getColor(this, R.color.home_control_focus_ink) : Color.BLACK;
         switch (view.getId()) {
             case R.id.power_toggle:
                 ((ImageView) view).setColorFilter(clr);

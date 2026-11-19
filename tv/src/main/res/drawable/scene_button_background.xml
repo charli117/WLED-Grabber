@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?android:attr/colorControlHighlight">
+    <item>
+        <shape>
+            <corners android:radius="10dp" />
+            <solid android:color="@color/scene_button_surface" />
+            <stroke android:width="2dp" android:color="@color/scene_button_outline" />
+        </shape>
+    </item>
+</ripple>
