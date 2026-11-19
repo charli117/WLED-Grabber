@@ -1,0 +1,45 @@
+tv/src/main/res/color/scene_button_surface.xml
+  19043dfb916abae2 3-4
+scripts/qa/SceneButtonVisibilityCheck.java
+  19043dfb916abae2 32,34,39,45-55
+tv/src/main/res/values/colors.xml
+  19043dfb916abae2 9
+tv/src/main/java/com/abrenoch/wledgrabber/tv/activities/MainActivity.java
+  19043dfb916abae2 17,231
+tv/src/main/res/color/scene_button_outline.xml
+  19043dfb916abae2 1-5
+tv/src/main/res/drawable/ic_scene_expand.xml
+  19043dfb916abae2 1-6
+tv/src/main/res/drawable/scene_button_background.xml
+  19043dfb916abae2 1-11
+tv/src/main/res/layout/activity_main.xml
+  19043dfb916abae2 95-100,102-103,107-109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.8.4",
+  "base_commit_sha": "d18020db9cf6d4a9c79d1200729ce604a3c0a617",
+  "prompts": {
+    "19043dfb916abae2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1f35a-ac12-7b00-a41c-4c926df78460",
+        "model": "gpt-6.2-astra"
+      },
+      "human_author": "罗威 <luowei@cvte.com>",
+      "messages": [],
+      "total_additions": 52,
+      "total_deletions": 10,
+      "accepted_lines": 52,
+      "overriden_lines": 0,
+      "messages_url": "https://gitai.gz.cvte.cn/cas/d515d8dbe29ec99b85c1e6d0514d7fcb861674a6b0d6f87639b4ec23e21f5f1e",
+      "token_usage": {
+        "input_tokens": 673047,
+        "output_tokens": 120045,
+        "cache_read_tokens": 40741567,
+        "cache_creation_tokens": null,
+        "total_cost": null
+      }
+    }
+  }
+}
